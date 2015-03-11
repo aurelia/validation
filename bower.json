@@ -1,0 +1,19 @@
+{
+  "name": "aurelia-validation",
+  "version": "0.1.0",
+  "description": "A validation plugin for Aurelia.",
+  "keywords": [
+    "aurelia",
+    "validation",
+    "plugin"
+  ],
+  "homepage": "http://aurelia.io",
+  "license": "MIT",
+  "authors": [
+    "Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aurelia/animator-css"
+  }
+}
