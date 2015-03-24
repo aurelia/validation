@@ -157,7 +157,7 @@ This is why I prefer the **validation.checkAll()** function. When it is called, 
 >Note: the validate attached behavior uses TW Bootstrap
 - it will find the *form-group* element and add the appropriate TW BS *has-error* or *has-success* classes
 - it will find the labels attached to the element and append a message with the TW BS *help-block* class
-- in addition, the message element will have a *aurelia-valiation-message* class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label, you can add this style:
+- in addition, the message element will have a *aurelia-valiation-message* class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label, you can add this style to app.html:
 ``` CSS 
 		.aurelia-validation-message{
 			display:  inline;
