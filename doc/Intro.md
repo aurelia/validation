@@ -1,30 +1,4 @@
-This document needs to be migrated.... Hold on to your hats!!!
-
-# aurelia-validation
-
-[![Join the chat at https://gitter.im/janvanderhaegen/aurelia-validation](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/janvanderhaegen/aurelia-validation?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-aurelia-validation is a small validation plugin for [aurelia.io](http://aurelia.io) that uses a fluent API (currently in alpha, **API is subject to change**).
-``` javascript
-this.validation = validation.on(this)
-                      .ensure('awesomeLevel')
-                            .min(9000)
-                      .ensure('readMe')
-                            .notEmpty()
-                            .minLength(5)
-                      .ensure('usage')
-                            .equals('simple');
-```
->I live in Mexico and don't give a crap about your anal need for license files. You use, I don't care. You abuse, I shoot you. Now go grab the code and do ya hubba hubba.
-
-# Running the tests
-``` 
-git pull https://github.com/janvanderhaegen/aurelia-validation
-cd aurelia-validation
-npm install
-jspm install -y
-karma start
-```
+[![Join the chat at https://gitter.im/aurelia/validation](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aurelia/validation?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Installation
 
@@ -33,13 +7,13 @@ karma start
 Go into your project and verify it's already `npm install`'ed and `jspm install`'ed. Now execute following command to install the plugin via JSPM:
 
 ```
-jspm install github:janvanderhaegen/aurelia-validation
+jspm install github:aurelia/validation
 ```
 
 this will add the plugin into your `jspm_packages` folder as well as an mapping-line into your `config.js` like follows:
 
 ```
-"janvanderhaegen/aurelia-validation": "github:janvanderhaegen/aurelia-validation@master",
+"aurelia/validation": "github:aurelia/validation@master",
 ```
 
 
@@ -88,7 +62,7 @@ export function configure(aurelia) {
     .defaultResources()
     .router()
     .eventAggregator()
-    .plugin('janvanderhaegen/aurelia-validation'); //Add this line to load the plugin
+    .plugin('aurelia/validation'); //Add this line to load the plugin
 
   aurelia.start().then(a => a.setRoot('app', document.body));
 }
@@ -122,7 +96,7 @@ export class Welcome{
 ```
 We start with importing the validation class
 ``` javacript
-import {Validation} from 'janvanderhaegen/aurelia-validation';
+import {Validation} from 'aurelia/validation';
 export class Welcome{
   static inject() { return [Validation]; }
   constructor(validation){
