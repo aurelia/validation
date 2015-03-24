@@ -7,13 +7,13 @@
 Go into your project and verify it's already `npm install`'ed and `jspm install`'ed. Now execute following command to install the plugin via JSPM:
 
 ```
-jspm install github:aurelia/validation
+jspm install github:aurelia-validation
 ```
 
 this will add the plugin into your `jspm_packages` folder as well as an mapping-line into your `config.js` like follows:
 
 ```
-"aurelia/validation": "github:aurelia/validation@master",
+"aurelia-validation": "github:aurelia-validation@X.X.X",
 ```
 
 
@@ -62,7 +62,7 @@ export function configure(aurelia) {
     .defaultResources()
     .router()
     .eventAggregator()
-    .plugin('aurelia/validation'); //Add this line to load the plugin
+    .plugin('aurelia-validation'); //Add this line to load the plugin
 
   aurelia.start().then(a => a.setRoot('app', document.body));
 }
@@ -96,7 +96,7 @@ export class Welcome{
 ```
 We start with importing the validation class
 ``` javacript
-import {Validation} from 'aurelia/validation';
+import {Validation} from 'aurelia-validation';
 export class Welcome{
   static inject() { return [Validation]; }
   constructor(validation){
