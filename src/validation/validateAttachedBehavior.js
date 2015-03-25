@@ -95,6 +95,7 @@ export class ValidateAttachedBehavior {
     }
   }
 
+
   appendMessageToElement(element, validationProperty) {
     var helpBlock = element.nextSibling;
     if (helpBlock) {

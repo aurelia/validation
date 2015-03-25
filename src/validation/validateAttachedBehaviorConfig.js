@@ -5,3 +5,4 @@ export class ValidateAttachedBehaviorConfig {
     this.appendMessageToInput = false;
   }
 }
+

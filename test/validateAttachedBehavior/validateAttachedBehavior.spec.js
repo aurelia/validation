@@ -5,46 +5,46 @@ import {ValidateAttachedBehaviorConfig} from '../../src/validation/validateAttac
 
 
 class TestSubject {
-    constructor(validation){
-        this.firstName = 'John';
-        this.lastName = 'Doe';
-        this.validation = validation.on(this)
-            .ensure('firstName')
-                .notEmpty()
-                .betweenLength(3,10)
-            .ensure('lastName')
-                .notEmpty()
-                .betweenLength(3,10);
-    }
+  constructor(validation) {
+    this.firstName = 'John';
+    this.lastName = 'Doe';
+    this.validation = validation.on(this)
+      .ensure('firstName')
+      .notEmpty()
+      .betweenLength(3, 10)
+      .ensure('lastName')
+      .notEmpty()
+      .betweenLength(3, 10);
+  }
 
-    static createInstance() {
-        return new TestSubject(new Validation(new ObserverLocator()));
-    }
+  static createInstance() {
+    return new TestSubject(new Validation(new ObserverLocator()));
+  }
 }
 
-class NestedTestSubject{
-  constructor(validation){
+class NestedTestSubject {
+  constructor(validation) {
     this.address =
     {
-      street : 'fakestreet',
-      number : '123'
+      street: 'fakestreet',
+      number: '123'
 
     };
     this.validationNested = validation.on(this)
       .ensure('address.street')
-        .notEmpty()
-        .betweenLength(3,10)
+      .notEmpty()
+      .betweenLength(3, 10)
       .ensure('address.number')
-        .notEmpty()
-        .betweenLength(1,10);
+      .notEmpty()
+      .betweenLength(1, 10);
 
     this.validation = validation.on(this.address)
       .ensure('street')
-        .notEmpty()
-        .betweenLength(3,10)
+      .notEmpty()
+      .betweenLength(3, 10)
       .ensure('number')
-        .notEmpty()
-        .betweenLength(1,10);
+      .notEmpty()
+      .betweenLength(1, 10);
   }
 
   static createInstance(firstName) {
@@ -52,18 +52,18 @@ class NestedTestSubject{
   }
 
 }
-class TestDOM{
-    static createElement(html){
-        var element = document.createElement('DIV');
-        element.innerHTML = html;
-        return element.children[0];
-    }
+class TestDOM {
+  static createElement(html) {
+    var element = document.createElement('DIV');
+    element.innerHTML = html;
+    return element.children[0];
+  }
 }
 
 describe('Tests on ValidateAttachedBehavior', () => {
-    it('should be working', () => {
-        var subject = TestSubject.createInstance();
-        var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
+  it('should be working', () => {
+    var subject = TestSubject.createInstance();
+    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
             <div class="form-group" id="formGroupFirstName">
             <label for="fn" id="labelFirstName" >First Name</label>
             <input type="text" value.bind="firstName" class="form-control" id="fn" placeholder="first name">
@@ -74,37 +74,37 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-        var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
-        behavior.value = subject.validation;
-        debugger;
-        behavior.attached();
+    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+    behavior.value = subject.validation;
+    debugger;
+    behavior.attached();
 
-        subject.firstName = '';
-        subject.validation.checkAll();
+    subject.firstName = '';
+    subject.validation.checkAll();
 
-        //default: adds 'has-warning'/'has-success' to form-group
-        var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
-        expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
+    //default: adds 'has-warning'/'has-success' to form-group
+    var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
+    expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
 
-        var lastNameGroup = testHTML.querySelector('#formGroupLastName');
-        expect(lastNameGroup.classList.contains('has-success')).toBe(true);
-
-
-        //default: adds <p> after label
-        var firstNameLabel = testHTML.querySelector('#labelFirstName');
-        var firstNameMessage = firstNameLabel.nextSibling;
-        expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-        expect(firstNameMessage.classList.contains('help-block')).toBe(true);
-        expect(firstNameMessage.textContent).toBe('is required');
+    var lastNameGroup = testHTML.querySelector('#formGroupLastName');
+    expect(lastNameGroup.classList.contains('has-success')).toBe(true);
 
 
-        //default: adds <p> after element
-        var lastNameLabel = testHTML.querySelector('#labelLastName');
-        var lastNameMessage = lastNameLabel.nextSibling;
-        expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-        expect(lastNameMessage.classList.contains('help-block')).toBe(true);
-        expect(lastNameMessage.textContent).toBe('');
-    });
+    //default: adds <p> after label
+    var firstNameLabel = testHTML.querySelector('#labelFirstName');
+    var firstNameMessage = firstNameLabel.nextSibling;
+    expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+    expect(firstNameMessage.classList.contains('help-block')).toBe(true);
+    expect(firstNameMessage.textContent).toBe('is required');
+
+
+    //default: adds <p> after element
+    var lastNameLabel = testHTML.querySelector('#labelLastName');
+    var lastNameMessage = lastNameLabel.nextSibling;
+    expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+    expect(lastNameMessage.classList.contains('help-block')).toBe(true);
+    expect(lastNameMessage.textContent).toBe('');
+  });
 
   it('should be working with nested properties', () => {
     var subject = NestedTestSubject.createInstance(null);
@@ -164,7 +164,6 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-
 
 
     var streetBehavior = new ValidateAttachedBehavior(testHTML.querySelector('#fn'), new ObserverLocator(), new ValidateAttachedBehaviorConfig());
