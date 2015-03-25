@@ -7,10 +7,10 @@
 Go into your project and verify it's already `npm install`'ed and `jspm install`'ed. Now execute following command to install the plugin via JSPM:
 
 ```
-jspm install github:aurelia-validation
+jspm install aurelia-validation
 ```
 
-this will add the plugin into your `jspm_packages` folder as well as an mapping-line into your `config.js` like follows:
+this will add the plugin into your `jspm_packages` folder as well as an mapping-line into your `config.js` as:
 
 ```
 "aurelia-validation": "github:aurelia-validation@X.X.X",
@@ -147,23 +147,8 @@ Secondly, let's provide some visual hints to the users. Open your **welcome.html
     <form role="form" submit.delegate="welcome()" validate.bind="validation" > 
 ```
 
-Gulp watch that thing and see the validation in action!
+*Gulp watch* to see the validation in action!
 
->Note: By default, a validation message will only be shown if the user actually changes the value (ie. the field is 'dirty'). You could disable your submit function by binding it: 
-```<button type=submit" disabled.bind="!validation.isValid" > ```. This has the weird user experience that when a field is not modified by the user (because you supplied a default value for example), there are no visual clues as to why the button is still disabled.
-This is why I prefer the **validation.checkAll()** function. When it is called, this will explicitly evaluate each field even if it's not dirty yet, and show all succes/error messages in the UI, then return a boolean indicating whether the validation passes or fails.
-
-
->Note: the validate attached behavior uses TW Bootstrap
-- it will find the *form-group* element and add the appropriate TW BS *has-error* or *has-success* classes
-- it will find the labels attached to the element and append a message with the TW BS *help-block* class
-- in addition, the message element will have a *aurelia-valiation-message* class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label, you can add this style to app.html:
-``` CSS 
-		.aurelia-validation-message{
-			display:  inline;
-			margin-left : 5px;
-		} 
-```
 
 # Validation types
 
@@ -444,11 +429,102 @@ Then, when you're setting up validation, you can use your new method:
               .SSN();
 ```
 #Customizing the visualization
-> //TODO
+##Basic usage
+To show validation messages, add the validateAttachedBehavior to any DOM element (the form element is most common) and bind it to your validation instance.
+``` html 
+    <form role="form" submit.delegate="welcome()" validate.bind="validation" > 
+```
+
+The validateAttachedBehavior will loop through all nested child elements and try to determine which controls are data-bound to which properties, and if there are validation rules for those properties, it will show visual clues.
+
+##Visual clues and customization
+The validateAttachedBehavior uses TW Bootstrap by default to provide visual clues about valid/invalid properties.
+- for each input element, it will tyr to find the parent form-group element and add the appropriate TW BS has-error or has-success classes
+- for each input element, it will try to find the labels for that element and append a message with the TW BS help-block class. The content of this element is kept in sync with the validation message (or left empty for valid properties)
+- this added message element will have a aurelia-valiation-message class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label, you can add this style to app.html:
+```css
+
+            .aurelia-validation-message{
+                display:  inline;
+                margin-left : 5px;
+            }
+```
+
+On a global application level, you can prevent the validateAttachedBehavior from appending this message to the labels, or you can have it append this message to the input control themselves. To do this, inject the *validateAttachedBehaviorConfig* instance in your app and set the *appendMessageToLabel* or *appendMessageToInput* properties.
+
+```javascript 
+import {ValidateAttachedBehaviorConfig} from 'aurelia-validation';
+export class App {
+  static inject() { return [ValidateAttachedBehaviorConfig]; }
+  constructor(validateAttachedBehaviorConfig) { 
+    //Configuring the way validation shows messages:
+    validateAttachedBehaviorConfig.appendMessageToLabel = false;
+    validateAttachedBehaviorConfig.appendMessageToInput = true;
+  }
+}
+```
+
+##How does are elements and validation rules matched
+The validateAttachedBehavior, once bound to a validation instance, will loop over every child element and try to match elements against validation rules.
+A simple example:
+```javascript
+this.validation = validation.on(this).ensure('firstName').notEmpty();
+```
+```html
+<form role="form" class="form-horizontal" validate.bind="validation">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">First Name</label> 
+    <input type="text" placeholder="first name" class="form-control" value.bind="firstName"> 
+  </div> 
+</form>
+```
+In this case, the validateAttachedBehavior will recognize the *value.bind="firstName"* attribute and match it against the validation rule you set up with *ensure('firstName')*.
+
+As your viewmodels become more complex or if you start using binding converters, the binding path you used to set up the validation rules might be different than the binding path you used in your view, so you'll need to give the validateAttachedBehavior some extra clues as to which elements should be matched against which validation rules.
+
+Consider this more complex example:
+```javascript
+this.contact.validation = validation.on(this.contact).ensure('firstName').notEmpty();
+```
+
+```html
+<form role="form" class="form-horizontal" validate.bind="contact.validation">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">First Name</label> 
+    <input type="text" placeholder="first name" class="form-control" value.bind="contact.firstName" validate="firstName"> 
+  </div> 
+</form>
+```
+Pay attention to the two validateAttachedBehavior attributes in this example's HTML:
+- *validate.bind="contact.validation"* this validateAttachedBehavior will bind the validation to the form.
+- *validate="firstName"* this validateAttachedBehavior will only tell the parent validateAttachedBehavior that this input element should be decorated with the validation result of the rules for *"firstName"*.  This is only needed because the validation rule was created with *ensure('firstName')*, whereas the binding for the same input element has a different binding path: *value.bind="contact.FirstName"*
+
+There is an array property named *bindingPathAttributes* on the *validateAttachedBehaviorConfig* instance that you can inject in your app, which holds the attributes that the validateAttachedBehavior will try to use to match elements to validationRules.  
+
+##Preventing form submission
+You could disable your submit function by binding it to the *validation.result.isValid* property: 
+```html
+<button type=submit" disabled.bind="!validation.result.isValid" >
+```
+This has a bit of a weird side effect: a validation message is only shown if the user actually changes the value of a form element, ie. the underlying field is 'dirty'.  Again: there are no visual clues as to what form elements are invalid until the user actually changes the value of a field.
+In contrast, calling the *validation.checkAll()* function will force all validation rules to be re-evaluated, as well as forcing every field to be considered 'dirty', then return a bool indicating if the entire validation has passed or failed.
+In summary: if you do not disable the submit button, but instead call the *checkAll* function in your code
+
+```javascript
+if(this.validation.checkAll()){
+  //perform action on form submission
+}
+```
+You will have the following user experience:
+- all fields in a form show no validation messages
+- when the user changes the value, validation messages & visual clues will be shown for each field he/she has edited
+- when the user hit submit, all input elements on the form will show validation messages & visual clues
+- if all validation rules have passed, the form submission code will actually run. If not, the user will clearly see what properties are valid, which are invalid, and why
+    
 
 #ValidationResult
-If you need more information about your model's validation status, apart from the true/false that the *validation.checkAll()* method returns, you can investigate the *validation.result* object.
-The *validation.result* property is an object that describes if your model is currently valid, as well as giving detail about each property.
+If you need more information about your model's validation status or if you want to bind your validation messages yourself, you can investigate the *validation.result* property.
+The *validation.result* property is a *validationResult* object that describes if your model is currently valid, as well as giving detail about each property.
 For example, suppose you have a validation set up like this:
 ```javascript
     this.validation = validation.on(this)
