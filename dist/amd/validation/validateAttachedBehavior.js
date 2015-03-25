@@ -1,28 +1,9 @@
 define(["exports", "aurelia-templating", "aurelia-binding", "../validation/validateAttachedBehaviorConfig"], function (exports, _aureliaTemplating, _aureliaBinding, _validationValidateAttachedBehaviorConfig) {
   "use strict";
 
-  var _createClass = (function () {
-    function defineProperties(target, props) {
-      for (var key in props) {
-        var prop = props[key];
-        prop.configurable = true;
-        if (prop.value) prop.writable = true;
-      }
-      Object.defineProperties(target, props);
-    }
+  var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  })();
-
-  var _classCallCheck = function (instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -44,13 +25,10 @@ define(["exports", "aurelia-templating", "aurelia-binding", "../validation/valid
     _createClass(ValidateAttachedBehavior, {
       valueChanged: {
         value: function valueChanged(newValue) {
-        }
-      },
-      attached: {
-        value: function attached() {
-          if (this.value === null || this.value === undefined) throw "Cannot bind ValidateAttachedBehavior to null/undefined";
-          if (typeof this.value === "string") {
-            return; //this is just to tell the real validation instance (higher in the DOM) the exact property to bind to
+          if (this.value === null || this.value === undefined) {
+            return;
+          }if (typeof this.value === "string") {
+            return; //this is just to tell the real validation instance (higher in the DOM) the exact property-path to bind to
           } else if (this.value.constructor.name === "ValidationResultProperty") {
             //Binding to a single validation property
             this.subscribeChangedHandlersForProperty(this.value, this.element);
@@ -83,7 +61,7 @@ define(["exports", "aurelia-templating", "aurelia-binding", "../validation/valid
           if (currentDepth === 5) {
             return;
           }
-          if (currentElement.nodeName === "LABEL" && currentElement.attributes["for"] && currentElement.attributes["for"].value === inputId) {
+          if (currentElement.nodeName === "LABEL" && (currentElement.attributes["for"] && currentElement.attributes["for"].value === inputId || !currentElement.attributes["for"])) {
             currentLabels.push(currentElement);
           }
 
@@ -140,8 +118,36 @@ define(["exports", "aurelia-templating", "aurelia-binding", "../validation/valid
               element.parentNode.appendChild(helpBlock);
             }
           }
-
-          helpBlock.textContent = validationProperty.message;
+          if (validationProperty) helpBlock.textContent = validationProperty.message;else helpBlock.textContent = "";
+        }
+      },
+      appendUIVisuals: {
+        value: function appendUIVisuals(validationProperty, currentElement) {
+          var formGroup = this.searchFormGroup(currentElement, 0);
+          if (formGroup) {
+            if (validationProperty) {
+              if (validationProperty.isValid) {
+                formGroup.classList.remove("has-warning");
+                formGroup.classList.add("has-success");
+              } else {
+                formGroup.classList.remove("has-success");
+                formGroup.classList.add("has-warning");
+              }
+            } else {
+              formGroup.classList.remove("has-warning");
+              formGroup.classList.remove("has-success");
+            }
+            if (this.config.appendMessageToInput) {
+              this.appendMessageToElement(currentElement, validationProperty);
+            }
+            if (this.config.appendMessageToLabel) {
+              var labels = this.findLabels(formGroup, currentElement.id);
+              for (var ii = 0; ii < labels.length; ii++) {
+                var label = labels[ii];
+                this.appendMessageToElement(label, validationProperty);
+              }
+            }
+          }
         }
       },
       subscribeChangedHandlersForProperty: {
@@ -149,34 +155,18 @@ define(["exports", "aurelia-templating", "aurelia-binding", "../validation/valid
           var _this = this;
 
           if (validationProperty !== undefined) {
+            this.appendUIVisuals(null, currentElement);
             validationProperty.onValidate(function (validationProperty) {
-              var formGroup = _this.searchFormGroup(currentElement, 0);
-              if (formGroup) {
-                if (validationProperty.isValid) {
-                  formGroup.classList.remove("has-warning");
-                  formGroup.classList.add("has-success");
-                } else {
-                  formGroup.classList.remove("has-success");
-                  formGroup.classList.add("has-warning");
-                }
-                if (_this.config.appendMessageToInput) {
-                  _this.appendMessageToElement(currentElement, validationProperty);
-                }
-                if (_this.config.appendMessageToLabel) {
-                  var labels = _this.findLabels(formGroup, currentElement.id);
-                  for (var ii = 0; ii < labels.length; ii++) {
-                    var label = labels[ii];
-                    _this.appendMessageToElement(label, validationProperty);
-                  }
-                }
-              }
+              _this.appendUIVisuals(validationProperty, currentElement);
             });
           }
         }
       },
       detached: {
-        value: function detached() {
-        }
+        value: function detached() {}
+      },
+      attached: {
+        value: function attached() {}
       }
     }, {
       metadata: {
@@ -194,5 +184,3 @@ define(["exports", "aurelia-templating", "aurelia-binding", "../validation/valid
     return ValidateAttachedBehavior;
   })();
 });
-
-//This empty method must be here, aurelia will not set this.value if it's not :-O

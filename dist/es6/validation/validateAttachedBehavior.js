@@ -60,8 +60,7 @@ export class ValidateAttachedBehavior {
     if (currentElement.nodeName === "LABEL" &&
       ((currentElement.attributes['for'] && currentElement.attributes['for'].value === inputId) ||
       (!currentElement.attributes['for']))
-    )
-      {
+    ) {
       currentLabels.push(currentElement);
     }
 
@@ -118,17 +117,16 @@ export class ValidateAttachedBehavior {
         element.parentNode.appendChild(helpBlock);
       }
     }
-    if(validationProperty)
+    if (validationProperty)
       helpBlock.textContent = validationProperty.message;
     else
       helpBlock.textContent = '';
   }
 
-  appendUIVisuals(validationProperty, currentElement)
-  {
+  appendUIVisuals(validationProperty, currentElement) {
     var formGroup = this.searchFormGroup(currentElement, 0);
     if (formGroup) {
-      if(validationProperty) {
+      if (validationProperty) {
         if (validationProperty.isValid) {
           formGroup.classList.remove('has-warning');
           formGroup.classList.add('has-success');
@@ -138,7 +136,7 @@ export class ValidateAttachedBehavior {
           formGroup.classList.add('has-warning');
         }
       }
-      else{
+      else {
         formGroup.classList.remove('has-warning');
         formGroup.classList.remove('has-success');
       }

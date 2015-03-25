@@ -24,7 +24,7 @@ define(["exports", "./validation/validationLocaleRepository", "./validation/vali
 
 	_defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehavior));
 
-  _defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehaviorConfig));
+	_defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehaviorConfig));
 
 	var ValidateAttachedBehavior = _validationValidateAttachedBehavior.ValidateAttachedBehavior;
 

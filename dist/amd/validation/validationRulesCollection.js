@@ -1,28 +1,9 @@
 define(["exports", "../validation/validation"], function (exports, _validationValidation) {
   "use strict";
 
-  var _createClass = (function () {
-    function defineProperties(target, props) {
-      for (var key in props) {
-        var prop = props[key];
-        prop.configurable = true;
-        if (prop.value) prop.writable = true;
-      }
-      Object.defineProperties(target, props);
-    }
+  var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  })();
-
-  var _classCallCheck = function (instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -108,7 +89,7 @@ define(["exports", "../validation/validation"], function (exports, _validationVa
       this.innerCollections = [];
       this.defaultCollection = new ValidationRulesCollection();
       this.caseLabel = "";
-      this.defaultCaseLabel = {description: "this is the case label for 'default'"};
+      this.defaultCaseLabel = { description: "this is the case label for 'default'" };
     }
 
     _createClass(SwitchCaseValidationRulesCollection, {
@@ -129,8 +110,7 @@ define(["exports", "../validation/validation"], function (exports, _validationVa
 
           if (caseLabel === this.defaultCaseLabel) {
             return this.defaultCollection;
-          }
-          var currentCollection = null;
+          }var currentCollection = null;
           for (var i = 0; i < this.innerCollections.length; i++) {
             currentCollection = this.innerCollections[i];
             if (currentCollection.caseLabel === caseLabel) {
@@ -173,7 +153,7 @@ define(["exports", "../validation/validation"], function (exports, _validationVa
       notEmpty: {
         value: function notEmpty() {
           var collection = this.getCurrentCollection(this.caseLabel);
-          if (collection !== null) collection.notEmpty(); else this.defaultCollection.notEmpty();
+          if (collection !== null) collection.notEmpty();else this.defaultCollection.notEmpty();
         }
       }
     });
