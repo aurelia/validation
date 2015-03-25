@@ -5,80 +5,80 @@ var _createClass = (function () { function defineProperties(target, props) { for
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var ValidationResult = exports.ValidationResult = (function () {
-    function ValidationResult() {
-        _classCallCheck(this, ValidationResult);
+  function ValidationResult() {
+    _classCallCheck(this, ValidationResult);
 
-        this.isValid = true;
-        this.properties = {};
-    }
+    this.isValid = true;
+    this.properties = {};
+  }
 
-    _createClass(ValidationResult, {
-        addProperty: {
-            value: function addProperty(name) {
-                if (!this.properties[name]) {
-                    this.properties[name] = new ValidationResultProperty(this);
-                }
-                return this.properties[name];
-            }
-        },
-        checkValidity: {
-            value: function checkValidity() {
-                for (var propertyName in this.properties) {
-                    if (!this.properties[propertyName].isValid) {
-                        this.isValid = false;
-                        return;
-                    }
-                }
-                this.isValid = true;
-            }
+  _createClass(ValidationResult, {
+    addProperty: {
+      value: function addProperty(name) {
+        if (!this.properties[name]) {
+          this.properties[name] = new ValidationResultProperty(this);
         }
-    });
+        return this.properties[name];
+      }
+    },
+    checkValidity: {
+      value: function checkValidity() {
+        for (var propertyName in this.properties) {
+          if (!this.properties[propertyName].isValid) {
+            this.isValid = false;
+            return;
+          }
+        }
+        this.isValid = true;
+      }
+    }
+  });
 
-    return ValidationResult;
+  return ValidationResult;
 })();
 
 var ValidationResultProperty = exports.ValidationResultProperty = (function () {
-    function ValidationResultProperty(group) {
-        _classCallCheck(this, ValidationResultProperty);
+  function ValidationResultProperty(group) {
+    _classCallCheck(this, ValidationResultProperty);
 
-        this.group = group;
-        this.isValid = true;
-        this.isDirty = false;
-        this.message = null;
-        this.failingRule = null;
-        this.onValidateCallbacks = [];
-    }
+    this.group = group;
+    this.isValid = true;
+    this.isDirty = false;
+    this.message = null;
+    this.failingRule = null;
+    this.onValidateCallbacks = [];
+  }
 
-    _createClass(ValidationResultProperty, {
-        onValidate: {
-            value: function onValidate(onValidateCallback) {
-                this.onValidateCallbacks.push(onValidateCallback);
-            }
-        },
-        setValidity: {
-            value: function setValidity(validationResponse, shouldBeDirty) {
-                var notifyObservers = !this.isDirty && shouldBeDirty || this.isValid !== validationResponse.isValid || this.message !== validationResponse.message;
+  _createClass(ValidationResultProperty, {
+    onValidate: {
+      value: function onValidate(onValidateCallback) {
+        this.onValidateCallbacks.push(onValidateCallback);
+      }
+    },
+    setValidity: {
+      value: function setValidity(validationResponse, shouldBeDirty) {
+        var notifyObservers = !this.isDirty && shouldBeDirty || this.isValid !== validationResponse.isValid || this.message !== validationResponse.message;
 
-                if (shouldBeDirty) this.isDirty = true;
-                this.message = validationResponse.message;
-                this.failingRule = validationResponse.failingRule;
-                this.isValid = validationResponse.isValid; //Set isValid last in case someone has observed 'isValid'
+        if (shouldBeDirty) this.isDirty = true;
+        this.message = validationResponse.message;
+        this.failingRule = validationResponse.failingRule;
+        this.isValid = validationResponse.isValid; //Set isValid last in case someone has observed 'isValid'
 
-                if (this.isValid !== this.group.isValid) this.group.checkValidity();
+        if (this.isValid !== this.group.isValid) this.group.checkValidity();
 
-                if (notifyObservers) {
-                    for (var i = 0; i < this.onValidateCallbacks.length; i++) {
-                        var callback = this.onValidateCallbacks[i];
-                        callback(this);
-                    }
-                }
-            }
+        if (notifyObservers) {
+          for (var i = 0; i < this.onValidateCallbacks.length; i++) {
+            var callback = this.onValidateCallbacks[i];
+            callback(this);
+          }
         }
-    });
+      }
+    }
+  });
 
-    return ValidationResultProperty;
+  return ValidationResultProperty;
 })();

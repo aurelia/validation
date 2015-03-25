@@ -25,6 +25,8 @@ var _validationValidateAttachedBehavior = require("./validation/validateAttached
 
 _defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehavior));
 
+_defaults(exports, _interopRequireWildcard(require("./validation/validateAttachedBehaviorConfig")));
+
 var ValidateAttachedBehavior = _validationValidateAttachedBehavior.ValidateAttachedBehavior;
 
 function install(aurelia) {

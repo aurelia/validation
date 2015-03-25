@@ -1,4 +1,4 @@
-define(["exports", "./validation/validationLocaleRepository", "./validation/validationResult", "./validation/validationRules", "./validation/validationRulesCollection", "./validation/validationGroupBuilder", "./validation/validation", "./validation/validateAttachedBehavior"], function (exports, _validationValidationLocaleRepository, _validationValidationResult, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroupBuilder, _validationValidation, _validationValidateAttachedBehavior) {
+define(["exports", "./validation/validationLocaleRepository", "./validation/validationResult", "./validation/validationRules", "./validation/validationRulesCollection", "./validation/validationGroupBuilder", "./validation/validation", "./validation/validateAttachedBehavior", "./validation/validateAttachedBehaviorConfig"], function (exports, _validationValidationLocaleRepository, _validationValidationResult, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroupBuilder, _validationValidation, _validationValidateAttachedBehavior, _validationValidateAttachedBehaviorConfig) {
 	"use strict";
 
 	var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
@@ -23,6 +23,8 @@ define(["exports", "./validation/validationLocaleRepository", "./validation/vali
 	_defaults(exports, _interopRequireWildcard(_validationValidation));
 
 	_defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehavior));
+
+  _defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehaviorConfig));
 
 	var ValidateAttachedBehavior = _validationValidateAttachedBehavior.ValidateAttachedBehavior;
 

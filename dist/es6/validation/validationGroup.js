@@ -2,126 +2,130 @@ import {ValidationGroupBuilder} from '../validation/validationGroupBuilder';
 import {ValidationResult} from '../validation/validationResult';
 
 export class ValidationGroup {
-    constructor(subject, observerLocator) {
-        this.result = new ValidationResult();
-        this.subject = subject;
-        this.validationProperties = [];
-        this.builder = new ValidationGroupBuilder(observerLocator, this);
-    }
-    checkAll() {
-        for (let i = this.validationProperties.length - 1; i >= 0; i--) {
-            var validatorProperty = this.validationProperties[i];
-            validatorProperty.validateCurrentValue(true);
-        }
-        return this.result.isValid;
-    }
+  constructor(subject, observerLocator) {
+    this.result = new ValidationResult();
+    this.subject = subject;
+    this.validationProperties = [];
+    this.builder = new ValidationGroupBuilder(observerLocator, this);
+  }
 
-    ensure(propertyName) {
-        return this.builder.ensure(propertyName);
+  checkAll() {
+    for (let i = this.validationProperties.length - 1; i >= 0; i--) {
+      var validatorProperty = this.validationProperties[i];
+      validatorProperty.validateCurrentValue(true);
     }
+    return this.result.isValid;
+  }
 
-    notEmpty() {
-        return this.builder.notEmpty();
-    }
+  ensure(propertyName) {
+    return this.builder.ensure(propertyName);
+  }
 
-    minimum(minimumValue) {
-        return this.builder.minimum(minimumValue);
-    }
-    between(minimumValue, maximumValue)
-    {
-        return this.builder.between(minimumValue, maximumValue);
-    }
+  notEmpty() {
+    return this.builder.notEmpty();
+  }
 
-    maximum(maximumValue) {
-        return this.builder.maximum(maximumValue);
-    }
+  minimum(minimumValue) {
+    return this.builder.minimum(minimumValue);
+  }
 
-    equals(otherValue, otherValueLabel) {
-        return this.builder.equals(otherValue, otherValueLabel);
-    }
+  between(minimumValue, maximumValue) {
+    return this.builder.between(minimumValue, maximumValue);
+  }
 
-    notEquals(otherValue, otherValueLabel) {
-        return this.builder.notEquals(otherValue, otherValueLabel);
-    }
+  maximum(maximumValue) {
+    return this.builder.maximum(maximumValue);
+  }
 
-    email() {
-        return this.builder.email();
-    }
+  equals(otherValue, otherValueLabel) {
+    return this.builder.equals(otherValue, otherValueLabel);
+  }
 
-    in(collection){
-        return this.builder.in(collection);
-    }
+  notEquals(otherValue, otherValueLabel) {
+    return this.builder.notEquals(otherValue, otherValueLabel);
+  }
 
-    minLength(minimumValue) {
-        return this.builder.minLength(minimumValue);
-    }
+  email() {
+    return this.builder.email();
+  }
 
-    maxLength(maximumValue) {
-        return this.builder.maxLength(maximumValue);
-    }
+  in(collection) {
+    return this.builder.in(collection);
+  }
 
-    betweenLength(minimumValue, maximumValue)
-    {
-        return this.builder.betweenLength(minimumValue, maximumValue);
-    }
+  minLength(minimumValue) {
+    return this.builder.minLength(minimumValue);
+  }
 
-    isNumeric() {
-        return this.builder.isNumeric();
-    }
+  maxLength(maximumValue) {
+    return this.builder.maxLength(maximumValue);
+  }
 
-    isDigit(){
-        return this.builder.isDigit();
-    }
+  betweenLength(minimumValue, maximumValue) {
+    return this.builder.betweenLength(minimumValue, maximumValue);
+  }
 
-    isAlphanumeric(){
-        return this.builder.isAlphaNumeric();
-    }
+  isNumeric() {
+    return this.builder.isNumeric();
+  }
 
-    isAlphanumericOrWhitespace(){
-        return this.builder.isAlphanumericOrWhitespace();
-    }
+  isDigit() {
+    return this.builder.isDigit();
+  }
 
-    isStrongPassword(minimumComplexityLevel){
-        return this.builder.isStrongPassword(minimumComplexityLevel);
-    }
+  isAlphanumeric() {
+    return this.builder.isAlphaNumeric();
+  }
 
-    matchesRegex(regexString) {
-        return this.builder.matchesRegex(regexString);
-    }
+  isAlphanumericOrWhitespace() {
+    return this.builder.isAlphanumericOrWhitespace();
+  }
 
-    matches(regex) {
-        return this.builder.matches(regex);
-    }
+  isStrongPassword(minimumComplexityLevel) {
+    return this.builder.isStrongPassword(minimumComplexityLevel);
+  }
 
-    passes(customFunction, threshold)
-    {
-        return this.builder.passes(customFunction, threshold);
-    }
+  matchesRegex(regexString) {
+    return this.builder.matchesRegex(regexString);
+  }
 
-    passesRule(validationRule) {
-        return this.builder.passesRule(validationRule);
-    }
+  matches(regex) {
+    return this.builder.matches(regex);
+  }
 
-    if(conditionExpression, threshold){
-        return this.builder.if(conditionExpression, threshold);
-    }
-    else(){
-        return this.builder.else();
-    }
-    endIf(){
-        return this.builder.endIf();
-    }
+  passes(customFunction, threshold) {
+    return this.builder.passes(customFunction, threshold);
+  }
 
-    switch(conditionExpression){
-        return this.builder.switch(conditionExpression);
-    }
-    case(caseLabel){
-        return this.builder.case(caseLabel);
-    }
-    default(){
-        return this.builder.default();
-    }
-    endSwitch(){
-        return this.builder.endSwitch();
-    }
+  passesRule(validationRule) {
+    return this.builder.passesRule(validationRule);
+  }
+
+  if(conditionExpression, threshold) {
+    return this.builder.if(conditionExpression, threshold);
+  }
+
+  else() {
+    return this.builder.else();
+  }
+
+  endIf() {
+    return this.builder.endIf();
+  }
+
+  switch(conditionExpression) {
+    return this.builder.switch(conditionExpression);
+  }
+
+  case(caseLabel) {
+    return this.builder.case(caseLabel);
+  }
+
+  default() {
+    return this.builder.default();
+  }
+
+  endSwitch() {
+    return this.builder.endSwitch();
+  }
 }

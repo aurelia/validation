@@ -5,6 +5,7 @@ export * from './validation/validationRulesCollection';
 export * from './validation/validationGroupBuilder';
 export * from './validation/validation';
 export * from './validation/validateAttachedBehavior';
+export * from './validation/validateAttachedBehaviorConfig'
 
 import {ValidateAttachedBehavior} from './validation/validateAttachedBehavior'
 
