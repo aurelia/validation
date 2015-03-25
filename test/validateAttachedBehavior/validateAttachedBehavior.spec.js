@@ -61,7 +61,7 @@ class TestDOM {
 }
 
 describe('Tests on ValidateAttachedBehavior', () => {
-  it('should be working', () => {
+  it('should be working with a simple use case', () => {
     var subject = TestSubject.createInstance();
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
             <div class="form-group" id="formGroupFirstName">
@@ -76,8 +76,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
     var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     behavior.value = subject.validation;
-    debugger;
-    behavior.attached();
+    behavior.valueChanged();
 
     subject.firstName = '';
     subject.validation.checkAll();
@@ -106,6 +105,94 @@ describe('Tests on ValidateAttachedBehavior', () => {
     expect(lastNameMessage.textContent).toBe('');
   });
 
+  it('should be working even before checkAll is called', () => {
+    var subject = TestSubject.createInstance();
+    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
+            <div class="form-group" id="formGroupFirstName">
+            <label for="fn" id="labelFirstName" >First Name</label>
+            <input type="text" value.bind="firstName" class="form-control" id="fn" placeholder="first name">
+            </div>
+            <div class="form-group" id="formGroupLastName">
+            <label for="ln"  id="labelLastName">Last Name</label>
+            <input type="text" value.bind="lastName" class="form-control" id="ln" placeholder="last name">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            </form>`);
+    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+    behavior.value = subject.validation;
+    behavior.valueChanged();
+
+    //default: adds 'has-warning'/'has-success' to form-group
+    var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
+    expect(firstNameGroup.classList.contains('has-warning')).toBe(false);
+
+    var lastNameGroup = testHTML.querySelector('#formGroupLastName');
+    expect(lastNameGroup.classList.contains('has-success')).toBe(false);
+
+
+    //default: adds <p> after label
+    var firstNameLabel = testHTML.querySelector('#labelFirstName');
+    var firstNameMessage = firstNameLabel.nextSibling;
+    expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+    expect(firstNameMessage.classList.contains('help-block')).toBe(true);
+    expect(firstNameMessage.textContent).toBe('');
+
+
+    //default: adds <p> after element
+    var lastNameLabel = testHTML.querySelector('#labelLastName');
+    var lastNameMessage = lastNameLabel.nextSibling;
+    expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+    expect(lastNameMessage.classList.contains('help-block')).toBe(true);
+    expect(lastNameMessage.textContent).toBe('');
+  });
+
+
+  describe('Tests on ValidateAttachedBehavior', () => {
+    it('should be working if labels have no proper "for" attribute', () => {
+      var subject = TestSubject.createInstance();
+      var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
+            <div class="form-group" id="formGroupFirstName">
+            <label id="labelFirstName" >First Name</label>
+            <input type="text" value.bind="firstName" class="form-control" id="fn" placeholder="first name">
+            </div>
+            <div class="form-group" id="formGroupLastName">
+            <label id="labelLastName">Last Name</label>
+            <input type="text" value.bind="lastName" class="form-control" id="ln" placeholder="last name">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            </form>`);
+      var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+      behavior.value = subject.validation;
+      behavior.valueChanged();
+
+      subject.firstName = '';
+      subject.validation.checkAll();
+
+      //default: adds 'has-warning'/'has-success' to form-group
+      var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
+      expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
+
+      var lastNameGroup = testHTML.querySelector('#formGroupLastName');
+      expect(lastNameGroup.classList.contains('has-success')).toBe(true);
+
+
+      //default: adds <p> after label
+      var firstNameLabel = testHTML.querySelector('#labelFirstName');
+      var firstNameMessage = firstNameLabel.nextSibling;
+      expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(firstNameMessage.classList.contains('help-block')).toBe(true);
+      expect(firstNameMessage.textContent).toBe('is required');
+
+
+      //default: adds <p> after element
+      var lastNameLabel = testHTML.querySelector('#labelLastName');
+      var lastNameMessage = lastNameLabel.nextSibling;
+      expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(lastNameMessage.classList.contains('help-block')).toBe(true);
+      expect(lastNameMessage.textContent).toBe('');
+    });
+  });
+
   it('should be working with nested properties', () => {
     var subject = NestedTestSubject.createInstance(null);
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
@@ -121,7 +208,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
     var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     behavior.value = subject.validationNested;
-    behavior.attached();
+    behavior.valueChanged();
 
     subject.address.street = '';
     subject.validationNested.checkAll();
@@ -168,11 +255,11 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
     var streetBehavior = new ValidateAttachedBehavior(testHTML.querySelector('#fn'), new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     streetBehavior.value = subject.validation.result.properties.street;
-    streetBehavior.attached();
+    streetBehavior.valueChanged();
 
     var numberBehavior = new ValidateAttachedBehavior(testHTML.querySelector('#ln'), new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     numberBehavior.value = subject.validation.result.properties.number;
-    numberBehavior.attached();
+    numberBehavior.valueChanged();
 
     subject.address.street = '';
     subject.validation.checkAll();
@@ -217,7 +304,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
     var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     behavior.value = subject.validation;
-    behavior.attached();
+    behavior.valueChanged();
 
     subject.firstName = '';
     subject.validation.checkAll();

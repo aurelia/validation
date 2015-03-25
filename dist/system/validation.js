@@ -38,10 +38,10 @@ System.register(["./validation/validationLocaleRepository", "./validation/valida
 			}
 
 			ValidateAttachedBehavior = _validationValidateAttachedBehavior.ValidateAttachedBehavior;
-    }, function (_validationValidateAttachedBehaviorConfig) {
-      for (var _key8 in _validationValidateAttachedBehaviorConfig) {
-        _export(_key8, _validationValidateAttachedBehaviorConfig[_key8]);
-      }
+		}, function (_validationValidateAttachedBehaviorConfig) {
+			for (var _key8 in _validationValidateAttachedBehaviorConfig) {
+				_export(_key8, _validationValidateAttachedBehaviorConfig[_key8]);
+			}
 		}],
 		execute: function () {
 			"use strict";

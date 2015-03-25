@@ -89,7 +89,7 @@ var SwitchCaseValidationRulesCollection = exports.SwitchCaseValidationRulesColle
     this.innerCollections = [];
     this.defaultCollection = new ValidationRulesCollection();
     this.caseLabel = "";
-    this.defaultCaseLabel = {description: "this is the case label for 'default'"};
+    this.defaultCaseLabel = { description: "this is the case label for 'default'" };
   }
 
   _createClass(SwitchCaseValidationRulesCollection, {
@@ -110,8 +110,7 @@ var SwitchCaseValidationRulesCollection = exports.SwitchCaseValidationRulesColle
 
         if (caseLabel === this.defaultCaseLabel) {
           return this.defaultCollection;
-        }
-        var currentCollection = null;
+        }var currentCollection = null;
         for (var i = 0; i < this.innerCollections.length; i++) {
           currentCollection = this.innerCollections[i];
           if (currentCollection.caseLabel === caseLabel) {
@@ -154,7 +153,7 @@ var SwitchCaseValidationRulesCollection = exports.SwitchCaseValidationRulesColle
     notEmpty: {
       value: function notEmpty() {
         var collection = this.getCurrentCollection(this.caseLabel);
-        if (collection !== null) collection.notEmpty(); else this.defaultCollection.notEmpty();
+        if (collection !== null) collection.notEmpty();else this.defaultCollection.notEmpty();
       }
     }
   });

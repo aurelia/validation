@@ -20,14 +20,10 @@ export class ValidateAttachedBehavior {
   }
 
   valueChanged(newValue) {
-    //This empty method must be here, aurelia will not set this.value if it's not :-O
-  }
-
-  attached() {
     if (this.value === null || this.value === undefined)
-      throw 'Cannot bind ValidateAttachedBehavior to null/undefined';
+      return;
     if (typeof (this.value) === 'string') {
-      return; //this is just to tell the real validation instance (higher in the DOM) the exact property to bind to
+      return; //this is just to tell the real validation instance (higher in the DOM) the exact property-path to bind to
     }
     else if (this.value.constructor.name === 'ValidationResultProperty') {
       //Binding to a single validation property
@@ -38,6 +34,7 @@ export class ValidateAttachedBehavior {
       this.subscribeChangedHandlers(this.element);
     }
   }
+
 
   searchFormGroup(currentElement, currentDepth) {
     if (currentDepth === 5) {
@@ -61,8 +58,10 @@ export class ValidateAttachedBehavior {
       return;
     }
     if (currentElement.nodeName === "LABEL" &&
-      currentElement.attributes['for'] &&
-      currentElement.attributes['for'].value === inputId) {
+      ((currentElement.attributes['for'] && currentElement.attributes['for'].value === inputId) ||
+      (!currentElement.attributes['for']))
+    )
+      {
       currentLabels.push(currentElement);
     }
 
@@ -119,41 +118,58 @@ export class ValidateAttachedBehavior {
         element.parentNode.appendChild(helpBlock);
       }
     }
+    if(validationProperty)
+      helpBlock.textContent = validationProperty.message;
+    else
+      helpBlock.textContent = '';
+  }
 
-    helpBlock.textContent = validationProperty.message;
+  appendUIVisuals(validationProperty, currentElement)
+  {
+    var formGroup = this.searchFormGroup(currentElement, 0);
+    if (formGroup) {
+      if(validationProperty) {
+        if (validationProperty.isValid) {
+          formGroup.classList.remove('has-warning');
+          formGroup.classList.add('has-success');
+        }
+        else {
+          formGroup.classList.remove('has-success');
+          formGroup.classList.add('has-warning');
+        }
+      }
+      else{
+        formGroup.classList.remove('has-warning');
+        formGroup.classList.remove('has-success');
+      }
+      if (this.config.appendMessageToInput) {
+        this.appendMessageToElement(currentElement, validationProperty);
+      }
+      if (this.config.appendMessageToLabel) {
+        var labels = this.findLabels(formGroup, currentElement.id);
+        for (var ii = 0; ii < labels.length; ii++) {
+          var label = labels[ii];
+          this.appendMessageToElement(label, validationProperty);
+
+        }
+      }
+    }
   }
 
   subscribeChangedHandlersForProperty(validationProperty, currentElement) {
     if (validationProperty !== undefined) {
+      this.appendUIVisuals(null, currentElement);
       validationProperty.onValidate(
         (validationProperty) => {
-          var formGroup = this.searchFormGroup(currentElement, 0);
-          if (formGroup) {
-            if (validationProperty.isValid) {
-              formGroup.classList.remove('has-warning');
-              formGroup.classList.add('has-success');
-            }
-            else {
-              formGroup.classList.remove('has-success');
-              formGroup.classList.add('has-warning');
-            }
-            if (this.config.appendMessageToInput) {
-              this.appendMessageToElement(currentElement, validationProperty);
-            }
-            if (this.config.appendMessageToLabel) {
-              var labels = this.findLabels(formGroup, currentElement.id);
-              for (var ii = 0; ii < labels.length; ii++) {
-                var label = labels[ii];
-                this.appendMessageToElement(label, validationProperty);
-
-              }
-            }
-          }
+          this.appendUIVisuals(validationProperty, currentElement);
         }
       );
     }
   }
 
   detached() {
+  }
+
+  attached() {
   }
 }

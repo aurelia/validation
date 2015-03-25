@@ -27,13 +27,10 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
   _createClass(ValidateAttachedBehavior, {
     valueChanged: {
       value: function valueChanged(newValue) {
-      }
-    },
-    attached: {
-      value: function attached() {
-        if (this.value === null || this.value === undefined) throw "Cannot bind ValidateAttachedBehavior to null/undefined";
-        if (typeof this.value === "string") {
-          return; //this is just to tell the real validation instance (higher in the DOM) the exact property to bind to
+        if (this.value === null || this.value === undefined) {
+          return;
+        }if (typeof this.value === "string") {
+          return; //this is just to tell the real validation instance (higher in the DOM) the exact property-path to bind to
         } else if (this.value.constructor.name === "ValidationResultProperty") {
           //Binding to a single validation property
           this.subscribeChangedHandlersForProperty(this.value, this.element);
@@ -66,7 +63,7 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
         if (currentDepth === 5) {
           return;
         }
-        if (currentElement.nodeName === "LABEL" && currentElement.attributes["for"] && currentElement.attributes["for"].value === inputId) {
+        if (currentElement.nodeName === "LABEL" && (currentElement.attributes["for"] && currentElement.attributes["for"].value === inputId || !currentElement.attributes["for"])) {
           currentLabels.push(currentElement);
         }
 
@@ -123,8 +120,36 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
             element.parentNode.appendChild(helpBlock);
           }
         }
-
-        helpBlock.textContent = validationProperty.message;
+        if (validationProperty) helpBlock.textContent = validationProperty.message;else helpBlock.textContent = "";
+      }
+    },
+    appendUIVisuals: {
+      value: function appendUIVisuals(validationProperty, currentElement) {
+        var formGroup = this.searchFormGroup(currentElement, 0);
+        if (formGroup) {
+          if (validationProperty) {
+            if (validationProperty.isValid) {
+              formGroup.classList.remove("has-warning");
+              formGroup.classList.add("has-success");
+            } else {
+              formGroup.classList.remove("has-success");
+              formGroup.classList.add("has-warning");
+            }
+          } else {
+            formGroup.classList.remove("has-warning");
+            formGroup.classList.remove("has-success");
+          }
+          if (this.config.appendMessageToInput) {
+            this.appendMessageToElement(currentElement, validationProperty);
+          }
+          if (this.config.appendMessageToLabel) {
+            var labels = this.findLabels(formGroup, currentElement.id);
+            for (var ii = 0; ii < labels.length; ii++) {
+              var label = labels[ii];
+              this.appendMessageToElement(label, validationProperty);
+            }
+          }
+        }
       }
     },
     subscribeChangedHandlersForProperty: {
@@ -132,34 +157,18 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
         var _this = this;
 
         if (validationProperty !== undefined) {
+          this.appendUIVisuals(null, currentElement);
           validationProperty.onValidate(function (validationProperty) {
-            var formGroup = _this.searchFormGroup(currentElement, 0);
-            if (formGroup) {
-              if (validationProperty.isValid) {
-                formGroup.classList.remove("has-warning");
-                formGroup.classList.add("has-success");
-              } else {
-                formGroup.classList.remove("has-success");
-                formGroup.classList.add("has-warning");
-              }
-              if (_this.config.appendMessageToInput) {
-                _this.appendMessageToElement(currentElement, validationProperty);
-              }
-              if (_this.config.appendMessageToLabel) {
-                var labels = _this.findLabels(formGroup, currentElement.id);
-                for (var ii = 0; ii < labels.length; ii++) {
-                  var label = labels[ii];
-                  _this.appendMessageToElement(label, validationProperty);
-                }
-              }
-            }
+            _this.appendUIVisuals(validationProperty, currentElement);
           });
         }
       }
     },
     detached: {
-      value: function detached() {
-      }
+      value: function detached() {}
+    },
+    attached: {
+      value: function attached() {}
     }
   }, {
     metadata: {
@@ -176,5 +185,3 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
 
   return ValidateAttachedBehavior;
 })();
-
-//This empty method must be here, aurelia will not set this.value if it's not :-O

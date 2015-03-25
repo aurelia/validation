@@ -16,28 +16,9 @@ System.register(["aurelia-binding", "../validation/validationRules", "../validat
     execute: function () {
       "use strict";
 
-      _createClass = (function () {
-        function defineProperties(target, props) {
-          for (var key in props) {
-            var prop = props[key];
-            prop.configurable = true;
-            if (prop.value) prop.writable = true;
-          }
-          Object.defineProperties(target, props);
-        }
+      _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-        return function (Constructor, protoProps, staticProps) {
-          if (protoProps) defineProperties(Constructor.prototype, protoProps);
-          if (staticProps) defineProperties(Constructor, staticProps);
-          return Constructor;
-        };
-      })();
-
-      _classCallCheck = function (instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-          throw new TypeError("Cannot call a class as a function");
-        }
-      };
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
       Validation = _export("Validation", (function () {
         function Validation(observerLocator) {

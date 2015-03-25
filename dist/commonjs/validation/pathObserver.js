@@ -93,8 +93,7 @@ var PathObserver = exports.PathObserver = (function () {
       value: function getObserver() {
         if (this.path.length == 1) {
           return this.observerLocator.getObserver(this.subject, this.path[0]);
-        }
-        return this;
+        }return this;
       }
     },
     getValue: {
@@ -112,10 +111,10 @@ var PathObserver = exports.PathObserver = (function () {
             }
           }
           if (currentObserver.obj !== expectedSubject)
-          //Happens if you set a value somewhere along the binding path and immediately call getValue (on the very last observer)
-          {
-            this.observeParts(this.path[i - 1]);
-            break;
+            //Happens if you set a value somewhere along the binding path and immediately call getValue (on the very last observer)
+            {
+              this.observeParts(this.path[i - 1]);
+              break;
             }
           expectedSubject = currentObserver.getValue();
         }

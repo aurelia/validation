@@ -116,10 +116,7 @@ var BetweenLengthValidationRule = exports.BetweenLengthValidationRule = (functio
   function BetweenLengthValidationRule(minimumLength, maximumLength) {
     _classCallCheck(this, BetweenLengthValidationRule);
 
-    _get(Object.getPrototypeOf(BetweenLengthValidationRule.prototype), "constructor", this).call(this, {
-      minimumLength: minimumLength,
-      maximumLength: maximumLength
-    }, function (newValue, threshold) {
+    _get(Object.getPrototypeOf(BetweenLengthValidationRule.prototype), "constructor", this).call(this, { minimumLength: minimumLength, maximumLength: maximumLength }, function (newValue, threshold) {
       return newValue.length !== undefined && newValue.length >= threshold.minimumLength && newValue.length < threshold.maximumLength;
     });
   }
@@ -203,10 +200,7 @@ var BetweenValueValidationRule = exports.BetweenValueValidationRule = (function 
   function BetweenValueValidationRule(minimumValue, maximumValue) {
     _classCallCheck(this, BetweenValueValidationRule);
 
-    _get(Object.getPrototypeOf(BetweenValueValidationRule.prototype), "constructor", this).call(this, {
-      minimumValue: minimumValue,
-      maximumValue: maximumValue
-    }, function (newValue, threshold) {
+    _get(Object.getPrototypeOf(BetweenValueValidationRule.prototype), "constructor", this).call(this, { minimumValue: minimumValue, maximumValue: maximumValue }, function (newValue, threshold) {
       return threshold.minimumValue <= newValue && newValue < threshold.maximumValue;
     });
   }
