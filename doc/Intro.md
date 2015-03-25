@@ -464,7 +464,7 @@ export class App {
 }
 ```
 
-##How does are elements and validation rules matched
+##How are elements and validation rules matched
 The validateAttachedBehavior, once bound to a validation instance, will loop over every child element and try to match elements against validation rules.
 A simple example:
 ```javascript
