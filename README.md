@@ -48,6 +48,10 @@ this.validation = validation.on(this)
 - [I18N](https://github.com/aurelia/validation/blob/master/doc/Intro.md#i18n)
 - [Custom Validation](https://github.com/aurelia/validation/blob/master/doc/Intro.md#custom-validation)
 - [Customizing visualization](https://github.com/aurelia/validation/blob/master/doc/Intro.md#customizing-the-visualization)
+  - [Basic Usage](https://github.com/aurelia/validation/blob/master/doc/Intro.md#basic-usage-2)
+  - [Visual clues and customization](https://github.com/aurelia/validation/blob/master/doc/Intro.md#visual-clues-and-customization)
+  - [How are elements and validation rules matched](https://github.com/aurelia/validation/blob/master/doc/Intro.md#how-are-elements-and-validation-rules-matched)
+  - [Preventing form submission](https://github.com/aurelia/validation/blob/master/doc/Intro.md#how-are-elements-and-validation-rules-matched)
 - [ValidationResult](https://github.com/aurelia/validation/blob/master/doc/Intro.md#validationresult)
 
 ## Dependencies
