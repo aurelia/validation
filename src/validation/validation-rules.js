@@ -51,12 +51,41 @@ export class ValidationRule {
 }
 
 export class EmailValidationRule extends ValidationRule {
+  //https://github.com/chriso/validator.js/blob/master/LICENSE
   constructor() {
-    this.emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+    this.emailUserUtf8Regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))$/i;
+    this.isFQDN = function (str) {
+      var parts = str.split('.');
+      for (var part, i = 0; i < parts.length; i++) {
+        part = parts[i];
+        if (part.indexOf('__') >= 0) {
+          return false;
+        }
+        part = part.replace(/_/g, '');
+        if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+          return false;
+        }
+        if (part[0] === '-' || part[part.length - 1] === '-' ||
+          part.indexOf('---') >= 0) {
+          return false;
+        }
+      }
+      return true;
+    };
     super(
       null,
       (newValue, threshold) => {
-        return this.emailRegex.test(newValue);
+        if (/\s/.test(newValue)) {
+          return false;
+        }
+        var parts = newValue.split('@');
+        var domain = parts.pop();
+        var user = parts.join('@');
+
+        if (!this.isFQDN(domain)) {
+          return false;
+        }
+        return  this.emailUserUtf8Regex.test(user);
       }
     );
   }
