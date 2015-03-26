@@ -29,42 +29,27 @@ Change the *aurelia-app* attribute to *aurelia-app="main"*.
 ```
 The aurelia framework will now bootstrap the application by looking for your **main.js** file and executing the exported *configure* method. Go ahead and add a new **main.js** file with these contents:
 ``` javascript
-    import {LogManager} from 'aurelia-framework';
-    import {ConsoleAppender} from 'aurelia-logging-console';
-    
-    LogManager.addAppender(new ConsoleAppender());
-    LogManager.setLevel(LogManager.levels.debug);
-    
-    export function configure(aurelia) {
-      aurelia.use
-    	.defaultBindingLanguage()
-    	.defaultResources()
-    	.router()
-    	.eventAggregator();
-    
-      aurelia.start().then(a => a.setRoot('app', document.body));
-    }
+export function configure(aurelia) {
+  aurelia.use
+    .standardConfiguration()
+    .developmentLogging();
+
+  aurelia.start().then(a => a.setRoot('app', document.body)); 
+}
+
 ```
 
 #### Load the plugin
 During bootstrapping phase, you can now include the validation plugin:
 
 ``` javascript
-import {LogManager} from 'aurelia-framework';
-import {ConsoleAppender} from 'aurelia-logging-console';
-
-LogManager.addAppender(new ConsoleAppender());
-LogManager.setLevel(LogManager.levels.debug);
-
 export function configure(aurelia) {
   aurelia.use
-    .defaultBindingLanguage()
-    .defaultResources()
-    .router()
-    .eventAggregator()
-    .plugin('aurelia-validation'); //Add this line to load the validation plugin
+    .standardConfiguration()
+    .developmentLogging()
+    .plugin('aurelia-validation'); //Add this line to load the plugin
 
-  aurelia.start().then(a => a.setRoot('app', document.body));
+  aurelia.start().then(a => a.setRoot('app', document.body)); 
 }
 ```
 
