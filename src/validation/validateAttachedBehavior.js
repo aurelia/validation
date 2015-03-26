@@ -73,8 +73,19 @@ export class ValidateAttachedBehavior {
 
     var atts = currentElement.attributes;
     if (atts[attributeName]) {
-      var bindingValue = atts[attributeName].value;
-      var validationProperty = this.value.result.properties[bindingValue];
+      var bindingPath = atts[attributeName].value;
+      var validationProperty = this.value.result.properties[bindingPath];
+
+      if(attributeName == 'validate' && (validationProperty === null || validationProperty === undefined))
+      {
+        //Dev explicitly stated to show validation on a field, but there's no rules for this field
+        //Hence, we add an empty validationProperty for that field, without any rules
+        //This way, when 'checkAll()' is called, the input element 'turns green'
+        this.value.ensure(bindingPath);
+        validationProperty = this.value.result.properties[bindingPath];
+      }
+
+
       this.subscribeChangedHandlersForProperty(validationProperty, currentElement);
       return true;
     }

@@ -8,6 +8,7 @@ class TestSubject {
   constructor(validation) {
     this.firstName = 'John';
     this.lastName = 'Doe';
+    this.address = {};
     this.validation = validation.on(this)
       .ensure('firstName')
       .notEmpty()
@@ -103,6 +104,33 @@ describe('Tests on ValidateAttachedBehavior', () => {
     expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
     expect(lastNameMessage.classList.contains('help-block')).toBe(true);
     expect(lastNameMessage.textContent).toBe('');
+  });
+
+
+  it('should add "success" to properties that have no rules defined', () => {
+    var subject = TestSubject.createInstance();
+    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
+            <div class="form-group" id="formGroupAddress">
+            <label for="ad" id="labelAddress" >Address</label>
+            <input type="text" value.bind="address" class="form-control" id="ad" placeholder="address" validate="address">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            </form>`);
+    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+    behavior.value = subject.validation;
+    behavior.valueChanged();
+    subject.validation.checkAll();
+
+    //default: adds 'has-warning'/'has-success' to form-group
+    var addressGroup = testHTML.querySelector('#formGroupAddress');
+    expect(addressGroup.classList.contains('has-success')).toBe(true);
+
+    //default: adds <p> after label
+    var addressLabel = testHTML.querySelector('#labelAddress');
+    var addressMessage = addressLabel.nextSibling;
+    expect(addressMessage.classList.contains('aurelia-validation-message')).toBe(true);
+    expect(addressMessage.classList.contains('help-block')).toBe(true);
+    expect(addressMessage.textContent).toBe('');
   });
 
   it('should be working even before checkAll is called', () => {
