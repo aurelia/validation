@@ -12,15 +12,27 @@ Object.defineProperty(exports, "__esModule", {
 
 var ObserverLocator = require("aurelia-binding").ObserverLocator;
 
-var AllRules = _interopRequireWildcard(require("../validation/validationRules"));
+var AllRules = _interopRequireWildcard(require("../validation/validation-rules"));
 
-var AllCollections = _interopRequireWildcard(require("../validation/validationRulesCollection"));
+var AllCollections = _interopRequireWildcard(require("../validation/validation-rules-collection"));
 
-var ValidationGroup = require("../validation/validationGroup").ValidationGroup;
+var ValidationGroup = require("../validation/validation-group").ValidationGroup;
 
-var ValidationLocaleRepository = require("../validation/validationLocaleRepository").ValidationLocaleRepository;
+var ValidationLocaleRepository = require("../validation/validation-locale-repository").ValidationLocaleRepository;
+
+/**
+ * A lightweight validation plugin
+ * @class Validation
+ * @constructor
+ */
 
 var Validation = exports.Validation = (function () {
+
+  /**
+   * Instantiates a new {Validation}
+   * @param observerLocator the observerLocator used to observer properties
+   */
+
   function Validation(observerLocator) {
     _classCallCheck(this, Validation);
 
@@ -29,6 +41,13 @@ var Validation = exports.Validation = (function () {
 
   _createClass(Validation, {
     on: {
+
+      /**
+       * Returns a new validation group on the subject
+       * @param subject The subject to validate
+       * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
+       */
+
       value: function on(subject) {
         return new ValidationGroup(subject, this.observerLocator);
       }

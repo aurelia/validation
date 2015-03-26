@@ -1,4 +1,4 @@
-System.register(["aurelia-binding", "../validation/validationRules", "../validation/validationRulesCollection", "../validation/validationGroup", "../validation/validationLocaleRepository"], function (_export) {
+System.register(["aurelia-binding", "../validation/validation-rules", "../validation/validation-rules-collection", "../validation/validation-group", "../validation/validation-locale-repository"], function (_export) {
   var ObserverLocator, AllRules, AllCollections, ValidationGroup, ValidationLocaleRepository, _createClass, _classCallCheck, Validation;
 
   return {
@@ -20,7 +20,18 @@ System.register(["aurelia-binding", "../validation/validationRules", "../validat
 
       _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+      /**
+       * A lightweight validation plugin
+       * @class Validation
+       * @constructor
+       */
       Validation = _export("Validation", (function () {
+
+        /**
+         * Instantiates a new {Validation}
+         * @param observerLocator the observerLocator used to observer properties
+         */
+
         function Validation(observerLocator) {
           _classCallCheck(this, Validation);
 
@@ -29,6 +40,13 @@ System.register(["aurelia-binding", "../validation/validationRules", "../validat
 
         _createClass(Validation, {
           on: {
+
+            /**
+             * Returns a new validation group on the subject
+             * @param subject The subject to validate
+             * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
+             */
+
             value: function on(subject) {
               return new ValidationGroup(subject, this.observerLocator);
             }

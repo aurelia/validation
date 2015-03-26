@@ -1,18 +1,32 @@
 import {ObserverLocator} from 'aurelia-binding';
-import * as AllRules from '../validation/validationRules';
-import * as AllCollections from '../validation/validationRulesCollection'
-import {ValidationGroup} from '../validation/validationGroup';
-import {ValidationLocaleRepository} from '../validation/validationLocaleRepository';
+import * as AllRules from '../validation/validation-rules';
+import * as AllCollections from '../validation/validation-rules-collection'
+import {ValidationGroup} from '../validation/validation-group';
+import {ValidationLocaleRepository} from '../validation/validation-locale-repository';
 
+/**
+ * A lightweight validation plugin
+ * @class Validation
+ * @constructor
+ */
 export class Validation {
   static inject() {
     return [ObserverLocator];
   }
 
+  /**
+   * Instantiates a new {Validation}
+   * @param observerLocator the observerLocator used to observer properties
+   */
   constructor(observerLocator) {
     this.observerLocator = observerLocator;
   }
 
+  /**
+   * Returns a new validation group on the subject
+   * @param subject The subject to validate
+   * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
+   */
   on(subject) {
     return new ValidationGroup(subject, this.observerLocator);
   }

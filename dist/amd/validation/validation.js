@@ -1,4 +1,4 @@
-define(["exports", "aurelia-binding", "../validation/validationRules", "../validation/validationRulesCollection", "../validation/validationGroup", "../validation/validationLocaleRepository"], function (exports, _aureliaBinding, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroup, _validationValidationLocaleRepository) {
+define(["exports", "aurelia-binding", "../validation/validation-rules", "../validation/validation-rules-collection", "../validation/validation-group", "../validation/validation-locale-repository"], function (exports, _aureliaBinding, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroup, _validationValidationLocaleRepository) {
   "use strict";
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -14,7 +14,19 @@ define(["exports", "aurelia-binding", "../validation/validationRules", "../valid
   var ValidationGroup = _validationValidationGroup.ValidationGroup;
   var ValidationLocaleRepository = _validationValidationLocaleRepository.ValidationLocaleRepository;
 
+  /**
+   * A lightweight validation plugin
+   * @class Validation
+   * @constructor
+   */
+
   var Validation = exports.Validation = (function () {
+
+    /**
+     * Instantiates a new {Validation}
+     * @param observerLocator the observerLocator used to observer properties
+     */
+
     function Validation(observerLocator) {
       _classCallCheck(this, Validation);
 
@@ -23,6 +35,13 @@ define(["exports", "aurelia-binding", "../validation/validationRules", "../valid
 
     _createClass(Validation, {
       on: {
+
+        /**
+         * Returns a new validation group on the subject
+         * @param subject The subject to validate
+         * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
+         */
+
         value: function on(subject) {
           return new ValidationGroup(subject, this.observerLocator);
         }
