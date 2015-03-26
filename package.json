@@ -23,6 +23,10 @@
     "format": "register",
     "directories": {
       "lib": "dist/system"
+    },
+    "dependencies": {
+      "aurelia-binding": "github:aurelia/binding@^0.4.0",
+      "aurelia-templating": "github:aurelia/templating@^0.9.0"
     }
   },
   "devDependencies": {
