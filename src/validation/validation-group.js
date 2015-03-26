@@ -1,5 +1,5 @@
-import {ValidationGroupBuilder} from '../validation/validationGroupBuilder';
-import {ValidationResult} from '../validation/validationResult';
+import {ValidationGroupBuilder} from '../validation/validation-group-builder';
+import {ValidationResult} from '../validation/validation-result';
 
 export class ValidationGroup {
   constructor(subject, observerLocator) {

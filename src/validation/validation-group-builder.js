@@ -1,6 +1,6 @@
-import * as AllRules from '../validation/validationRules';
-import * as AllCollections from '../validation/validationRulesCollection'
-import {ValidationProperty} from '../validation/validationProperty';
+import * as AllRules from '../validation/validation-rules';
+import * as AllCollections from '../validation/validation-rules-collection'
+import {ValidationProperty} from '../validation/validation-property';
 
 export class ValidationGroupBuilder {
   constructor(observerLocator, validationGroup) {

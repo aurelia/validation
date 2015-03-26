@@ -1,5 +1,5 @@
-import * as AllCollections from '../validation/validationRulesCollection'
-import {PathObserver} from '../validation/pathObserver'
+import * as AllCollections from '../validation/validation-rules-collection'
+import {PathObserver} from '../validation/path-observer'
 
 export class ValidationProperty {
   constructor(observerLocator, propertyName, validationGroup, propertyResult) {

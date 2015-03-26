@@ -1,4 +1,4 @@
-import {CustomFunctionValidationRule} from '../../src/validation/validationRules';
+import {CustomFunctionValidationRule} from '../../src/validation/validation-rules';
 
 //No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'notEmpty()'
 

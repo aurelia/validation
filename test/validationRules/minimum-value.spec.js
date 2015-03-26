@@ -1,4 +1,4 @@
-import {MinimumValueValidationRule} from '../../src/validation/validationRules';
+import {MinimumValueValidationRule} from '../../src/validation/validation-rules';
 
 //No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'notEmpty()'
 

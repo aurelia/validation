@@ -1,8 +1,8 @@
 import {ObserverLocator} from 'aurelia-binding';
-import * as AllRules from '../validation/validationRules';
-import * as AllCollections from '../validation/validationRulesCollection'
-import {ValidationGroup} from '../validation/validationGroup';
-import {ValidationLocaleRepository} from '../validation/validationLocaleRepository';
+import * as AllRules from '../validation/validation-rules';
+import * as AllCollections from '../validation/validation-rules-collection'
+import {ValidationGroup} from '../validation/validation-group';
+import {ValidationLocaleRepository} from '../validation/validation-locale-repository';
 
 export class Validation {
   static inject() {

@@ -1,6 +1,6 @@
 import {Behavior} from 'aurelia-templating';
 import {ObserverLocator} from 'aurelia-binding';
-import {ValidateAttachedBehaviorConfig} from '../validation/validateAttachedBehaviorConfig'
+import {ValidateAttachedBehaviorConfig} from '../validation/validate-attached-behavior-config'
 
 export class ValidateAttachedBehavior {
   static metadata() {

@@ -1,7 +1,7 @@
 import {ObserverLocator} from 'aurelia-binding';
 import {Validation} from '../../src/validation/validation';
-import {ValidateAttachedBehavior} from '../../src/validation/validateAttachedBehavior';
-import {ValidateAttachedBehaviorConfig} from '../../src/validation/validateAttachedBehaviorConfig'
+import {ValidateAttachedBehavior} from '../../src/validation/validate-attached-behavior';
+import {ValidateAttachedBehaviorConfig} from '../../src/validation/validate-attached-behavior-config';
 
 
 class TestSubject {
