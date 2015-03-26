@@ -23,9 +23,9 @@ You'll need to register the plugin when your aurelia app is bootstrapping. If yo
 ``` html
 <body aurelia-app>
 ```
-Change the *aurelia-app* attribute to *aurelia-main*.
+Change the *aurelia-app* attribute to *aurelia-app="main"*.
 ``` html
-<body aurelia-main>
+<body aurelia-main="main">
 ```
 The aurelia framework will now bootstrap the application by looking for your **main.js** file and executing the exported *configure* method. Go ahead and add a new **main.js** file with these contents:
 ``` javascript
@@ -62,7 +62,7 @@ export function configure(aurelia) {
     .defaultResources()
     .router()
     .eventAggregator()
-    .plugin('aurelia-validation'); //Add this line to load the plugin
+    .plugin('aurelia-validation'); //Add this line to load the validation plugin
 
   aurelia.start().then(a => a.setRoot('app', document.body));
 }
