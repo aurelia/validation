@@ -22,6 +22,7 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
     this.observerLocator = observerLocator;
     this.changedObservers = [];
     this.config = config;
+    this.processedValidation = null;
   }
 
   _createClass(ValidateAttachedBehavior, {
@@ -29,7 +30,8 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
       value: function valueChanged(newValue) {
         if (this.value === null || this.value === undefined) {
           return;
-        }if (typeof this.value === "string") {
+        }this.processedValidation = this.value;
+        if (typeof this.value === "string") {
           return; //this is just to tell the real validation instance (higher in the DOM) the exact property-path to bind to
         } else if (this.value.constructor.name === "ValidationResultProperty") {
           //Binding to a single validation property
@@ -177,7 +179,9 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
       value: function detached() {}
     },
     attached: {
-      value: function attached() {}
+      value: function attached() {
+        if (this.processedValidation === null || this.processedValidation === undefined) this.valueChanged(this.value);
+      }
     }
   }, {
     metadata: {

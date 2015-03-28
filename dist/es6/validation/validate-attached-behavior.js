@@ -17,11 +17,13 @@ export class ValidateAttachedBehavior {
     this.observerLocator = observerLocator;
     this.changedObservers = [];
     this.config = config;
+    this.processedValidation = null;
   }
 
   valueChanged(newValue) {
     if (this.value === null || this.value === undefined)
       return;
+    this.processedValidation = this.value;
     if (typeof (this.value) === 'string') {
       return; //this is just to tell the real validation instance (higher in the DOM) the exact property-path to bind to
     }
@@ -180,5 +182,7 @@ export class ValidateAttachedBehavior {
   }
 
   attached() {
+    if(this.processedValidation === null || this.processedValidation === undefined)
+      this.valueChanged(this.value);
   }
 }
