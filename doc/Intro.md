@@ -426,13 +426,19 @@ The validateAttachedBehavior will loop through all nested child elements and try
 The validateAttachedBehavior uses TW Bootstrap by default to provide visual clues about valid/invalid properties.
 - for each input element, it will tyr to find the parent form-group element and add the appropriate TW BS has-error or has-success classes
 - for each input element, it will try to find the labels for that element and append a message with the TW BS help-block class. The content of this element is kept in sync with the validation message (or left empty for valid properties)
-- this added message element will have a aurelia-valiation-message class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label, you can add this style to app.html:
+- this added message element will have a aurelia-valiation-message class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label and the label is colored without adding a TW bootstrap "control-label" class, you can add these style to styles/styles.css:
 ```css
+	.aurelia-validation-message{
+	  display:  inline;
+	  margin-left : 5px;
+	}
+	.has-success label {
+	  color: #3c763d;
+	}
+	.has-warning label {
+	  color: #8a6d3b;
+	}
 
-            .aurelia-validation-message{
-                display:  inline;
-                margin-left : 5px;
-            }
 ```
 
 On a global application level, you can prevent the validateAttachedBehavior from appending this message to the labels, or you can have it append this message to the input control themselves. To do this, inject the *validateAttachedBehaviorConfig* instance in your app and set the *appendMessageToLabel* or *appendMessageToInput* properties.
