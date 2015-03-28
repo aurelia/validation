@@ -77,7 +77,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
     var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     behavior.value = subject.validation;
-    behavior.valueChanged();
+    behavior.attached();
 
     subject.firstName = '';
     subject.validation.checkAll();
@@ -118,7 +118,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
     var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     behavior.value = subject.validation;
-    behavior.valueChanged();
+    behavior.attached();
     subject.validation.checkAll();
 
     //default: adds 'has-warning'/'has-success' to form-group
@@ -148,7 +148,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
     var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     behavior.value = subject.validation;
-    behavior.valueChanged();
+    behavior.attached();
 
     //default: adds 'has-warning'/'has-success' to form-group
     var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
@@ -191,7 +191,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
       var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
       behavior.value = subject.validation;
-      behavior.valueChanged();
+      behavior.attached();
 
       subject.firstName = '';
       subject.validation.checkAll();
@@ -236,7 +236,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
     var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     behavior.value = subject.validationNested;
-    behavior.valueChanged();
+    behavior.attached();
 
     subject.address.street = '';
     subject.validationNested.checkAll();
@@ -283,11 +283,11 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
     var streetBehavior = new ValidateAttachedBehavior(testHTML.querySelector('#fn'), new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     streetBehavior.value = subject.validation.result.properties.street;
-    streetBehavior.valueChanged();
+    streetBehavior.attached();
 
     var numberBehavior = new ValidateAttachedBehavior(testHTML.querySelector('#ln'), new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     numberBehavior.value = subject.validation.result.properties.number;
-    numberBehavior.valueChanged();
+    numberBehavior.attached();
 
     subject.address.street = '';
     subject.validation.checkAll();
@@ -332,7 +332,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </form>`);
     var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
     behavior.value = subject.validation;
-    behavior.valueChanged();
+    behavior.attached();
 
     subject.firstName = '';
     subject.validation.checkAll();
