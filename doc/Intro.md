@@ -16,6 +16,10 @@ this will add the plugin into your `jspm_packages` folder as well as an mapping-
 "aurelia-validation": "github:aurelia-validation@X.X.X",
 ```
 
+If you're feeling experimental or cannot wait for the next release, you could also install the latest version by executing:
+```
+jspm install aurelia-validation=github:aurelia\validation@master
+```
 
 
 #### Migrate from aurelia-app to aurelia-main 
@@ -132,10 +136,12 @@ Secondly, let's provide some visual hints to the users. Open your **welcome.html
     <form role="form" submit.delegate="welcome()" validate.bind="validation" > 
 ```
 
-*Gulp watch* to see the validation in action!
+*Gulp watch* to see the validation in action ([or watch this sample](http://aurelia.io/validation/#/)).
 
 
 # Validation types
+
+tl;dr: [watch these samples](http://aurelia.io/validation/#/validators)
 
 ####notEmpty()
 This is a special case, dictating that the field is 'required' and cannot be empty.
@@ -213,6 +219,7 @@ Adds a custom message for the previously appended validation rule. *message* is 
 
 
 #Logical operators
+tl;dr: [watch these samples](http://aurelia.io/validation/#/logical-operators)
 ##if(conditionalExpression)
 ###Basic usage
 Pass a function (*conditionalExpression*) that returns true of false.
@@ -493,6 +500,7 @@ Pay attention to the two validateAttachedBehavior attributes in this example's H
 There is an array property named *bindingPathAttributes* on the *validateAttachedBehaviorConfig* instance that you can inject in your app, which holds the attributes that the validateAttachedBehavior will try to use to match elements to validationRules.  
 
 ##Preventing form submission
+tl;dr: [watch these samples](http://aurelia.io/validation/#/form-submission)
 You could disable your submit function by binding it to the *validation.result.isValid* property: 
 ```html
 <button type=submit" disabled.bind="!validation.result.isValid" >
