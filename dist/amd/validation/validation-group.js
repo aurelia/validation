@@ -224,7 +224,7 @@ define(["exports", "../validation/validation-group-builder", "../validation/vali
          */
 
         value: function isAlphanumeric() {
-          return this.builder.isAlphaNumeric();
+          return this.builder.isAlphanumeric();
         }
       },
       isAlphanumericOrWhitespace: {

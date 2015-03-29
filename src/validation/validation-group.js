@@ -161,7 +161,7 @@ export class ValidationGroup {
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
   isAlphanumeric() {
-    return this.builder.isAlphaNumeric();
+    return this.builder.isAlphanumeric();
   }
 
   /**

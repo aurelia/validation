@@ -225,7 +225,7 @@ var ValidationGroup = exports.ValidationGroup = (function () {
        */
 
       value: function isAlphanumeric() {
-        return this.builder.isAlphaNumeric();
+        return this.builder.isAlphanumeric();
       }
     },
     isAlphanumericOrWhitespace: {

@@ -226,7 +226,7 @@ System.register(["../validation/validation-group-builder", "../validation/valida
              */
 
             value: function isAlphanumeric() {
-              return this.builder.isAlphaNumeric();
+              return this.builder.isAlphanumeric();
             }
           },
           isAlphanumericOrWhitespace: {
