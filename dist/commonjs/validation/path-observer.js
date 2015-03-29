@@ -130,9 +130,9 @@ var PathObserver = exports.PathObserver = (function () {
       value: function subscribe(callback) {
         this.callbacks.unshift(callback);
         if (this.observers.length === this.path.length) {
-          return this.observers[0].subscribe(callback);
+          return this.observers[this.observers.length - 1].subscribe(callback);
         }
-        //TODO proper cleanup of callbacks!
+        //TODO proper cleanup of callbacks
       }
     }
   });

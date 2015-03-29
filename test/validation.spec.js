@@ -79,6 +79,22 @@ describe('Basic validation tests: notempty', () => {
 
 
   it('should update the validation automatically when the property changes', (done) => {
+    var subject = { company : { name : 'Bob the builder construction, Inc.' } };
+
+    subject.validation = new Validation(new ObserverLocator()).on(subject)
+      .ensure('company.name')
+      .notEmpty().betweenLength(5,10);
+
+    expect(subject.validation.result.isValid).toBe(false);
+    subject.company.name = 'Bob, Inc.';
+
+    setTimeout(()=>{
+      expect(subject.validation.result.isValid).toBe( true );
+      done();
+    }, 0);
+  });
+
+  it('should update the validation automatically when the property changes with nested properties', (done) => {
     var subject = TestSubject.createInstance(null);
     expect(subject.validation.result.isValid).toBe(false);
     subject.firstName = 'Bob the builder';
