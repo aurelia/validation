@@ -108,12 +108,19 @@ export class ValidationGroupBuilder {
   passesRule(validationRule) {
 
     this.validationRuleCollections[0].addValidationRule(validationRule);
+    this.checkLast();
     return this.validationGroup;
+  }
+
+  checkLast(){
+    var validationProperty = this.validationGroup.validationProperties[this.validationGroup.validationProperties.length -1];
+    validationProperty.validateCurrentValue(false);
   }
 
   withMessage(message)
   {
     this.validationRuleCollections[0].withMessage(message);
+    this.checkLast();
     return this.validationGroup;
   }
 
@@ -138,6 +145,7 @@ export class ValidationGroupBuilder {
     if (!this.validationRuleCollections[0].default)
       throw 'Invalid statement: \'endIf\'';
     this.validationRuleCollections.shift(); //go up one level in the nested collections
+    this.checkLast();
     return this.validationGroup;
   }
 
@@ -173,6 +181,7 @@ export class ValidationGroupBuilder {
     if (!this.validationRuleCollections[0].default)
       throw 'Invalid statement: \'endIf\'';
     this.validationRuleCollections.shift(); //go up one level in the nested collections
+    this.checkLast();
     return this.validationGroup;
   }
 }

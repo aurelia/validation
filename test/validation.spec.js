@@ -63,6 +63,20 @@ describe('Basic validation tests: notempty', () => {
     expect(subject.validation.result.isValid).toBe(true);
   });
 
+  it('should evaluate immediately without marking the property as dirty', () => {
+    var subject = { firstName : 'John' };
+
+    subject.validation = new Validation(new ObserverLocator()).on(subject)
+        .ensure('firstName').notEmpty().betweenLength(5,10);
+
+    expect(subject.validation.result.isValid).toBe(false);
+    expect(subject.validation.result.properties.firstName.isDirty).toBe(false);
+
+    subject.validation.checkAll();
+    expect(subject.validation.result.isValid).toBe(false);
+    expect(subject.validation.result.properties.firstName.isDirty).toBe(true);
+  });
+
 
   it('should update the validation automatically when the property changes', (done) => {
     var subject = TestSubject.createInstance(null);
