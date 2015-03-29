@@ -280,4 +280,13 @@ export class ValidationGroup {
   endSwitch() {
     return this.builder.endSwitch();
   }
+
+  /**
+   * Specifies that the execution of the previous validation rule should use the specified error message if it fails
+   * @param message either a static string or a function that takes two arguments: newValue (the value that has been evaluated) and threshold.
+   * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
+   */
+  withMessage(message){
+    return this.builder.withMessage(message);
+  }
 }

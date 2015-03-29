@@ -77,6 +77,11 @@ System.register(["../validation/validation"], function (_export) {
             value: function notEmpty() {
               this.isRequired = true;
             }
+          },
+          withMessage: {
+            value: function withMessage(message) {
+              this.validationRules[this.validationRules.length - 1].withMessage(message);
+            }
           }
         });
 
@@ -155,6 +160,12 @@ System.register(["../validation/validation"], function (_export) {
             value: function notEmpty() {
               var collection = this.getCurrentCollection(this.caseLabel);
               if (collection !== null) collection.notEmpty();else this.defaultCollection.notEmpty();
+            }
+          },
+          withMessage: {
+            value: function withMessage(message) {
+              var collection = this.getCurrentCollection(this.caseLabel);
+              if (collection !== null) collection.withMessage(message);else this.defaultCollection.withMessage(message);
             }
           }
         });

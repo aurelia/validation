@@ -101,4 +101,19 @@ describe('Basic validation tests: notempty', () => {
     subject.firstName = [];
     expect(subject.validation.checkAll()).toBe(false);
   });
+
+  it('should use a custom message if one is provided', () => {
+    var subject = TestSubject.createInstance("Bob");
+    subject.validation.ensure('firstName').minLength(10).withMessage("Not valid!");
+
+    expect(subject.validation.checkAll()).toBe(false);
+    expect(subject.validation.result.properties.firstName.message).toBe("Not valid!");
+  });
+  it('should use a custom message function if one is provided', () => {
+    var subject = TestSubject.createInstance("Bob");
+    subject.validation.ensure('firstName').minLength(10).withMessage((newValue, threshold) => {return newValue + " is not valid!";});
+
+    expect(subject.validation.checkAll()).toBe(false);
+    expect(subject.validation.result.properties.firstName.message).toBe("Bob is not valid!");
+  });
 });

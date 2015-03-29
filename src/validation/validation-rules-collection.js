@@ -59,6 +59,11 @@ export class ValidationRulesCollection {
   notEmpty() {
     this.isRequired = true;
   }
+
+  withMessage(message)
+  {
+    this.validationRules[this.validationRules.length -1].withMessage(message);
+  }
 }
 
 export class SwitchCaseValidationRulesCollection {
@@ -124,5 +129,13 @@ export class SwitchCaseValidationRulesCollection {
       collection.notEmpty();
     else
       this.defaultCollection.notEmpty();
+  }
+
+  withMessage(message){
+    var collection = this.getCurrentCollection(this.caseLabel);
+    if (collection !== null)
+      collection.withMessage(message);
+    else
+      this.defaultCollection.withMessage(message);
   }
 }

@@ -75,6 +75,11 @@ var ValidationRulesCollection = exports.ValidationRulesCollection = (function ()
       value: function notEmpty() {
         this.isRequired = true;
       }
+    },
+    withMessage: {
+      value: function withMessage(message) {
+        this.validationRules[this.validationRules.length - 1].withMessage(message);
+      }
     }
   });
 
@@ -154,6 +159,12 @@ var SwitchCaseValidationRulesCollection = exports.SwitchCaseValidationRulesColle
       value: function notEmpty() {
         var collection = this.getCurrentCollection(this.caseLabel);
         if (collection !== null) collection.notEmpty();else this.defaultCollection.notEmpty();
+      }
+    },
+    withMessage: {
+      value: function withMessage(message) {
+        var collection = this.getCurrentCollection(this.caseLabel);
+        if (collection !== null) collection.withMessage(message);else this.defaultCollection.withMessage(message);
       }
     }
   });

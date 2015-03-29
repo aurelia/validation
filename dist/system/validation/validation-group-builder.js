@@ -30,7 +30,7 @@ System.register(["../validation/validation-rules", "../validation/validation-rul
             value: function ensure(propertyName) {
               var newValidationProperty = null;
               this.validationRuleCollections = [];
-              for (var i = 0; i < this.validationGroup.validationProperties; i++) {
+              for (var i = 0; i < this.validationGroup.validationProperties.length; i++) {
                 if (this.validationGroup.validationProperties[i].propertyName === propertyName) {
                   newValidationProperty = this.validationGroup.validationProperties[i];
                   break;
@@ -146,6 +146,12 @@ System.register(["../validation/validation-rules", "../validation/validation-rul
             value: function passesRule(validationRule) {
 
               this.validationRuleCollections[0].addValidationRule(validationRule);
+              return this.validationGroup;
+            }
+          },
+          withMessage: {
+            value: function withMessage(message) {
+              this.validationRuleCollections[0].withMessage(message);
               return this.validationGroup;
             }
           },

@@ -12,7 +12,7 @@ export class ValidationGroupBuilder {
   ensure(propertyName) {
     var newValidationProperty = null;
     this.validationRuleCollections = [];
-    for (let i = 0; i < this.validationGroup.validationProperties; i++) {
+    for (let i = 0; i < this.validationGroup.validationProperties.length; i++) {
       if (this.validationGroup.validationProperties[i].propertyName === propertyName) {
         newValidationProperty = this.validationGroup.validationProperties[i];
         break;
@@ -108,6 +108,12 @@ export class ValidationGroupBuilder {
   passesRule(validationRule) {
 
     this.validationRuleCollections[0].addValidationRule(validationRule);
+    return this.validationGroup;
+  }
+
+  withMessage(message)
+  {
+    this.validationRuleCollections[0].withMessage(message);
     return this.validationGroup;
   }
 
