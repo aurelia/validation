@@ -75,7 +75,10 @@ export class ValidateAttachedBehavior {
 
     var atts = currentElement.attributes;
     if (atts[attributeName]) {
-      var bindingPath = atts[attributeName].value;
+      debugger;
+      var bindingPath = atts[attributeName].value.trim();
+      if(bindingPath.indexOf('|') != -1)
+        bindingPath = bindingPath.split('|')[0].trim();
       var validationProperty = this.value.result.properties[bindingPath];
 
       if(attributeName == 'validate' && (validationProperty === null || validationProperty === undefined))

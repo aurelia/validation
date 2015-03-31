@@ -15,7 +15,7 @@ class TestSubject {
   }
 }
 
-describe('Basic validation tests: notempty', () => {
+describe('Basic validation tests', () => {
   it('should fail if a notempty property is null', () => {
     var subject = TestSubject.createInstance(null);
     expect(subject.validation.result.isValid).toBe(false);
