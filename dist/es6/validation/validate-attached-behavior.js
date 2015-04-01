@@ -39,10 +39,10 @@ export class ValidateAttachedBehavior {
 
 
   searchFormGroup(currentElement, currentDepth) {
-    if (currentDepth === 5) {
+    if (currentDepth === 5 || currentElement == null) {
       return null;
     }
-    if (currentElement.classList.contains('form-group')) {
+    if (currentElement.classList && currentElement.classList.contains('form-group')) {
       return currentElement;
     }
     return this.searchFormGroup(currentElement.parentNode, 1 + currentDepth);
@@ -75,7 +75,6 @@ export class ValidateAttachedBehavior {
 
     var atts = currentElement.attributes;
     if (atts[attributeName]) {
-      debugger;
       var bindingPath = atts[attributeName].value.trim();
       if(bindingPath.indexOf('|') != -1)
         bindingPath = bindingPath.split('|')[0].trim();
@@ -143,19 +142,27 @@ export class ValidateAttachedBehavior {
     var formGroup = this.searchFormGroup(currentElement, 0);
     if (formGroup) {
       if (validationProperty) {
-        if (validationProperty.isValid) {
-          formGroup.classList.remove('has-warning');
-          formGroup.classList.add('has-success');
+        if(!formGroup.classList)
+        {
+          console.error('ValidateAttachedBehavior found a form-group element without classList. Cannot add the has-warning or has-success classes');
         }
-        else {
-          formGroup.classList.remove('has-success');
-          formGroup.classList.add('has-warning');
+        else
+        {
+          if (validationProperty.isValid) {
+            formGroup.classList.remove('has-warning');
+            formGroup.classList.add('has-success');
+          }
+          else {
+            formGroup.classList.remove('has-success');
+            formGroup.classList.add('has-warning');
+          }
         }
       }
       else {
         formGroup.classList.remove('has-warning');
         formGroup.classList.remove('has-success');
       }
+
       if (this.config.appendMessageToInput) {
         this.appendMessageToElement(currentElement, validationProperty);
       }

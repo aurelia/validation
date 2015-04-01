@@ -151,6 +151,27 @@ describe('Tests on ValidateAttachedBehavior', () => {
   });
 
 
+  it('should be working with a custom HTML element', () => {
+    var subject = NestedTestSubject.createInstance();
+    var testHTML = TestDOM.createElement(`<form validate.bind="validation" submit.delegate="save()">
+
+           <div class="form-group">
+             <input type="text" class="form-control" value.bind="address.street"/>
+           </div>
+
+            <lookup-widget title="Client" placeholder="Find Client..." value.two-way="address.street"></lookup-widget>
+
+            <button type="submit" class="btn btn-default">Save</button>
+          </form>
+      </template>`);
+    debugger;
+    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+    behavior.value = subject.validationNested;
+    behavior.attached();
+    subject.validationNested.checkAll();
+  });
+
+
   it('should add "success" to properties that have no rules defined', () => {
     var subject = TestSubject.createInstance();
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >

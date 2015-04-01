@@ -46,10 +46,10 @@ System.register(["aurelia-templating", "aurelia-binding", "../validation/validat
           },
           searchFormGroup: {
             value: function searchFormGroup(currentElement, currentDepth) {
-              if (currentDepth === 5) {
+              if (currentDepth === 5 || currentElement == null) {
                 return null;
               }
-              if (currentElement.classList.contains("form-group")) {
+              if (currentElement.classList && currentElement.classList.contains("form-group")) {
                 return currentElement;
               }
               return this.searchFormGroup(currentElement.parentNode, 1 + currentDepth);
@@ -81,7 +81,6 @@ System.register(["aurelia-templating", "aurelia-binding", "../validation/validat
 
               var atts = currentElement.attributes;
               if (atts[attributeName]) {
-                debugger;
                 var bindingPath = atts[attributeName].value.trim();
                 if (bindingPath.indexOf("|") != -1) bindingPath = bindingPath.split("|")[0].trim();
                 var validationProperty = this.value.result.properties[bindingPath];
@@ -143,17 +142,22 @@ System.register(["aurelia-templating", "aurelia-binding", "../validation/validat
               var formGroup = this.searchFormGroup(currentElement, 0);
               if (formGroup) {
                 if (validationProperty) {
-                  if (validationProperty.isValid) {
-                    formGroup.classList.remove("has-warning");
-                    formGroup.classList.add("has-success");
+                  if (!formGroup.classList) {
+                    console.error("ValidateAttachedBehavior found a form-group element without classList. Cannot add the has-warning or has-success classes");
                   } else {
-                    formGroup.classList.remove("has-success");
-                    formGroup.classList.add("has-warning");
+                    if (validationProperty.isValid) {
+                      formGroup.classList.remove("has-warning");
+                      formGroup.classList.add("has-success");
+                    } else {
+                      formGroup.classList.remove("has-success");
+                      formGroup.classList.add("has-warning");
+                    }
                   }
                 } else {
                   formGroup.classList.remove("has-warning");
                   formGroup.classList.remove("has-success");
                 }
+
                 if (this.config.appendMessageToInput) {
                   this.appendMessageToElement(currentElement, validationProperty);
                 }
