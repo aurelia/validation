@@ -127,8 +127,10 @@ We now have a working validation, but nothing changes behaviorally. If the valid
 First, let's make sure that the 'welcome' function can only be executed if the validation is valid:
 ``` javascript
   welcome(){
-    if(this.validation.checkAll()) //add this
-      alert(`Welcome, ${this.fullName}! `);
+    if(this.validation.validate()) //add this
+      .then( () => {
+        alert(`Welcome, ${this.fullName}! `);
+      });
   }
 ```
 Secondly, let's provide some visual hints to the users. Open your **welcome.html** file and add the validate attached behavior:
@@ -506,13 +508,13 @@ You could disable your submit function by binding it to the *validation.result.i
 <button type=submit" disabled.bind="!validation.result.isValid" >
 ```
 This has a bit of a weird side effect: a validation message is only shown if the user actually changes the value of a form element, ie. the underlying field is 'dirty'.  Again: there are no visual clues as to what form elements are invalid until the user actually changes the value of a field.
-In contrast, calling the *validation.checkAll()* function will force all validation rules to be re-evaluated, as well as forcing every field to be considered 'dirty', then return a bool indicating if the entire validation has passed or failed.
-In summary: if you do not disable the submit button, but instead call the *checkAll* function in your code
+In contrast, calling the *validation.validate()* function will force all validation rules to be re-evaluated, as well as forcing every field to be considered 'dirty', then return a promise that will either resolve or reject, indicating if the entire validation has passed or failed.
+In summary: if you do not disable the submit button, but instead call the *validate()* function in your code
 
 ```javascript
-if(this.validation.checkAll()){
+this.validation.validate().then( () => {
   //perform action on form submission
-}
+});
 ```
 You will have the following user experience:
 - all fields in a form show no validation messages
@@ -556,10 +558,10 @@ For this validation, the *validation.result* object would (qua form) look like t
             },
     }
 ```
-Each property will be updated when the validation on that property is triggered (when the value changes, or when the *checkAll()* is called).
+Each property will be updated when the validation on that property is triggered (when the value changes, or when the *validate()* is called).
 Each property contains four pieces of information:
 - *isValid* : a boolean indicating if this property is valid
-- *isDirty* : a boolean indicating if this property is dirty (ie: if the value has changed since the validation has been created).  This will also be set to true if the *checkAll()* is called. (*The isDirty property is used for UX purposes. A model can have invalid defaults, but we don't want to show the user error messages yet until the user actually changes the value, or the user clicks a submit button that triggers the checkAll().*)
+- *isDirty* : a boolean indicating if this property is dirty (ie: if the value has changed since the validation has been created).  This will also be set to true if the *validate()* is called. (*The isDirty property is used for UX purposes. A model can have invalid defaults, but we don't want to show the user error messages yet until the user actually changes the value, or the user clicks a submit button that triggers the validate().*)
 - *message* : a localized error message. See **I18N**
 - *failingRule* : a non localized error message identifier of the first rule that failed. Possible values are
   - 'isRequired'
