@@ -24,11 +24,34 @@ export class ValidationGroup {
    * @returns {bool} True/false indicating if every property is valid
    */
   checkAll() {
+    throw 'The synchronous "checkAll()" function is no longer supported. Use "validate()" which returns a promise that fulfils when valid, rejects when invalid';
+  }
+
+  /**
+   * Causes complete re-evaluation: gets the latest value, marks the property as 'dirty', runs validation rules asynchronously and updates this.result
+   * @returns {Promise} A promise that fulfils when valid, rejects when invalid.
+   */
+  validate() {
+    var promise = Promise.resolve(this.result);
     for (let i = this.validationProperties.length - 1; i >= 0; i--) {
-      var validatorProperty = this.validationProperties[i];
-      validatorProperty.validateCurrentValue(true);
+      let validatorProperty = this.validationProperties[i];
+      promise = promise.then(
+        () => {
+          return validatorProperty.validateCurrentValue(true);
+        },
+        () => {
+          return validatorProperty.validateCurrentValue(true).then(
+            //doesn't matter what this validation property does, as soon as one has rejected, we call the next but keep rejecting
+            () => {
+              return Promise.reject(false);
+            }, () => {
+              return Promise.reject(false);
+            }
+          );
+        }
+      );
     }
-    return this.result.isValid;
+    return promise;
   }
 
   /**
@@ -130,6 +153,7 @@ export class ValidationGroup {
   maxLength(maximumValue) {
     return this.builder.maxLength(maximumValue);
   }
+
   /**
    * Adds a validation rule that checks a value for having a length greater than or equal to a specified threshold and less than another threshold
    * @param minimumValue The minimum threshold
@@ -264,6 +288,7 @@ export class ValidationGroup {
   case(caseLabel) {
     return this.builder.case(caseLabel);
   }
+
   /**
    * Specifies that the next validation rules only need to be evaluated when not other caseLabel matches the value returned by a preceding switch statement
    * See: switch(conditionExpression)
@@ -272,6 +297,7 @@ export class ValidationGroup {
   default() {
     return this.builder.default();
   }
+
   /**
    * Specifies that the execution of next validation rules no longer depend on the the previously specified conditionExpression.
    * See: switch(conditionExpression)
@@ -286,7 +312,7 @@ export class ValidationGroup {
    * @param message either a static string or a function that takes two arguments: newValue (the value that has been evaluated) and threshold.
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  withMessage(message){
+  withMessage(message) {
     return this.builder.withMessage(message);
   }
 }

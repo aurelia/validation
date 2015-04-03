@@ -42,11 +42,37 @@ define(["exports", "../validation/validation-group-builder", "../validation/vali
          */
 
         value: function checkAll() {
+          throw "The synchronous \"checkAll()\" function is no longer supported. Use \"validate()\" which returns a promise that fulfils when valid, rejects when invalid";
+        }
+      },
+      validate: {
+
+        /**
+         * Causes complete re-evaluation: gets the latest value, marks the property as 'dirty', runs validation rules asynchronously and updates this.result
+         * @returns {Promise} A promise that fulfils when valid, rejects when invalid.
+         */
+
+        value: function validate() {
+          var _this = this;
+
+          var promise = Promise.resolve(this.result);
           for (var i = this.validationProperties.length - 1; i >= 0; i--) {
-            var validatorProperty = this.validationProperties[i];
-            validatorProperty.validateCurrentValue(true);
+            (function (i) {
+              var validatorProperty = _this.validationProperties[i];
+              promise = promise.then(function () {
+                return validatorProperty.validateCurrentValue(true);
+              }, function () {
+                return validatorProperty.validateCurrentValue(true).then(
+                //doesn't matter what this validation property does, as soon as one has rejected, we call the next but keep rejecting
+                function () {
+                  return Promise.reject(false);
+                }, function () {
+                  return Promise.reject(false);
+                });
+              });
+            })(i);
           }
-          return this.result.isValid;
+          return promise;
         }
       },
       ensure: {
@@ -183,6 +209,7 @@ define(["exports", "../validation/validation-group-builder", "../validation/vali
         }
       },
       betweenLength: {
+
         /**
          * Adds a validation rule that checks a value for having a length greater than or equal to a specified threshold and less than another threshold
          * @param minimumValue The minimum threshold
@@ -362,6 +389,7 @@ define(["exports", "../validation/validation-group-builder", "../validation/vali
         }
       },
       "default": {
+
         /**
          * Specifies that the next validation rules only need to be evaluated when not other caseLabel matches the value returned by a preceding switch statement
          * See: switch(conditionExpression)
@@ -373,6 +401,7 @@ define(["exports", "../validation/validation-group-builder", "../validation/vali
         }
       },
       endSwitch: {
+
         /**
          * Specifies that the execution of next validation rules no longer depend on the the previously specified conditionExpression.
          * See: switch(conditionExpression)

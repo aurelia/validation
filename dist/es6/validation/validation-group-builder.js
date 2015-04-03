@@ -112,13 +112,12 @@ export class ValidationGroupBuilder {
     return this.validationGroup;
   }
 
-  checkLast(){
-    var validationProperty = this.validationGroup.validationProperties[this.validationGroup.validationProperties.length -1];
+  checkLast() {
+    var validationProperty = this.validationGroup.validationProperties[this.validationGroup.validationProperties.length - 1];
     validationProperty.validateCurrentValue(false);
   }
 
-  withMessage(message)
-  {
+  withMessage(message) {
     this.validationRuleCollections[0].withMessage(message);
     this.checkLast();
     return this.validationGroup;

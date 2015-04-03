@@ -40,13 +40,20 @@ define(["exports", "../validation/validation-rules-collection", "../validation/p
       },
       validateCurrentValue: {
         value: function validateCurrentValue(forceDirty) {
-          this.validate(this.observer.getValue(), forceDirty);
+          return this.validate(this.observer.getValue(), forceDirty);
         }
       },
       validate: {
         value: function validate(newValue, shouldBeDirty) {
-          var validationResponse = this.validationRules.validate(newValue);
-          this.propertyResult.setValidity(validationResponse, shouldBeDirty);
+          var _this = this;
+
+          return this.validationRules.validate(newValue).then(function (validationResponse) {
+            _this.propertyResult.setValidity(validationResponse, shouldBeDirty);
+            return Promise.resolve(true);
+          }, function (validationResponse) {
+            _this.propertyResult.setValidity(validationResponse, shouldBeDirty);
+            return Promise.reject(false);
+          });
         }
       }
     });

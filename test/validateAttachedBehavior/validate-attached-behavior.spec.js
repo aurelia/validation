@@ -2,6 +2,7 @@ import {ObserverLocator} from 'aurelia-binding';
 import {Validation} from '../../src/validation/validation';
 import {ValidateAttachedBehavior} from '../../src/validation/validate-attached-behavior';
 import {ValidateAttachedBehaviorConfig} from '../../src/validation/validate-attached-behavior-config';
+import {Expectations} from '../expectations';
 
 
 class TestSubject {
@@ -62,7 +63,8 @@ class TestDOM {
 }
 
 describe('Tests on ValidateAttachedBehavior', () => {
-  it('should be working with a simple use case', () => {
+  it('should be working with a simple use case', (done) => {
+    var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance();
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
             <div class="form-group" id="formGroupFirstName">
@@ -80,166 +82,12 @@ describe('Tests on ValidateAttachedBehavior', () => {
     behavior.attached();
 
     subject.firstName = '';
-    subject.validation.checkAll();
 
-    //default: adds 'has-warning'/'has-success' to form-group
-    var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
-    expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
+    expectations.assert(() => {
+      subject.validation.validate();
+    }, false);
 
-    var lastNameGroup = testHTML.querySelector('#formGroupLastName');
-    expect(lastNameGroup.classList.contains('has-success')).toBe(true);
-
-
-    //default: adds <p> after label
-    var firstNameLabel = testHTML.querySelector('#labelFirstName');
-    var firstNameMessage = firstNameLabel.nextSibling;
-    expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(firstNameMessage.classList.contains('help-block')).toBe(true);
-    expect(firstNameMessage.textContent).toBe('is required');
-
-
-    //default: adds <p> after element
-    var lastNameLabel = testHTML.querySelector('#labelLastName');
-    var lastNameMessage = lastNameLabel.nextSibling;
-    expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(lastNameMessage.classList.contains('help-block')).toBe(true);
-    expect(lastNameMessage.textContent).toBe('');
-  });
-
-  it('should be working with a bindings that contain a valueFormatter', () => {
-    var subject = TestSubject.createInstance();
-    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
-            <div class="form-group" id="formGroupFirstName">
-            <label for="fn" id="labelFirstName" >First Name</label>
-            <input type="text" value.bind="firstName | toUpper" class="form-control" id="fn" placeholder="first name">
-            </div>
-            <div class="form-group" id="formGroupLastName">
-            <label for="ln"  id="labelLastName">Last Name</label>
-            <input type="text" value.bind="lastName | trim | toLower" class="form-control" id="ln" placeholder="last name">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
-    behavior.value = subject.validation;
-    behavior.attached();
-
-    subject.firstName = '';
-    subject.validation.checkAll();
-
-    //default: adds 'has-warning'/'has-success' to form-group
-    var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
-    expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
-
-    var lastNameGroup = testHTML.querySelector('#formGroupLastName');
-    expect(lastNameGroup.classList.contains('has-success')).toBe(true);
-
-
-    //default: adds <p> after label
-    var firstNameLabel = testHTML.querySelector('#labelFirstName');
-    var firstNameMessage = firstNameLabel.nextSibling;
-    expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(firstNameMessage.classList.contains('help-block')).toBe(true);
-    expect(firstNameMessage.textContent).toBe('is required');
-
-
-    //default: adds <p> after element
-    var lastNameLabel = testHTML.querySelector('#labelLastName');
-    var lastNameMessage = lastNameLabel.nextSibling;
-    expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(lastNameMessage.classList.contains('help-block')).toBe(true);
-    expect(lastNameMessage.textContent).toBe('');
-  });
-
-
-  it('should add "success" to properties that have no rules defined', () => {
-    var subject = TestSubject.createInstance();
-    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
-            <div class="form-group" id="formGroupAddress">
-            <label for="ad" id="labelAddress" >Address</label>
-            <input type="text" value.bind="address" class="form-control" id="ad" placeholder="address" validate="address">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
-    behavior.value = subject.validation;
-    behavior.attached();
-    subject.validation.checkAll();
-
-    //default: adds 'has-warning'/'has-success' to form-group
-    var addressGroup = testHTML.querySelector('#formGroupAddress');
-    expect(addressGroup.classList.contains('has-success')).toBe(true);
-
-    //default: adds <p> after label
-    var addressLabel = testHTML.querySelector('#labelAddress');
-    var addressMessage = addressLabel.nextSibling;
-    expect(addressMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(addressMessage.classList.contains('help-block')).toBe(true);
-    expect(addressMessage.textContent).toBe('');
-  });
-
-  it('should be working even before checkAll is called', () => {
-    var subject = TestSubject.createInstance();
-    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
-            <div class="form-group" id="formGroupFirstName">
-            <label for="fn" id="labelFirstName" >First Name</label>
-            <input type="text" value.bind="firstName" class="form-control" id="fn" placeholder="first name">
-            </div>
-            <div class="form-group" id="formGroupLastName">
-            <label for="ln"  id="labelLastName">Last Name</label>
-            <input type="text" value.bind="lastName" class="form-control" id="ln" placeholder="last name">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
-    behavior.value = subject.validation;
-    behavior.attached();
-
-    //default: adds 'has-warning'/'has-success' to form-group
-    var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
-    expect(firstNameGroup.classList.contains('has-warning')).toBe(false);
-
-    var lastNameGroup = testHTML.querySelector('#formGroupLastName');
-    expect(lastNameGroup.classList.contains('has-success')).toBe(false);
-
-
-    //default: adds <p> after label
-    var firstNameLabel = testHTML.querySelector('#labelFirstName');
-    var firstNameMessage = firstNameLabel.nextSibling;
-    expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(firstNameMessage.classList.contains('help-block')).toBe(true);
-    expect(firstNameMessage.textContent).toBe('');
-
-
-    //default: adds <p> after element
-    var lastNameLabel = testHTML.querySelector('#labelLastName');
-    var lastNameMessage = lastNameLabel.nextSibling;
-    expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(lastNameMessage.classList.contains('help-block')).toBe(true);
-    expect(lastNameMessage.textContent).toBe('');
-  });
-
-
-  describe('Tests on ValidateAttachedBehavior', () => {
-    it('should be working if labels have no proper "for" attribute', () => {
-      var subject = TestSubject.createInstance();
-      var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
-            <div class="form-group" id="formGroupFirstName">
-            <label id="labelFirstName" >First Name</label>
-            <input type="text" value.bind="firstName" class="form-control" id="fn" placeholder="first name">
-            </div>
-            <div class="form-group" id="formGroupLastName">
-            <label id="labelLastName">Last Name</label>
-            <input type="text" value.bind="lastName" class="form-control" id="ln" placeholder="last name">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            </form>`);
-      var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
-      behavior.value = subject.validation;
-      behavior.attached();
-
-      subject.firstName = '';
-      subject.validation.checkAll();
-
+    expectations.assert(() => {
       //default: adds 'has-warning'/'has-success' to form-group
       var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
       expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
@@ -262,10 +110,214 @@ describe('Tests on ValidateAttachedBehavior', () => {
       expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(lastNameMessage.classList.contains('help-block')).toBe(true);
       expect(lastNameMessage.textContent).toBe('');
+      return Promise.resolve(true);
+    }, true);
+
+    expectations.validate();
+
+
+  });
+
+  it('should be working with a bindings that contain a valueFormatter', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance();
+    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
+            <div class="form-group" id="formGroupFirstName">
+            <label for="fn" id="labelFirstName" >First Name</label>
+            <input type="text" value.bind="firstName | toUpper" class="form-control" id="fn" placeholder="first name">
+            </div>
+            <div class="form-group" id="formGroupLastName">
+            <label for="ln"  id="labelLastName">Last Name</label>
+            <input type="text" value.bind="lastName | trim | toLower" class="form-control" id="ln" placeholder="last name">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            </form>`);
+    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+    behavior.value = subject.validation;
+    behavior.attached();
+
+    subject.firstName = '';
+
+    expectations.assert(() => {
+      subject.validation.validate();
+    }, false);
+
+    expectations.assert(() => {
+//default: adds 'has-warning'/'has-success' to form-group
+      var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
+      expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
+
+      var lastNameGroup = testHTML.querySelector('#formGroupLastName');
+      expect(lastNameGroup.classList.contains('has-success')).toBe(true);
+
+
+      //default: adds <p> after label
+      var firstNameLabel = testHTML.querySelector('#labelFirstName');
+      var firstNameMessage = firstNameLabel.nextSibling;
+      expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(firstNameMessage.classList.contains('help-block')).toBe(true);
+      expect(firstNameMessage.textContent).toBe('is required');
+
+
+      //default: adds <p> after element
+      var lastNameLabel = testHTML.querySelector('#labelLastName');
+      var lastNameMessage = lastNameLabel.nextSibling;
+      expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(lastNameMessage.classList.contains('help-block')).toBe(true);
+      expect(lastNameMessage.textContent).toBe('');
+      return Promise.resolve(true);
+    }, true);
+
+    expectations.validate();
+
+
+  });
+
+
+  it('should add "success" to properties that have no rules defined', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance();
+    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
+            <div class="form-group" id="formGroupAddress">
+            <label for="ad" id="labelAddress" >Address</label>
+            <input type="text" value.bind="address" class="form-control" id="ad" placeholder="address" validate="address">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            </form>`);
+    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+    behavior.value = subject.validation;
+    behavior.attached();
+
+
+    expectations.assert(() => {
+      subject.validation.validate();
+    }, false);
+
+    expectations.assert(() => {
+      //default: adds 'has-warning'/'has-success' to form-group
+      var addressGroup = testHTML.querySelector('#formGroupAddress');
+      expect(addressGroup.classList.contains('has-success')).toBe(true);
+
+      //default: adds <p> after label
+      var addressLabel = testHTML.querySelector('#labelAddress');
+      var addressMessage = addressLabel.nextSibling;
+      expect(addressMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(addressMessage.classList.contains('help-block')).toBe(true);
+      expect(addressMessage.textContent).toBe('');
+      return Promise.resolve(true);
+    }, true);
+
+    expectations.validate();
+
+
+  });
+
+  it('should be working even before validate() is called', (done) => {
+    var subject = TestSubject.createInstance();
+    var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
+            <div class="form-group" id="formGroupFirstName">
+            <label for="fn" id="labelFirstName" >First Name</label>
+            <input type="text" value.bind="firstName" class="form-control" id="fn" placeholder="first name">
+            </div>
+            <div class="form-group" id="formGroupLastName">
+            <label for="ln"  id="labelLastName">Last Name</label>
+            <input type="text" value.bind="lastName" class="form-control" id="ln" placeholder="last name">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            </form>`);
+    var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+    behavior.value = subject.validation;
+    behavior.attached();
+
+    setTimeout(() => {
+      //default: adds 'has-warning'/'has-success' to form-group
+      var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
+      expect(firstNameGroup.classList.contains('has-warning')).toBe(false);
+
+      var lastNameGroup = testHTML.querySelector('#formGroupLastName');
+      expect(lastNameGroup.classList.contains('has-success')).toBe(false);
+
+
+      //default: adds <p> after label
+      var firstNameLabel = testHTML.querySelector('#labelFirstName');
+      var firstNameMessage = firstNameLabel.nextSibling;
+      expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(firstNameMessage.classList.contains('help-block')).toBe(true);
+      expect(firstNameMessage.textContent).toBe('');
+
+
+      //default: adds <p> after element
+      var lastNameLabel = testHTML.querySelector('#labelLastName');
+      var lastNameMessage = lastNameLabel.nextSibling;
+      expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(lastNameMessage.classList.contains('help-block')).toBe(true);
+      expect(lastNameMessage.textContent).toBe('');
+      done();
+    }, 0);
+  });
+
+
+  describe('Tests on ValidateAttachedBehavior', () => {
+    it('should be working if labels have no proper "for" attribute', (done) => {
+      var expectations = new Expectations(expect, done);
+      var subject = TestSubject.createInstance();
+      var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
+            <div class="form-group" id="formGroupFirstName">
+            <label id="labelFirstName" >First Name</label>
+            <input type="text" value.bind="firstName" class="form-control" id="fn" placeholder="first name">
+            </div>
+            <div class="form-group" id="formGroupLastName">
+            <label id="labelLastName">Last Name</label>
+            <input type="text" value.bind="lastName" class="form-control" id="ln" placeholder="last name">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            </form>`);
+      var behavior = new ValidateAttachedBehavior(testHTML, new ObserverLocator(), new ValidateAttachedBehaviorConfig());
+      behavior.value = subject.validation;
+      behavior.attached();
+
+      subject.firstName = '';
+
+
+      expectations.assert(() => {
+        subject.validation.validate();
+      }, false);
+
+      expectations.assert(() => {
+
+        //default: adds 'has-warning'/'has-success' to form-group
+        var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
+        expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
+
+        var lastNameGroup = testHTML.querySelector('#formGroupLastName');
+        expect(lastNameGroup.classList.contains('has-success')).toBe(true);
+
+
+        //default: adds <p> after label
+        var firstNameLabel = testHTML.querySelector('#labelFirstName');
+        var firstNameMessage = firstNameLabel.nextSibling;
+        expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+        expect(firstNameMessage.classList.contains('help-block')).toBe(true);
+        expect(firstNameMessage.textContent).toBe('is required');
+
+
+        //default: adds <p> after element
+        var lastNameLabel = testHTML.querySelector('#labelLastName');
+        var lastNameMessage = lastNameLabel.nextSibling;
+        expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+        expect(lastNameMessage.classList.contains('help-block')).toBe(true);
+        expect(lastNameMessage.textContent).toBe('');
+        return Promise.resolve(true);
+      }, true);
+
+      expectations.validate();
+
+
     });
   });
 
-  it('should be working with nested properties', () => {
+  it('should be working with nested properties', (done) => {
+    var expectations = new Expectations(expect, done);
     var subject = NestedTestSubject.createInstance(null);
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
             <div class="form-group" id="formGroupStreet">
@@ -283,34 +335,45 @@ describe('Tests on ValidateAttachedBehavior', () => {
     behavior.attached();
 
     subject.address.street = '';
-    subject.validationNested.checkAll();
-
-    //default: adds 'has-warning'/'has-success' to form-group
-    var streetGroup = testHTML.querySelector('#formGroupStreet');
-    expect(streetGroup.classList.contains('has-warning')).toBe(true);
-
-    var numberGroup = testHTML.querySelector('#formGroupNumber');
-    expect(numberGroup.classList.contains('has-success')).toBe(true);
 
 
-    //default: adds <p> after label
-    var streetLabel = testHTML.querySelector('#labelStreet');
-    var streetMessage = streetLabel.nextSibling;
-    expect(streetMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(streetMessage.classList.contains('help-block')).toBe(true);
-    expect(streetMessage.textContent).toBe('is required');
+    expectations.assert(() => {
+      subject.validation.validate();
+    }, false);
+
+    expectations.assert(() => {
+
+      //default: adds 'has-warning'/'has-success' to form-group
+      var streetGroup = testHTML.querySelector('#formGroupStreet');
+      expect(streetGroup.classList.contains('has-warning')).toBe(true);
+
+      var numberGroup = testHTML.querySelector('#formGroupNumber');
+      expect(numberGroup.classList.contains('has-success')).toBe(true);
 
 
-    //default: adds <p> after element
-    var numberLabel = testHTML.querySelector('#labelNumber');
-    var numberMessage = numberLabel.nextSibling;
-    expect(numberMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(numberMessage.classList.contains('help-block')).toBe(true);
-    expect(numberMessage.textContent).toBe('');
+      //default: adds <p> after label
+      var streetLabel = testHTML.querySelector('#labelStreet');
+      var streetMessage = streetLabel.nextSibling;
+      expect(streetMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(streetMessage.classList.contains('help-block')).toBe(true);
+      expect(streetMessage.textContent).toBe('is required');
+
+
+      //default: adds <p> after element
+      var numberLabel = testHTML.querySelector('#labelNumber');
+      var numberMessage = numberLabel.nextSibling;
+      expect(numberMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(numberMessage.classList.contains('help-block')).toBe(true);
+      expect(numberMessage.textContent).toBe('');
+      return Promise.resolve(true);
+    }, true);
+
+    expectations.validate();
   });
 
 
-  it('should be working with validationProperties', () => {
+  it('should be working with validationProperties', (done) => {
+    var expectations = new Expectations(expect, done);
     var subject = NestedTestSubject.createInstance(null);
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
             <div class="form-group" id="formGroupStreet">
@@ -334,34 +397,46 @@ describe('Tests on ValidateAttachedBehavior', () => {
     numberBehavior.attached();
 
     subject.address.street = '';
-    subject.validation.checkAll();
-
-    //default: adds 'has-warning'/'has-success' to form-group
-    var streetGroup = testHTML.querySelector('#formGroupStreet');
-    expect(streetGroup.classList.contains('has-warning')).toBe(true);
-
-    var numberGroup = testHTML.querySelector('#formGroupNumber');
-    expect(numberGroup.classList.contains('has-success')).toBe(true);
 
 
-    //default: adds <p> after label
-    var streetLabel = testHTML.querySelector('#labelStreet');
-    var streetMessage = streetLabel.nextSibling;
-    expect(streetMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(streetMessage.classList.contains('help-block')).toBe(true);
-    expect(streetMessage.textContent).toBe('is required');
+    expectations.assert(() => {
+      subject.validation.validate();
+    }, false);
+
+    expectations.assert(() => {
+
+      //default: adds 'has-warning'/'has-success' to form-group
+      var streetGroup = testHTML.querySelector('#formGroupStreet');
+      expect(streetGroup.classList.contains('has-warning')).toBe(true);
+
+      var numberGroup = testHTML.querySelector('#formGroupNumber');
+      expect(numberGroup.classList.contains('has-success')).toBe(true);
 
 
-    //default: adds <p> after element
-    var numberLabel = testHTML.querySelector('#labelNumber');
-    var numberMessage = numberLabel.nextSibling;
-    expect(numberMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(numberMessage.classList.contains('help-block')).toBe(true);
-    expect(numberMessage.textContent).toBe('');
+      //default: adds <p> after label
+      var streetLabel = testHTML.querySelector('#labelStreet');
+      var streetMessage = streetLabel.nextSibling;
+      expect(streetMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(streetMessage.classList.contains('help-block')).toBe(true);
+      expect(streetMessage.textContent).toBe('is required');
+
+
+      //default: adds <p> after element
+      var numberLabel = testHTML.querySelector('#labelNumber');
+      var numberMessage = numberLabel.nextSibling;
+      expect(numberMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(numberMessage.classList.contains('help-block')).toBe(true);
+      expect(numberMessage.textContent).toBe('');
+
+      return Promise.resolve(true);
+    }, true);
+
+    expectations.validate();
   });
 
 
-  it('should only use the "value.bind" if no extra "validate" attribute is present', () => {
+  it('should only use the "value.bind" if no extra "validate" attribute is present', (done) => {
+    var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance();
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
             <div class="form-group" id="formGroupFirstName">
@@ -379,30 +454,40 @@ describe('Tests on ValidateAttachedBehavior', () => {
     behavior.attached();
 
     subject.firstName = '';
-    subject.validation.checkAll();
 
-    //default: adds 'has-warning'/'has-success' to form-group
-    var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
-    expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
+    expectations.assert(() => {
+      subject.validation.validate();
+    }, false);
 
-    var lastNameGroup = testHTML.querySelector('#formGroupLastName');
-    expect(lastNameGroup.classList.contains('has-success')).toBe(true);
+    expectations.assert(() => {
 
+      //default: adds 'has-warning'/'has-success' to form-group
+      var firstNameGroup = testHTML.querySelector('#formGroupFirstName');
+      expect(firstNameGroup.classList.contains('has-warning')).toBe(true);
 
-    //default: adds <p> after label
-    var firstNameLabel = testHTML.querySelector('#labelFirstName');
-    var firstNameMessage = firstNameLabel.nextSibling;
-    expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(firstNameMessage.classList.contains('help-block')).toBe(true);
-    expect(firstNameMessage.textContent).toBe('is required');
+      var lastNameGroup = testHTML.querySelector('#formGroupLastName');
+      expect(lastNameGroup.classList.contains('has-success')).toBe(true);
 
 
-    //default: adds <p> after element
-    var lastNameLabel = testHTML.querySelector('#labelLastName');
-    var lastNameMessage = lastNameLabel.nextSibling;
-    expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
-    expect(lastNameMessage.classList.contains('help-block')).toBe(true);
-    expect(lastNameMessage.textContent).toBe('');
+      //default: adds <p> after label
+      var firstNameLabel = testHTML.querySelector('#labelFirstName');
+      var firstNameMessage = firstNameLabel.nextSibling;
+      expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(firstNameMessage.classList.contains('help-block')).toBe(true);
+      expect(firstNameMessage.textContent).toBe('is required');
+
+
+      //default: adds <p> after element
+      var lastNameLabel = testHTML.querySelector('#labelLastName');
+      var lastNameMessage = lastNameLabel.nextSibling;
+      expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
+      expect(lastNameMessage.classList.contains('help-block')).toBe(true);
+      expect(lastNameMessage.textContent).toBe('');
+
+      return Promise.resolve(true);
+    }, true);
+
+    expectations.validate();
   });
 });
 

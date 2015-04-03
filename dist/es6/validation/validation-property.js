@@ -25,11 +25,19 @@ export class ValidationProperty {
   }
 
   validateCurrentValue(forceDirty) {
-    this.validate(this.observer.getValue(), forceDirty);
+    return this.validate(this.observer.getValue(), forceDirty);
   }
 
   validate(newValue, shouldBeDirty) {
-    var validationResponse = this.validationRules.validate(newValue);
-    this.propertyResult.setValidity(validationResponse, shouldBeDirty);
+    return this.validationRules.validate(newValue).then(
+      (validationResponse) => {
+        this.propertyResult.setValidity(validationResponse, shouldBeDirty);
+        return Promise.resolve(true);
+      },
+      (validationResponse) => {
+        this.propertyResult.setValidity(validationResponse, shouldBeDirty);
+        return Promise.reject(false);
+      }
+    );
   }
 }

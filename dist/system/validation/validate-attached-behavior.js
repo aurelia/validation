@@ -81,7 +81,6 @@ System.register(["aurelia-templating", "aurelia-binding", "../validation/validat
 
               var atts = currentElement.attributes;
               if (atts[attributeName]) {
-                debugger;
                 var bindingPath = atts[attributeName].value.trim();
                 if (bindingPath.indexOf("|") != -1) bindingPath = bindingPath.split("|")[0].trim();
                 var validationProperty = this.value.result.properties[bindingPath];
@@ -142,7 +141,7 @@ System.register(["aurelia-templating", "aurelia-binding", "../validation/validat
             value: function appendUIVisuals(validationProperty, currentElement) {
               var formGroup = this.searchFormGroup(currentElement, 0);
               if (formGroup) {
-                if (validationProperty) {
+                if (validationProperty && validationProperty.isDirty) {
                   if (validationProperty.isValid) {
                     formGroup.classList.remove("has-warning");
                     formGroup.classList.add("has-success");

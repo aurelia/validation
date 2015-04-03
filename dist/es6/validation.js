@@ -7,7 +7,6 @@ export * from './validation/validation';
 export * from './validation/validate-attached-behavior';
 export * from './validation/validate-attached-behavior-config'
 
-export function install(aurelia)
-{
+export function install(aurelia) {
   aurelia.globalizeResources('./validation/validate-attached-behavior');
 }

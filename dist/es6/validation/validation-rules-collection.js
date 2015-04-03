@@ -8,42 +8,75 @@ export class ValidationRulesCollection {
   }
 
   validate(newValue) {
-    var response = {
-      isValid: true,
-      message: null,
-      failingRule: null
-    };
+    let executeRules = true;
+
+    //Is required?
     if (Validation.Utilities.isEmptyValue(newValue)) {
       if (this.isRequired) {
-        response.isValid = false;
-        response.message = Validation.Locale.translate('isRequired');
-        response.failingRule = 'isRequired';
+        return Promise.reject({
+          isValid: false,
+          message: Validation.Locale.translate('isRequired'),
+          failingRule: 'isRequired'
+        });
+      }
+      else {
+        executeRules = false;
       }
     }
-    else {
-      //validate rules
+
+    var checks = Promise.resolve({
+      isValid: true,
+      message: '',
+      failingRule: null
+    });
+    //validate rules
+    if (executeRules) {
       for (let i = 0; i < this.validationRules.length; i++) {
-        var rule = this.validationRules[i];
-        if (!rule.validate(newValue)) {
-          response.isValid = false;
-          response.message = rule.explain();
-          response.failingRule = rule.ruleName;
-          break;
-        }
+        let rule = this.validationRules[i];
+        checks = checks.then(
+          ()=> {
+            return rule.validate(newValue).then(() => {
+            }, ()=> {
+              return Promise.reject({
+                isValid: false,
+                message: rule.explain(),
+                failingRule: rule.ruleName
+              })
+            });
+          },
+          (e)=> {
+            return Promise.reject(e);
+          }
+        );
       }
     }
-    if (response.isValid) {
-      for (let i = 0; i < this.validationCollections.length; i++) {
-        let validationCollectionResponse = this.validationCollections[i].validate(newValue);
-        if (!validationCollectionResponse.isValid) {
-          response.isValid = false;
-          response.message = validationCollectionResponse.message;
-          response.failingRule = validationCollectionResponse.failingRule;
-          break;
+    //validate collections
+    for (let i = 0; i < this.validationCollections.length; i++) {
+      let validationCollection = this.validationCollections[i];
+      checks = checks.then(
+        ()=> {
+          return validationCollection.validate(newValue).then(() => {
+          }, (e)=> {
+            return Promise.reject(e);
+          })
+        },
+        (e)=> {
+          return Promise.reject(e);
         }
-      }
+      );
     }
-    return response;
+    return checks.then(
+      () => {
+        return Promise.resolve({
+          isValid: true,
+          message: '',
+          failingRule: null
+        });
+      },
+      (e) => {
+        return Promise.reject(e);
+      }
+    );
   }
 
   addValidationRule(validationRule) {
@@ -60,9 +93,8 @@ export class ValidationRulesCollection {
     this.isRequired = true;
   }
 
-  withMessage(message)
-  {
-    this.validationRules[this.validationRules.length -1].withMessage(message);
+  withMessage(message) {
+    this.validationRules[this.validationRules.length - 1].withMessage(message);
   }
 }
 
@@ -131,7 +163,7 @@ export class SwitchCaseValidationRulesCollection {
       this.defaultCollection.notEmpty();
   }
 
-  withMessage(message){
+  withMessage(message) {
     var collection = this.getCurrentCollection(this.caseLabel);
     if (collection !== null)
       collection.withMessage(message);

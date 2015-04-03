@@ -1,9 +1,10 @@
 import {ObserverLocator} from 'aurelia-binding';
 import {Validation} from '../src/validation/validation';
+import {Expectations} from './expectations';
 
 
 class TestSubject {
-  constructor(validation, firstName){
+  constructor(validation, firstName) {
     this.firstName = firstName;
     this.validation = validation.on(this)
       .ensure('firstName')
@@ -16,134 +17,246 @@ class TestSubject {
 }
 
 describe('Basic validation tests', () => {
-  it('should fail if a notempty property is null', () => {
+  it('should fail if a notempty property is null', (done) => {
     var subject = TestSubject.createInstance(null);
-    expect(subject.validation.result.isValid).toBe(false);
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(false);
+      done();
+    }, 0);
   });
 
 
-  it('should fail if a notempty property is an empty string', () => {
+  it('should fail if a notempty property is an empty string', (done) => {
     var subject = TestSubject.createInstance('');
-    expect(subject.validation.result.isValid).toBe(false);
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(false);
+      done();
+    }, 0);
   });
 
 
-  it('should fail if a notempty property contains only whitespace', () => {
+  it('should fail if a notempty property contains only whitespace', (done) => {
     var subject = TestSubject.createInstance('            ');
-    expect(subject.validation.result.isValid).toBe(false);
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(false);
+      done();
+    }, 0);
   });
 
 
-  it('should not fail if a notempty property is a random string', () => {
+  it('should not fail if a notempty property is a random string', (done) => {
     var subject = TestSubject.createInstance('a random string');
-    expect(subject.validation.result.isValid).toBe(true);
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(true);
+      done();
+    }, 0);
   });
 
 
-  it('should fail if an array is empty', () => {
+  it('should fail if an array is empty', (done) => {
     var subject = TestSubject.createInstance([]);
-    expect(subject.validation.result.isValid).toBe(false);
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(false);
+      done();
+    }, 0);
   });
 
 
-  it('should not fail on an array with elements', () => {
+  it('should not fail on an array with elements', (done) => {
     var subject = TestSubject.createInstance(['some element']);
-    expect(subject.validation.result.isValid).toBe(true);
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(true);
+      done();
+    }, 0);
   });
 
 
-  it('should not fail on an array with empty element', () => {
+  it('should not fail on an array with empty element', (done) => {
     var subject = TestSubject.createInstance(['']);
-    expect(subject.validation.result.isValid).toBe(true);
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(true);
+      done();
+    }, 0);
   });
 
 
-  it('should not fail if value is a function', () => {
-    var subject = TestSubject.createInstance(() => { return 'Demo'; });
-    expect(subject.validation.result.isValid).toBe(true);
+  it('should not fail if value is a function', (done) => {
+    var subject = TestSubject.createInstance(() => {
+      return 'Demo';
+    });
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(true);
+      done();
+    }, 0);
   });
 
-  it('should evaluate immediately without marking the property as dirty', () => {
-    var subject = { firstName : 'John' };
+  it('should evaluate immediately without marking the property as dirty', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = {firstName: 'John'};
 
     subject.validation = new Validation(new ObserverLocator()).on(subject)
-        .ensure('firstName').notEmpty().betweenLength(5,10);
+      .ensure('firstName').notEmpty().betweenLength(5, 10);
 
-    expect(subject.validation.result.isValid).toBe(false);
-    expect(subject.validation.result.properties.firstName.isDirty).toBe(false);
+    setTimeout(() => {
+      expect(subject.validation.result.isValid).toBe(false);
+      expect(subject.validation.result.properties.firstName.isDirty).toBe(false);
+      expectations.assert(() => {
+        return subject.validation.validate();
+      }, false);
 
-    subject.validation.checkAll();
-    expect(subject.validation.result.isValid).toBe(false);
-    expect(subject.validation.result.properties.firstName.isDirty).toBe(true);
+      expectations.assert(() => {
+        expect(subject.validation.result.isValid).toBe(false);
+        expect(subject.validation.result.properties.firstName.isDirty).toBe(true);
+        return Promise.resolve(true);
+      }, true);
+
+      expectations.validate();
+    }, 0);
   });
 
 
   it('should update the validation automatically when the property changes', (done) => {
-    var subject = { company : { name : 'Bob the builder construction, Inc.' } };
+    var subject = {company: {name: 'Bob the builder construction, Inc.'}};
 
     subject.validation = new Validation(new ObserverLocator()).on(subject)
       .ensure('company.name')
-      .notEmpty().betweenLength(5,10);
+      .notEmpty().betweenLength(5, 10);
+    setTimeout(() => {
+      expect(subject.validation.result.isValid).toBe(false);
 
-    expect(subject.validation.result.isValid).toBe(false);
-    subject.company.name = 'Bob, Inc.';
+      subject.company.name = 'Bob, Inc.';
+      setTimeout(()=> {
+        expect(subject.validation.result.isValid).toBe(true);
+        done();
+      }, 0);
 
-    setTimeout(()=>{
-      expect(subject.validation.result.isValid).toBe( true );
-      done();
     }, 0);
+
+
   });
 
   it('should update the validation automatically when the property changes with nested properties', (done) => {
     var subject = TestSubject.createInstance(null);
-    expect(subject.validation.result.isValid).toBe(false);
-    subject.firstName = 'Bob the builder';
 
-    setTimeout(()=>{
-      expect(subject.validation.result.isValid).toBe( true );
-      done();
+    setTimeout(() => {
+      expect(subject.validation.result.isValid).toBe(false);
+
+      subject.firstName = 'Bob the builder';
+
+      setTimeout(()=> {
+
+        expect(subject.validation.result.isValid).toBe(true);
+        done();
+      }, 0);
+
+    }, 0);
+
+  });
+
+
+  it('should update the validation when validate() is called', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance(null);
+    setTimeout(() => {
+      expect(subject.validation.result.isValid).toBe(false);
+      expectations.assert(() => {
+        subject.firstName = 'Bob the builder';
+        return subject.validation.validate();
+      }, true);
+      expectations.validate();
     }, 0);
   });
 
 
-  it('should update the validation checkAll is called', () =>{
-    var subject = TestSubject.createInstance(null);
-    expect(subject.validation.result.isValid).toBe(false);
-    subject.firstName = 'Bob the builder';
-    expect(subject.validation.checkAll()).toBe( true );
-  });
-
-
-  it('should update if an array gains elements', () => {
+  it('should update if an array gains elements', (done) => {
+    var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance([]);
-    expect(subject.validation.result.isValid).toBe(false);
-    subject.firstName.push('bob the builder');
-    expect(subject.validation.checkAll()).toBe( true );
-    subject.firstName.pop();
-    expect(subject.validation.checkAll()).toBe( false );
+    setTimeout(()=> {
+      expect(subject.validation.result.isValid).toBe(false);
+      expectations.assert(() => {
+        subject.firstName.push('bob the builder');
+        return subject.validation.validate();
+      }, true);
+
+      expectations.assert(() => {
+        subject.firstName.pop();
+        return subject.validation.validate();
+      }, false);
+
+      expectations.validate();
+    }, 0);
   });
 
 
-  it('should update if an array is overwritten', () => {
+  it('should update if an array is overwritten', (done) => {
+    var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance(['a', 'b', 'c']);
     expect(subject.validation.result.isValid).toBe(true);
-
-    subject.firstName = [];
-    expect(subject.validation.checkAll()).toBe(false);
+    expectations.assert(() => {
+      subject.firstName = [];
+      return subject.validation.validate();
+    }, false);
+    expectations.validate();
   });
 
-  it('should use a custom message if one is provided', () => {
+  it('should use a custom message if one is provided', (done) => {
+    var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance("Bob");
     subject.validation.ensure('firstName').minLength(10).withMessage("Not valid!");
 
-    expect(subject.validation.checkAll()).toBe(false);
-    expect(subject.validation.result.properties.firstName.message).toBe("Not valid!");
-  });
-  it('should use a custom message function if one is provided', () => {
-    var subject = TestSubject.createInstance("Bob");
-    subject.validation.ensure('firstName').minLength(10).withMessage((newValue, threshold) => {return newValue + " is not valid!";});
+    expectations.assert(() => {
+      return subject.validation.validate();
+    }, false);
 
-    expect(subject.validation.checkAll()).toBe(false);
-    expect(subject.validation.result.properties.firstName.message).toBe("Bob is not valid!");
+    expectations.assert(() => {
+      expect(subject.validation.result.properties.firstName.message).toBe("Not valid!");
+      return subject.validation.validate();
+    }, false);
+
+    expectations.validate();
+  });
+  it('should use a custom message function if one is provided', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance("Bob");
+    subject.validation.ensure('firstName').minLength(10).withMessage((newValue, threshold) => {
+      return newValue + " is not valid!";
+    });
+
+    expectations.assert(() => {
+      return subject.validation.validate();
+    }, false);
+
+    expectations.assert(() => {
+      expect(subject.validation.result.properties.firstName.message).toBe("Bob is not valid!");
+      return subject.validation.validate();
+    }, false);
+
+    expectations.validate();
+  });
+
+
+  it('should complete when validation is valid', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance("Bob");
+
+    subject.validation.validate().then(() => {
+      expect('validate() should complete').toBe('validate() should complete');
+      done();
+    }, () => {
+      expect('validate() should complete').toBe('validate() rejected');
+      done();
+    });
+  });
+  it('should reject when validation is invalid', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance('');
+
+    subject.validation.validate().then(() => {
+      expect('validate() should reject').toBe('validate() completed');
+      done();
+    }, () => {
+      expect('validate() should reject').toBe('validate() should reject');
+      done();
+    });
   });
 });

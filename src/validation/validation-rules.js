@@ -18,6 +18,34 @@ export class ValidationRule {
     return this.errorMessage;
   }
 
+  setResult(result, currentValue) {
+    if (result === true || result === undefined || result === null || result === '' ) {
+      this.errorMessage = null;
+      return true;
+    }
+    else {
+      if (typeof(result) === 'string') {
+        this.errorMessage = result;
+      }
+      else {
+        if (this.message) {
+          if (typeof(this.message) === 'function') {
+            this.errorMessage = this.message(currentValue, this.threshold);
+          }
+          else if (typeof(this.message) === 'string') {
+            this.errorMessage = this.message;
+          }
+          else
+            throw 'Unable to handle the error message:' + this.message;
+        }
+        else {
+          this.errorMessage = Validation.Locale.translate(this.ruleName, currentValue, this.threshold);
+        }
+      }
+      return false;
+    }
+  }
+
   validate(currentValue) {
     if (typeof (currentValue) === 'string') {
       if (String.prototype.trim) {
@@ -28,25 +56,27 @@ export class ValidationRule {
       }
     }
     var result = this.onValidate(currentValue, this.threshold);
-    if (result) {
-      this.errorMessage = null;
-    }
-    else {
-      if (this.message) {
-        if (typeof(this.message) === 'function') {
-          this.errorMessage = this.message(currentValue, this.threshold);
+    var promise = Promise.resolve(result);
+
+    var nextPromise = promise.then(
+      (promiseResult) => {
+        if (this.setResult(promiseResult, currentValue)) {
+          return Promise.resolve(this);
         }
-        else if (typeof(this.message) === 'string') {
-          this.errorMessage = this.message;
+        else {
+          return Promise.reject(this);
         }
+      },
+      (promiseResult) => {
+        if( typeof(promiseResult) === 'string' && promiseResult !== '')
+          this.setResult(promiseResult, currentValue);
         else
-          throw 'Unable to handle the error message:' + this.message;
+          this.setResult(false, currentValue);
+        return Promise.reject(this);
       }
-      else {
-        this.errorMessage = Validation.Locale.translate(this.ruleName, currentValue, this.threshold);
-      }
-    }
-    return result;
+    );
+
+    return nextPromise;
   }
 }
 
@@ -85,7 +115,7 @@ export class EmailValidationRule extends ValidationRule {
         if (!this.isFQDN(domain)) {
           return false;
         }
-        return  this.emailUserUtf8Regex.test(user);
+        return this.emailUserUtf8Regex.test(user);
       }
     );
   }

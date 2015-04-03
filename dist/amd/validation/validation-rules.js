@@ -36,8 +36,33 @@ define(["exports", "../validation/validation"], function (exports, _validationVa
           return this.errorMessage;
         }
       },
+      setResult: {
+        value: function setResult(result, currentValue) {
+          if (result === true || result === undefined || result === null || result === "") {
+            this.errorMessage = null;
+            return true;
+          } else {
+            if (typeof result === "string") {
+              this.errorMessage = result;
+            } else {
+              if (this.message) {
+                if (typeof this.message === "function") {
+                  this.errorMessage = this.message(currentValue, this.threshold);
+                } else if (typeof this.message === "string") {
+                  this.errorMessage = this.message;
+                } else throw "Unable to handle the error message:" + this.message;
+              } else {
+                this.errorMessage = Validation.Locale.translate(this.ruleName, currentValue, this.threshold);
+              }
+            }
+            return false;
+          }
+        }
+      },
       validate: {
         value: function validate(currentValue) {
+          var _this = this;
+
           if (typeof currentValue === "string") {
             if (String.prototype.trim) {
               currentValue = currentValue.trim();
@@ -46,20 +71,20 @@ define(["exports", "../validation/validation"], function (exports, _validationVa
             }
           }
           var result = this.onValidate(currentValue, this.threshold);
-          if (result) {
-            this.errorMessage = null;
-          } else {
-            if (this.message) {
-              if (typeof this.message === "function") {
-                this.errorMessage = this.message(currentValue, this.threshold);
-              } else if (typeof this.message === "string") {
-                this.errorMessage = this.message;
-              } else throw "Unable to handle the error message:" + this.message;
+          var promise = Promise.resolve(result);
+
+          var nextPromise = promise.then(function (promiseResult) {
+            if (_this.setResult(promiseResult, currentValue)) {
+              return Promise.resolve(_this);
             } else {
-              this.errorMessage = Validation.Locale.translate(this.ruleName, currentValue, this.threshold);
+              return Promise.reject(_this);
             }
-          }
-          return result;
+          }, function (promiseResult) {
+            if (typeof promiseResult === "string" && promiseResult !== "") _this.setResult(promiseResult, currentValue);else _this.setResult(false, currentValue);
+            return Promise.reject(_this);
+          });
+
+          return nextPromise;
         }
       }
     });

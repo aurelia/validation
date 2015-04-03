@@ -24,41 +24,69 @@ System.register(["../validation/validation"], function (_export) {
         _createClass(ValidationRulesCollection, {
           validate: {
             value: function validate(newValue) {
-              var response = {
-                isValid: true,
-                message: null,
-                failingRule: null
-              };
+              var _this = this;
+
+              var executeRules = true;
+
+              //Is required?
               if (Validation.Utilities.isEmptyValue(newValue)) {
                 if (this.isRequired) {
-                  response.isValid = false;
-                  response.message = Validation.Locale.translate("isRequired");
-                  response.failingRule = "isRequired";
+                  return Promise.reject({
+                    isValid: false,
+                    message: Validation.Locale.translate("isRequired"),
+                    failingRule: "isRequired"
+                  });
+                } else {
+                  executeRules = false;
                 }
-              } else {
-                //validate rules
+              }
+
+              var checks = Promise.resolve({
+                isValid: true,
+                message: "",
+                failingRule: null
+              });
+              //validate rules
+              if (executeRules) {
                 for (var i = 0; i < this.validationRules.length; i++) {
-                  var rule = this.validationRules[i];
-                  if (!rule.validate(newValue)) {
-                    response.isValid = false;
-                    response.message = rule.explain();
-                    response.failingRule = rule.ruleName;
-                    break;
-                  }
+                  (function (i) {
+                    var rule = _this.validationRules[i];
+                    checks = checks.then(function () {
+                      return rule.validate(newValue).then(function () {}, function () {
+                        return Promise.reject({
+                          isValid: false,
+                          message: rule.explain(),
+                          failingRule: rule.ruleName
+                        });
+                      });
+                    }, function (e) {
+                      return Promise.reject(e);
+                    });
+                  })(i);
                 }
               }
-              if (response.isValid) {
-                for (var i = 0; i < this.validationCollections.length; i++) {
-                  var validationCollectionResponse = this.validationCollections[i].validate(newValue);
-                  if (!validationCollectionResponse.isValid) {
-                    response.isValid = false;
-                    response.message = validationCollectionResponse.message;
-                    response.failingRule = validationCollectionResponse.failingRule;
-                    break;
-                  }
-                }
+              //validate collections
+              for (var i = 0; i < this.validationCollections.length; i++) {
+                (function (i) {
+                  var validationCollection = _this.validationCollections[i];
+                  checks = checks.then(function () {
+                    return validationCollection.validate(newValue).then(function () {}, function (e) {
+                      return Promise.reject(e);
+                    });
+                  }, function (e) {
+                    return Promise.reject(e);
+                  });
+                })(i);
               }
-              return response;
+              return checks.then(function () {
+                return Promise.resolve({
+                  isValid: true,
+                  message: "",
+                  failingRule: null
+                });
+              }, function (e) {
+                return Promise.reject(e);
+              });
             }
           },
           addValidationRule: {

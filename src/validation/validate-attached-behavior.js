@@ -75,14 +75,12 @@ export class ValidateAttachedBehavior {
 
     var atts = currentElement.attributes;
     if (atts[attributeName]) {
-      debugger;
       var bindingPath = atts[attributeName].value.trim();
-      if(bindingPath.indexOf('|') != -1)
+      if (bindingPath.indexOf('|') != -1)
         bindingPath = bindingPath.split('|')[0].trim();
       var validationProperty = this.value.result.properties[bindingPath];
 
-      if(attributeName == 'validate' && (validationProperty === null || validationProperty === undefined))
-      {
+      if (attributeName == 'validate' && (validationProperty === null || validationProperty === undefined)) {
         //Dev explicitly stated to show validation on a field, but there's no rules for this field
         //Hence, we add an empty validationProperty for that field, without any rules
         //This way, when 'checkAll()' is called, the input element 'turns green'
@@ -142,7 +140,7 @@ export class ValidateAttachedBehavior {
   appendUIVisuals(validationProperty, currentElement) {
     var formGroup = this.searchFormGroup(currentElement, 0);
     if (formGroup) {
-      if (validationProperty) {
+      if (validationProperty && validationProperty.isDirty) {
         if (validationProperty.isValid) {
           formGroup.classList.remove('has-warning');
           formGroup.classList.add('has-success');
@@ -185,7 +183,7 @@ export class ValidateAttachedBehavior {
   }
 
   attached() {
-    if(this.processedValidation === null || this.processedValidation === undefined)
+    if (this.processedValidation === null || this.processedValidation === undefined)
       this.valueChanged(this.value);
   }
 }
