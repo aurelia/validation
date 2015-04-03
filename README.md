@@ -18,6 +18,7 @@ this.validation = validation.on(this)
 > To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.durandal.io/). If you have questions, we invite you to join us on [our Gitter Channel](https://gitter.im/aurelia/discuss).
 
 ##Documentation
+*Important note*: both the documentation and the samples reflect the latest version of the sources, not the latest released version!
 Watch the [live samples](http://aurelia.io/validation/). (Work-in-progress)
 
 - [Installing the plugin](https://github.com/aurelia/validation/blob/master/doc/Intro.md#installation)
