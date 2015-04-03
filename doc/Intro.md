@@ -210,8 +210,14 @@ Optionally takes an *otherValueLabel*, which will be used in the error message.
 
 ####passes(customFunction, threshold)
 Validates that the value entered is valid according to the provided *customFunction*.
-Your *customFunction* is a function that takes two arguments: *newValue* (the value currently being evaluated) and optionally: *threshold*, and returns true/false.
->Note: there is a default message for *passes*, but this one is usually followed by a call to *withMessage*
+Your *customFunction* is a function that takes two arguments: *newValue* (the value currently being evaluated) and optionally: *threshold*, and returns either...
+- true, null, '', undefined or a promise that resolves to the forementioned values: for valid.
+- a non-empty string or a promise that resolves to a non-empty string: for invalid. Your non-empty string will be used as the validation message.
+- false, any other object or a promise that resolves to the forementioned values: for invalid.
+- a promise that rejects to a non-empty string: for invalid. Your non-empty string will be used as the validation message.
+- a promise that rejects to anything else: for invalid. 
+
+>Note: there is a default message for failing *passes()* rules which states 'invalid value'. For UX purposes, it's suggested to have your custom function return a message, return a promise that resolves or rejects to a message, or  follow the call to *passes()* by a call to *withMessage()*
 
 ####passesRule(validationRule)
 Validates that the message passes the provided *validationRule* (ValidationRule). See **custom validation**.
