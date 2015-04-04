@@ -7,16 +7,16 @@ data = {
   messages: {
     'isRequired': 'est obligatoire',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
-      return `ne peut contenir que des caractères alphanumériques ou des espace`;
+      return `ne peut contenir que des caractères alphanumériques ou des espaces`;
     },
     'AlphaNumericValidationRule': (newValue, threshold) => {
       return `ne peut contenir que des caractères alphanumériques`;
     },
     'BetweenLengthValidationRule': (newValue, threshold) => {
-      return `doit avoir une longueur comprise entre ${threshold.minimumLength} et ${threshold.maximumLength} caractères`;
+      return `doit contenir de ${threshold.minimumLength} à ${threshold.maximumLength} caractères`;
     },
     'BetweenValueValidationRule': (newValue, threshold) => {
-      return `doit être compris entre ${threshold.minimumValue} et ${threshold.maximumValue}`;
+      return `doit être entre ${threshold.minimumValue} et ${threshold.maximumValue}`;
     },
     'CustomFunctionValidationRule': (newValue, threshold) => {
       return `n'est pas une valeur valide`
@@ -30,25 +30,25 @@ data = {
     'EqualityValidationRule': (newValue, threshold) => {
       if (threshold.otherValueLabel)
         if (threshold.equality)
-          return `ne correspond pas à ${threshold.otherValueLabel}`;
+          return `doit correspondre à ${threshold.otherValueLabel}`;
         else
-          return `ne peut pas correspondre à ${threshold.otherValueLabel}`;
+          return `ne doit pas correspondre à ${threshold.otherValueLabel}`;
       else if (threshold.equality)
-        return `devrait être ${threshold.otherValue}`;
+        return `doit être ${threshold.otherValue}`;
       else
-        return `ne peut être ${threshold.otherValue}`;
+        return `ne doit pas être ${threshold.otherValue}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
       return `n'est pas une valeur valide`;
     },
     'MinimumLengthValidationRule': (newValue, threshold) => {
-      return `doit avoir au moins ${threshold} caractères`;
+      return `doit contenir au moins ${threshold} caractères`;
     },
     'MinimumValueValidationRule': (newValue, threshold) => {
       return `doit être ${threshold} ou plus`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
-      return `ne peut être plus long que ${threshold} caractères`;
+      return `ne doit pas contenir plus de ${threshold} caractères`;
     },
     'MaximumValueValidationRule': (newValue, threshold) => {
       return `doit être moins que ${threshold}`;
@@ -61,9 +61,9 @@ data = {
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {
       if (threshold == 4)
-        return `devrait contenir une combinaison de lettres minuscules, lettres majuscules, de caractères numériques et de caractères spéciaux`;
+        return `doit contenir une combinaison de lettres minuscules, de lettres majuscules, de caractères numériques et de caractères spéciaux`;
       else
-        return `devrait contenir au moins ${threshold} des caractéristiques suivantes : lettres minuscules, lettres majuscules, caractères numériques ou caractères spéciaux`;
+        return `doit contenir au moins ${threshold} des caractéristiques suivantes : lettres minuscules, lettres majuscules, caractères numériques ou caractères spéciaux`;
     }
   }
 }
