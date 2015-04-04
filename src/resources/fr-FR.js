@@ -7,32 +7,32 @@ data = {
   messages: {
     'isRequired': 'est obligatoire',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
-      return `ne peut contenir que des caractères de type numérique ou alphabétique ou avec des espaces`;
+      return `ne peut contenir que des caractères alphanumériques ou des espace`;
     },
     'AlphaNumericValidationRule': (newValue, threshold) => {
-      return `ne peut contenir que des caractères de type numérique ou alphabétique`;
+      return `ne peut contenir que des caractères alphanumériques`;
     },
     'BetweenLengthValidationRule': (newValue, threshold) => {
-      return `doit être compris entre between ${threshold.minimumLength} et ${threshold.maximumLength} caratères`;
+      return `doit avoir une longueur comprise entre ${threshold.minimumLength} et ${threshold.maximumLength} caractères`;
     },
     'BetweenValueValidationRule': (newValue, threshold) => {
-      return `doit être entre ${threshold.minimumValue} et ${threshold.maximumValue}`;
+      return `doit être compris entre ${threshold.minimumValue} et ${threshold.maximumValue}`;
     },
     'CustomFunctionValidationRule': (newValue, threshold) => {
       return `n'est pas une valeur valide`
     },
     'DigitValidationRule': (newValue, threshold) => {
-      return `doit contenir uniquement des valeurs nurmérique`;
+      return `doit contenir uniquement des caractères numériques`;
     },
     'EmailValidationRule': (newValue, threshold) => {
-      return `n'est pas une email valide`;
+      return `n'est pas une adresse email valide`;
     },
     'EqualityValidationRule': (newValue, threshold) => {
       if (threshold.otherValueLabel)
         if (threshold.equality)
-          return `ne correspond pas ${threshold.otherValueLabel}`;
+          return `ne correspond pas à ${threshold.otherValueLabel}`;
         else
-          return `ne peut pas correspondre ${threshold.otherValueLabel}`;
+          return `ne peut pas correspondre à ${threshold.otherValueLabel}`;
       else if (threshold.equality)
         return `devrait être ${threshold.otherValue}`;
       else
@@ -42,7 +42,7 @@ data = {
       return `n'est pas une valeur valide`;
     },
     'MinimumLengthValidationRule': (newValue, threshold) => {
-      return `doit avoir au moins ${threshold} caratères`;
+      return `doit avoir au moins ${threshold} caractères`;
     },
     'MinimumValueValidationRule': (newValue, threshold) => {
       return `doit être ${threshold} ou plus`;
@@ -54,16 +54,16 @@ data = {
       return `doit être moins que ${threshold}`;
     },
     'NumericValidationRule': (newValue, threshold) => {
-      return `doit être numérique`;
+      return `doit être une valeur numérique`;
     },
     'RegexValidationRule': (newValue, threshold) => {
       return `n'est pas une valeur valide`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {
       if (threshold == 4)
-        return `devrait contenir une combinaison de lettres en miniscule, majuscule, numérique et des caractères spéciaux`;
+        return `devrait contenir une combinaison de lettres minuscules, lettres majuscules, de caractères numériques et de caractères spéciaux`;
       else
-        return `devrait contenir au moins ${threshold} les caractéristiques suivants: lettres minuscule, lettres majuscule, caractères numérique ou scpéciaux`;
+        return `devrait contenir au moins ${threshold} des caractéristiques suivantes : lettres minuscules, lettres majuscules, caractères numériques ou caractères spéciaux`;
     }
   }
 }
