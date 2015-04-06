@@ -14,6 +14,8 @@ var AllCollections = _interopRequireWildcard(require("../validation/validation-r
 
 var PathObserver = require("../validation/path-observer").PathObserver;
 
+var Debouncer = require("../validation/debouncer").Debouncer;
+
 var ValidationProperty = exports.ValidationProperty = (function () {
   function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult) {
     var _this = this;
@@ -27,8 +29,12 @@ var ValidationProperty = exports.ValidationProperty = (function () {
 
     this.observer = new PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
 
-    this.observer.subscribe(function (newValue, oldValue) {
-      _this.validate(newValue, true);
+    var debouncer = new Debouncer();
+
+    this.observer.subscribe(function () {
+      debouncer.debounce(function () {
+        _this.validateCurrentValue(true);
+      });
     });
   }
 

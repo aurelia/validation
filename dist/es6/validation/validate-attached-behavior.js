@@ -42,7 +42,7 @@ export class ValidateAttachedBehavior {
     if (currentDepth === 5) {
       return null;
     }
-    if (currentElement.classList.contains('form-group')) {
+    if (currentElement.classList && currentElement.classList.contains('form-group')) {
       return currentElement;
     }
     return this.searchFormGroup(currentElement.parentNode, 1 + currentDepth);

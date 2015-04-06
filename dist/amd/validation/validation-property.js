@@ -1,4 +1,4 @@
-define(["exports", "../validation/validation-rules-collection", "../validation/path-observer"], function (exports, _validationValidationRulesCollection, _validationPathObserver) {
+define(["exports", "../validation/validation-rules-collection", "../validation/path-observer", "../validation/debouncer"], function (exports, _validationValidationRulesCollection, _validationPathObserver, _validationDebouncer) {
   "use strict";
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -10,6 +10,7 @@ define(["exports", "../validation/validation-rules-collection", "../validation/p
   });
   var AllCollections = _validationValidationRulesCollection;
   var PathObserver = _validationPathObserver.PathObserver;
+  var Debouncer = _validationDebouncer.Debouncer;
 
   var ValidationProperty = exports.ValidationProperty = (function () {
     function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult) {
@@ -24,8 +25,12 @@ define(["exports", "../validation/validation-rules-collection", "../validation/p
 
       this.observer = new PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
 
-      this.observer.subscribe(function (newValue, oldValue) {
-        _this.validate(newValue, true);
+      var debouncer = new Debouncer();
+
+      this.observer.subscribe(function () {
+        debouncer.debounce(function () {
+          _this.validateCurrentValue(true);
+        });
       });
     }
 

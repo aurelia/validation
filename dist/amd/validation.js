@@ -1,4 +1,4 @@
-define(["exports", "./validation/validation-locale-repository", "./validation/validation-result", "./validation/validation-rules", "./validation/validation-rules-collection", "./validation/validation-group-builder", "./validation/validation", "./validation/validate-attached-behavior", "./validation/validate-attached-behavior-config"], function (exports, _validationValidationLocaleRepository, _validationValidationResult, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroupBuilder, _validationValidation, _validationValidateAttachedBehavior, _validationValidateAttachedBehaviorConfig) {
+define(["exports", "./validation/validation-locale-repository", "./validation/validation-result", "./validation/validation-rules", "./validation/validation-rules-collection", "./validation/validation-group-builder", "./validation/validation", "./validation/validate-attached-behavior", "./validation/validate-attached-behavior-config", "./validation/debouncer"], function (exports, _validationValidationLocaleRepository, _validationValidationResult, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroupBuilder, _validationValidation, _validationValidateAttachedBehavior, _validationValidateAttachedBehaviorConfig, _validationDebouncer) {
   "use strict";
 
   var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
@@ -25,6 +25,8 @@ define(["exports", "./validation/validation-locale-repository", "./validation/va
   _defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehavior));
 
   _defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehaviorConfig));
+
+  _defaults(exports, _interopRequireWildcard(_validationDebouncer));
 
   function install(aurelia) {
     aurelia.globalizeResources("./validation/validate-attached-behavior");

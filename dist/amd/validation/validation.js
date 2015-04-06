@@ -86,4 +86,6 @@ define(["exports", "aurelia-binding", "../validation/validation-rules", "../vali
     }
   };
   Validation.Locale = new ValidationLocaleRepository();
+
+  Validation.debounceTime = 150;
 });

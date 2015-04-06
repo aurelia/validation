@@ -115,42 +115,63 @@ describe('Basic validation tests', () => {
   });
 
 
-  it('should update the validation automatically when the property changes', (done) => {
+  it('should update the validation automatically when the property changes with nested properties', (done) => {
     var subject = {company: {name: 'Bob the builder construction, Inc.'}};
 
     subject.validation = new Validation(new ObserverLocator()).on(subject)
       .ensure('company.name')
       .notEmpty().betweenLength(5, 10);
-    setTimeout(() => {
+    setTimeout(() => { //Settimeout to allow initial validation
       expect(subject.validation.result.isValid).toBe(false);
 
       subject.company.name = 'Bob, Inc.';
-      setTimeout(()=> {
+      setTimeout(()=> { //wait 200 ms to allow validation on the new value
         expect(subject.validation.result.isValid).toBe(true);
         done();
-      }, 0);
-
+      }, Validation.debounceTime + 1);
+      //Note: cannot really use jasmine.clock() because of the combination of setTimeout and actual promises
     }, 0);
-
-
   });
 
-  it('should update the validation automatically when the property changes with nested properties', (done) => {
+
+  it('should update the validation automatically when the property changes', (done) => {
+
     var subject = TestSubject.createInstance(null);
 
     setTimeout(() => {
       expect(subject.validation.result.isValid).toBe(false);
-
       subject.firstName = 'Bob the builder';
-
-      setTimeout(()=> {
-
+      setTimeout(() =>{
         expect(subject.validation.result.isValid).toBe(true);
         done();
-      }, 0);
+
+      }, Validation.debounceTime + 1);
+      //Note: cannot really use jasmine.clock() because of the combination of setTimeout and actual promises
 
     }, 0);
+  });
 
+  it('should not update if the value continuously changes', (done) => {
+    var subject = TestSubject.createInstance(null);
+    subject.validation.ensure('firstName').notEmpty().betweenLength(5, 10);
+
+    setTimeout(() => { //Do setTimout 0 to allow initial validation
+      expect(subject.validation.result.isValid).toBe(false);
+
+      subject.firstName = 'Bob';
+      setTimeout(() =>{ //Do setTimout 190, property should not be validated
+        expect(subject.validation.result.isValid).toBe(false);
+
+        subject.firstName = 'Bobby';
+        setTimeout( () => { //Property changed before 200 ms, property should not be validated
+          expect(subject.validation.result.isValid).toBe(false);
+          setTimeout(() => { //property did not change in last 200 ms, property should be validated
+            expect(subject.validation.result.isValid).toBe(true);
+            done();
+          }, 21);
+        }, Validation.debounceTime - 10);
+      }, Validation.debounceTime - 10);
+    }, 0);
   });
 
 

@@ -92,3 +92,5 @@ Validation.Utilities = {
   }
 };
 Validation.Locale = new ValidationLocaleRepository();
+
+Validation.debounceTime = 150;

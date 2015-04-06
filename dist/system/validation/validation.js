@@ -91,6 +91,8 @@ System.register(["aurelia-binding", "../validation/validation-rules", "../valida
         }
       };
       Validation.Locale = new ValidationLocaleRepository();
+
+      Validation.debounceTime = 150;
     }
   };
 });

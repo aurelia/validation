@@ -1,5 +1,6 @@
-import * as AllCollections from '../validation/validation-rules-collection'
-import {PathObserver} from '../validation/path-observer'
+import * as AllCollections from '../validation/validation-rules-collection';
+import {PathObserver} from '../validation/path-observer';
+import {Debouncer} from '../validation/debouncer';
 
 export class ValidationProperty {
   constructor(observerLocator, propertyName, validationGroup, propertyResult) {
@@ -11,8 +12,10 @@ export class ValidationProperty {
     this.observer = new PathObserver(observerLocator, validationGroup.subject, propertyName)
       .getObserver();
 
-    this.observer.subscribe((newValue, oldValue) => {
-      this.validate(newValue, true);
+    let debouncer = new Debouncer();
+
+    this.observer.subscribe(() => {
+      debouncer.debounce( () => { this.validateCurrentValue(true); });
     });
   }
 

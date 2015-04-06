@@ -25,6 +25,8 @@ _defaults(exports, _interopRequireWildcard(require("./validation/validate-attach
 
 _defaults(exports, _interopRequireWildcard(require("./validation/validate-attached-behavior-config")));
 
+_defaults(exports, _interopRequireWildcard(require("./validation/debouncer")));
+
 function install(aurelia) {
   aurelia.globalizeResources("./validation/validate-attached-behavior");
 }

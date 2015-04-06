@@ -44,7 +44,7 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
     },
     searchFormGroup: {
       value: function searchFormGroup(currentElement, currentDepth) {
-        if (currentDepth === 5 || currentElement == null) {
+        if (currentDepth === 5) {
           return null;
         }
         if (currentElement.classList && currentElement.classList.contains("form-group")) {
@@ -79,7 +79,6 @@ var ValidateAttachedBehavior = exports.ValidateAttachedBehavior = (function () {
 
         var atts = currentElement.attributes;
         if (atts[attributeName]) {
-          debugger;
           var bindingPath = atts[attributeName].value.trim();
           if (bindingPath.indexOf("|") != -1) bindingPath = bindingPath.split("|")[0].trim();
           var validationProperty = this.value.result.properties[bindingPath];

@@ -1,4 +1,4 @@
-System.register(["./validation/validation-locale-repository", "./validation/validation-result", "./validation/validation-rules", "./validation/validation-rules-collection", "./validation/validation-group-builder", "./validation/validation", "./validation/validate-attached-behavior", "./validation/validate-attached-behavior-config"], function (_export) {
+System.register(["./validation/validation-locale-repository", "./validation/validation-result", "./validation/validation-rules", "./validation/validation-rules-collection", "./validation/validation-group-builder", "./validation/validation", "./validation/validate-attached-behavior", "./validation/validate-attached-behavior-config", "./validation/debouncer"], function (_export) {
   _export("install", install);
 
   function install(aurelia) {
@@ -37,6 +37,10 @@ System.register(["./validation/validation-locale-repository", "./validation/vali
     }, function (_validationValidateAttachedBehaviorConfig) {
       for (var _key8 in _validationValidateAttachedBehaviorConfig) {
         _export(_key8, _validationValidateAttachedBehaviorConfig[_key8]);
+      }
+    }, function (_validationDebouncer) {
+      for (var _key9 in _validationDebouncer) {
+        _export(_key9, _validationDebouncer[_key9]);
       }
     }],
     execute: function () {

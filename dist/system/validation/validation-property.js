@@ -1,11 +1,13 @@
-System.register(["../validation/validation-rules-collection", "../validation/path-observer"], function (_export) {
-  var AllCollections, PathObserver, _createClass, _classCallCheck, ValidationProperty;
+System.register(["../validation/validation-rules-collection", "../validation/path-observer", "../validation/debouncer"], function (_export) {
+  var AllCollections, PathObserver, Debouncer, _createClass, _classCallCheck, ValidationProperty;
 
   return {
     setters: [function (_validationValidationRulesCollection) {
       AllCollections = _validationValidationRulesCollection;
     }, function (_validationPathObserver) {
       PathObserver = _validationPathObserver.PathObserver;
+    }, function (_validationDebouncer) {
+      Debouncer = _validationDebouncer.Debouncer;
     }],
     execute: function () {
       "use strict";
@@ -27,8 +29,12 @@ System.register(["../validation/validation-rules-collection", "../validation/pat
 
           this.observer = new PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
 
-          this.observer.subscribe(function (newValue, oldValue) {
-            _this.validate(newValue, true);
+          var debouncer = new Debouncer();
+
+          this.observer.subscribe(function () {
+            debouncer.debounce(function () {
+              _this.validateCurrentValue(true);
+            });
           });
         }
 
