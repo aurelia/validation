@@ -8,7 +8,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _Validation = require('../validation');
+var _Validation = require('../validation/validation');
 
 var Debouncer = (function () {
   function Debouncer() {

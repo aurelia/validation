@@ -3,7 +3,7 @@ import * as AllRules from '../validation/validation-rules';
 import * as AllCollections from '../validation/validation-rules-collection'
 import {ValidationGroup} from '../validation/validation-group';
 import {ValidationLocaleRepository} from '../validation/validation-locale-repository';
-import {inject} from 'aurelia-framework';
+import {inject} from 'aurelia-dependency-injection';
 
 /**
  * A lightweight validation plugin

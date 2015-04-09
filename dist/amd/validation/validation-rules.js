@@ -343,7 +343,8 @@ define(['exports', '../validation/validation'], function (exports, _validationVa
     function StrongPasswordValidationRule(minimumComplexityLevel) {
       _classCallCheck(this, StrongPasswordValidationRule);
 
-      _get(Object.getPrototypeOf(StrongPasswordValidationRule.prototype), 'constructor', this).call(this, complexityLevel, function (newValue, threshold) {
+      _get(Object.getPrototypeOf(StrongPasswordValidationRule.prototype), 'constructor', this).call(this, complexityLevel ? complexityLevel : 4, function (newValue, threshold) {
+        debugger;
         if (typeof newValue !== 'string') return false;
         var strength = 0;
 

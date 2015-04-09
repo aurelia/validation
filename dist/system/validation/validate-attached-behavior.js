@@ -1,9 +1,9 @@
-System.register(['aurelia-framework', 'aurelia-templating', 'aurelia-binding', '../validation/validate-attached-behavior-config'], function (_export) {
+System.register(['aurelia-dependency-injection', 'aurelia-templating', 'aurelia-binding', '../validation/validate-attached-behavior-config'], function (_export) {
   var inject, customAttribute, Behavior, ObserverLocator, ValidateAttachedBehaviorConfig, _classCallCheck, _createClass, ValidateAttachedBehavior;
 
   return {
-    setters: [function (_aureliaFramework) {
-      inject = _aureliaFramework.inject;
+    setters: [function (_aureliaDependencyInjection) {
+      inject = _aureliaDependencyInjection.inject;
     }, function (_aureliaTemplating) {
       customAttribute = _aureliaTemplating.customAttribute;
       Behavior = _aureliaTemplating.Behavior;
@@ -186,8 +186,8 @@ System.register(['aurelia-framework', 'aurelia-templating', 'aurelia-binding', '
         }]);
 
         var _ValidateAttachedBehavior = ValidateAttachedBehavior;
-        ValidateAttachedBehavior = inject(Element, ObserverLocator, ValidateAttachedBehaviorConfig)(ValidateAttachedBehavior) || ValidateAttachedBehavior;
         ValidateAttachedBehavior = customAttribute('validate')(ValidateAttachedBehavior) || ValidateAttachedBehavior;
+        ValidateAttachedBehavior = inject(Element, ObserverLocator, ValidateAttachedBehaviorConfig)(ValidateAttachedBehavior) || ValidateAttachedBehavior;
         return ValidateAttachedBehavior;
       })();
 

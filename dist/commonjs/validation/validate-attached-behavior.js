@@ -8,7 +8,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _inject = require('aurelia-framework');
+var _inject = require('aurelia-dependency-injection');
 
 var _customAttribute = require('aurelia-templating');
 
@@ -183,8 +183,8 @@ var ValidateAttachedBehavior = (function () {
   }]);
 
   var _ValidateAttachedBehavior = ValidateAttachedBehavior;
-  ValidateAttachedBehavior = _inject.inject(Element, _ObserverLocator.ObserverLocator, _ValidateAttachedBehaviorConfig.ValidateAttachedBehaviorConfig)(ValidateAttachedBehavior) || ValidateAttachedBehavior;
   ValidateAttachedBehavior = _customAttribute.customAttribute('validate')(ValidateAttachedBehavior) || ValidateAttachedBehavior;
+  ValidateAttachedBehavior = _inject.inject(Element, _ObserverLocator.ObserverLocator, _ValidateAttachedBehaviorConfig.ValidateAttachedBehaviorConfig)(ValidateAttachedBehavior) || ValidateAttachedBehavior;
   return ValidateAttachedBehavior;
 })();
 

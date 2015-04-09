@@ -1,4 +1,4 @@
-define(['exports', '../validation'], function (exports, _validation) {
+define(['exports', '../validation/validation'], function (exports, _validationValidation) {
   'use strict';
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -29,7 +29,7 @@ define(['exports', '../validation'], function (exports, _validation) {
               func();
             }
           }
-        }, _validation.Validation.debounceTime);
+        }, _validationValidation.Validation.debounceTime);
       }
     }]);
 

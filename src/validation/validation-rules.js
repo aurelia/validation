@@ -264,8 +264,9 @@ export class AlphaNumericOrWhitespaceValidationRule extends ValidationRule {
 export class StrongPasswordValidationRule extends ValidationRule {
   constructor(minimumComplexityLevel) {
     super(
-      complexityLevel,
+      (complexityLevel) ? complexityLevel : 4,
       (newValue, threshold) => {
+        debugger;
         if (typeof (newValue) !== 'string')
           return false;
         var strength = 0;

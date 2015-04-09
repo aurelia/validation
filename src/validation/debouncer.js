@@ -1,4 +1,4 @@
-import {Validation} from '../validation';
+import {Validation} from '../validation/validation';
 
 export class Debouncer{
   constructor(){

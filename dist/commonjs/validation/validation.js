@@ -24,7 +24,7 @@ var _ValidationGroup = require('../validation/validation-group');
 
 var _ValidationLocaleRepository = require('../validation/validation-locale-repository');
 
-var _inject = require('aurelia-framework');
+var _inject = require('aurelia-dependency-injection');
 
 var Validation = (function () {
   function Validation(observerLocator) {

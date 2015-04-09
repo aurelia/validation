@@ -1,9 +1,9 @@
-System.register(['../validation'], function (_export) {
+System.register(['../validation/validation'], function (_export) {
   var Validation, _classCallCheck, _createClass, Debouncer;
 
   return {
-    setters: [function (_validation) {
-      Validation = _validation.Validation;
+    setters: [function (_validationValidation) {
+      Validation = _validationValidation.Validation;
     }],
     execute: function () {
       'use strict';

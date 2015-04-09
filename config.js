@@ -9,6 +9,7 @@ System.config({
 System.config({
   "map": {
     "aurelia-binding": "github:aurelia/binding@0.5.0",
+    "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.6.0",
     "aurelia-templating": "github:aurelia/templating@0.10.0",
     "traceur": "github:jmcriffey/bower-traceur@0.0.87",
     "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87",

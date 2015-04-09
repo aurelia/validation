@@ -1,4 +1,4 @@
-define(['exports', 'aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', '../validation/validation-locale-repository', 'aurelia-framework'], function (exports, _aureliaBinding, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroup, _validationValidationLocaleRepository, _aureliaFramework) {
+define(['exports', 'aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', '../validation/validation-locale-repository', 'aurelia-dependency-injection'], function (exports, _aureliaBinding, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroup, _validationValidationLocaleRepository, _aureliaDependencyInjection) {
   'use strict';
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -24,7 +24,7 @@ define(['exports', 'aurelia-binding', '../validation/validation-rules', '../vali
     }]);
 
     var _Validation = Validation;
-    Validation = _aureliaFramework.inject(_aureliaBinding.ObserverLocator)(Validation) || Validation;
+    Validation = _aureliaDependencyInjection.inject(_aureliaBinding.ObserverLocator)(Validation) || Validation;
     return Validation;
   })();
 

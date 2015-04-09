@@ -37,7 +37,14 @@ module.exports = function(config) {
       options: {
         sourceMap: 'inline',
         modules: 'system',
-        moduleIds: false
+        moduleIds: false,
+        comments: false,
+        compact: false,
+        stage:2,
+        optional: [
+          "es7.decorators",
+          "es7.classProperties"
+        ]
       }
     },
 
