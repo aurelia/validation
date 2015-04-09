@@ -25,8 +25,12 @@
       "lib": "dist/system"
     },
     "dependencies": {
-      "aurelia-binding": "github:aurelia/binding@^0.4.0",
-      "aurelia-templating": "github:aurelia/templating@^0.9.0"
+      "aurelia-binding": "github:aurelia/binding@^0.5.0",
+      "aurelia-templating": "github:aurelia/templating@^0.10.0"
+    },
+    "devDependencies": {
+      "traceur": "github:jmcriffey/bower-traceur@0.0.87",
+      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87"
     }
   },
   "devDependencies": {
