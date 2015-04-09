@@ -2,16 +2,9 @@ import {Behavior} from 'aurelia-templating';
 import {ObserverLocator} from 'aurelia-binding';
 import {ValidateAttachedBehaviorConfig} from '../validation/validate-attached-behavior-config'
 
+@inject(Element, ObserverLocator, ValidateAttachedBehaviorConfig)
+@customAttribute('validate')
 export class ValidateAttachedBehavior {
-  static metadata() {
-    return Behavior
-      .attachedBehavior('validate');
-  }
-
-  static inject() {
-    return [Element, ObserverLocator, ValidateAttachedBehaviorConfig];
-  }
-
   constructor(element, observerLocator, config) {
     this.element = element;
     this.observerLocator = observerLocator;

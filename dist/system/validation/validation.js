@@ -1,5 +1,5 @@
-System.register(["aurelia-binding", "../validation/validation-rules", "../validation/validation-rules-collection", "../validation/validation-group", "../validation/validation-locale-repository"], function (_export) {
-  var ObserverLocator, AllRules, AllCollections, ValidationGroup, ValidationLocaleRepository, _createClass, _classCallCheck, Validation;
+System.register(['aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', '../validation/validation-locale-repository'], function (_export) {
+  var ObserverLocator, AllRules, AllCollections, ValidationGroup, ValidationLocaleRepository, _classCallCheck, _createClass, Validation;
 
   return {
     setters: [function (_aureliaBinding) {
@@ -14,57 +14,36 @@ System.register(["aurelia-binding", "../validation/validation-rules", "../valida
       ValidationLocaleRepository = _validationValidationLocaleRepository.ValidationLocaleRepository;
     }],
     execute: function () {
-      "use strict";
+      'use strict';
 
-      _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+      _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      /**
-       * A lightweight validation plugin
-       * @class Validation
-       * @constructor
-       */
-      Validation = _export("Validation", (function () {
-
-        /**
-         * Instantiates a new {Validation}
-         * @param observerLocator the observerLocator used to observer properties
-         */
-
+      Validation = (function () {
         function Validation(observerLocator) {
-          _classCallCheck(this, Validation);
+          _classCallCheck(this, _Validation);
 
           this.observerLocator = observerLocator;
         }
 
-        _createClass(Validation, {
-          on: {
-
-            /**
-             * Returns a new validation group on the subject
-             * @param subject The subject to validate
-             * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
-             */
-
-            value: function on(subject) {
-              return new ValidationGroup(subject, this.observerLocator);
-            }
+        _createClass(Validation, [{
+          key: 'on',
+          value: function on(subject) {
+            return new ValidationGroup(subject, this.observerLocator);
           }
-        }, {
-          inject: {
-            value: function inject() {
-              return [ObserverLocator];
-            }
-          }
-        });
+        }]);
 
+        var _Validation = Validation;
+        Validation = inject(ObserverLocator)(Validation) || Validation;
         return Validation;
-      })());
+      })();
+
+      _export('Validation', Validation);
 
       Validation.Utilities = {
         isEmptyValue: function isEmptyValue(val) {
-          if (typeof val === "function") {
+          if (typeof val === 'function') {
             return this.isEmptyValue(val());
           }
           if (val === undefined) {
@@ -73,14 +52,14 @@ System.register(["aurelia-binding", "../validation/validation-rules", "../valida
           if (val === null) {
             return true;
           }
-          if (val === "") {
+          if (val === '') {
             return true;
           }
-          if (typeof val === "string") {
+          if (typeof val === 'string') {
             if (String.prototype.trim) {
               val = val.trim();
             } else {
-              val = val.replace(/^\s+|\s+$/g, "");
+              val = val.replace(/^\s+|\s+$/g, '');
             }
           }
 

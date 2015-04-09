@@ -83,6 +83,22 @@ export class ValidationRule {
 export class EmailValidationRule extends ValidationRule {
   //https://github.com/chriso/validator.js/blob/master/LICENSE
   constructor() {
+    super(
+      null,
+      (newValue, threshold) => {
+        if (/\s/.test(newValue)) {
+          return false;
+        }
+        var parts = newValue.split('@');
+        var domain = parts.pop();
+        var user = parts.join('@');
+
+        if (!this.isFQDN(domain)) {
+          return false;
+        }
+        return this.emailUserUtf8Regex.test(user);
+      }
+    );  
     this.emailUserUtf8Regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))$/i;
     this.isFQDN = function (str) {
       var parts = str.split('.');
@@ -102,22 +118,6 @@ export class EmailValidationRule extends ValidationRule {
       }
       return true;
     };
-    super(
-      null,
-      (newValue, threshold) => {
-        if (/\s/.test(newValue)) {
-          return false;
-        }
-        var parts = newValue.split('@');
-        var domain = parts.pop();
-        var user = parts.join('@');
-
-        if (!this.isFQDN(domain)) {
-          return false;
-        }
-        return this.emailUserUtf8Regex.test(user);
-      }
-    );
   }
 }
 
@@ -225,48 +225,44 @@ export class BetweenValueValidationRule extends ValidationRule {
 
 export class DigitValidationRule extends ValidationRule {
   constructor() {
-    this.digitRegex = /^\d+$/;
     super(
       null,
       (newValue, threshold) => {
         return this.digitRegex.test(newValue);
       }
     );
+    this.digitRegex = /^\d+$/;
   }
 }
 
 export class AlphaNumericValidationRule extends ValidationRule {
   constructor() {
-    this.alphaNumericRegex = /^[a-z0-9]+$/i;
     super(
       null,
       (newValue, threshold) => {
         return this.alphaNumericRegex.test(newValue);
       }
     );
+    this.alphaNumericRegex = /^[a-z0-9]+$/i;
   }
 }
 
 
 export class AlphaNumericOrWhitespaceValidationRule extends ValidationRule {
   constructor() {
-    this.alphaNumericRegex = /^[a-z0-9\s]+$/i;
     super(
       null,
       (newValue, threshold) => {
         return this.alphaNumericRegex.test(newValue);
       }
     );
+    this.alphaNumericRegex = /^[a-z0-9\s]+$/i;
   }
 }
 
 
 export class StrongPasswordValidationRule extends ValidationRule {
   constructor(minimumComplexityLevel) {
-    var complexityLevel = 4;
-    if (minimumComplexityLevel && minimumComplexityLevel > 1 && minimumComplexityLevel < 4)
-      complexityLevel = minimumComplexityLevel;
-
     super(
       complexityLevel,
       (newValue, threshold) => {
@@ -281,6 +277,10 @@ export class StrongPasswordValidationRule extends ValidationRule {
         return strength >= threshold;
       }
     );
+
+    var complexityLevel = 4;
+    if (minimumComplexityLevel && minimumComplexityLevel > 1 && minimumComplexityLevel < 4)
+      complexityLevel = minimumComplexityLevel;
   }
 }
 

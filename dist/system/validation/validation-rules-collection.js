@@ -1,18 +1,18 @@
-System.register(["../validation/validation"], function (_export) {
-  var Validation, _createClass, _classCallCheck, ValidationRulesCollection, SwitchCaseValidationRulesCollection;
+System.register(['../validation/validation'], function (_export) {
+  var Validation, _classCallCheck, _createClass, ValidationRulesCollection, SwitchCaseValidationRulesCollection;
 
   return {
     setters: [function (_validationValidation) {
       Validation = _validationValidation.Validation;
     }],
     execute: function () {
-      "use strict";
+      'use strict';
 
-      _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+      _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      ValidationRulesCollection = _export("ValidationRulesCollection", (function () {
+      ValidationRulesCollection = (function () {
         function ValidationRulesCollection() {
           _classCallCheck(this, ValidationRulesCollection);
 
@@ -21,185 +21,190 @@ System.register(["../validation/validation"], function (_export) {
           this.validationCollections = [];
         }
 
-        _createClass(ValidationRulesCollection, {
-          validate: {
-            value: function validate(newValue) {
-              var _this = this;
+        _createClass(ValidationRulesCollection, [{
+          key: 'validate',
+          value: function validate(newValue) {
+            var _this = this;
 
-              var executeRules = true;
+            var executeRules = true;
 
-              //Is required?
-              if (Validation.Utilities.isEmptyValue(newValue)) {
-                if (this.isRequired) {
-                  return Promise.reject({
-                    isValid: false,
-                    message: Validation.Locale.translate("isRequired"),
-                    failingRule: "isRequired"
-                  });
-                } else {
-                  executeRules = false;
-                }
+            if (Validation.Utilities.isEmptyValue(newValue)) {
+              if (this.isRequired) {
+                return Promise.reject({
+                  isValid: false,
+                  message: Validation.Locale.translate('isRequired'),
+                  failingRule: 'isRequired'
+                });
+              } else {
+                executeRules = false;
               }
+            }
 
-              var checks = Promise.resolve({
-                isValid: true,
-                message: "",
-                failingRule: null
-              });
-              //validate rules
-              if (executeRules) {
-                for (var i = 0; i < this.validationRules.length; i++) {
-                  (function (i) {
-                    var rule = _this.validationRules[i];
-                    checks = checks.then(function () {
-                      return rule.validate(newValue).then(function () {}, function () {
-                        return Promise.reject({
-                          isValid: false,
-                          message: rule.explain(),
-                          failingRule: rule.ruleName
-                        });
-                      });
-                    }, function (e) {
-                      return Promise.reject(e);
+            var checks = Promise.resolve({
+              isValid: true,
+              message: '',
+              failingRule: null
+            });
+
+            if (executeRules) {
+              var _loop = function (i) {
+                var rule = _this.validationRules[i];
+                checks = checks.then(function () {
+                  return rule.validate(newValue).then(function () {}, function () {
+                    return Promise.reject({
+                      isValid: false,
+                      message: rule.explain(),
+                      failingRule: rule.ruleName
                     });
-                  })(i);
-                }
-              }
-              //validate collections
-              for (var i = 0; i < this.validationCollections.length; i++) {
-                (function (i) {
-                  var validationCollection = _this.validationCollections[i];
-                  checks = checks.then(function () {
-                    return validationCollection.validate(newValue).then(function () {}, function (e) {
-                      return Promise.reject(e);
-                    });
-                  }, function (e) {
-                    return Promise.reject(e);
                   });
-                })(i);
+                }, function (e) {
+                  return Promise.reject(e);
+                });
+              };
+
+              for (var i = 0; i < this.validationRules.length; i++) {
+                _loop(i);
               }
-              return checks.then(function () {
-                return Promise.resolve({
-                  isValid: true,
-                  message: "",
-                  failingRule: null
+            }
+
+            var _loop2 = function (i) {
+              var validationCollection = _this.validationCollections[i];
+              checks = checks.then(function () {
+                return validationCollection.validate(newValue).then(function () {}, function (e) {
+                  return Promise.reject(e);
                 });
               }, function (e) {
                 return Promise.reject(e);
               });
+            };
+
+            for (var i = 0; i < this.validationCollections.length; i++) {
+              _loop2(i);
             }
-          },
-          addValidationRule: {
-            value: function addValidationRule(validationRule) {
-              if (validationRule.validate === undefined) //Can ES6 check on base class??
-                throw new exception("That's not a valid validationRule");
-              this.validationRules.push(validationRule);
-            }
-          },
-          addValidationRuleCollection: {
-            value: function addValidationRuleCollection(validationRulesCollection) {
-              this.validationCollections.push(validationRulesCollection);
-            }
-          },
-          notEmpty: {
-            value: function notEmpty() {
-              this.isRequired = true;
-            }
-          },
-          withMessage: {
-            value: function withMessage(message) {
-              this.validationRules[this.validationRules.length - 1].withMessage(message);
-            }
+            return checks.then(function () {
+              return Promise.resolve({
+                isValid: true,
+                message: '',
+                failingRule: null
+              });
+            }, function (e) {
+              return Promise.reject(e);
+            });
           }
-        });
+        }, {
+          key: 'addValidationRule',
+          value: function addValidationRule(validationRule) {
+            if (validationRule.validate === undefined) throw new exception('That\'s not a valid validationRule');
+            this.validationRules.push(validationRule);
+          }
+        }, {
+          key: 'addValidationRuleCollection',
+          value: function addValidationRuleCollection(validationRulesCollection) {
+            this.validationCollections.push(validationRulesCollection);
+          }
+        }, {
+          key: 'notEmpty',
+          value: function notEmpty() {
+            this.isRequired = true;
+          }
+        }, {
+          key: 'withMessage',
+          value: function withMessage(message) {
+            this.validationRules[this.validationRules.length - 1].withMessage(message);
+          }
+        }]);
 
         return ValidationRulesCollection;
-      })());
-      SwitchCaseValidationRulesCollection = _export("SwitchCaseValidationRulesCollection", (function () {
+      })();
+
+      _export('ValidationRulesCollection', ValidationRulesCollection);
+
+      SwitchCaseValidationRulesCollection = (function () {
         function SwitchCaseValidationRulesCollection(conditionExpression) {
           _classCallCheck(this, SwitchCaseValidationRulesCollection);
 
           this.conditionExpression = conditionExpression;
           this.innerCollections = [];
           this.defaultCollection = new ValidationRulesCollection();
-          this.caseLabel = "";
-          this.defaultCaseLabel = { description: "this is the case label for 'default'" };
+          this.caseLabel = '';
+          this.defaultCaseLabel = { description: 'this is the case label for \'default\'' };
         }
 
-        _createClass(SwitchCaseValidationRulesCollection, {
-          "case": {
-            value: function _case(caseLabel) {
-              this.caseLabel = caseLabel;
-              this.getCurrentCollection(caseLabel, true); //force creation
-            }
-          },
-          "default": {
-            value: function _default() {
-              this.caseLabel = this.defaultCaseLabel;
-            }
-          },
-          getCurrentCollection: {
-            value: function getCurrentCollection(caseLabel) {
-              var createIfNotExists = arguments[1] === undefined ? false : arguments[1];
+        _createClass(SwitchCaseValidationRulesCollection, [{
+          key: 'case',
+          value: function _case(caseLabel) {
+            this.caseLabel = caseLabel;
+            this.getCurrentCollection(caseLabel, true);
+          }
+        }, {
+          key: 'default',
+          value: function _default() {
+            this.caseLabel = this.defaultCaseLabel;
+          }
+        }, {
+          key: 'getCurrentCollection',
+          value: function getCurrentCollection(caseLabel) {
+            var createIfNotExists = arguments[1] === undefined ? false : arguments[1];
 
-              if (caseLabel === this.defaultCaseLabel) {
-                return this.defaultCollection;
-              }var currentCollection = null;
-              for (var i = 0; i < this.innerCollections.length; i++) {
-                currentCollection = this.innerCollections[i];
-                if (currentCollection.caseLabel === caseLabel) {
-                  return currentCollection.collection;
-                }
-              }
-              if (createIfNotExists) {
-                currentCollection = {
-                  caseLabel: caseLabel,
-                  collection: new ValidationRulesCollection()
-                };
-                this.innerCollections.push(currentCollection);
+            if (caseLabel === this.defaultCaseLabel) {
+              return this.defaultCollection;
+            }var currentCollection = null;
+            for (var i = 0; i < this.innerCollections.length; i++) {
+              currentCollection = this.innerCollections[i];
+              if (currentCollection.caseLabel === caseLabel) {
                 return currentCollection.collection;
               }
-              return null;
             }
-          },
-          validate: {
-            value: function validate(newValue) {
-              var collection = this.getCurrentCollection(this.conditionExpression(newValue));
-              if (collection !== null) {
-                return collection.validate(newValue);
-              } else {
-                return this.defaultCollection.validate(newValue);
-              }
+            if (createIfNotExists) {
+              currentCollection = {
+                caseLabel: caseLabel,
+                collection: new ValidationRulesCollection()
+              };
+              this.innerCollections.push(currentCollection);
+              return currentCollection.collection;
             }
-          },
-          addValidationRule: {
-            value: function addValidationRule(validationRule) {
-              var currentCollection = this.getCurrentCollection(this.caseLabel, true);
-              currentCollection.addValidationRule(validationRule);
-            }
-          },
-          addValidationRuleCollection: {
-            value: function addValidationRuleCollection(validationRulesCollection) {
-              var currentCollection = this.getCurrentCollection(this.caseLabel, true);
-              currentCollection.addValidationRuleCollection(validationRulesCollection);
-            }
-          },
-          notEmpty: {
-            value: function notEmpty() {
-              var collection = this.getCurrentCollection(this.caseLabel);
-              if (collection !== null) collection.notEmpty();else this.defaultCollection.notEmpty();
-            }
-          },
-          withMessage: {
-            value: function withMessage(message) {
-              var collection = this.getCurrentCollection(this.caseLabel);
-              if (collection !== null) collection.withMessage(message);else this.defaultCollection.withMessage(message);
+            return null;
+          }
+        }, {
+          key: 'validate',
+          value: function validate(newValue) {
+            var collection = this.getCurrentCollection(this.conditionExpression(newValue));
+            if (collection !== null) {
+              return collection.validate(newValue);
+            } else {
+              return this.defaultCollection.validate(newValue);
             }
           }
-        });
+        }, {
+          key: 'addValidationRule',
+          value: function addValidationRule(validationRule) {
+            var currentCollection = this.getCurrentCollection(this.caseLabel, true);
+            currentCollection.addValidationRule(validationRule);
+          }
+        }, {
+          key: 'addValidationRuleCollection',
+          value: function addValidationRuleCollection(validationRulesCollection) {
+            var currentCollection = this.getCurrentCollection(this.caseLabel, true);
+            currentCollection.addValidationRuleCollection(validationRulesCollection);
+          }
+        }, {
+          key: 'notEmpty',
+          value: function notEmpty() {
+            var collection = this.getCurrentCollection(this.caseLabel);
+            if (collection !== null) collection.notEmpty();else this.defaultCollection.notEmpty();
+          }
+        }, {
+          key: 'withMessage',
+          value: function withMessage(message) {
+            var collection = this.getCurrentCollection(this.caseLabel);
+            if (collection !== null) collection.withMessage(message);else this.defaultCollection.withMessage(message);
+          }
+        }]);
 
         return SwitchCaseValidationRulesCollection;
-      })());
+      })();
+
+      _export('SwitchCaseValidationRulesCollection', SwitchCaseValidationRulesCollection);
     }
   };
 });

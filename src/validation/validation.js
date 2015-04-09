@@ -9,11 +9,8 @@ import {ValidationLocaleRepository} from '../validation/validation-locale-reposi
  * @class Validation
  * @constructor
  */
+@inject(ObserverLocator)
 export class Validation {
-  static inject() {
-    return [ObserverLocator];
-  }
-
   /**
    * Instantiates a new {Validation}
    * @param observerLocator the observerLocator used to observer properties
