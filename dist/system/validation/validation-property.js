@@ -1,5 +1,5 @@
-System.register(["../validation/validation-rules-collection", "../validation/path-observer", "../validation/debouncer"], function (_export) {
-  var AllCollections, PathObserver, Debouncer, _createClass, _classCallCheck, ValidationProperty;
+System.register(['../validation/validation-rules-collection', '../validation/path-observer', '../validation/debouncer'], function (_export) {
+  var AllCollections, PathObserver, Debouncer, _classCallCheck, _createClass, ValidationProperty;
 
   return {
     setters: [function (_validationValidationRulesCollection) {
@@ -10,13 +10,13 @@ System.register(["../validation/validation-rules-collection", "../validation/pat
       Debouncer = _validationDebouncer.Debouncer;
     }],
     execute: function () {
-      "use strict";
+      'use strict';
 
-      _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+      _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      ValidationProperty = _export("ValidationProperty", (function () {
+      ValidationProperty = (function () {
         function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult) {
           var _this = this;
 
@@ -38,37 +38,37 @@ System.register(["../validation/validation-rules-collection", "../validation/pat
           });
         }
 
-        _createClass(ValidationProperty, {
-          addValidationRule: {
-            value: function addValidationRule(validationRule) {
-              if (validationRule.validate === undefined) //Can ES6 check on base class??
-                throw new exception("That's not a valid validationRule");
-              this.validationRules.addValidationRule(validationRule);
-              this.validateCurrentValue(false);
-            }
-          },
-          validateCurrentValue: {
-            value: function validateCurrentValue(forceDirty) {
-              return this.validate(this.observer.getValue(), forceDirty);
-            }
-          },
-          validate: {
-            value: function validate(newValue, shouldBeDirty) {
-              var _this = this;
-
-              return this.validationRules.validate(newValue).then(function (validationResponse) {
-                _this.propertyResult.setValidity(validationResponse, shouldBeDirty);
-                return Promise.resolve(true);
-              }, function (validationResponse) {
-                _this.propertyResult.setValidity(validationResponse, shouldBeDirty);
-                return Promise.reject(false);
-              });
-            }
+        _createClass(ValidationProperty, [{
+          key: 'addValidationRule',
+          value: function addValidationRule(validationRule) {
+            if (validationRule.validate === undefined) throw new exception('That\'s not a valid validationRule');
+            this.validationRules.addValidationRule(validationRule);
+            this.validateCurrentValue(false);
           }
-        });
+        }, {
+          key: 'validateCurrentValue',
+          value: function validateCurrentValue(forceDirty) {
+            return this.validate(this.observer.getValue(), forceDirty);
+          }
+        }, {
+          key: 'validate',
+          value: function validate(newValue, shouldBeDirty) {
+            var _this2 = this;
+
+            return this.validationRules.validate(newValue).then(function (validationResponse) {
+              _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
+              return Promise.resolve(true);
+            }, function (validationResponse) {
+              _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
+              return Promise.reject(false);
+            });
+          }
+        }]);
 
         return ValidationProperty;
-      })());
+      })();
+
+      _export('ValidationProperty', ValidationProperty);
     }
   };
 });

@@ -1,44 +1,45 @@
-System.register(["../validation"], function (_export) {
-  var Validation, _createClass, _classCallCheck, Debouncer;
+System.register(['../validation/validation'], function (_export) {
+  var Validation, _classCallCheck, _createClass, Debouncer;
 
   return {
-    setters: [function (_validation) {
-      Validation = _validation.Validation;
+    setters: [function (_validationValidation) {
+      Validation = _validationValidation.Validation;
     }],
     execute: function () {
-      "use strict";
+      'use strict';
 
-      _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+      _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      Debouncer = _export("Debouncer", (function () {
+      Debouncer = (function () {
         function Debouncer() {
           _classCallCheck(this, Debouncer);
 
           this.currentFunction = null;
         }
 
-        _createClass(Debouncer, {
-          debounce: {
-            value: function debounce(func) {
-              var _this = this;
+        _createClass(Debouncer, [{
+          key: 'debounce',
+          value: function debounce(func) {
+            var _this = this;
 
-              this.currentFunction = func;
-              setTimeout(function () {
-                if (func !== null && func !== undefined) {
-                  if (func === _this.currentFunction) {
-                    _this.currentFunction = null;
-                    func();
-                  }
+            this.currentFunction = func;
+            setTimeout(function () {
+              if (func !== null && func !== undefined) {
+                if (func === _this.currentFunction) {
+                  _this.currentFunction = null;
+                  func();
                 }
-              }, Validation.debounceTime);
-            }
+              }
+            }, Validation.debounceTime);
           }
-        });
+        }]);
 
         return Debouncer;
-      })());
+      })();
+
+      _export('Debouncer', Debouncer);
     }
   };
 });

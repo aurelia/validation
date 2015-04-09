@@ -1,32 +1,50 @@
-"use strict";
+'use strict';
 
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
+var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
 
 var _defaults = function (obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; };
 
-exports.install = install;
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports.install = install;
 
-_defaults(exports, _interopRequireWildcard(require("./validation/validation-locale-repository")));
+var _validationValidationLocaleRepository = require('./validation/validation-locale-repository');
 
-_defaults(exports, _interopRequireWildcard(require("./validation/validation-result")));
+_defaults(exports, _interopRequireWildcard(_validationValidationLocaleRepository));
 
-_defaults(exports, _interopRequireWildcard(require("./validation/validation-rules")));
+var _validationValidationResult = require('./validation/validation-result');
 
-_defaults(exports, _interopRequireWildcard(require("./validation/validation-rules-collection")));
+_defaults(exports, _interopRequireWildcard(_validationValidationResult));
 
-_defaults(exports, _interopRequireWildcard(require("./validation/validation-group-builder")));
+var _validationValidationRules = require('./validation/validation-rules');
 
-_defaults(exports, _interopRequireWildcard(require("./validation/validation")));
+_defaults(exports, _interopRequireWildcard(_validationValidationRules));
 
-_defaults(exports, _interopRequireWildcard(require("./validation/validate-attached-behavior")));
+var _validationValidationRulesCollection = require('./validation/validation-rules-collection');
 
-_defaults(exports, _interopRequireWildcard(require("./validation/validate-attached-behavior-config")));
+_defaults(exports, _interopRequireWildcard(_validationValidationRulesCollection));
 
-_defaults(exports, _interopRequireWildcard(require("./validation/debouncer")));
+var _validationValidationGroupBuilder = require('./validation/validation-group-builder');
+
+_defaults(exports, _interopRequireWildcard(_validationValidationGroupBuilder));
+
+var _validationValidation = require('./validation/validation');
+
+_defaults(exports, _interopRequireWildcard(_validationValidation));
+
+var _validationValidateAttachedBehavior = require('./validation/validate-attached-behavior');
+
+_defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehavior));
+
+var _validationValidateAttachedBehaviorConfig = require('./validation/validate-attached-behavior-config');
+
+_defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehaviorConfig));
+
+var _validationDebouncer = require('./validation/debouncer');
+
+_defaults(exports, _interopRequireWildcard(_validationDebouncer));
 
 function install(aurelia) {
-  aurelia.globalizeResources("./validation/validate-attached-behavior");
+  aurelia.globalizeResources('./validation/validate-attached-behavior');
 }

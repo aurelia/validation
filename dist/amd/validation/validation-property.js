@@ -1,18 +1,15 @@
-define(["exports", "../validation/validation-rules-collection", "../validation/path-observer", "../validation/debouncer"], function (exports, _validationValidationRulesCollection, _validationPathObserver, _validationDebouncer) {
-  "use strict";
+define(['exports', '../validation/validation-rules-collection', '../validation/path-observer', '../validation/debouncer'], function (exports, _validationValidationRulesCollection, _validationPathObserver, _validationDebouncer) {
+  'use strict';
 
-  var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(exports, '__esModule', {
     value: true
   });
-  var AllCollections = _validationValidationRulesCollection;
-  var PathObserver = _validationPathObserver.PathObserver;
-  var Debouncer = _validationDebouncer.Debouncer;
 
-  var ValidationProperty = exports.ValidationProperty = (function () {
+  var ValidationProperty = (function () {
     function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult) {
       var _this = this;
 
@@ -21,11 +18,11 @@ define(["exports", "../validation/validation-rules-collection", "../validation/p
       this.propertyResult = propertyResult;
       this.propertyName = propertyName;
       this.validationGroup = validationGroup;
-      this.validationRules = new AllCollections.ValidationRulesCollection();
+      this.validationRules = new _validationValidationRulesCollection.ValidationRulesCollection();
 
-      this.observer = new PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
+      this.observer = new _validationPathObserver.PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
 
-      var debouncer = new Debouncer();
+      var debouncer = new _validationDebouncer.Debouncer();
 
       this.observer.subscribe(function () {
         debouncer.debounce(function () {
@@ -34,35 +31,35 @@ define(["exports", "../validation/validation-rules-collection", "../validation/p
       });
     }
 
-    _createClass(ValidationProperty, {
-      addValidationRule: {
-        value: function addValidationRule(validationRule) {
-          if (validationRule.validate === undefined) //Can ES6 check on base class??
-            throw new exception("That's not a valid validationRule");
-          this.validationRules.addValidationRule(validationRule);
-          this.validateCurrentValue(false);
-        }
-      },
-      validateCurrentValue: {
-        value: function validateCurrentValue(forceDirty) {
-          return this.validate(this.observer.getValue(), forceDirty);
-        }
-      },
-      validate: {
-        value: function validate(newValue, shouldBeDirty) {
-          var _this = this;
-
-          return this.validationRules.validate(newValue).then(function (validationResponse) {
-            _this.propertyResult.setValidity(validationResponse, shouldBeDirty);
-            return Promise.resolve(true);
-          }, function (validationResponse) {
-            _this.propertyResult.setValidity(validationResponse, shouldBeDirty);
-            return Promise.reject(false);
-          });
-        }
+    _createClass(ValidationProperty, [{
+      key: 'addValidationRule',
+      value: function addValidationRule(validationRule) {
+        if (validationRule.validate === undefined) throw new exception('That\'s not a valid validationRule');
+        this.validationRules.addValidationRule(validationRule);
+        this.validateCurrentValue(false);
       }
-    });
+    }, {
+      key: 'validateCurrentValue',
+      value: function validateCurrentValue(forceDirty) {
+        return this.validate(this.observer.getValue(), forceDirty);
+      }
+    }, {
+      key: 'validate',
+      value: function validate(newValue, shouldBeDirty) {
+        var _this2 = this;
+
+        return this.validationRules.validate(newValue).then(function (validationResponse) {
+          _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
+          return Promise.resolve(true);
+        }, function (validationResponse) {
+          _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
+          return Promise.reject(false);
+        });
+      }
+    }]);
 
     return ValidationProperty;
   })();
+
+  exports.ValidationProperty = ValidationProperty;
 });

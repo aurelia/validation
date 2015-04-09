@@ -3,17 +3,15 @@ import * as AllRules from '../validation/validation-rules';
 import * as AllCollections from '../validation/validation-rules-collection'
 import {ValidationGroup} from '../validation/validation-group';
 import {ValidationLocaleRepository} from '../validation/validation-locale-repository';
+import {inject} from 'aurelia-dependency-injection';
 
 /**
  * A lightweight validation plugin
  * @class Validation
  * @constructor
  */
+@inject(ObserverLocator)
 export class Validation {
-  static inject() {
-    return [ObserverLocator];
-  }
-
   /**
    * Instantiates a new {Validation}
    * @param observerLocator the observerLocator used to observer properties

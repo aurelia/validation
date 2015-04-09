@@ -1,7 +1,7 @@
-define(["exports"], function (exports) {
-  "use strict";
+define(['exports'], function (exports) {
+  'use strict';
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(exports, '__esModule', {
     value: true
   });
 
@@ -10,54 +10,66 @@ define(["exports"], function (exports) {
       numericRegex: /^-?(?:\d+)(?:\,\d+)?$/
     },
     messages: {
-      isRequired: "is verplicht",
-      AlphaNumericOrWhitespaceValidationRule: function (newValue, threshold) {
-        return "kan enkel alfanumerieke tekens of spaties bevatten";
+      isRequired: 'is verplicht',
+      AlphaNumericOrWhitespaceValidationRule: function AlphaNumericOrWhitespaceValidationRule(newValue, threshold) {
+        return 'kan enkel alfanumerieke tekens of spaties bevatten';
       },
-      AlphaNumericValidationRule: function (newValue, threshold) {
-        return "kan enkel alfanumerieke tekens bevatten";
+      AlphaNumericValidationRule: function AlphaNumericValidationRule(newValue, threshold) {
+        return 'kan enkel alfanumerieke tekens bevatten';
       },
-      BetweenLengthValidationRule: function (newValue, threshold) {
-        return "moet tussen " + threshold.minimumLength + " en " + threshold.maximumLength + " tekens lang zijn";
+      BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
+        return 'moet tussen ' + threshold.minimumLength + ' en ' + threshold.maximumLength + ' tekens lang zijn';
       },
-      BetweenValueValidationRule: function (newValue, threshold) {
-        return "moet tussen " + threshold.minimumValue + " en " + threshold.maximumValue + " zijn";
+      BetweenValueValidationRule: function BetweenValueValidationRule(newValue, threshold) {
+        return 'moet tussen ' + threshold.minimumValue + ' en ' + threshold.maximumValue + ' zijn';
       },
-      DigitValidationRule: function (newValue, threshold) {
-        return "mag enkel cijfers bevatten";
+      DigitValidationRule: function DigitValidationRule(newValue, threshold) {
+        return 'mag enkel cijfers bevatten';
       },
-      CustomFunctionValidationRule: function (newValue, threshold) {
-        return "geen geldige waarde";
+      CustomFunctionValidationRule: function CustomFunctionValidationRule(newValue, threshold) {
+        return 'geen geldige waarde';
       },
-      EmailValidationRule: function (newValue, threshold) {
-        return "is geen geldig email adres";
+      EmailValidationRule: function EmailValidationRule(newValue, threshold) {
+        return 'is geen geldig email adres';
       },
-      EqualityValidationRule: function (newValue, threshold) {
-        if (threshold.otherValueLabel) if (threshold.equality) return "moet overeen komen met " + threshold.otherValueLabel;else return "mag niet overeen komen met " + threshold.otherValueLabel;else if (threshold.equality) return "moet " + threshold.otherValue + " zijn";else return "mag niet " + threshold.otherValue + " zijn";
+      EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
+        if (threshold.otherValueLabel) if (threshold.equality) {
+          return 'moet overeen komen met ' + threshold.otherValueLabel;
+        } else {
+          return 'mag niet overeen komen met ' + threshold.otherValueLabel;
+        } else if (threshold.equality) {
+          return 'moet ' + threshold.otherValue + ' zijn';
+        } else {
+          return 'mag niet ' + threshold.otherValue + ' zijn';
+        }
       },
-      InCollectionValidationRule: function (newValue, threshold) {
-        return "is geen geldige waarde";
+      InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
+        return 'is geen geldige waarde';
       },
-      MinimumLengthValidationRule: function (newValue, threshold) {
-        return "moet op zijn minst " + threshold + " tekens lang zijn";
+      MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
+        return 'moet op zijn minst ' + threshold + ' tekens lang zijn';
       },
-      MinimumValueValidationRule: function (newValue, threshold) {
-        return "moet op zijn minst " + threshold + " zijn";
+      MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
+        return 'moet op zijn minst ' + threshold + ' zijn';
       },
-      MaximumLengthValidationRule: function (newValue, threshold) {
-        return "moet minder dan " + threshold + " tekens lang zijn";
+      MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
+        return 'moet minder dan ' + threshold + ' tekens lang zijn';
       },
-      MaximumValueValidationRule: function (newValue, threshold) {
-        return "moet minder dan " + threshold + " zijn";
+      MaximumValueValidationRule: function MaximumValueValidationRule(newValue, threshold) {
+        return 'moet minder dan ' + threshold + ' zijn';
       },
-      NumericValidationRule: function (newValue, threshold) {
-        return "moet een getal zijn";
+      NumericValidationRule: function NumericValidationRule(newValue, threshold) {
+        return 'moet een getal zijn';
       },
-      RegexValidationRule: function (newValue, threshold) {
-        return "is geen geldige waarde";
+      RegexValidationRule: function RegexValidationRule(newValue, threshold) {
+        return 'is geen geldige waarde';
       },
-      StrongPasswordValidationRule: function (newValue, threshold) {
-        if (threshold == 4) return "moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn";else return "moet op zijn minst " + threshold + " van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens";
+      StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {
+        if (threshold == 4) {
+          return 'moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn';
+        } else {
+          return 'moet op zijn minst ' + threshold + ' van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens';
+        }
       }
     }
   };

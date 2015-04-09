@@ -1,8 +1,8 @@
-System.register(["./validation/validation-locale-repository", "./validation/validation-result", "./validation/validation-rules", "./validation/validation-rules-collection", "./validation/validation-group-builder", "./validation/validation", "./validation/validate-attached-behavior", "./validation/validate-attached-behavior-config", "./validation/debouncer"], function (_export) {
-  _export("install", install);
+System.register(['./validation/validation-locale-repository', './validation/validation-result', './validation/validation-rules', './validation/validation-rules-collection', './validation/validation-group-builder', './validation/validation', './validation/validate-attached-behavior', './validation/validate-attached-behavior-config', './validation/debouncer'], function (_export) {
+  _export('install', install);
 
   function install(aurelia) {
-    aurelia.globalizeResources("./validation/validate-attached-behavior");
+    aurelia.globalizeResources('./validation/validate-attached-behavior');
   }
 
   return {
@@ -44,7 +44,7 @@ System.register(["./validation/validation-locale-repository", "./validation/vali
       }
     }],
     execute: function () {
-      "use strict";
+      'use strict';
     }
   };
 });
