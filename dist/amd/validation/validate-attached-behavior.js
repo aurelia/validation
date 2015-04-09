@@ -1,4 +1,4 @@
-define(['exports', 'aurelia-templating', 'aurelia-binding', '../validation/validate-attached-behavior-config'], function (exports, _aureliaTemplating, _aureliaBinding, _validationValidateAttachedBehaviorConfig) {
+define(['exports', 'aurelia-framework', 'aurelia-templating', 'aurelia-binding', '../validation/validate-attached-behavior-config'], function (exports, _aureliaFramework, _aureliaTemplating, _aureliaBinding, _validationValidateAttachedBehaviorConfig) {
   'use strict';
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -176,8 +176,8 @@ define(['exports', 'aurelia-templating', 'aurelia-binding', '../validation/valid
     }]);
 
     var _ValidateAttachedBehavior = ValidateAttachedBehavior;
-    ValidateAttachedBehavior = inject(Element, _aureliaBinding.ObserverLocator, _validationValidateAttachedBehaviorConfig.ValidateAttachedBehaviorConfig)(ValidateAttachedBehavior) || ValidateAttachedBehavior;
-    ValidateAttachedBehavior = customAttribute('validate')(ValidateAttachedBehavior) || ValidateAttachedBehavior;
+    ValidateAttachedBehavior = _aureliaFramework.inject(Element, _aureliaBinding.ObserverLocator, _validationValidateAttachedBehaviorConfig.ValidateAttachedBehaviorConfig)(ValidateAttachedBehavior) || ValidateAttachedBehavior;
+    ValidateAttachedBehavior = _aureliaTemplating.customAttribute('validate')(ValidateAttachedBehavior) || ValidateAttachedBehavior;
     return ValidateAttachedBehavior;
   })();
 

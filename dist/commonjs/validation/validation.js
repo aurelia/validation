@@ -24,6 +24,8 @@ var _ValidationGroup = require('../validation/validation-group');
 
 var _ValidationLocaleRepository = require('../validation/validation-locale-repository');
 
+var _inject = require('aurelia-framework');
+
 var Validation = (function () {
   function Validation(observerLocator) {
     _classCallCheck(this, _Validation);
@@ -39,7 +41,7 @@ var Validation = (function () {
   }]);
 
   var _Validation = Validation;
-  Validation = inject(_ObserverLocator.ObserverLocator)(Validation) || Validation;
+  Validation = _inject.inject(_ObserverLocator.ObserverLocator)(Validation) || Validation;
   return Validation;
 })();
 

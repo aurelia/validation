@@ -1,5 +1,5 @@
-System.register(['aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', '../validation/validation-locale-repository'], function (_export) {
-  var ObserverLocator, AllRules, AllCollections, ValidationGroup, ValidationLocaleRepository, _classCallCheck, _createClass, Validation;
+System.register(['aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', '../validation/validation-locale-repository', 'aurelia-framework'], function (_export) {
+  var ObserverLocator, AllRules, AllCollections, ValidationGroup, ValidationLocaleRepository, inject, _classCallCheck, _createClass, Validation;
 
   return {
     setters: [function (_aureliaBinding) {
@@ -12,6 +12,8 @@ System.register(['aurelia-binding', '../validation/validation-rules', '../valida
       ValidationGroup = _validationValidationGroup.ValidationGroup;
     }, function (_validationValidationLocaleRepository) {
       ValidationLocaleRepository = _validationValidationLocaleRepository.ValidationLocaleRepository;
+    }, function (_aureliaFramework) {
+      inject = _aureliaFramework.inject;
     }],
     execute: function () {
       'use strict';

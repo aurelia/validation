@@ -1,8 +1,11 @@
-System.register(['aurelia-templating', 'aurelia-binding', '../validation/validate-attached-behavior-config'], function (_export) {
-  var Behavior, ObserverLocator, ValidateAttachedBehaviorConfig, _classCallCheck, _createClass, ValidateAttachedBehavior;
+System.register(['aurelia-framework', 'aurelia-templating', 'aurelia-binding', '../validation/validate-attached-behavior-config'], function (_export) {
+  var inject, customAttribute, Behavior, ObserverLocator, ValidateAttachedBehaviorConfig, _classCallCheck, _createClass, ValidateAttachedBehavior;
 
   return {
-    setters: [function (_aureliaTemplating) {
+    setters: [function (_aureliaFramework) {
+      inject = _aureliaFramework.inject;
+    }, function (_aureliaTemplating) {
+      customAttribute = _aureliaTemplating.customAttribute;
       Behavior = _aureliaTemplating.Behavior;
     }, function (_aureliaBinding) {
       ObserverLocator = _aureliaBinding.ObserverLocator;

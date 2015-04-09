@@ -1,3 +1,5 @@
+import {inject} from 'aurelia-framework';
+import {customAttribute} from 'aurelia-templating';
 import {Behavior} from 'aurelia-templating';
 import {ObserverLocator} from 'aurelia-binding';
 import {ValidateAttachedBehaviorConfig} from '../validation/validate-attached-behavior-config'
