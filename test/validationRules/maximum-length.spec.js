@@ -14,13 +14,13 @@ describe('Tests on MaximumLengthValidationRule', () => {
     expectations.validate();
   });
 
-  it('should trim strings before evaluating', (done) => {
+  it('should not trim strings before evaluating', (done) => {
     var expectations = new Expectations(expect, done);
     var rule = new MaximumLengthValidationRule(3);
-    expectations.expectAsync(rule.validate('  a  ')).toBe(true);
-    expectations.expectAsync(rule.validate('  ab  ')).toBe(true);
-    expectations.expectAsync(rule.validate('  abc  ')).toBe(false);
-    expectations.expectAsync(rule.validate('  abcd  ')).toBe(false);
+    expectations.expectAsync(rule.validate(' a')).toBe(true);
+    expectations.expectAsync(rule.validate('a ')).toBe(true);
+    expectations.expectAsync(rule.validate(' a ')).toBe(false);
+    expectations.expectAsync(rule.validate('  aa  ')).toBe(false);
     expectations.validate();
   });
   it('should be working with arrays', (done) => {

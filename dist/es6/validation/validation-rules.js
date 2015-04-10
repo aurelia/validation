@@ -47,14 +47,6 @@ export class ValidationRule {
   }
 
   validate(currentValue) {
-    if (typeof (currentValue) === 'string') {
-      if (String.prototype.trim) {
-        currentValue = currentValue.trim();
-      }
-      else {
-        currentValue = currentValue.replace(/^\s+|\s+$/g, '');
-      }
-    }
     var result = this.onValidate(currentValue, this.threshold);
     var promise = Promise.resolve(result);
 
@@ -291,7 +283,6 @@ export class StrongPasswordValidationRule extends ValidationRule {
     super(
       (complexityLevel) ? complexityLevel : 4,
       (newValue, threshold) => {
-        debugger;
         if (typeof (newValue) !== 'string')
           return false;
         var strength = 0;

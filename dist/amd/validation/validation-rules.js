@@ -62,13 +62,6 @@ define(['exports', '../validation/validation'], function (exports, _validationVa
       value: function validate(currentValue) {
         var _this = this;
 
-        if (typeof currentValue === 'string') {
-          if (String.prototype.trim) {
-            currentValue = currentValue.trim();
-          } else {
-            currentValue = currentValue.replace(/^\s+|\s+$/g, '');
-          }
-        }
         var result = this.onValidate(currentValue, this.threshold);
         var promise = Promise.resolve(result);
 
@@ -382,7 +375,6 @@ define(['exports', '../validation/validation'], function (exports, _validationVa
       _classCallCheck(this, StrongPasswordValidationRule);
 
       _get(Object.getPrototypeOf(StrongPasswordValidationRule.prototype), 'constructor', this).call(this, complexityLevel ? complexityLevel : 4, function (newValue, threshold) {
-        debugger;
         if (typeof newValue !== 'string') return false;
         var strength = 0;
 

@@ -16,9 +16,7 @@ export class Expectations {
   expectAsync(somePromise) {
     return {
       toBe: (shouldSucceed) => {
-        this.assert(() => {
-          return somePromise;
-        }, shouldSucceed);
+        this.assert(somePromise, shouldSucceed);
       }
     };
   }

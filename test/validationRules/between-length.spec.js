@@ -7,6 +7,7 @@ describe('Tests on BetweenLengthValidationRule', () => {
   it('should be working with strings', (done) => {
     var expectations = new Expectations(expect, done);
     var rule = new BetweenLengthValidationRule(2, 4);
+
     expectations.expectAsync(rule.validate('a')).toBe(false);
     expectations.expectAsync(rule.validate('ab')).toBe(true);
     expectations.expectAsync(rule.validate('abc')).toBe(true);
@@ -17,10 +18,10 @@ describe('Tests on BetweenLengthValidationRule', () => {
   it('should trim strings before evaluating', (done) => {
     var expectations = new Expectations(expect, done);
     var rule = new BetweenLengthValidationRule(2, 4);
+    expectations.expectAsync(rule.validate('a')).toBe(false);
+    expectations.expectAsync(rule.validate(' a')).toBe(true);
+    expectations.expectAsync(rule.validate('a  ')).toBe(true);
     expectations.expectAsync(rule.validate('  a  ')).toBe(false);
-    expectations.expectAsync(rule.validate('  ab  ')).toBe(true);
-    expectations.expectAsync(rule.validate('  abc  ')).toBe(true);
-    expectations.expectAsync(rule.validate('  abcd  ')).toBe(false);
     expectations.validate();
   });
   it('should be working with arrays', (done) => {
