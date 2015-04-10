@@ -17,6 +17,12 @@ System.register([], function (_export) {
           AlphaNumericValidationRule: function AlphaNumericValidationRule(newValue, threshold) {
             return 'kan enbart innehålla alfanumeriska tecken';
           },
+          AlphaValidationRule: function AlphaValidationRule(newValue, threshold) {
+            return 'kan enbart innehålla bokstäver eller mellanslag';
+          },
+          AlphaOrWhitespaceValidationRule: function AlphaOrWhitespaceValidationRule(newValue, threshold) {
+            return 'kan enbart innehålla bokstäver';
+          },
           BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
             return 'måste vara mellan ' + threshold.minimumLength + ' och ' + threshold.maximumLength + ' tecken långt';
           },

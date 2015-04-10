@@ -16,6 +16,12 @@ var data = {
     AlphaNumericValidationRule: function AlphaNumericValidationRule(newValue, threshold) {
       return 'sadece alfanumerik karakterleri girebilirsiniz';
     },
+    AlphaValidationRule: function AlphaValidationRule(newValue, threshold) {
+      return 'sadece harf veya boşluk girebilirsiniz';
+    },
+    AlphaOrWhitespaceValidationRule: function AlphaOrWhitespaceValidationRule(newValue, threshold) {
+      return 'sadece harf veya boşluk girebilirsiniz';
+    },
     BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
       return 'uzunluğu ' + threshold.minimumLength + ' ile ' + threshold.maximumLength + ' arasında olmalıdır';
     },

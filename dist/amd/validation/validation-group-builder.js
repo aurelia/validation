@@ -105,6 +105,16 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
         return this.passesRule(new _validationValidationRules.DigitValidationRule());
       }
     }, {
+      key: 'isAlpha',
+      value: function isAlpha() {
+        return this.passesRule(new _validationValidationRules.AlphaValidationRule());
+      }
+    }, {
+      key: 'isAlphaOrWhitespace',
+      value: function isAlphaOrWhitespace() {
+        return this.passesRule(new _validationValidationRules.AlphaOrWhitespaceValidationRule());
+      }
+    }, {
       key: 'isAlphanumeric',
       value: function isAlphanumeric() {
         return this.passesRule(new _validationValidationRules.AlphaNumericValidationRule());

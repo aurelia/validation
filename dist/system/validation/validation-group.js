@@ -125,6 +125,11 @@ System.register(['../validation/validation-group-builder', '../validation/valida
             return this.builder.isDigit();
           }
         }, {
+          key: 'isAlpha',
+          value: function isAlpha() {
+            return this.builder.isAlpha();
+          }
+        }, {
           key: 'isAlphanumeric',
           value: function isAlphanumeric() {
             return this.builder.isAlphanumeric();

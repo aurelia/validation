@@ -12,6 +12,12 @@ data = {
     'AlphaNumericValidationRule': (newValue, threshold) => {
       return `kan enbart innehålla alfanumeriska tecken`;
     },
+    'AlphaValidationRule' : (newValue, threshold) => {
+      return `kan enbart innehålla bokstäver eller mellanslag`;
+    },
+    'AlphaOrWhitespaceValidationRule' : (newValue, threshold) => {
+      return `kan enbart innehålla bokstäver`;
+    },
     'BetweenLengthValidationRule': (newValue, threshold) => {
       return `måste vara mellan ${threshold.minimumLength} och ${threshold.maximumLength} tecken långt`;
     },

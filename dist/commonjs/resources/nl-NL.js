@@ -16,6 +16,12 @@ var data = {
     AlphaNumericValidationRule: function AlphaNumericValidationRule(newValue, threshold) {
       return 'kan enkel alfanumerieke tekens bevatten';
     },
+    AlphaValidationRule: function AlphaValidationRule(newValue, threshold) {
+      return 'kan enkel letters bevatten';
+    },
+    AlphaOrWhitespaceValidationRule: function AlphaOrWhitespaceValidationRule(newValue, threshold) {
+      return 'kan enkel letters of spaties bevatten';
+    },
     BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
       return 'moet tussen ' + threshold.minimumLength + ' en ' + threshold.maximumLength + ' tekens lang zijn';
     },

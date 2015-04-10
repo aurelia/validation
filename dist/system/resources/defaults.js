@@ -22,6 +22,12 @@ System.register([], function (_export) {
           AlphaNumericValidationRule: function AlphaNumericValidationRule(newValue, threshold) {
             return 'can contain only alphanumerical characters';
           },
+          AlphaValidationRule: function AlphaValidationRule(newValue, threshold) {
+            return 'can contain only letters';
+          },
+          AlphaOrWhitespaceValidationRule: function AlphaOrWhitespaceValidationRule(newValue, threshold) {
+            return 'can contain only letters or spaces';
+          },
           BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
             return 'needs to be at between ' + threshold.minimumLength + ' and ' + threshold.maximumLength + ' characters long';
           },

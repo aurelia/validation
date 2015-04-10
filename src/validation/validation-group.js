@@ -180,6 +180,11 @@ export class ValidationGroup {
     return this.builder.isDigit();
   }
 
+  isAlpha()
+  {
+    return this.builder.isAlpha();
+  }
+
   /**
    * Adds a validation rule that checks a value for only containing alphanumerical characters
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API

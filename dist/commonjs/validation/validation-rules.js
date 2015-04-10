@@ -321,26 +321,64 @@ var AlphaNumericValidationRule = (function (_ValidationRule12) {
 
 exports.AlphaNumericValidationRule = AlphaNumericValidationRule;
 
-var AlphaNumericOrWhitespaceValidationRule = (function (_ValidationRule13) {
-  function AlphaNumericOrWhitespaceValidationRule() {
+var AlphaValidationRule = (function (_ValidationRule13) {
+  function AlphaValidationRule() {
     var _this5 = this;
+
+    _classCallCheck(this, AlphaValidationRule);
+
+    _get(Object.getPrototypeOf(AlphaValidationRule.prototype), 'constructor', this).call(this, null, function (newValue, threshold) {
+      return _this5.alphaNumericRegex.test(newValue);
+    });
+    this.alphaNumericRegex = /^[a-z]+$/i;
+  }
+
+  _inherits(AlphaValidationRule, _ValidationRule13);
+
+  return AlphaValidationRule;
+})(ValidationRule);
+
+exports.AlphaValidationRule = AlphaValidationRule;
+
+var AlphaOrWhitespaceValidationRule = (function (_ValidationRule14) {
+  function AlphaOrWhitespaceValidationRule() {
+    var _this6 = this;
+
+    _classCallCheck(this, AlphaOrWhitespaceValidationRule);
+
+    _get(Object.getPrototypeOf(AlphaOrWhitespaceValidationRule.prototype), 'constructor', this).call(this, null, function (newValue, threshold) {
+      return _this6.alphaNumericRegex.test(newValue);
+    });
+    this.alphaNumericRegex = /^[a-z\s]+$/i;
+  }
+
+  _inherits(AlphaOrWhitespaceValidationRule, _ValidationRule14);
+
+  return AlphaOrWhitespaceValidationRule;
+})(ValidationRule);
+
+exports.AlphaOrWhitespaceValidationRule = AlphaOrWhitespaceValidationRule;
+
+var AlphaNumericOrWhitespaceValidationRule = (function (_ValidationRule15) {
+  function AlphaNumericOrWhitespaceValidationRule() {
+    var _this7 = this;
 
     _classCallCheck(this, AlphaNumericOrWhitespaceValidationRule);
 
     _get(Object.getPrototypeOf(AlphaNumericOrWhitespaceValidationRule.prototype), 'constructor', this).call(this, null, function (newValue, threshold) {
-      return _this5.alphaNumericRegex.test(newValue);
+      return _this7.alphaNumericRegex.test(newValue);
     });
     this.alphaNumericRegex = /^[a-z0-9\s]+$/i;
   }
 
-  _inherits(AlphaNumericOrWhitespaceValidationRule, _ValidationRule13);
+  _inherits(AlphaNumericOrWhitespaceValidationRule, _ValidationRule15);
 
   return AlphaNumericOrWhitespaceValidationRule;
 })(ValidationRule);
 
 exports.AlphaNumericOrWhitespaceValidationRule = AlphaNumericOrWhitespaceValidationRule;
 
-var StrongPasswordValidationRule = (function (_ValidationRule14) {
+var StrongPasswordValidationRule = (function (_ValidationRule16) {
   function StrongPasswordValidationRule(minimumComplexityLevel) {
     _classCallCheck(this, StrongPasswordValidationRule);
 
@@ -360,14 +398,14 @@ var StrongPasswordValidationRule = (function (_ValidationRule14) {
     if (minimumComplexityLevel && minimumComplexityLevel > 1 && minimumComplexityLevel < 4) complexityLevel = minimumComplexityLevel;
   }
 
-  _inherits(StrongPasswordValidationRule, _ValidationRule14);
+  _inherits(StrongPasswordValidationRule, _ValidationRule16);
 
   return StrongPasswordValidationRule;
 })(ValidationRule);
 
 exports.StrongPasswordValidationRule = StrongPasswordValidationRule;
 
-var EqualityValidationRule = (function (_ValidationRule15) {
+var EqualityValidationRule = (function (_ValidationRule17) {
   function EqualityValidationRule(otherValue, equality, otherValueLabel) {
     _classCallCheck(this, EqualityValidationRule);
 
@@ -381,14 +419,14 @@ var EqualityValidationRule = (function (_ValidationRule15) {
     });
   }
 
-  _inherits(EqualityValidationRule, _ValidationRule15);
+  _inherits(EqualityValidationRule, _ValidationRule17);
 
   return EqualityValidationRule;
 })(ValidationRule);
 
 exports.EqualityValidationRule = EqualityValidationRule;
 
-var InCollectionValidationRule = (function (_ValidationRule16) {
+var InCollectionValidationRule = (function (_ValidationRule18) {
   function InCollectionValidationRule(collection) {
     _classCallCheck(this, InCollectionValidationRule);
 
@@ -400,7 +438,7 @@ var InCollectionValidationRule = (function (_ValidationRule16) {
     });
   }
 
-  _inherits(InCollectionValidationRule, _ValidationRule16);
+  _inherits(InCollectionValidationRule, _ValidationRule18);
 
   return InCollectionValidationRule;
 })(ValidationRule);

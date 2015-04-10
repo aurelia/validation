@@ -12,6 +12,12 @@ data = {
     'AlphaNumericValidationRule': (newValue, threshold) => {
       return `kan enkel alfanumerieke tekens bevatten`;
     },
+    'AlphaValidationRule' : (newValue, threshold) => {
+      return `kan enkel letters bevatten`;
+    },
+    'AlphaOrWhitespaceValidationRule' : (newValue, threshold) => {
+      return `kan enkel letters of spaties bevatten`;
+    },
     'BetweenLengthValidationRule': (newValue, threshold) => {
       return `moet tussen ${threshold.minimumLength} en ${threshold.maximumLength} tekens lang zijn`;
     },

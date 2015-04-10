@@ -247,6 +247,31 @@ export class AlphaNumericValidationRule extends ValidationRule {
   }
 }
 
+export class AlphaValidationRule extends ValidationRule {
+  constructor() {
+    super(
+      null,
+      (newValue, threshold) => {
+        return this.alphaNumericRegex.test(newValue);
+      }
+    );
+    this.alphaNumericRegex = /^[a-z]+$/i;
+  }
+}
+
+
+export class AlphaOrWhitespaceValidationRule extends ValidationRule{
+  constructor() {
+    super(
+      null,
+      (newValue, threshold) => {
+        return this.alphaNumericRegex.test(newValue);
+      }
+    );
+    this.alphaNumericRegex = /^[a-z\s]+$/i;
+  }
+}
+
 
 export class AlphaNumericOrWhitespaceValidationRule extends ValidationRule {
   constructor() {

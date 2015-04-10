@@ -112,6 +112,16 @@ System.register(['../validation/validation-rules', '../validation/validation-rul
             return this.passesRule(new AllRules.DigitValidationRule());
           }
         }, {
+          key: 'isAlpha',
+          value: function isAlpha() {
+            return this.passesRule(new AllRules.AlphaValidationRule());
+          }
+        }, {
+          key: 'isAlphaOrWhitespace',
+          value: function isAlphaOrWhitespace() {
+            return this.passesRule(new AllRules.AlphaOrWhitespaceValidationRule());
+          }
+        }, {
           key: 'isAlphanumeric',
           value: function isAlphanumeric() {
             return this.passesRule(new AllRules.AlphaNumericValidationRule());

@@ -81,6 +81,14 @@ export class ValidationGroupBuilder {
     return this.passesRule(new AllRules.DigitValidationRule());
   }
 
+  isAlpha(){
+    return this.passesRule(new AllRules.AlphaValidationRule());
+  }
+
+  isAlphaOrWhitespace(){
+    return this.passesRule(new AllRules.AlphaOrWhitespaceValidationRule());
+  }
+
   isAlphanumeric() {
     return this.passesRule(new AllRules.AlphaNumericValidationRule());
   }

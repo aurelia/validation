@@ -12,6 +12,12 @@ data = {
     'AlphaNumericValidationRule': (newValue, threshold) => {
       return `sadece alfanumerik karakterleri girebilirsiniz`;
     },
+    'AlphaValidationRule' : (newValue, threshold) => {
+      return `sadece harf veya boşluk girebilirsiniz`;
+    },
+    'AlphaOrWhitespaceValidationRule' : (newValue, threshold) => {
+      return `sadece harf veya boşluk girebilirsiniz`;
+    },
     'BetweenLengthValidationRule': (newValue, threshold) => {
       return `uzunluğu ${threshold.minimumLength} ile ${threshold.maximumLength} arasında olmalıdır`;
     },
