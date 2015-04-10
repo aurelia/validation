@@ -42,23 +42,6 @@ describe('Integration tests with \'if\' and \'else\'', () => {
     expectations.validate();
   });
 
-  it('should work with a simple if statement', (done) => {
-    var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance('John');
-    subject.validation
-      .ensure('firstName')
-      .if(() => {
-        return subject.age >= 18;
-      })
-      .passes((newValue) => {
-        return newValue === 'John';
-      });
-    expectations.assert(() => {
-      return subject.validate();
-    }, true);
-
-    expectations.validate();
-  });
   it('should work with notEmpty', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance('John');
