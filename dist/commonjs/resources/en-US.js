@@ -38,15 +38,16 @@ var data = {
       return 'is not a valid email address';
     },
     EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-      if (threshold.otherValueLabel) if (threshold.equality) {
-        return 'does not match ' + threshold.otherValueLabel;
-      } else {
-        return 'cannot not match ' + threshold.otherValueLabel;
-      } else if (threshold.equality) {
-        return 'should be ' + threshold.otherValue;
-      } else {
-        return 'cannot not be ' + threshold.otherValue;
-      }
+      return 'should be ' + threshold.otherValue;
+    },
+    InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
+      return 'cannot be ' + threshold.otherValue;
+    },
+    EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
+      return 'does not match ' + threshold.otherValueLabel;
+    },
+    InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
+      return 'cannot match ' + threshold.otherValueLabel;
     },
     InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
       return 'not a valid value';
@@ -70,11 +71,10 @@ var data = {
       return 'not a valid value';
     },
     StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {
-      if (threshold == 4) {
-        return 'should contain a combination of lowercase letters, uppercase letters, digits and special characters';
-      } else {
-        return 'should contain at least ' + threshold + ' of the following groups: lowercase letters, uppercase letters, digits or special characters';
-      }
+      return 'should contain a combination of lowercase letters, uppercase letters, digits and special characters';
+    },
+    MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
+      return 'should contain at least ' + threshold + ' of the following groups: lowercase letters, uppercase letters, digits or special characters';
     }
   }
 };

@@ -34,15 +34,16 @@ data = {
       return `är inte en giltig e-postadress`;
     },
     'EqualityValidationRule': (newValue, threshold) => {
-      if (threshold.otherValueLabel)
-        if (threshold.equality)
-          return `matchar inte ${threshold.otherValueLabel}`;
-        else
-          return `får inte matcha ${threshold.otherValueLabel}`;
-      else if (threshold.equality)
         return `ska vara ${threshold.otherValue}`;
-      else
+    },
+    'InEqualityValidationRule' : (newValue, threshold) => {
         return `kan inte vara ${threshold.otherValue}`;
+    },
+    'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
+      return `matchar inte ${threshold.otherValueLabel}`;
+    },
+    'InEqualityWithOtherLabelValidationRule' : (newValue, threshold) => {
+      return `får inte matcha ${threshold.otherValueLabel}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
       return `är inget giltigt värde`;
@@ -66,10 +67,10 @@ data = {
       return `är inte ett giltigt värde`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {
-      if (threshold == 4)
         return `ska innehålla en kombination av gemener, versaler, siffror och specialtecken`;
-      else
-        return `ska innehålla minst ${threshold} av följande grupperingar: gemener, versaler, siffror eller specialtecken`;
+    },
+    'MediumPasswordValidationRule' : (newValue, threshold) => {
+      return `ska innehålla minst ${threshold} av följande grupperingar: gemener, versaler, siffror eller specialtecken`;
     }
   }
-}
+};

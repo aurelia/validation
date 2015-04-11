@@ -38,15 +38,16 @@ var data = {
       return 'n\'est pas une adresse email valide';
     },
     EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-      if (threshold.otherValueLabel) if (threshold.equality) {
-        return 'doit correspondre à ' + threshold.otherValueLabel;
-      } else {
-        return 'ne doit pas correspondre à ' + threshold.otherValueLabel;
-      } else if (threshold.equality) {
-        return 'doit être ' + threshold.otherValue;
-      } else {
-        return 'ne doit pas être ' + threshold.otherValue;
-      }
+      return 'doit être ' + threshold.otherValue;
+    },
+    InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
+      return 'ne peut pas être ' + threshold.otherValue;
+    },
+    EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
+      return 'doit correspondre à ' + threshold.otherValueLabel;
+    },
+    InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
+      return 'ne doit pas correspondre à ' + threshold.otherValueLabel;
     },
     InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
       return 'n\'est pas une valeur valide';
@@ -70,11 +71,10 @@ var data = {
       return 'n\'est pas une valeur valide';
     },
     StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {
-      if (threshold == 4) {
-        return 'doit contenir une combinaison de lettres minuscules, de lettres majuscules, de caractères numériques et de caractères spéciaux';
-      } else {
-        return 'doit contenir au moins ' + threshold + ' des caractéristiques suivantes : lettres minuscules, lettres majuscules, caractères numériques ou caractères spéciaux';
-      }
+      return 'doit contenir une combinaison de lettres minuscules, de lettres majuscules, de caractères numériques et de caractères spéciaux';
+    },
+    MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
+      return 'doit contenir au moins ' + threshold + ' des caractéristiques suivantes : lettres minuscules, lettres majuscules, caractères numériques ou caractères spéciaux';
     }
   }
 };

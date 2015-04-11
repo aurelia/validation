@@ -67,12 +67,20 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
     }, {
       key: 'equals',
       value: function equals(otherValue, otherValueLabel) {
-        return this.passesRule(new _validationValidationRules.EqualityValidationRule(otherValue, true, otherValueLabel));
+        if (!otherValueLabel) {
+          return this.passesRule(new _validationValidationRules.EqualityValidationRule(otherValue));
+        } else {
+          return this.passesRule(new _validationValidationRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
+        }
       }
     }, {
       key: 'notEquals',
       value: function notEquals(otherValue, otherValueLabel) {
-        return this.passesRule(new _validationValidationRules.EqualityValidationRule(otherValue, false, otherValueLabel));
+        if (!otherValueLabel) {
+          return this.passesRule(new _validationValidationRules.InEqualityValidationRule(otherValue));
+        } else {
+          return this.passesRule(new _validationValidationRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
+        }
       }
     }, {
       key: 'email',

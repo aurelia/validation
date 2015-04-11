@@ -365,11 +365,11 @@ var AlphaNumericOrWhitespaceValidationRule = (function (_ValidationRule15) {
 
 exports.AlphaNumericOrWhitespaceValidationRule = AlphaNumericOrWhitespaceValidationRule;
 
-var StrongPasswordValidationRule = (function (_ValidationRule16) {
-  function StrongPasswordValidationRule(minimumComplexityLevel) {
-    _classCallCheck(this, StrongPasswordValidationRule);
+var MediumPasswordValidationRule = (function (_ValidationRule16) {
+  function MediumPasswordValidationRule(minimumComplexityLevel) {
+    _classCallCheck(this, MediumPasswordValidationRule);
 
-    _get(Object.getPrototypeOf(StrongPasswordValidationRule.prototype), 'constructor', this).call(this, minimumComplexityLevel ? minimumComplexityLevel : 4, function (newValue, threshold) {
+    _get(Object.getPrototypeOf(MediumPasswordValidationRule.prototype), 'constructor', this).call(this, minimumComplexityLevel ? minimumComplexityLevel : 3, function (newValue, threshold) {
       if (typeof newValue !== 'string') return false;
       var strength = 0;
 
@@ -379,23 +379,34 @@ var StrongPasswordValidationRule = (function (_ValidationRule16) {
       strength += /[\W]+/.test(newValue) ? 1 : 0;
       return strength >= threshold;
     });
-
-    var complexityLevel = 4;
-    if (minimumComplexityLevel && minimumComplexityLevel > 1 && minimumComplexityLevel < 4) complexityLevel = minimumComplexityLevel;
   }
 
-  _inherits(StrongPasswordValidationRule, _ValidationRule16);
+  _inherits(MediumPasswordValidationRule, _ValidationRule16);
+
+  return MediumPasswordValidationRule;
+})(ValidationRule);
+
+exports.MediumPasswordValidationRule = MediumPasswordValidationRule;
+
+var StrongPasswordValidationRule = (function (_MediumPasswordValidationRule) {
+  function StrongPasswordValidationRule() {
+    _classCallCheck(this, StrongPasswordValidationRule);
+
+    _get(Object.getPrototypeOf(StrongPasswordValidationRule.prototype), 'constructor', this).call(this, 4);
+  }
+
+  _inherits(StrongPasswordValidationRule, _MediumPasswordValidationRule);
 
   return StrongPasswordValidationRule;
-})(ValidationRule);
+})(MediumPasswordValidationRule);
 
 exports.StrongPasswordValidationRule = StrongPasswordValidationRule;
 
-var EqualityValidationRule = (function (_ValidationRule17) {
-  function EqualityValidationRule(otherValue, equality, otherValueLabel) {
-    _classCallCheck(this, EqualityValidationRule);
+var EqualityValidationRuleBase = (function (_ValidationRule17) {
+  function EqualityValidationRuleBase(otherValue, equality, otherValueLabel) {
+    _classCallCheck(this, EqualityValidationRuleBase);
 
-    _get(Object.getPrototypeOf(EqualityValidationRule.prototype), 'constructor', this).call(this, {
+    _get(Object.getPrototypeOf(EqualityValidationRuleBase.prototype), 'constructor', this).call(this, {
       otherValue: otherValue,
       equality: equality,
       otherValueLabel: otherValueLabel
@@ -405,12 +416,68 @@ var EqualityValidationRule = (function (_ValidationRule17) {
     });
   }
 
-  _inherits(EqualityValidationRule, _ValidationRule17);
+  _inherits(EqualityValidationRuleBase, _ValidationRule17);
 
-  return EqualityValidationRule;
+  return EqualityValidationRuleBase;
 })(ValidationRule);
 
+exports.EqualityValidationRuleBase = EqualityValidationRuleBase;
+
+var EqualityValidationRule = (function (_EqualityValidationRuleBase) {
+  function EqualityValidationRule(otherValue) {
+    _classCallCheck(this, EqualityValidationRule);
+
+    _get(Object.getPrototypeOf(EqualityValidationRule.prototype), 'constructor', this).call(this, otherValue, true);
+  }
+
+  _inherits(EqualityValidationRule, _EqualityValidationRuleBase);
+
+  return EqualityValidationRule;
+})(EqualityValidationRuleBase);
+
 exports.EqualityValidationRule = EqualityValidationRule;
+
+var EqualityWithOtherLabelValidationRule = (function (_EqualityValidationRuleBase2) {
+  function EqualityWithOtherLabelValidationRule(otherValue, otherLabel) {
+    _classCallCheck(this, EqualityWithOtherLabelValidationRule);
+
+    _get(Object.getPrototypeOf(EqualityWithOtherLabelValidationRule.prototype), 'constructor', this).call(this, otherValue, true, otherLabel);
+  }
+
+  _inherits(EqualityWithOtherLabelValidationRule, _EqualityValidationRuleBase2);
+
+  return EqualityWithOtherLabelValidationRule;
+})(EqualityValidationRuleBase);
+
+exports.EqualityWithOtherLabelValidationRule = EqualityWithOtherLabelValidationRule;
+
+var InEqualityValidationRule = (function (_EqualityValidationRuleBase3) {
+  function InEqualityValidationRule(otherValue) {
+    _classCallCheck(this, InEqualityValidationRule);
+
+    _get(Object.getPrototypeOf(InEqualityValidationRule.prototype), 'constructor', this).call(this, otherValue, false);
+  }
+
+  _inherits(InEqualityValidationRule, _EqualityValidationRuleBase3);
+
+  return InEqualityValidationRule;
+})(EqualityValidationRuleBase);
+
+exports.InEqualityValidationRule = InEqualityValidationRule;
+
+var InEqualityWithOtherLabelValidationRule = (function (_EqualityValidationRuleBase4) {
+  function InEqualityWithOtherLabelValidationRule(otherValue, otherLabel) {
+    _classCallCheck(this, InEqualityWithOtherLabelValidationRule);
+
+    _get(Object.getPrototypeOf(InEqualityWithOtherLabelValidationRule.prototype), 'constructor', this).call(this, otherValue, false, otherLabel);
+  }
+
+  _inherits(InEqualityWithOtherLabelValidationRule, _EqualityValidationRuleBase4);
+
+  return InEqualityWithOtherLabelValidationRule;
+})(EqualityValidationRuleBase);
+
+exports.InEqualityWithOtherLabelValidationRule = InEqualityWithOtherLabelValidationRule;
 
 var InCollectionValidationRule = (function (_ValidationRule18) {
   function InCollectionValidationRule(collection) {

@@ -78,12 +78,20 @@ var ValidationGroupBuilder = (function () {
   }, {
     key: 'equals',
     value: function equals(otherValue, otherValueLabel) {
-      return this.passesRule(new AllRules.EqualityValidationRule(otherValue, true, otherValueLabel));
+      if (!otherValueLabel) {
+        return this.passesRule(new AllRules.EqualityValidationRule(otherValue));
+      } else {
+        return this.passesRule(new AllRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
+      }
     }
   }, {
     key: 'notEquals',
     value: function notEquals(otherValue, otherValueLabel) {
-      return this.passesRule(new AllRules.EqualityValidationRule(otherValue, false, otherValueLabel));
+      if (!otherValueLabel) {
+        return this.passesRule(new AllRules.InEqualityValidationRule(otherValue));
+      } else {
+        return this.passesRule(new AllRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
+      }
     }
   }, {
     key: 'email',

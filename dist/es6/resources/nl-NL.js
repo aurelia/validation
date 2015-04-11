@@ -34,15 +34,16 @@ data = {
       return `is geen geldig email adres`;
     },
     'EqualityValidationRule': (newValue, threshold) => {
-      if (threshold.otherValueLabel)
-        if (threshold.equality)
-          return `moet overeen komen met ${threshold.otherValueLabel}`;
-        else
-          return `mag niet overeen komen met ${threshold.otherValueLabel}`;
-      else if (threshold.equality)
-        return `moet ${threshold.otherValue} zijn`;
-      else
-        return `mag niet ${threshold.otherValue} zijn`;
+      return `moet ${threshold.otherValue} zijn`;
+    },
+    'InEqualityValidationRule' : (newValue, threshold) => {
+      return `mag niet ${threshold.otherValue} zijn`;
+    },
+    'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
+      return `moet overeen komen met ${threshold.otherValueLabel}`;
+    },
+    'InEqualityWithOtherLabelValidationRule' : (newValue, threshold) => {
+      return `mag niet overeen komen met ${threshold.otherValueLabel}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
       return `is geen geldige waarde`;
@@ -66,10 +67,10 @@ data = {
       return `is geen geldige waarde`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {
-      if (threshold == 4)
-        return `moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn`;
-      else
-        return `moet op zijn minst ${threshold} van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens`;
+      return `moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn`;
+    },
+    'MediumPasswordValidationRule' : (newValue, threshold) => {
+      return `moet op zijn minst ${threshold} van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens`;
     }
   }
 };

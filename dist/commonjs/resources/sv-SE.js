@@ -38,15 +38,16 @@ var data = {
       return 'är inte en giltig e-postadress';
     },
     EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-      if (threshold.otherValueLabel) if (threshold.equality) {
-        return 'matchar inte ' + threshold.otherValueLabel;
-      } else {
-        return 'får inte matcha ' + threshold.otherValueLabel;
-      } else if (threshold.equality) {
-        return 'ska vara ' + threshold.otherValue;
-      } else {
-        return 'kan inte vara ' + threshold.otherValue;
-      }
+      return 'ska vara ' + threshold.otherValue;
+    },
+    InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
+      return 'kan inte vara ' + threshold.otherValue;
+    },
+    EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
+      return 'matchar inte ' + threshold.otherValueLabel;
+    },
+    InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
+      return 'får inte matcha ' + threshold.otherValueLabel;
     },
     InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
       return 'är inget giltigt värde';
@@ -70,11 +71,10 @@ var data = {
       return 'är inte ett giltigt värde';
     },
     StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {
-      if (threshold == 4) {
-        return 'ska innehålla en kombination av gemener, versaler, siffror och specialtecken';
-      } else {
-        return 'ska innehålla minst ' + threshold + ' av följande grupperingar: gemener, versaler, siffror eller specialtecken';
-      }
+      return 'ska innehålla en kombination av gemener, versaler, siffror och specialtecken';
+    },
+    MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
+      return 'ska innehålla minst ' + threshold + ' av följande grupperingar: gemener, versaler, siffror eller specialtecken';
     }
   }
 };

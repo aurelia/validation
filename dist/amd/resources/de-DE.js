@@ -33,15 +33,16 @@ define(['exports'], function (exports) {
         return 'ist keine gültige Email-Adresse';
       },
       EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-        if (threshold.otherValueLabel) if (threshold.equality) {
-          return 'entspricht nicht ' + threshold.otherValueLabel;
-        } else {
-          return 'darf nicht mit ' + threshold.otherValueLabel + ' übereinstimmen';
-        } else if (threshold.equality) {
-          return 'sollte ' + threshold.otherValue + ' sein';
-        } else {
-          return 'sollte nicht ' + threshold.otherValue + ' sein';
-        }
+        return 'sollte ' + threshold.otherValue + ' sein';
+      },
+      InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
+        return 'sollte nicht ' + threshold.otherValue + ' sein';
+      },
+      EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
+        return 'darf nicht mit ' + threshold.otherValueLabel + ' übereinstimmen';
+      },
+      InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
+        return 'cannot not match ' + threshold.otherValueLabel;
       },
       InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
         return 'ist kein gültiger Wert';
@@ -65,11 +66,10 @@ define(['exports'], function (exports) {
         return 'ist kein gültiger Wert';
       },
       StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {
-        if (threshold == 4) {
-          return 'sollte eine Kombination aus Groß- und Kleinbuchstaben, sowie Zahlen und Sonderzeichen enthalten';
-        } else {
-          return 'sollte zumindest ' + threshold + ' der folgenden Gruppen enthalten: Kleinbuchstaben, Großbuchstaben, Zahlen oder Sonderzeichen';
-        }
+        return 'sollte eine Kombination aus Groß- und Kleinbuchstaben, sowie Zahlen und Sonderzeichen enthalten';
+      },
+      MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
+        return 'sollte zumindest ' + threshold + ' der folgenden Gruppen enthalten: Kleinbuchstaben, Großbuchstaben, Zahlen oder Sonderzeichen';
       }
     }
   };

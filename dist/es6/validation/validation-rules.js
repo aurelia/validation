@@ -273,11 +273,10 @@ export class AlphaNumericOrWhitespaceValidationRule extends ValidationRule {
   }
 }
 
-
-export class StrongPasswordValidationRule extends ValidationRule {
+export class MediumPasswordValidationRule extends ValidationRule {
   constructor(minimumComplexityLevel) {
     super(
-      (minimumComplexityLevel) ? minimumComplexityLevel : 4,
+      (minimumComplexityLevel) ? minimumComplexityLevel : 3,
       (newValue, threshold) => {
         if (typeof (newValue) !== 'string')
           return false;
@@ -290,14 +289,18 @@ export class StrongPasswordValidationRule extends ValidationRule {
         return strength >= threshold;
       }
     );
-
-    var complexityLevel = 4;
-    if (minimumComplexityLevel && minimumComplexityLevel > 1 && minimumComplexityLevel < 4)
-      complexityLevel = minimumComplexityLevel;
   }
 }
 
-export class EqualityValidationRule extends ValidationRule {
+
+export class StrongPasswordValidationRule extends MediumPasswordValidationRule
+{
+  constructor(){
+    super(4);
+  }
+}
+
+export class EqualityValidationRuleBase extends ValidationRule {
   constructor(otherValue, equality, otherValueLabel) {
     super(
       {
@@ -313,6 +316,31 @@ export class EqualityValidationRule extends ValidationRule {
     );
   }
 }
+
+export class EqualityValidationRule extends EqualityValidationRuleBase{
+  constructor(otherValue){
+    super(otherValue, true);
+  }
+}
+
+export class EqualityWithOtherLabelValidationRule extends EqualityValidationRuleBase{
+  constructor(otherValue, otherLabel){
+    super(otherValue, true, otherLabel);
+  }
+}
+
+export class InEqualityValidationRule extends EqualityValidationRuleBase{
+  constructor(otherValue){
+    super(otherValue, false);
+  }
+}
+
+export class InEqualityWithOtherLabelValidationRule extends EqualityValidationRuleBase{
+  constructor(otherValue, otherLabel){
+    super(otherValue, false, otherLabel);
+  }
+}
+
 
 export class InCollectionValidationRule extends ValidationRule {
   constructor(collection) {

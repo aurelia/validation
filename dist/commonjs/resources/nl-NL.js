@@ -38,15 +38,16 @@ var data = {
       return 'is geen geldig email adres';
     },
     EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-      if (threshold.otherValueLabel) if (threshold.equality) {
-        return 'moet overeen komen met ' + threshold.otherValueLabel;
-      } else {
-        return 'mag niet overeen komen met ' + threshold.otherValueLabel;
-      } else if (threshold.equality) {
-        return 'moet ' + threshold.otherValue + ' zijn';
-      } else {
-        return 'mag niet ' + threshold.otherValue + ' zijn';
-      }
+      return 'moet ' + threshold.otherValue + ' zijn';
+    },
+    InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
+      return 'mag niet ' + threshold.otherValue + ' zijn';
+    },
+    EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
+      return 'moet overeen komen met ' + threshold.otherValueLabel;
+    },
+    InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
+      return 'mag niet overeen komen met ' + threshold.otherValueLabel;
     },
     InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
       return 'is geen geldige waarde';
@@ -70,11 +71,10 @@ var data = {
       return 'is geen geldige waarde';
     },
     StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {
-      if (threshold == 4) {
-        return 'moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn';
-      } else {
-        return 'moet op zijn minst ' + threshold + ' van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens';
-      }
+      return 'moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn';
+    },
+    MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
+      return 'moet op zijn minst ' + threshold + ' van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens';
     }
   }
 };

@@ -39,15 +39,16 @@ define(['exports'], function (exports) {
         return 'geçerli bir e-posta giriniz';
       },
       EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-        if (threshold.otherValueLabel) if (threshold.equality) {
-          return 'değer ' + threshold.otherValueLabel + '\'\'e eşit olmalıdır';
-        } else {
-          return 'değer ' + threshold.otherValueLabel + '\'\'den farklı olmalıdır';
-        } else if (threshold.equality) {
-          return 'değer ' + threshold.otherValue + '\'\'e eşit olmalıdır';
-        } else {
-          return 'değer ' + threshold.otherValue + '\'\'den farklı olmalıdır';
-        }
+        return 'değer ' + threshold.otherValue + '\'\'e eşit olmalıdır';
+      },
+      InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
+        return 'değer ' + threshold.otherValue + '\'\'den farklı olmalıdır';
+      },
+      EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
+        return 'değer ' + threshold.otherValueLabel + '\'\'e eşit olmalıdır';
+      },
+      InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
+        return 'değer ' + threshold.otherValueLabel + '\'\'den farklı olmalıdır';
       },
       InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
         return 'geçersiz değer';
@@ -71,11 +72,10 @@ define(['exports'], function (exports) {
         return 'geçerli bir değer giriniz';
       },
       StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {
-        if (threshold == 4) {
-          return 'küçük harfler, büyük harfler, sayılar ve işaretlerin birleşimi olmalıdır';
-        } else {
-          return 'küçük harfler, büyük harfler, sayılar veya işaretlerden en az ' + threshold + ' değişik tip olmalı';
-        }
+        return 'küçük harfler, büyük harfler, sayılar ve işaretlerin birleşimi olmalıdır';
+      },
+      MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
+        return 'küçük harfler, büyük harfler, sayılar veya işaretlerden en az ' + threshold + ' değişik tip olmalı';
       }
     }
   };
