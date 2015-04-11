@@ -32,26 +32,27 @@ export class ValidationGroup {
    * @returns {Promise} A promise that fulfils when valid, rejects when invalid.
    */
   validate() {
-    var promise = Promise.resolve(this.result);
+    var promise = Promise.resolve(true);
     for (let i = this.validationProperties.length - 1; i >= 0; i--) {
       let validatorProperty = this.validationProperties[i];
-      promise = promise.then(
-        () => {
-          return validatorProperty.validateCurrentValue(true);
-        },
-        () => {
-          return validatorProperty.validateCurrentValue(true).then(
-            //doesn't matter what this validation property does, as soon as one has rejected, we call the next but keep rejecting
-            () => {
-              return Promise.reject(false);
-            }, () => {
-              return Promise.reject(false);
-            }
-          );
-        }
-      );
+      promise = promise.then( () => { return validatorProperty.validateCurrentValue(true); });
     }
-    return promise;
+    promise = promise.catch( () => {
+      console.log("Should never get here: a validation property should always resolve to true/false!");
+      debugger;
+      throw Error("Should never get here: a validation property should always resolve to true/false!");
+    });
+
+    return promise.then( () => {
+      if(this.result.isValid)
+      {
+        return Promise.resolve(this.result);
+      }
+      else
+      {
+        return Promise.reject(this.result);
+      }
+    });
   }
 
   /**

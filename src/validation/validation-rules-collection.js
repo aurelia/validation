@@ -7,13 +7,19 @@ export class ValidationRulesCollection {
     this.validationCollections = [];
   }
 
+
+
+
+  /**
+   * Returns a promise that fulfils and resolves to simple result status object.
+   */
   validate(newValue) {
     let executeRules = true;
 
     //Is required?
     if (Validation.Utilities.isEmptyValue(newValue)) {
       if (this.isRequired) {
-        return Promise.reject({
+        return Promise.resolve({
           isValid: false,
           message: Validation.Locale.translate('isRequired'),
           failingRule: 'isRequired'
@@ -29,54 +35,54 @@ export class ValidationRulesCollection {
       message: '',
       failingRule: null
     });
+
     //validate rules
     if (executeRules) {
       for (let i = 0; i < this.validationRules.length; i++) {
         let rule = this.validationRules[i];
-        checks = checks.then(
-          ()=> {
-            return rule.validate(newValue).then(() => {
-            }, ()=> {
-              return Promise.reject({
-                isValid: false,
-                message: rule.explain(),
-                failingRule: rule.ruleName
-              })
-            });
-          },
-          (e)=> {
-            return Promise.reject(e);
+        checks = checks.then( (previousRuleResult) => {
+          //Earlier in the chain, something resolved to an invalid result. Chain it.
+          if(previousRuleResult.isValid  === false)
+          {
+            return previousRuleResult;
           }
-        );
+          else
+          {
+            return rule.validate(newValue).then( (thisRuleResult) => {
+              if(thisRuleResult === false) {
+                return {
+                  isValid: false,
+                  message: rule.explain(),
+                  failingRule: rule.ruleName
+                };
+              }
+              else
+              {
+                //assertion
+                if(!previousRuleResult.isValid)
+                {
+                  throw Error("ValidationRulesCollection.validate caught an unexpected result while validating it's chain of rules.");
+                }
+                return previousRuleResult;
+              }
+            });
+          }
+        });
       }
     }
+
     //validate collections
     for (let i = 0; i < this.validationCollections.length; i++) {
       let validationCollection = this.validationCollections[i];
-      checks = checks.then(
-        ()=> {
-          return validationCollection.validate(newValue).then(() => {
-          }, (e)=> {
-            return Promise.reject(e);
-          })
-        },
-        (e)=> {
-          return Promise.reject(e);
-        }
-      );
+      checks = checks.then( (previousValidationResult)=> {
+        if(previousValidationResult.isValid)
+          return validationCollection.validate(newValue);
+        else
+          return previousValidationResult;
+      });
     }
-    return checks.then(
-      () => {
-        return Promise.resolve({
-          isValid: true,
-          message: '',
-          failingRule: null
-        });
-      },
-      (e) => {
-        return Promise.reject(e);
-      }
-    );
+
+    return checks;
   }
 
   addValidationRule(validationRule) {

@@ -10,46 +10,34 @@ export class TestValidationRule extends ValidationRule {
 }
 
 describe('Tests on async validation: validation rule', () => {
-  it('should accept a valid validation', (done) => {
+  it('should fulfil a valid validation and resolve to true', (done) => {
     var testRule = new TestValidationRule(true);
     testRule.validate().then(() => {
       expect(testRule.explain()).toBe(null);
       done();
-    }, ()=> {
-      expect(testRule.explain()).toBe('test rule');
-      done();
     });
   });
-  it('should reject an invalid validation', (done) => {
+  it('should fulfil an invalid validation and resolve to false', (done) => {
     var testRule = new TestValidationRule(false);
     testRule.validate().then(() => {
-      expect(testRule.explain()).toBe(null);
-      done();
-    }, ()=> {
       expect(testRule.explain()).toBe('test rule');
       done();
     });
   });
 });
 describe('Tests on async validation: validation collection', () => {
-  it('should accept a valid validation', (done) => {
+  it('should fulfil with a valid validation', (done) => {
     var testCollection = new ValidationRulesCollection();
     testCollection.addValidationRule(new TestValidationRule(true));
     testCollection.validate('test').then((result) => {
       expect(result.isValid).toBe(true);
       done();
-    }, ()=> {
-      expect(result.isValid).toBe(false);
-      done();
     });
   });
-  it('should reject an invalid validation', (done) => {
+  it('should fulfil with an invalid validation', (done) => {
     var testCollection = new ValidationRulesCollection();
     testCollection.addValidationRule(new TestValidationRule(false));
     testCollection.validate('test').then((result) => {
-      expect(result.isValid).toBe(true);
-      done();
-    }, (result)=> {
       expect(result.isValid).toBe(false);
       done();
     });
@@ -57,43 +45,24 @@ describe('Tests on async validation: validation collection', () => {
 });
 
 describe('Tests on async validation: validation collection with inner collection', () => {
-  it('should accept a valid validation', (done) => {
+  it('should fulfil a valid validation', (done) => {
     var innerTestCollection = new ValidationRulesCollection();
     innerTestCollection.addValidationRule(new TestValidationRule(true));
     var testCollection = new ValidationRulesCollection();
     testCollection.addValidationRuleCollection(innerTestCollection);
     testCollection.validate('test').then((result) => {
       expect(result.isValid).toBe(true);
-      done();
-    }, ()=> {
-      expect(result.isValid).toBe(false);
-      done();
-    });
-  });
-  it('should reject an invalid validation', (done) => {
-    var innerTestCollection = new ValidationRulesCollection();
-    innerTestCollection.addValidationRule(new TestValidationRule(true));
-    var testCollection = new ValidationRulesCollection();
-    testCollection.addValidationRuleCollection(innerTestCollection);
-    testCollection.validate('test').then((result) => {
-      expect(result.isValid).toBe(true);
-      done();
-    }, (result)=> {
-      expect(result.isValid).toBe(false);
       done();
     });
   });
 
-  it('should reject an invalid validation', (done) => {
+  it('should fulfil an invalid validation', (done) => {
     var innerTestCollection = new ValidationRulesCollection();
-    innerTestCollection.addValidationRule(new TestValidationRule(true));
+    innerTestCollection.addValidationRule(new TestValidationRule(false));
     innerTestCollection.notEmpty();
     var testCollection = new ValidationRulesCollection();
     testCollection.addValidationRuleCollection(innerTestCollection);
     testCollection.validate().then((result) => {
-      expect(false).toBe(true);
-      done();
-    }, (result)=> {
       expect(result.isValid).toBe(false);
       done();
     });

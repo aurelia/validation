@@ -28,7 +28,7 @@ var ValidationRulesCollection = (function () {
 
       if (_Validation.Validation.Utilities.isEmptyValue(newValue)) {
         if (this.isRequired) {
-          return Promise.reject({
+          return Promise.resolve({
             isValid: false,
             message: _Validation.Validation.Locale.translate('isRequired'),
             failingRule: 'isRequired'
@@ -47,16 +47,25 @@ var ValidationRulesCollection = (function () {
       if (executeRules) {
         var _loop = function (i) {
           var rule = _this.validationRules[i];
-          checks = checks.then(function () {
-            return rule.validate(newValue).then(function () {}, function () {
-              return Promise.reject({
-                isValid: false,
-                message: rule.explain(),
-                failingRule: rule.ruleName
+          checks = checks.then(function (previousRuleResult) {
+            if (previousRuleResult.isValid === false) {
+              return previousRuleResult;
+            } else {
+              return rule.validate(newValue).then(function (thisRuleResult) {
+                if (thisRuleResult === false) {
+                  return {
+                    isValid: false,
+                    message: rule.explain(),
+                    failingRule: rule.ruleName
+                  };
+                } else {
+                  if (!previousRuleResult.isValid) {
+                    throw Error('ValidationRulesCollection.validate caught an unexpected result while validating it\'s chain of rules.');
+                  }
+                  return previousRuleResult;
+                }
               });
-            });
-          }, function (e) {
-            return Promise.reject(e);
+            }
           });
         };
 
@@ -67,27 +76,16 @@ var ValidationRulesCollection = (function () {
 
       var _loop2 = function (i) {
         var validationCollection = _this.validationCollections[i];
-        checks = checks.then(function () {
-          return validationCollection.validate(newValue).then(function () {}, function (e) {
-            return Promise.reject(e);
-          });
-        }, function (e) {
-          return Promise.reject(e);
+        checks = checks.then(function (previousValidationResult) {
+          if (previousValidationResult.isValid) return validationCollection.validate(newValue);else return previousValidationResult;
         });
       };
 
       for (var i = 0; i < this.validationCollections.length; i++) {
         _loop2(i);
       }
-      return checks.then(function () {
-        return Promise.resolve({
-          isValid: true,
-          message: '',
-          failingRule: null
-        });
-      }, function (e) {
-        return Promise.reject(e);
-      });
+
+      return checks;
     }
   }, {
     key: 'addValidationRule',

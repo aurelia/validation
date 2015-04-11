@@ -69,16 +69,10 @@ System.register(['../validation/validation'], function (_export) {
             var promise = Promise.resolve(result);
 
             var nextPromise = promise.then(function (promiseResult) {
-              if (_this.setResult(promiseResult, currentValue)) {
-                return Promise.resolve(_this);
-              } else {
-                return Promise.reject(_this);
-              }
-            }, function (promiseResult) {
-              if (typeof promiseResult === 'string' && promiseResult !== '') _this.setResult(promiseResult, currentValue);else _this.setResult(false, currentValue);
-              return Promise.reject(_this);
+              return _this.setResult(promiseResult, currentValue);
+            }, function (promiseFailure) {
+              if (typeof promiseFailure === 'string' && promiseFailure !== '') return _this.setResult(promiseFailure, currentValue);else return _this.setResult(false, currentValue);
             });
-
             return nextPromise;
           }
         }]);
@@ -377,7 +371,7 @@ System.register(['../validation/validation'], function (_export) {
         function StrongPasswordValidationRule(minimumComplexityLevel) {
           _classCallCheck(this, StrongPasswordValidationRule);
 
-          _get(Object.getPrototypeOf(StrongPasswordValidationRule.prototype), 'constructor', this).call(this, complexityLevel ? complexityLevel : 4, function (newValue, threshold) {
+          _get(Object.getPrototypeOf(StrongPasswordValidationRule.prototype), 'constructor', this).call(this, minimumComplexityLevel ? minimumComplexityLevel : 4, function (newValue, threshold) {
             if (typeof newValue !== 'string') return false;
             var strength = 0;
 

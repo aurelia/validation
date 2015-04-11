@@ -29,7 +29,7 @@ export class ValidationGroupBuilder {
 
   notEmpty() {
     this.validationRuleCollections[0].notEmpty();
-    this.validationGroup.validationProperties[this.validationGroup.validationProperties.length - 1].validateCurrentValue();
+    this.checkLast();
     return this.validationGroup;
   }
 

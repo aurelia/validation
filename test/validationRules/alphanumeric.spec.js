@@ -43,10 +43,9 @@ describe('Tests on AlphaNumericValidationRule', () => {
     var expectations = new Expectations(expect, done);
     var rule = new AlphaNumericValidationRule();
     expectations.expectAsync(rule.validate('abc 123')).toBe(false);
-    expectations.validate();
 
-    //Note: spaces are always trimmed
-    expectations.expectAsync(rule.validate(' abc123 ')).toBe(true);
+    //Note: spaces are no longer trimmed
+    expectations.expectAsync(rule.validate(' abc123 ')).toBe(false);
     expectations.validate();
 
   });

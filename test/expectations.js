@@ -16,16 +16,33 @@ export class Expectations {
   expectAsync(somePromise) {
     return {
       toBe: (shouldSucceed) => {
-        this.assert(somePromise, shouldSucceed);
+        this.expectation = this.expectation
+          .then( () => {
+            if(typeof(somePromise) === 'function')
+            {
+              return somePromise();
+            }
+            else
+              return somePromise;
+          } )
+          .then( (promiseResult) => {
+            this.expect(promiseResult).toBe(shouldSucceed);
+          });
       }
     };
   }
+
 
   assert(assertion, shouldSucceed) {
     this.expectation = this.expectation.then(
       () => {
         return new Promise((fulfil, reject) => {
-          assertion().then(
+          var thePromise = assertion;
+          if(typeof(thePromise) === 'function')
+          {
+            thePromise = thePromise();
+          }
+          thePromise.then(
             () => {
               this.assertTestResult(shouldSucceed, true, fulfil, reject);
             },
@@ -34,9 +51,6 @@ export class Expectations {
             }
           );
         });
-      },
-      () => {
-        return Promise.reject();
       }
     );
     return this;

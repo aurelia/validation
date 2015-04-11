@@ -50,10 +50,11 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
 
         return this.validationRules.validate(newValue).then(function (validationResponse) {
           _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
-          return Promise.resolve(true);
-        }, function (validationResponse) {
-          _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
-          return Promise.reject(false);
+          return validationResponse.isValid;
+        })['catch'](function (err) {
+          console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);
+          debugger;
+          throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
         });
       }
     }]);

@@ -21,9 +21,12 @@ describe('Tests on StrongPasswordValidationRule', () => {
     expectations.expectAsync(rule.validate('ABCDEFG*1')).toBe(false);
     expectations.validate();
 
-    rule = new StrongPasswordValidationRule(3); //allows 'medium' passwords
+  });
+  it('should respect the minimum complexity level', (done) => {
+    var expectations = new Expectations(expect, done);
+    var rule = new StrongPasswordValidationRule(3); //allows 'medium' passwords
     expectations.expectAsync(rule.validate('aBcdEfG*1')).toBe(true);
-    expectations.expectAsync(rule.validate('aBcdEfG*')).toBe(true);
+    expectations.expectAsync(rule.validate('aBcdEfG*S')).toBe(true);
     expectations.expectAsync(rule.validate('aBcdEfG1')).toBe(true);
     expectations.expectAsync(rule.validate('abcdefg*1')).toBe(true);
     expectations.expectAsync(rule.validate('ABCDEFG*1')).toBe(true);

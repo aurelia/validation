@@ -134,9 +134,8 @@ describe('I18N tests: number', () => {
       return subject.validation.validate();
     }, false);
 
-
     expectations.validate();
-  });
+   });
   it('should result in properly translated default error message', (done) => {
     var expectations = new Expectations(expect, done);
     Validation.Locale.load('nl-BE').then(()=> {

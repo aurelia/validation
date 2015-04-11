@@ -2,6 +2,7 @@ import {ObserverLocator} from 'aurelia-binding';
 import {Validation} from '../src/validation/validation';
 import {Expectations} from './expectations';
 
+Validation.debounceTime = 1;
 
 class TestSubject {
   constructor(validation, firstName) {
@@ -128,14 +129,13 @@ describe('Basic validation tests', () => {
       setTimeout(()=> { //wait 200 ms to allow validation on the new value
         expect(subject.validation.result.isValid).toBe(true);
         done();
-      }, Validation.debounceTime + 1);
+      },  50);
       //Note: cannot really use jasmine.clock() because of the combination of setTimeout and actual promises
     }, 0);
   });
 
 
   it('should update the validation automatically when the property changes', (done) => {
-
     var subject = TestSubject.createInstance(null);
 
     setTimeout(() => {
@@ -145,11 +145,11 @@ describe('Basic validation tests', () => {
         expect(subject.validation.result.isValid).toBe(true);
         done();
 
-      }, Validation.debounceTime + 1);
+      }, 50);
       //Note: cannot really use jasmine.clock() because of the combination of setTimeout and actual promises
-
     }, 0);
   });
+
 
   it('should not update if the value continuously changes', (done) => {
     var subject = TestSubject.createInstance(null);
@@ -257,7 +257,6 @@ describe('Basic validation tests', () => {
 
 
   it('should complete when validation is valid', (done) => {
-    var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance("Bob");
 
     subject.validation.validate().then(() => {
@@ -269,7 +268,6 @@ describe('Basic validation tests', () => {
     });
   });
   it('should reject when validation is invalid', (done) => {
-    var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance('');
 
     subject.validation.validate().then(() => {

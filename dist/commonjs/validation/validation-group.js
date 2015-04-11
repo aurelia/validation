@@ -32,25 +32,31 @@ var ValidationGroup = (function () {
     value: function validate() {
       var _this = this;
 
-      var promise = Promise.resolve(this.result);
+      var promise = Promise.resolve(true);
 
       var _loop = function (i) {
         var validatorProperty = _this.validationProperties[i];
         promise = promise.then(function () {
           return validatorProperty.validateCurrentValue(true);
-        }, function () {
-          return validatorProperty.validateCurrentValue(true).then(function () {
-            return Promise.reject(false);
-          }, function () {
-            return Promise.reject(false);
-          });
         });
       };
 
       for (var i = this.validationProperties.length - 1; i >= 0; i--) {
         _loop(i);
       }
-      return promise;
+      promise = promise['catch'](function () {
+        console.log('Should never get here: a validation property should always resolve to true/false!');
+        debugger;
+        throw Error('Should never get here: a validation property should always resolve to true/false!');
+      });
+
+      return promise.then(function () {
+        if (_this.result.isValid) {
+          return Promise.resolve(_this.result);
+        } else {
+          return Promise.reject(_this.result);
+        }
+      });
     }
   }, {
     key: 'ensure',

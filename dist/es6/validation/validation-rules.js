@@ -46,28 +46,24 @@ export class ValidationRule {
     }
   }
 
+  /**
+   * Validation rules: return a promise that fulfills and resolves to true/false
+   */
   validate(currentValue) {
     var result = this.onValidate(currentValue, this.threshold);
     var promise = Promise.resolve(result);
 
     var nextPromise = promise.then(
       (promiseResult) => {
-        if (this.setResult(promiseResult, currentValue)) {
-          return Promise.resolve(this);
-        }
-        else {
-          return Promise.reject(this);
-        }
+        return this.setResult(promiseResult, currentValue);
       },
-      (promiseResult) => {
-        if( typeof(promiseResult) === 'string' && promiseResult !== '')
-          this.setResult(promiseResult, currentValue);
+      (promiseFailure) => {
+        if( typeof(promiseFailure) === 'string' && promiseFailure !== '')
+          return this.setResult(promiseFailure, currentValue);
         else
-          this.setResult(false, currentValue);
-        return Promise.reject(this);
+          return this.setResult(false, currentValue);
       }
     );
-
     return nextPromise;
   }
 }
@@ -281,7 +277,7 @@ export class AlphaNumericOrWhitespaceValidationRule extends ValidationRule {
 export class StrongPasswordValidationRule extends ValidationRule {
   constructor(minimumComplexityLevel) {
     super(
-      (complexityLevel) ? complexityLevel : 4,
+      (minimumComplexityLevel) ? minimumComplexityLevel : 4,
       (newValue, threshold) => {
         if (typeof (newValue) !== 'string')
           return false;

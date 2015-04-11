@@ -31,16 +31,19 @@ export class ValidationProperty {
     return this.validate(this.observer.getValue(), forceDirty);
   }
 
+  /**
+   * returns a promise that fulfils and resolves to true/false
+   */
   validate(newValue, shouldBeDirty) {
-    return this.validationRules.validate(newValue).then(
-      (validationResponse) => {
+    return this.validationRules.validate(newValue)
+        .then( (validationResponse) => {
         this.propertyResult.setValidity(validationResponse, shouldBeDirty);
-        return Promise.resolve(true);
-      },
-      (validationResponse) => {
-        this.propertyResult.setValidity(validationResponse, shouldBeDirty);
-        return Promise.reject(false);
-      }
-    );
+        return validationResponse.isValid;
+      })
+      .catch( (err) => {
+        console.log("Unexpected behavior: a validation-rules-collection should always fulfil", err);
+        debugger;
+        throw Error("Unexpected behavior: a validation-rules-collection should always fulfil");
+      });
   }
 }

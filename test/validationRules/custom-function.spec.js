@@ -4,6 +4,8 @@ import {Expectations} from '../expectations';
 //No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'notEmpty()'
 
 describe('Tests on CustomFunctionValidationRule', () => {
+
+
   it('should be working with simple funtions', (done) => {
     var expectations = new Expectations(expect, done);
     var rule = new CustomFunctionValidationRule((newValue, threshold) => {
@@ -32,6 +34,7 @@ describe('Tests on CustomFunctionValidationRule', () => {
     expectations.expectAsync(rule.validate('1337')).toBe(false);
     expectations.validate();
   });
+
   it('should be passing the threshold around to the message', (done) => {
     var expectations = new Expectations(expect, done);
     var randomObject = {randomProperty: '1337'};
@@ -43,10 +46,9 @@ describe('Tests on CustomFunctionValidationRule', () => {
     });
 
     expectations.expectAsync(rule.validate('1336')).toBe(false);
-    expectations.expectAsync(rule.explain()).toBe('Cool 1337');
+    expectations.expectAsync( () => { return rule.explain();}).toBe('Cool 1337');
     expectations.validate();
   });
-
 
   it('should succeed when the function returns true', (done) => {
     var expectations = new Expectations(expect, done);
@@ -134,10 +136,7 @@ describe('Tests on CustomFunctionValidationRule', () => {
     var expectations = new Expectations(expect, done);
     var rule = new CustomFunctionValidationRule((newValue, threshold) => { return Promise.resolve('this is not good') ; });
     expectations.expectAsync(rule.validate('')).toBe(false);
-    expectations.assert( () => {
-      expect(rule.explain()).toBe('this is not good');
-      return Promise.resolve(true);
-    }, true);
+    expectations.expectAsync( () => { return rule.explain();}).toBe('this is not good');
     expectations.validate();
   });
 
@@ -171,10 +170,7 @@ describe('Tests on CustomFunctionValidationRule', () => {
     var expectations = new Expectations(expect, done);
     var rule = new CustomFunctionValidationRule((newValue, threshold) => { return Promise.reject('this is not good') ; });
     expectations.expectAsync(rule.validate('')).toBe(false);
-    expectations.assert( () => {
-      expect(rule.explain()).toBe('this is not good');
-      return Promise.resolve(true);
-    }, true);
+    expectations.expectAsync( () => { return rule.explain(); }).toBe('this is not good');
     expectations.validate();
   });
 });

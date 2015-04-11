@@ -83,9 +83,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
     subject.firstName = '';
 
-    expectations.assert(() => {
-      subject.validation.validate();
-    }, false);
+    expectations.assert( subject.validation.validate(), false);
 
     expectations.assert(() => {
       //default: adds 'has-warning'/'has-success' to form-group
@@ -138,9 +136,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
     subject.firstName = '';
 
-    expectations.assert(() => {
-      subject.validation.validate();
-    }, false);
+    expectations.assert( subject.validation.validate(), false);
 
     expectations.assert(() => {
 //default: adds 'has-warning'/'has-success' to form-group
@@ -278,10 +274,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
       subject.firstName = '';
 
-
-      expectations.assert(() => {
-        subject.validation.validate();
-      }, false);
+      expectations.assert( subject.validation.validate(), false);
 
       expectations.assert(() => {
 
@@ -336,10 +329,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
     subject.address.street = '';
 
-
-    expectations.assert(() => {
-      subject.validation.validate();
-    }, false);
+    expectations.assert( subject.validationNested.validate(), false);
 
     expectations.assert(() => {
 
@@ -398,10 +388,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
     subject.address.street = '';
 
-
-    expectations.assert(() => {
-      subject.validation.validate();
-    }, false);
+    expectations.assert( subject.validation.validate(), false);
 
     expectations.assert(() => {
 
@@ -455,9 +442,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
     subject.firstName = '';
 
-    expectations.assert(() => {
-      subject.validation.validate();
-    }, false);
+    expectations.assert( subject.validation.validate(), false);
 
     expectations.assert(() => {
 
