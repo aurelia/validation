@@ -52,22 +52,31 @@ var data = {
     InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
       return 'n\'est pas une valeur valide';
     },
+    MinimumInclusiveValueValidationRule: function MinimumInclusiveValueValidationRule(newValue, threshold) {
+      return 'doit être ' + threshold + ' ou plus';
+    },
     MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
       return 'doit contenir au moins ' + threshold + ' caractères';
     },
     MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-      return 'doit être ' + threshold + ' ou plus';
+      return 'doit être plus que ' + threshold;
+    },
+    MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
+      return 'doit être moins que ' + threshold;
     },
     MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
       return 'ne doit pas contenir plus de ' + threshold + ' caractères';
     },
     MaximumValueValidationRule: function MaximumValueValidationRule(newValue, threshold) {
-      return 'doit être moins que ' + threshold;
+      return 'doit être ' + threshold + ' ou moins';
     },
     NumericValidationRule: function NumericValidationRule(newValue, threshold) {
       return 'doit être une valeur numérique';
     },
     RegexValidationRule: function RegexValidationRule(newValue, threshold) {
+      return 'n\'est pas une valeur valide';
+    },
+    ContainsOnlyValidationRule: function ContainsOnlyValidationRule(newValue, threshold) {
       return 'n\'est pas une valeur valide';
     },
     StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {

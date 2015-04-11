@@ -48,22 +48,31 @@ data = {
     'InCollectionValidationRule': (newValue, threshold) => {
       return `n'est pas une valeur valide`;
     },
+    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `doit être ${threshold} ou plus`;
+    },
     'MinimumLengthValidationRule': (newValue, threshold) => {
       return `doit contenir au moins ${threshold} caractères`;
     },
     'MinimumValueValidationRule': (newValue, threshold) => {
-      return `doit être ${threshold} ou plus`;
+      return `doit être plus que ${threshold}`;
+    },
+    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `doit être moins que ${threshold}`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
       return `ne doit pas contenir plus de ${threshold} caractères`;
     },
     'MaximumValueValidationRule': (newValue, threshold) => {
-      return `doit être moins que ${threshold}`;
+      return `doit être ${threshold} ou moins`;
     },
     'NumericValidationRule': (newValue, threshold) => {
       return `doit être une valeur numérique`;
     },
     'RegexValidationRule': (newValue, threshold) => {
+      return `n'est pas une valeur valide`;
+    },
+    'ContainsOnlyValidationRule': (newValue, threshold) => {
       return `n'est pas une valeur valide`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {

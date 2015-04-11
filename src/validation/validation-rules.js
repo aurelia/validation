@@ -125,7 +125,7 @@ export class MaximumLengthValidationRule extends ValidationRule {
     super(
       maximumLength,
       (newValue, maximumLength) => {
-        return newValue.length !== undefined && newValue.length < maximumLength;
+        return newValue.length !== undefined && newValue.length <= maximumLength;
       }
     );
   }
@@ -138,7 +138,7 @@ export class BetweenLengthValidationRule extends ValidationRule {
       (newValue, threshold) => {
         return newValue.length !== undefined
           && newValue.length >= threshold.minimumLength
-          && newValue.length < threshold.maximumLength;
+          && newValue.length <= threshold.maximumLength;
       }
     );
   }
@@ -179,7 +179,24 @@ export class RegexValidationRule extends ValidationRule {
   }
 }
 
+export class ContainsOnlyValidationRule extends RegexValidationRule{
+  constructor(regex){
+    super(regex);
+  }
+}
+
 export class MinimumValueValidationRule extends ValidationRule {
+  constructor(minimumValue) {
+    super(
+      minimumValue,
+      (newValue, minimumValue) => {
+        return minimumValue < newValue;
+      }
+    );
+  }
+}
+
+export class MinimumInclusiveValueValidationRule extends ValidationRule {
   constructor(minimumValue) {
     super(
       minimumValue,
@@ -189,6 +206,7 @@ export class MinimumValueValidationRule extends ValidationRule {
     );
   }
 }
+
 export class MaximumValueValidationRule extends ValidationRule {
   constructor(maximumValue) {
     super(
@@ -200,12 +218,23 @@ export class MaximumValueValidationRule extends ValidationRule {
   }
 }
 
+export class MaximumInclusiveValueValidationRule extends ValidationRule{
+  constructor(maximumValue) {
+    super(
+      maximumValue,
+      (newValue, maximumValue) => {
+        return newValue <= maximumValue;
+      }
+    );
+  }
+}
+
 export class BetweenValueValidationRule extends ValidationRule {
   constructor(minimumValue, maximumValue) {
     super(
       {minimumValue: minimumValue, maximumValue: maximumValue},
       (newValue, threshold) => {
-        return threshold.minimumValue <= newValue && newValue < threshold.maximumValue;
+        return threshold.minimumValue <= newValue && newValue <= threshold.maximumValue;
       }
     );
   }
@@ -240,10 +269,10 @@ export class AlphaValidationRule extends ValidationRule {
     super(
       null,
       (newValue, threshold) => {
-        return this.alphaNumericRegex.test(newValue);
+        return this.alphaRegex.test(newValue);
       }
     );
-    this.alphaNumericRegex = /^[a-z]+$/i;
+    this.alphaRegex = /^[a-z]+$/i;
   }
 }
 

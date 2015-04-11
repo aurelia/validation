@@ -48,11 +48,17 @@ data = {
     'InCollectionValidationRule': (newValue, threshold) => {
       return `är inget giltigt värde`;
     },
+    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `måste vara ${threshold} eller mer`;
+    },
     'MinimumLengthValidationRule': (newValue, threshold) => {
       return `behöver vara minst ${threshold} tecken långt`;
     },
     'MinimumValueValidationRule': (newValue, threshold) => {
-      return `måste vara ${threshold} eller mer`;
+      return `måste vara mer än ${threshold}`;
+    },
+    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `måste vara ${threshold} eller mindre`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
       return `kan inte vara längre än ${threshold} tecken`;
@@ -64,6 +70,9 @@ data = {
       return `måste vara ett nummer`;
     },
     'RegexValidationRule': (newValue, threshold) => {
+      return `är inte ett giltigt värde`;
+    },
+    'ContainsOnlyValidationRule': (newValue, threshold) => {
       return `är inte ett giltigt värde`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {

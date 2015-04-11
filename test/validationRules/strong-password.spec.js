@@ -2,7 +2,7 @@ import {StrongPasswordValidationRule} from '../../src/validation/validation-rule
 import {MediumPasswordValidationRule} from '../../src/validation/validation-rules';
 import {Expectations} from '../expectations';
 
-//No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'notEmpty()'
+//No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'isNotEmpty()'
 
 describe('Tests on StrongPasswordValidationRule', () => {
   it('should be working with strong passwords', (done) => {
@@ -58,6 +58,7 @@ describe('tests on MediumPasswordValidationRule', () => {
     expectations.expectAsync(rule.validate('123abcdefg')).toBe(true);
     expectations.expectAsync(rule.validate('abcdefg')).toBe(false);
     expectations.expectAsync(rule.validate('12345789')).toBe(false);
+    expectations.expectAsync(rule.validate('aBcDeFgH')).toBe(true);
     expectations.validate();
   });
   it('should give a correct translation', (done) => {

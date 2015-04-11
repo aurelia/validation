@@ -8,10 +8,10 @@ class TestSubject {
     this.wealth = '';
     this.validation = validation.on(this)
       .ensure('firstName')
-      .notEmpty()
+      .isNotEmpty()
       .ensure('wealth')
-      .notEmpty()
-      .isNumeric();
+      .isNotEmpty()
+      .isNumber();
   }
 
   static createInstance() {

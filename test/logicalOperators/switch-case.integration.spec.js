@@ -23,14 +23,14 @@ describe('Integration tests with switch cases', () => {
     var subject = TestSubject.createInstance('John');
     subject.validation
       .ensure('state')
-      .notEmpty()
+      .isNotEmpty()
       .switch(() => {
         return subject.country;
       })
       .case('US')
-      .in(['TX', 'FL'])
+      .isIn(['TX', 'FL'])
       .case('Belgium')
-      .in(['WVL', 'OVL']);
+      .isIn(['WVL', 'OVL']);
 
     expectations.assert(() => {
       subject.country = 'US';
@@ -72,16 +72,16 @@ describe('Integration tests with switch cases', () => {
     var subject = TestSubject.createInstance('John');
     subject.validation
       .ensure('state')
-      .notEmpty()
+      .isNotEmpty()
       .switch(() => {
         return subject.country;
       })
       .case('US')
-      .in(['TX', 'FL'])
+      .isIn(['TX', 'FL'])
       .case('Belgium')
-      .in(['WVL', 'OVL'])
+      .isIn(['WVL', 'OVL'])
       .default()
-      .minLength(3);
+      .hasMinLength(3);
 
     expectations.assert(() => {
       subject.country = 'US';
@@ -128,16 +128,16 @@ describe('Integration tests with switch cases', () => {
       var subject = TestSubject.createInstance('John');
       subject.validation
         .ensure('state')
-        .notEmpty()
+        .isNotEmpty()
         .switch(() => {
           return subject.country;
         })
         .case('US')
-        .in(['TX', 'FL'])
+        .isIn(['TX', 'FL'])
         .case('Belgium')
-        .in(['WVL', 'OVL'])
+        .isIn(['WVL', 'OVL'])
         .endSwitch()
-        .minLength(3);
+        .hasMinLength(3);
 
       expectations.assert(() => {
         subject.country = 'US';
@@ -175,9 +175,9 @@ describe('Integration tests with switch cases', () => {
     var subject = TestSubject.createInstance('John');
     subject.validation
       .ensure('state')
-      .notEmpty()
+      .isNotEmpty()
       .ensure('country')
-      .notEmpty()
+      .isNotEmpty()
       .switch()
       .case('US')
       .passes(() => {

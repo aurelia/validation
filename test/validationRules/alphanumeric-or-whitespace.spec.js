@@ -1,7 +1,7 @@
 import {AlphaNumericOrWhitespaceValidationRule} from '../../src/validation/validation-rules';
 import {Expectations} from '../expectations';
 
-//No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'notEmpty()'
+//No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'isNotEmpty()'
 
 describe('Tests on AlphaNumericOrWhitespaceValidationRule', () => {
   it('should be working with only digits', (done) => {

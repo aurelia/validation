@@ -95,7 +95,7 @@ export class ValidationRulesCollection {
     this.validationCollections.push(validationRulesCollection);
   }
 
-  notEmpty() {
+  isNotEmpty() {
     this.isRequired = true;
   }
 
@@ -161,12 +161,12 @@ export class SwitchCaseValidationRulesCollection {
     currentCollection.addValidationRuleCollection(validationRulesCollection);
   }
 
-  notEmpty() {
+  isNotEmpty() {
     var collection = this.getCurrentCollection(this.caseLabel);
     if (collection !== null)
-      collection.notEmpty();
+      collection.isNotEmpty();
     else
-      this.defaultCollection.notEmpty();
+      this.defaultCollection.isNotEmpty();
   }
 
   withMessage(message) {

@@ -3,7 +3,7 @@
 
 #### Bug Fixes
 
-* **email:** add a better email validation ([9e45f82d](https://github.com/aurelia/validation/commit/9e45f82db028c71a88a5d75c4fdf678c5474e7a3))
+* **isEmail:** add a better isEmail validation ([9e45f82d](https://github.com/aurelia/validation/commit/9e45f82db028c71a88a5d75c4fdf678c5474e7a3))
 
 
 #### Features

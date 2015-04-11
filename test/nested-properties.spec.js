@@ -11,10 +11,10 @@ class TestSubject {
       taps: 0
     };
     this.validation = validation.on(this)
-      .ensure('company.name').notEmpty()
-      .ensure('company.city').notEmpty()
-      .ensure('company.email').notEmpty().email()
-      .ensure('company.taps').isNumeric().minimum(1).maximum(500);
+      .ensure('company.name').isNotEmpty()
+      .ensure('company.city').isNotEmpty()
+      .ensure('company.email').isNotEmpty().isEmail()
+      .ensure('company.taps').isNumber().isBetween(1, 500);
   }
 
   static createInstance() {
@@ -113,7 +113,7 @@ describe('Nested property tests', () => {
     subject.company.email = 'Bob@thebuilder.com';
 
     var observer = new ObserverLocator()
-      .getObserver(subject, 'company.email');
+      .getObserver(subject, 'company.isEmail');
 
     expect(observer.getValue()).toBe(undefined);
     //If this returns "expected Bob@thebuilder.com to be undefined", the custom pathObserver implementation can go :)

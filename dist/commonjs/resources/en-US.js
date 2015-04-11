@@ -52,11 +52,17 @@ var data = {
     InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
       return 'not a valid value';
     },
+    MinimumInclusiveValueValidationRule: function MinimumInclusiveValueValidationRule(newValue, threshold) {
+      return 'needs to be ' + threshold + ' or more';
+    },
     MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
       return 'needs to be at least ' + threshold + ' characters long';
     },
     MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-      return 'needs to be ' + threshold + ' or more';
+      return 'needs to be more than ' + threshold;
+    },
+    MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
+      return 'needs to be ' + threshold + ' or less';
     },
     MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
       return 'cannot be longer then ' + threshold + ' characters';
@@ -68,6 +74,9 @@ var data = {
       return 'needs to be a number';
     },
     RegexValidationRule: function RegexValidationRule(newValue, threshold) {
+      return 'not a valid value';
+    },
+    ContainsOnlyValidationRule: function ContainsOnlyValidationRule(newValue, threshold) {
       return 'not a valid value';
     },
     StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {

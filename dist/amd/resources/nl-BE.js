@@ -53,11 +53,17 @@ define(['exports'], function (exports) {
       InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
         return 'is geen geldige waarde';
       },
+      MinimumInclusiveValueValidationRule: function MinimumInclusiveValueValidationRule(newValue, threshold) {
+        return 'moet op zijn minst ' + threshold + ' zijn';
+      },
       MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
         return 'moet op zijn minst ' + threshold + ' tekens lang zijn';
       },
       MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-        return 'moet op zijn minst ' + threshold + ' zijn';
+        return 'moet op meer dan ' + threshold + ' zijn';
+      },
+      MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
+        return 'moet op zijn meest ' + threshold + ' zijn';
       },
       MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
         return 'moet minder dan ' + threshold + ' tekens lang zijn';
@@ -69,6 +75,9 @@ define(['exports'], function (exports) {
         return 'moet een getal zijn';
       },
       RegexValidationRule: function RegexValidationRule(newValue, threshold) {
+        return 'is geen geldige waarde';
+      },
+      ContainsOnlyValidationRule: function ContainsOnlyValidationRule(newValue, threshold) {
         return 'is geen geldige waarde';
       },
       StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {

@@ -60,8 +60,8 @@ export function configure(aurelia) {
 # Getting started
 
 Let's set up the **welcome.js** model from the [skeleton-navigation](http://github.com/aurelia/skeleton-navigation) with some validation. 
-After importing the validation plugin in our model we'll do three things: 
-- add a simple validation so that both firstName and lastname are required and have to have a length between 3 and 10 characters.
+After importing the validation plugin in our model we'll do three things:
+- add a simple validation so that both firstName and lastname are required and have to have a length isBetweenOrEqualTo 3 and 10 characters.
 - prevent the 'welcome' function from executing if the model isn't valid
 - add validation messages to the view to provide hints to the end-user
 
@@ -114,13 +114,13 @@ Great, we're all set, now let's add our first validation:
     
     this.validation = validation.on(this)
         .ensure('firstName') 
-              .notEmpty() 
-              .minLength(3)
-              .maxLength(10) 
+              .isNotEmpty()
+              .hasMinLength(3)
+              .hasMaxLength(10)
         .ensure('lastName') 
-              .notEmpty() 
-              .minLength(3)
-              .maxLength(10) ;
+              .isNotEmpty()
+              .hasMinLength(3)
+              .hasMaxLength(10) ;
   }
 ```
 We now have a working validation, but nothing changes behaviorally. If the validation fails, there's no way to inform the end-user of his/her mistakes.
@@ -145,51 +145,51 @@ Secondly, let's provide some visual hints to the users. Open your **welcome.html
 
 tl;dr: [watch these samples](http://aurelia.io/validation/#/validators)
 
-####notEmpty()
+####isNotEmpty()
 This is a special case, dictating that the field is 'required' and cannot be empty.
 Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
 >Note: strings are always trimmed before they evaluated.
->The notEmpty rule is always checked first before any other validation rule.  This means that without the notEmpty rule, the .minLength(5) rule would still consider a value of '' as valid because the field is allowed to be empty.
+>The isNotEmpty rule is always checked first before any other validation rule.  This means that without the isNotEmpty rule, the .hasMinLength(5) rule would still consider a value of '' as valid because the field is allowed to be empty.
 
-####between(minimumValue, maximumValue)
+####isBetweenOrEqualTo(minimumValue, maximumValue)
 Validates that the value entered is greater than or equal to the provided *minimumValue* and strictly smaller than the provided *maximumValue*.
 
-####betweenLength(minimumLength, maximumLength)
+####hasLengthBetween(minimumLength, maximumLength)
 Validates that the length of the value entered is greater than or equal to the provided *minimumLength* and strictly less than the provided *maximumLength*.
 
-####email()
-Validates that the value entered is a properly formed email address.
+####isEmail()
+Validates that the value entered is a properly formed isEmail address.
 
-####equals(otherValue, otherValueLabel)
-Validates that the value entered equals the *otherValue*.
+####isEqualTo(otherValue, otherValueLabel)
+Validates that the value entered isEqualTo the *otherValue*.
 Optionally takes an *otherValueLabel*, which will be used in the error message.
 
-####in(collection)
+####isIn(collection)
 Validates that at least one of the values in the *collection* is equal to the value entered.
 
-####isAlphanumeric()
+####containsOnlyAlphanumerics()
 Validates that the value entered contains only lowercase characters, uppercase characters, or digits.
 
-####isAlphanumericOrWhitespace()
+####containsOnlyAlphanumericsOrWhitespace()
 Validates that the value entered contains only lowercase characters, uppercase characters, digits or whitespace.
 
-####isDigit()
+####containsOnlyDigits()
 Validates that the value entered contains only digits.
 
 ####isStrongPassword(minimumComplexityLevel)
 Validates that the value entered is a strong password. A strong password contains each of the following groups: lowercase characters, uppercase characters, digits and special characters.
 Optionally takes a *minumumComplexityLevel* of 2, 3 or 4 (default) to allow weak, medium or strong passwords only.
 This matches the number of groups (lowercase/uppercase/digits/special characters) that need to be present.
->Note: optimal user experience when preceded with .betweenLength(8,16)
+>Note: optimal user experience when preceded with .hasLengthBetween(8,16)
 
-####isNumeric()
+####isNumber()
 Validates that the value entered is numeric.
 This supports properly formatted numbers, like '-1,000.00'. (This depends on the current locale, see **I18N**)
 
-####minLength(minimumLength)
+####hasMinLength(minimumLength)
 Validates that the length of the value entered is greater than or equal to the provided *minimumLength*.
 
-####minimum(minimumValue)
+####isGreaterThanOrEqualTo(minimumValue)
 Validates that the value entered is greater than or equal to the provided *minimumValue*.
 
 ####matches(regex)
@@ -198,13 +198,13 @@ Validates that the value entered is valid according to the provided *regex* (Reg
 ####matchesRegex(regexString)
 Validates that the value entered is valid according to the provided *regexString* (string).
 
-####maxLength(maximumLength)
+####hasMaxLength(maximumLength)
 Validates that the length of the value entered is strictly less than the provided *maximumLength*.
 
-####maximum(maximumValue)
+####isLessThanOrEqualTo(maximumValue)
 Validates that the value entered is strictly smaller than the provided *maximumValue*.
 
-####notEquals(otherValue, otherValueLabel)
+####isNotEqualTo(otherValue, otherValueLabel)
 Validates that the value entered does not equal the *otherValue*. 
 Optionally takes an *otherValueLabel*, which will be used in the error message.
 
@@ -236,9 +236,9 @@ Any conditions that come after the *if(conditionalExpression)* operator will onl
         this.validation = validation.on(this)
             .ensure('state')
                 .if(() => { return subject.country === 'US'; })
-                    .in(['TX', 'FL'])
+                    .isIn(['TX', 'FL'])
                 .endIf()
-                .notEmpty();
+                .isNotEmpty();
 ```
 
 ###else()
@@ -247,9 +247,9 @@ Optionally, chain any *if(conditionalExpression)* with an *else()*. Any conditio
         this.validation = validation.on(this)
             .ensure('state')
                 .if(() => { return subject.country === 'US'; })
-                    .in(['TX', 'FL'])
+                    .isIn(['TX', 'FL'])
                 .else()
-                    .notEmpty()
+                    .isNotEmpty()
                 .endIf();
 ```
 
@@ -259,29 +259,29 @@ The *if(conditionalExpression)* is automatically terminated when you move to the
         this.validation = validation.on(this)
             .ensure('state')
                 .if(() => { return subject.country === 'US'; })
-                    .in(['TX', 'FL'])
+                    .isIn(['TX', 'FL'])
                     .if( () => { return subject.state === 'FL'})
                         .passes( () => {return subject.age >= 65;})
                     .endIf() //without endif, the 'else' would apply if state !== 'FL'
                 .else()
                     .passes( () => { return subject.age >= 18;})
                 .endIf()
-                .notEmpty();  //Without the endif, the 'notEmpty' would only apply to the above else case
+                .isNotEmpty();  //Without the endif, the 'isNotEmpty' would only apply to the above else case
 ```
 
 ##switch(conditionalExpression)
 ###Basic usage
 Pass a function (*conditionalExpression*) that returns any label (string, number, ...).
-Only the validation statements chained to the *case(label)* that equals the returned label, will be evaluated.
+Only the validation statements chained to the *case(label)* that isEqualTo the returned label, will be evaluated.
 ```javascript
         this.validation = validation.on(this)
             .ensure('state')
-            .notEmpty()
+            .isNotEmpty()
             .switch(() => {return subject.country;})
                 .case('US')
-                    .in(['TX','FL'])
+                    .isIn(['TX','FL'])
                 .case('Belgium')
-                    .in(['WVL', 'OVL'])
+                    .isIn(['WVL', 'OVL'])
             .endSwitch();
 ```
 
@@ -291,14 +291,14 @@ To add a default case, use the *default()* method.
 ```javascript
         this.validation = validation.on(this)
             .ensure('state')
-            .notEmpty()
+            .isNotEmpty()
             .switch(() => {return subject.country;})
                 .case('US')
-                    .in(['TX','FL'])
+                    .isIn(['TX','FL'])
                 .case('Belgium')
-                    .in(['WVL', 'OVL'])
+                    .isIn(['WVL', 'OVL'])
                 .default()
-                    .minLength(3)
+                    .hasMinLength(3)
             .endSwitch();
 ```
 
@@ -307,7 +307,7 @@ If *switch()* is being called without a *conditionExpression*, it will use the c
 ```javascript
         this.validation = validation.on(this)
             .ensure('customerLevel')
-            .notEmpty()
+            .isNotEmpty()
             .switch()
                 .case('Gold')
                     .passes( () => { return this.income > 100000;} ).withMessage('Customer needs a higher income to be a Gold member')
@@ -417,15 +417,15 @@ Then, when you're setting up validation, you can use your new method:
 ``` javascript
     this.validation = validation.on(this)
         .ensure('firstName') 
-              .notEmpty() 
-              .minLength(3)
-              .maxLength(10) 
+              .isNotEmpty()
+              .hasMinLength(3)
+              .hasMaxLength(10)
         .ensure('lastName') 
-              .notEmpty() 
-              .minLength(3)
-              .maxLength(10)
+              .isNotEmpty()
+              .hasMinLength(3)
+              .hasMaxLength(10)
         .ensure('ssn')
-              .notEmpty()
+              .isNotEmpty()
               .SSN();
 ```
 #Customizing the visualization
@@ -474,7 +474,7 @@ export class App {
 The validateAttachedBehavior, once bound to a validation instance, will loop over every child element and try to match elements against validation rules.
 A simple example:
 ```javascript
-this.validation = validation.on(this).ensure('firstName').notEmpty();
+this.validation = validation.on(this).ensure('firstName').isNotEmpty();
 ```
 ```html
 <form role="form" class="form-horizontal" validate.bind="validation">
@@ -490,7 +490,7 @@ As your viewmodels become more complex or if you start using binding converters,
 
 Consider this more complex example:
 ```javascript
-this.contact.validation = validation.on(this.contact).ensure('firstName').notEmpty();
+this.contact.validation = validation.on(this.contact).ensure('firstName').isNotEmpty();
 ```
 
 ```html
@@ -505,7 +505,7 @@ Pay attention to the two validateAttachedBehavior attributes in this example's H
 - *validate.bind="contact.validation"* this validateAttachedBehavior will bind the validation to the form.
 - *validate="firstName"* this validateAttachedBehavior will only tell the parent validateAttachedBehavior that this input element should be decorated with the validation result of the rules for *"firstName"*.  This is only needed because the validation rule was created with *ensure('firstName')*, whereas the binding for the same input element has a different binding path: *value.bind="contact.FirstName"*
 
-There is an array property named *bindingPathAttributes* on the *validateAttachedBehaviorConfig* instance that you can inject in your app, which holds the attributes that the validateAttachedBehavior will try to use to match elements to validationRules.  
+There is an array property named *bindingPathAttributes* on the *validateAttachedBehaviorConfig* instance that you can inject in your app, which holds the attributes that the validateAttachedBehavior will try to use to match elements to validationRules.
 
 ##Preventing form submission
 tl;dr: [watch these samples](http://aurelia.io/validation/#/form-submission)
@@ -535,9 +535,9 @@ The *validation.result* property is a *validationResult* object that describes i
 For example, suppose you have a validation set up like this:
 ```javascript
     this.validation = validation.on(this)
-        .ensure('firstName').notEmpty().between(3,80)
-        .ensure('lastName').notEmpty().between(3,80)
-        .ensure('email').notEmpty().email();
+        .ensure('firstName').isNotEmpty().isBetweenOrEqualTo(3,80)
+        .ensure('lastName').isNotEmpty().isBetweenOrEqualTo(3,80)
+        .ensure('isEmail').isNotEmpty().isEmail();
 ```
 For this validation, the *validation.result* object would (qua form) look like this:
 ```javascript
@@ -556,10 +556,10 @@ For this validation, the *validation.result* object would (qua form) look like t
                 message : 'is required',
                 failingRule : 'isRequired'
             },
-            email : {
+            isEmail : {
                 isValid : false,
                 isDirty : true,
-                message : 'is not a valid email address',
+                message : 'is not a valid isEmail address',
                 failingRule : 'EmailValidationRule'
             },
     }

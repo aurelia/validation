@@ -48,11 +48,17 @@ data = {
     'InCollectionValidationRule': (newValue, threshold) => {
       return `geçersiz değer`;
     },
+    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `değer ${threshold} veya daha fazla olmalıdır`;
+    },
     'MinimumLengthValidationRule': (newValue, threshold) => {
       return `değer en az ${threshold} karakter uzunluğunda olmalıdır`;
     },
     'MinimumValueValidationRule': (newValue, threshold) => {
-      return `değer ${threshold} veya daha fazla olmalıdır`;
+      return `daha fazla olmalıdır ${threshold}`;
+    },
+    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `değer ${threshold}''dan az olmalı`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
       return `değer ${threshold} karakterden uzun olmamalıdır`;
@@ -64,6 +70,9 @@ data = {
       return `sadece sayı girebilirsiniz`;
     },
     'RegexValidationRule': (newValue, threshold) => {
+      return `geçerli bir değer giriniz`;
+    },
+    'ContainsOnlyValidationRule': (newValue, threshold) => {
       return `geçerli bir değer giriniz`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {

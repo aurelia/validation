@@ -52,11 +52,17 @@ var data = {
     InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
       return 'är inget giltigt värde';
     },
+    MinimumInclusiveValueValidationRule: function MinimumInclusiveValueValidationRule(newValue, threshold) {
+      return 'måste vara ' + threshold + ' eller mer';
+    },
     MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
       return 'behöver vara minst ' + threshold + ' tecken långt';
     },
     MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-      return 'måste vara ' + threshold + ' eller mer';
+      return 'måste vara mer än ' + threshold;
+    },
+    MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
+      return 'måste vara ' + threshold + ' eller mindre';
     },
     MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
       return 'kan inte vara längre än ' + threshold + ' tecken';
@@ -68,6 +74,9 @@ var data = {
       return 'måste vara ett nummer';
     },
     RegexValidationRule: function RegexValidationRule(newValue, threshold) {
+      return 'är inte ett giltigt värde';
+    },
+    ContainsOnlyValidationRule: function ContainsOnlyValidationRule(newValue, threshold) {
       return 'är inte ett giltigt värde';
     },
     StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {

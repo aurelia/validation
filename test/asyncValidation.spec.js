@@ -59,7 +59,7 @@ describe('Tests on async validation: validation collection with inner collection
   it('should fulfil an invalid validation', (done) => {
     var innerTestCollection = new ValidationRulesCollection();
     innerTestCollection.addValidationRule(new TestValidationRule(false));
-    innerTestCollection.notEmpty();
+    innerTestCollection.isNotEmpty();
     var testCollection = new ValidationRulesCollection();
     testCollection.addValidationRuleCollection(innerTestCollection);
     testCollection.validate().then((result) => {

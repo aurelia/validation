@@ -50,11 +50,17 @@ data = {
     'InCollectionValidationRule': (newValue, threshold) => {
       return `not a valid value`;
     },
+    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `needs to be ${threshold} or more`;
+    },
     'MinimumLengthValidationRule': (newValue, threshold) => {
       return `needs to be at least ${threshold} characters long`;
     },
     'MinimumValueValidationRule': (newValue, threshold) => {
-      return `needs to be ${threshold} or more`;
+      return `needs to be more than ${threshold}`;
+    },
+    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `needs to be ${threshold} or less`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
       return `cannot be longer then ${threshold} characters`;
@@ -66,6 +72,9 @@ data = {
       return `needs to be a number`;
     },
     'RegexValidationRule': (newValue, threshold) => {
+      return `not a valid value`;
+    },
+    'ContainsOnlyValidationRule': (newValue, threshold) => {
       return `not a valid value`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {

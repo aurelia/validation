@@ -12,11 +12,11 @@ class TestSubject {
     this.address = {};
     this.validation = validation.on(this)
       .ensure('firstName')
-      .notEmpty()
-      .betweenLength(3, 10)
+      .isNotEmpty()
+      .hasLengthBetween(3, 10)
       .ensure('lastName')
-      .notEmpty()
-      .betweenLength(3, 10);
+      .isNotEmpty()
+      .hasLengthBetween(3, 10);
   }
 
   static createInstance() {
@@ -34,19 +34,19 @@ class NestedTestSubject {
     };
     this.validationNested = validation.on(this)
       .ensure('address.street')
-      .notEmpty()
-      .betweenLength(3, 10)
+      .isNotEmpty()
+      .hasLengthBetween(3, 10)
       .ensure('address.number')
-      .notEmpty()
-      .betweenLength(1, 10);
+      .isNotEmpty()
+      .hasLengthBetween(1, 10);
 
     this.validation = validation.on(this.address)
       .ensure('street')
-      .notEmpty()
-      .betweenLength(3, 10)
+      .isNotEmpty()
+      .hasLengthBetween(3, 10)
       .ensure('number')
-      .notEmpty()
-      .betweenLength(1, 10);
+      .isNotEmpty()
+      .hasLengthBetween(1, 10);
   }
 
   static createInstance(firstName) {

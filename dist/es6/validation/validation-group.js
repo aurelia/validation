@@ -20,8 +20,8 @@ export class ValidationGroup {
   }
 
   /**
-   * Causes each property to re-evaluate: gets the latest value, marks the property as 'dirty', runs validation rules on latest value, updates this.result
-   * @returns {bool} True/false indicating if every property is valid
+   * @deprecated
+   * The synchronous "checkAll()" function is no longer supported. Use "validate()" which returns a promise that fulfils when valid, rejects when invalid
    */
   checkAll() {
     throw 'The synchronous "checkAll()" function is no longer supported. Use "validate()" which returns a promise that fulfils when valid, rejects when invalid';
@@ -57,19 +57,19 @@ export class ValidationGroup {
 
   /**
    * Adds a validation property for the specified path
-   * @param {String} propertyPath the path of the property/field, for example 'firstName' or 'address.muncipality.zipCode'
+   * @param {String} bindingPatch the path of the property/field, for example 'firstName' or 'address.muncipality.zipCode'
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  ensure(propertyPath) {
-    return this.builder.ensure(propertyPath);
+  ensure(bindingPatch) {
+    return this.builder.ensure(bindingPatch);
   }
 
   /**
-   * Adds a validation rule that checks a value for being 'notEmpty', 'required'
+   * Adds a validation rule that checks a value for being 'isNotEmpty', 'required'
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  notEmpty() {
-    return this.builder.notEmpty();
+  isNotEmpty() {
+    return this.builder.isNotEmpty();
   }
 
   /**
@@ -77,18 +77,26 @@ export class ValidationGroup {
    * @param minimumValue the threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  minimum(minimumValue) {
-    return this.builder.minimum(minimumValue);
+  isGreaterThanOrEqualTo(minimumValue) {
+    return this.builder.isGreaterThanOrEqualTo(minimumValue);
+  }
+  /**
+   * Adds a validation rule that checks a value for being greater than a threshold
+   * @param minimumValue the threshold
+   * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
+   */
+  isGreaterThan(minimumValue) {
+    return this.builder.isGreaterThan(minimumValue);
   }
 
   /**
-   * Adds a validation rule that checks a value for being greater than or equal to a threshold, and less than another threshold
+   * Adds a validation rule that checks a value for being greater than or equal to a threshold, and less than or equal to another threshold
    * @param minimumValue The minimum threshold
-   * @param maximumValue The maximum threshold
+   * @param maximumValue The isLessThanOrEqualTo threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  between(minimumValue, maximumValue) {
-    return this.builder.between(minimumValue, maximumValue);
+  isBetween(minimumValue, maximumValue) {
+    return this.builder.isBetween(minimumValue, maximumValue);
   }
 
   /**
@@ -96,8 +104,16 @@ export class ValidationGroup {
    * @param maximumValue The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  maximum(maximumValue) {
-    return this.builder.maximum(maximumValue);
+  isLessThanOrEqualTo(maximumValue) {
+    return this.builder.isLessThanOrEqualTo(maximumValue);
+  }
+  /**
+   * Adds a validation rule that checks a value for being less than or equal to a threshold
+   * @param maximumValue The threshold
+   * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
+   */
+  isLessThan(maximumValue){
+    return this.builder.isLessThan(maximumValue);
   }
 
   /**
@@ -106,8 +122,8 @@ export class ValidationGroup {
    * @param otherValueLabel Optional: a label to use in the validation message
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  equals(otherValue, otherValueLabel) {
-    return this.builder.equals(otherValue, otherValueLabel);
+  isEqualTo(otherValue, otherValueLabel) {
+    return this.builder.isEqualTo(otherValue, otherValueLabel);
   }
 
   /**
@@ -116,16 +132,16 @@ export class ValidationGroup {
    * @param otherValueLabel Optional: a label to use in the validation message
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  notEquals(otherValue, otherValueLabel) {
-    return this.builder.notEquals(otherValue, otherValueLabel);
+  isNotEqualTo(otherValue, otherValueLabel) {
+    return this.builder.isNotEqualTo(otherValue, otherValueLabel);
   }
 
   /**
-   * Adds a validation rule that checks a value for being a valid email address
+   * Adds a validation rule that checks a value for being a valid isEmail address
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  email() {
-    return this.builder.email();
+  isEmail() {
+    return this.builder.isEmail();
   }
 
   /**
@@ -133,8 +149,8 @@ export class ValidationGroup {
    * @param collection The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  in(collection) {
-    return this.builder.in(collection);
+  isIn(collection) {
+    return this.builder.isIn(collection);
   }
 
   /**
@@ -142,8 +158,8 @@ export class ValidationGroup {
    * @param minimumValue The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  minLength(minimumValue) {
-    return this.builder.minLength(minimumValue);
+  hasMinLength(minimumValue) {
+    return this.builder.hasMinLength(minimumValue);
   }
 
   /**
@@ -151,55 +167,74 @@ export class ValidationGroup {
    * @param maximumValue The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  maxLength(maximumValue) {
-    return this.builder.maxLength(maximumValue);
+  hasMaxLength(maximumValue) {
+    return this.builder.hasMaxLength(maximumValue);
   }
 
   /**
    * Adds a validation rule that checks a value for having a length greater than or equal to a specified threshold and less than another threshold
-   * @param minimumValue The minimum threshold
-   * @param maximumValue The maximum threshold
+   * @param minimumValue The min threshold
+   * @param maximumValue The max threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  betweenLength(minimumValue, maximumValue) {
-    return this.builder.betweenLength(minimumValue, maximumValue);
+  hasLengthBetween(minimumValue, maximumValue) {
+    return this.builder.hasLengthBetween(minimumValue, maximumValue);
   }
 
   /**
    * Adds a validation rule that checks a value for being numeric, this includes formatted numbers like '-3,600.25'
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isNumeric() {
-    return this.builder.isNumeric();
+  isNumber() {
+    return this.builder.isNumber();
   }
 
   /**
    * Adds a validation rule that checks a value for being strictly numeric, this excludes formatted numbers like '-3,600.25'
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isDigit() {
-    return this.builder.isDigit();
+  containsOnlyDigits() {
+    return this.builder.containsOnlyDigits();
   }
 
-  isAlpha()
-  {
-    return this.builder.isAlpha();
+  containsOnly(regex){
+    return this.builder.containsOnly(regex);
   }
+
+  containsOnlyAlpha()
+  {
+    return this.builder.containsOnlyAlpha();
+  }
+
+  containsOnlyAlphaOrWhitespace()
+  {
+    return this.builder.containsOnlyAlphaOrWhitespace();
+  }
+  containsOnlyLetters()
+  {
+    return this.builder.containsOnlyAlpha();
+  }
+
+  containsOnlyLettersOrWhitespace()
+  {
+    return this.builder.containsOnlyAlphaOrWhitespace();
+  }
+
 
   /**
    * Adds a validation rule that checks a value for only containing alphanumerical characters
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isAlphanumeric() {
-    return this.builder.isAlphanumeric();
+  containsOnlyAlphanumerics() {
+    return this.builder.containsOnlyAlphanumerics();
   }
 
   /**
    * Adds a validation rule that checks a value for only containing alphanumerical characters or whitespace
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isAlphanumericOrWhitespace() {
-    return this.builder.isAlphanumericOrWhitespace();
+  containsOnlyAlphanumericsOrWhitespace() {
+    return this.builder.containsOnlyAlphanumericsOrWhitespace();
   }
 
   /**
@@ -211,14 +246,6 @@ export class ValidationGroup {
     return this.builder.isStrongPassword(minimumComplexityLevel);
   }
 
-  /**
-   * Adds a validation rule that checks a value for matching a particular regex
-   * @param regexString {String} the regex to match
-   * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
-   */
-  matchesRegex(regexString) {
-    return this.builder.matchesRegex(regexString);
-  }
 
   /**
    * Adds a validation rule that checks a value for matching a particular regex

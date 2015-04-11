@@ -5,7 +5,7 @@ import {InEqualityWithOtherLabelValidationRule } from '../../src/validation/vali
 
 import {Expectations} from '../expectations';
 
-//No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'notEmpty()'
+//No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'isNotEmpty()'
 
 describe('Tests on EqualityValidationRule', () => {
   it('should be working with equality', (done) => {

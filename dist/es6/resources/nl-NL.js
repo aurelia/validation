@@ -48,11 +48,17 @@ data = {
     'InCollectionValidationRule': (newValue, threshold) => {
       return `is geen geldige waarde`;
     },
+    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `moet op zijn minst ${threshold} zijn`;
+    },
     'MinimumLengthValidationRule': (newValue, threshold) => {
       return `moet op zijn minst ${threshold} tekens lang zijn`;
     },
     'MinimumValueValidationRule': (newValue, threshold) => {
-      return `moet op zijn minst ${threshold} zijn`;
+      return `moet op meer dan ${threshold} zijn`;
+    },
+    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+      return `moet op zijn meest ${threshold} zijn`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
       return `moet minder dan ${threshold} tekens lang zijn`;
@@ -64,6 +70,9 @@ data = {
       return `moet een getal zijn`;
     },
     'RegexValidationRule': (newValue, threshold) => {
+      return `is geen geldige waarde`;
+    },
+    'ContainsOnlyValidationRule': (newValue, threshold) => {
       return `is geen geldige waarde`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {

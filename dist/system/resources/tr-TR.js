@@ -53,11 +53,17 @@ System.register([], function (_export) {
           InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
             return 'geçersiz değer';
           },
+          MinimumInclusiveValueValidationRule: function MinimumInclusiveValueValidationRule(newValue, threshold) {
+            return 'değer ' + threshold + ' veya daha fazla olmalıdır';
+          },
           MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
             return 'değer en az ' + threshold + ' karakter uzunluğunda olmalıdır';
           },
           MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-            return 'değer ' + threshold + ' veya daha fazla olmalıdır';
+            return 'daha fazla olmalıdır ' + threshold;
+          },
+          MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
+            return 'değer ' + threshold + '\'\'dan az olmalı';
           },
           MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
             return 'değer ' + threshold + ' karakterden uzun olmamalıdır';
@@ -69,6 +75,9 @@ System.register([], function (_export) {
             return 'sadece sayı girebilirsiniz';
           },
           RegexValidationRule: function RegexValidationRule(newValue, threshold) {
+            return 'geçerli bir değer giriniz';
+          },
+          ContainsOnlyValidationRule: function ContainsOnlyValidationRule(newValue, threshold) {
             return 'geçerli bir değer giriniz';
           },
           StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {

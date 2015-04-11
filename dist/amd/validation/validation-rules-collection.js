@@ -98,8 +98,8 @@ define(['exports', '../validation/validation'], function (exports, _validationVa
         this.validationCollections.push(validationRulesCollection);
       }
     }, {
-      key: 'notEmpty',
-      value: function notEmpty() {
+      key: 'isNotEmpty',
+      value: function isNotEmpty() {
         this.isRequired = true;
       }
     }, {
@@ -183,10 +183,10 @@ define(['exports', '../validation/validation'], function (exports, _validationVa
         currentCollection.addValidationRuleCollection(validationRulesCollection);
       }
     }, {
-      key: 'notEmpty',
-      value: function notEmpty() {
+      key: 'isNotEmpty',
+      value: function isNotEmpty() {
         var collection = this.getCurrentCollection(this.caseLabel);
-        if (collection !== null) collection.notEmpty();else this.defaultCollection.notEmpty();
+        if (collection !== null) collection.isNotEmpty();else this.defaultCollection.isNotEmpty();
       }
     }, {
       key: 'withMessage',

@@ -27,88 +27,99 @@ export class ValidationGroupBuilder {
     return this.validationGroup;
   }
 
-  notEmpty() {
-    this.validationRuleCollections[0].notEmpty();
+  isNotEmpty() {
+    this.validationRuleCollections[0].isNotEmpty();
     this.checkLast();
     return this.validationGroup;
   }
 
-  minimum(minimumValue) {
+  isGreaterThan(minimumValue) {
     return this.passesRule(new AllRules.MinimumValueValidationRule(minimumValue));
   }
+  isGreaterThanOrEqualTo(minimumValue) {
+    return this.passesRule(new AllRules.MinimumInclusiveValueValidationRule(minimumValue));
+  }
 
-  between(minimumValue, maximumValue) {
+  isBetween(minimumValue, maximumValue) {
     return this.passesRule(new AllRules.BetweenValueValidationRule(minimumValue, maximumValue));
   }
 
-  in(collection) {
+  isIn(collection) {
     return this.passesRule(new AllRules.InCollectionValidationRule(collection));
   }
 
-  maximum(maximumValue) {
+  isLessThan(maximumValue) {
     return this.passesRule(new AllRules.MaximumValueValidationRule(maximumValue));
   }
 
-  equals(otherValue, otherValueLabel) {
+  isLessThanOrEqualTo(maximumValue) {
+    return this.passesRule(new AllRules.MaximumInclusiveValueValidationRule(maximumValue));
+  }
+
+  isEqualTo(otherValue, otherValueLabel) {
     if(!otherValueLabel)
       return this.passesRule(new AllRules.EqualityValidationRule(otherValue));
     else
       return this.passesRule(new AllRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel))
   }
 
-  notEquals(otherValue, otherValueLabel) {
+  isNotEqualTo(otherValue, otherValueLabel) {
     if(!otherValueLabel)
       return this.passesRule(new AllRules.InEqualityValidationRule(otherValue));
     else
       return this.passesRule(new AllRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel))
   }
 
-  email() {
+  isEmail() {
     return this.passesRule(new AllRules.EmailValidationRule());
   }
 
-  minLength(minimumValue) {
+  hasMinLength(minimumValue) {
     return this.passesRule(new AllRules.MinimumLengthValidationRule(minimumValue));
   }
 
-  maxLength(maximumValue) {
+  hasMaxLength(maximumValue) {
     return this.passesRule(new AllRules.MaximumLengthValidationRule(maximumValue));
   }
 
-  betweenLength(minimumValue, maximumValue) {
+  hasLengthBetween(minimumValue, maximumValue) {
     return this.passesRule(new AllRules.BetweenLengthValidationRule(minimumValue, maximumValue));
   }
 
-  isNumeric() {
+  isNumber() {
     return this.passesRule(new AllRules.NumericValidationRule());
   }
 
-  isDigit() {
+  containsOnlyDigits() {
     return this.passesRule(new AllRules.DigitValidationRule());
   }
 
-  isAlpha(){
+  containsOnlyAlpha(){
     return this.passesRule(new AllRules.AlphaValidationRule());
   }
 
-  isAlphaOrWhitespace(){
+  containsOnlyAlphaOrWhitespace(){
     return this.passesRule(new AllRules.AlphaOrWhitespaceValidationRule());
   }
 
-  isAlphanumeric() {
+  containsOnlyAlphanumerics(){
     return this.passesRule(new AllRules.AlphaNumericValidationRule());
   }
 
-  isAlphanumericOrWhitespace() {
+  containsOnlyAlphanumericsOrWhitespace() {
     return this.passesRule(new AllRules.AlphaNumericOrWhitespaceValidationRule());
   }
 
   isStrongPassword(minimumComplexityLevel) {
-    return this.passesRule(new AllRules.StrongPasswordValidationRule(minimumComplexityLevel));
+    if(minimumComplexityLevel === 4)
+      return this.passesRule(new AllRules.StrongPasswordValidationRule());
+    else
+      return this.passesRule(new AllRules.MediumPasswordValidationRule(minimumComplexityLevel));
   }
 
-  matchesRegex(regexString) {
-    return this.matches(new RegExp(regexString));
+  containsOnly(regex)
+  {
+    return this.passesRule(new AllRules.ContainsOnlyValidationRule(regex));
   }
 
   matches(regex) {

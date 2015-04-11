@@ -65,6 +65,9 @@ System.register([], function (_export) {
           RegexValidationRule: function RegexValidationRule(newValue, threshold) {
             return 'ist kein gültiger Wert';
           },
+          ContainsOnlyValidationRule: function ContainsOnlyValidationRule(newValue, threshold) {
+            return 'ist kein gültiger Wert';
+          },
           StrongPasswordValidationRule: function StrongPasswordValidationRule(newValue, threshold) {
             return 'sollte eine Kombination aus Groß- und Kleinbuchstaben, sowie Zahlen und Sonderzeichen enthalten';
           },

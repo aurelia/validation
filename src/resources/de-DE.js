@@ -60,6 +60,9 @@ data = {
     'RegexValidationRule': (newValue, threshold) => {
       return `ist kein gültiger Wert`;
     },
+    'ContainsOnlyValidationRule': (newValue, threshold) => {
+      return `ist kein gültiger Wert`;
+    },
     'StrongPasswordValidationRule': (newValue, threshold) => {
         return `sollte eine Kombination aus Groß- und Kleinbuchstaben, sowie Zahlen und Sonderzeichen enthalten`;
     },

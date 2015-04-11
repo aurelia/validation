@@ -42,7 +42,7 @@ describe('Integration tests with \'if\' and \'else\'', () => {
     expectations.validate();
   });
 
-  it('should work with notEmpty', (done) => {
+  it('should work with isNotEmpty', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance('John');
     subject.validation
@@ -50,7 +50,7 @@ describe('Integration tests with \'if\' and \'else\'', () => {
       .if(() => {
         return subject.age >= 18;
       })
-      .notEmpty();
+      .isNotEmpty();
 
     expectations.assert(() => {
       return subject.validation.validate()
@@ -75,9 +75,9 @@ describe('Integration tests with \'if\' and \'else\'', () => {
       .if(() => {
         return subject.country === 'US';
       })
-      .in(['TX', 'FL'])
+      .isIn(['TX', 'FL'])
       .else()
-      .notEmpty();
+      .isNotEmpty();
 
     expectations.assert(()=> {
       return subject.validate();
@@ -111,14 +111,14 @@ describe('Integration tests with \'if\' and \'else\'', () => {
       .if(() => {
         return subject.country === 'US';
       })
-      .in(['TX', 'FL']) //either 'TX', 'FL' or empty
+      .isIn(['TX', 'FL']) //either 'TX', 'FL' or empty
       .else()
       .if(() => {
         return subject.country === 'Belgium';
       })
-      .in(['WVL', 'OVL']) //either 'WVL', 'OVL' or empty
+      .isIn(['WVL', 'OVL']) //either 'WVL', 'OVL' or empty
       .else()
-      .notEmpty();
+      .isNotEmpty();
     expectations.assert(() => {
       return subject.validation.validate();
     }, true);
@@ -167,7 +167,7 @@ describe('Integration tests with \'if\' and \'else\'', () => {
       .if(() => {
         return subject.country === 'US';
       })
-      .in(['TX', 'FL'])
+      .isIn(['TX', 'FL'])
       .if(() => {
         return subject.state === 'FL'
       })
@@ -180,7 +180,7 @@ describe('Integration tests with \'if\' and \'else\'', () => {
         return subject.age >= 18;
       })
       .endIf()
-      .notEmpty();  //Without the endif, the 'notEmpty' would only apply to the above else case
+      .isNotEmpty();  //Without the endif, the 'isNotEmpty' would only apply to the above else case
 
     expectations.assert(() => {
       subject.age = 18;

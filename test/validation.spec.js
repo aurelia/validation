@@ -1,5 +1,5 @@
-import {ObserverLocator} from 'aurelia-binding';
 import {Validation} from '../src/validation/validation';
+import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
 
 Validation.debounceTime = 1;
@@ -9,7 +9,7 @@ class TestSubject {
     this.firstName = firstName;
     this.validation = validation.on(this)
       .ensure('firstName')
-      .notEmpty();
+      .isNotEmpty();
   }
 
   static createInstance(firstName) {
@@ -96,7 +96,7 @@ describe('Basic validation tests', () => {
     var subject = {firstName: 'John'};
 
     subject.validation = new Validation(new ObserverLocator()).on(subject)
-      .ensure('firstName').notEmpty().betweenLength(5, 10);
+      .ensure('firstName').isNotEmpty().hasLengthBetween(5, 10);
 
     setTimeout(() => {
       expect(subject.validation.result.isValid).toBe(false);
@@ -121,7 +121,7 @@ describe('Basic validation tests', () => {
 
     subject.validation = new Validation(new ObserverLocator()).on(subject)
       .ensure('company.name')
-      .notEmpty().betweenLength(5, 10);
+      .isNotEmpty().hasLengthBetween(5, 10);
     setTimeout(() => { //Settimeout to allow initial validation
       expect(subject.validation.result.isValid).toBe(false);
 
@@ -152,8 +152,9 @@ describe('Basic validation tests', () => {
 
 
   it('should not update if the value continuously changes', (done) => {
+    Validation.debounceTime = 50;
     var subject = TestSubject.createInstance(null);
-    subject.validation.ensure('firstName').notEmpty().betweenLength(5, 10);
+    subject.validation.ensure('firstName').isNotEmpty().hasLengthBetween(5, 10);
 
     setTimeout(() => { //Do setTimout 0 to allow initial validation
       expect(subject.validation.result.isValid).toBe(false);
@@ -163,10 +164,11 @@ describe('Basic validation tests', () => {
         expect(subject.validation.result.isValid).toBe(false);
 
         subject.firstName = 'Bobby';
-        setTimeout( () => { //Property changed before 200 ms, property should not be validated
+        setTimeout( () => { //Property changed before x ms, property should not be validated
           expect(subject.validation.result.isValid).toBe(false);
-          setTimeout(() => { //property did not change in last 200 ms, property should be validated
+          setTimeout(() => { //property did not change in last x ms, property should be validated
             expect(subject.validation.result.isValid).toBe(true);
+            Validation.debounceTime = 0;
             done();
           }, 21);
         }, Validation.debounceTime - 10);
@@ -223,7 +225,7 @@ describe('Basic validation tests', () => {
   it('should use a custom message if one is provided', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance("Bob");
-    subject.validation.ensure('firstName').minLength(10).withMessage("Not valid!");
+    subject.validation.ensure('firstName').hasMinLength(10).withMessage("Not valid!");
 
     expectations.assert(() => {
       return subject.validation.validate();
@@ -239,7 +241,7 @@ describe('Basic validation tests', () => {
   it('should use a custom message function if one is provided', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance("Bob");
-    subject.validation.ensure('firstName').minLength(10).withMessage((newValue, threshold) => {
+    subject.validation.ensure('firstName').hasMinLength(10).withMessage((newValue, threshold) => {
       return newValue + " is not valid!";
     });
 

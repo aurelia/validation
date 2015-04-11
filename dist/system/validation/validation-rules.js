@@ -1,5 +1,5 @@
 System.register(['../validation/validation'], function (_export) {
-  var Validation, _get, _inherits, _classCallCheck, _createClass, ValidationRule, EmailValidationRule, MinimumLengthValidationRule, MaximumLengthValidationRule, BetweenLengthValidationRule, CustomFunctionValidationRule, NumericValidationRule, RegexValidationRule, MinimumValueValidationRule, MaximumValueValidationRule, BetweenValueValidationRule, DigitValidationRule, AlphaNumericValidationRule, AlphaValidationRule, AlphaOrWhitespaceValidationRule, AlphaNumericOrWhitespaceValidationRule, MediumPasswordValidationRule, StrongPasswordValidationRule, EqualityValidationRuleBase, EqualityValidationRule, EqualityWithOtherLabelValidationRule, InEqualityValidationRule, InEqualityWithOtherLabelValidationRule, InCollectionValidationRule;
+  var Validation, _get, _inherits, _classCallCheck, _createClass, ValidationRule, EmailValidationRule, MinimumLengthValidationRule, MaximumLengthValidationRule, BetweenLengthValidationRule, CustomFunctionValidationRule, NumericValidationRule, RegexValidationRule, ContainsOnlyValidationRule, MinimumValueValidationRule, MinimumInclusiveValueValidationRule, MaximumValueValidationRule, MaximumInclusiveValueValidationRule, BetweenValueValidationRule, DigitValidationRule, AlphaNumericValidationRule, AlphaValidationRule, AlphaOrWhitespaceValidationRule, AlphaNumericOrWhitespaceValidationRule, MediumPasswordValidationRule, StrongPasswordValidationRule, EqualityValidationRuleBase, EqualityValidationRule, EqualityWithOtherLabelValidationRule, InEqualityValidationRule, InEqualityWithOtherLabelValidationRule, InCollectionValidationRule;
 
   return {
     setters: [function (_validationValidation) {
@@ -149,7 +149,7 @@ System.register(['../validation/validation'], function (_export) {
           _classCallCheck(this, MaximumLengthValidationRule);
 
           _get(Object.getPrototypeOf(MaximumLengthValidationRule.prototype), 'constructor', this).call(this, maximumLength, function (newValue, maximumLength) {
-            return newValue.length !== undefined && newValue.length < maximumLength;
+            return newValue.length !== undefined && newValue.length <= maximumLength;
           });
         }
 
@@ -165,7 +165,7 @@ System.register(['../validation/validation'], function (_export) {
           _classCallCheck(this, BetweenLengthValidationRule);
 
           _get(Object.getPrototypeOf(BetweenLengthValidationRule.prototype), 'constructor', this).call(this, { minimumLength: minimumLength, maximumLength: maximumLength }, function (newValue, threshold) {
-            return newValue.length !== undefined && newValue.length >= threshold.minimumLength && newValue.length < threshold.maximumLength;
+            return newValue.length !== undefined && newValue.length >= threshold.minimumLength && newValue.length <= threshold.maximumLength;
           });
         }
 
@@ -224,12 +224,26 @@ System.register(['../validation/validation'], function (_export) {
 
       _export('RegexValidationRule', RegexValidationRule);
 
+      ContainsOnlyValidationRule = (function (_RegexValidationRule) {
+        function ContainsOnlyValidationRule(regex) {
+          _classCallCheck(this, ContainsOnlyValidationRule);
+
+          _get(Object.getPrototypeOf(ContainsOnlyValidationRule.prototype), 'constructor', this).call(this, regex);
+        }
+
+        _inherits(ContainsOnlyValidationRule, _RegexValidationRule);
+
+        return ContainsOnlyValidationRule;
+      })(RegexValidationRule);
+
+      _export('ContainsOnlyValidationRule', ContainsOnlyValidationRule);
+
       MinimumValueValidationRule = (function (_ValidationRule8) {
         function MinimumValueValidationRule(minimumValue) {
           _classCallCheck(this, MinimumValueValidationRule);
 
           _get(Object.getPrototypeOf(MinimumValueValidationRule.prototype), 'constructor', this).call(this, minimumValue, function (newValue, minimumValue) {
-            return minimumValue <= newValue;
+            return minimumValue < newValue;
           });
         }
 
@@ -240,7 +254,23 @@ System.register(['../validation/validation'], function (_export) {
 
       _export('MinimumValueValidationRule', MinimumValueValidationRule);
 
-      MaximumValueValidationRule = (function (_ValidationRule9) {
+      MinimumInclusiveValueValidationRule = (function (_ValidationRule9) {
+        function MinimumInclusiveValueValidationRule(minimumValue) {
+          _classCallCheck(this, MinimumInclusiveValueValidationRule);
+
+          _get(Object.getPrototypeOf(MinimumInclusiveValueValidationRule.prototype), 'constructor', this).call(this, minimumValue, function (newValue, minimumValue) {
+            return minimumValue <= newValue;
+          });
+        }
+
+        _inherits(MinimumInclusiveValueValidationRule, _ValidationRule9);
+
+        return MinimumInclusiveValueValidationRule;
+      })(ValidationRule);
+
+      _export('MinimumInclusiveValueValidationRule', MinimumInclusiveValueValidationRule);
+
+      MaximumValueValidationRule = (function (_ValidationRule10) {
         function MaximumValueValidationRule(maximumValue) {
           _classCallCheck(this, MaximumValueValidationRule);
 
@@ -249,30 +279,46 @@ System.register(['../validation/validation'], function (_export) {
           });
         }
 
-        _inherits(MaximumValueValidationRule, _ValidationRule9);
+        _inherits(MaximumValueValidationRule, _ValidationRule10);
 
         return MaximumValueValidationRule;
       })(ValidationRule);
 
       _export('MaximumValueValidationRule', MaximumValueValidationRule);
 
-      BetweenValueValidationRule = (function (_ValidationRule10) {
+      MaximumInclusiveValueValidationRule = (function (_ValidationRule11) {
+        function MaximumInclusiveValueValidationRule(maximumValue) {
+          _classCallCheck(this, MaximumInclusiveValueValidationRule);
+
+          _get(Object.getPrototypeOf(MaximumInclusiveValueValidationRule.prototype), 'constructor', this).call(this, maximumValue, function (newValue, maximumValue) {
+            return newValue <= maximumValue;
+          });
+        }
+
+        _inherits(MaximumInclusiveValueValidationRule, _ValidationRule11);
+
+        return MaximumInclusiveValueValidationRule;
+      })(ValidationRule);
+
+      _export('MaximumInclusiveValueValidationRule', MaximumInclusiveValueValidationRule);
+
+      BetweenValueValidationRule = (function (_ValidationRule12) {
         function BetweenValueValidationRule(minimumValue, maximumValue) {
           _classCallCheck(this, BetweenValueValidationRule);
 
           _get(Object.getPrototypeOf(BetweenValueValidationRule.prototype), 'constructor', this).call(this, { minimumValue: minimumValue, maximumValue: maximumValue }, function (newValue, threshold) {
-            return threshold.minimumValue <= newValue && newValue < threshold.maximumValue;
+            return threshold.minimumValue <= newValue && newValue <= threshold.maximumValue;
           });
         }
 
-        _inherits(BetweenValueValidationRule, _ValidationRule10);
+        _inherits(BetweenValueValidationRule, _ValidationRule12);
 
         return BetweenValueValidationRule;
       })(ValidationRule);
 
       _export('BetweenValueValidationRule', BetweenValueValidationRule);
 
-      DigitValidationRule = (function (_ValidationRule11) {
+      DigitValidationRule = (function (_ValidationRule13) {
         function DigitValidationRule() {
           var _this3 = this;
 
@@ -284,14 +330,14 @@ System.register(['../validation/validation'], function (_export) {
           this.digitRegex = /^\d+$/;
         }
 
-        _inherits(DigitValidationRule, _ValidationRule11);
+        _inherits(DigitValidationRule, _ValidationRule13);
 
         return DigitValidationRule;
       })(ValidationRule);
 
       _export('DigitValidationRule', DigitValidationRule);
 
-      AlphaNumericValidationRule = (function (_ValidationRule12) {
+      AlphaNumericValidationRule = (function (_ValidationRule14) {
         function AlphaNumericValidationRule() {
           var _this4 = this;
 
@@ -303,33 +349,33 @@ System.register(['../validation/validation'], function (_export) {
           this.alphaNumericRegex = /^[a-z0-9]+$/i;
         }
 
-        _inherits(AlphaNumericValidationRule, _ValidationRule12);
+        _inherits(AlphaNumericValidationRule, _ValidationRule14);
 
         return AlphaNumericValidationRule;
       })(ValidationRule);
 
       _export('AlphaNumericValidationRule', AlphaNumericValidationRule);
 
-      AlphaValidationRule = (function (_ValidationRule13) {
+      AlphaValidationRule = (function (_ValidationRule15) {
         function AlphaValidationRule() {
           var _this5 = this;
 
           _classCallCheck(this, AlphaValidationRule);
 
           _get(Object.getPrototypeOf(AlphaValidationRule.prototype), 'constructor', this).call(this, null, function (newValue, threshold) {
-            return _this5.alphaNumericRegex.test(newValue);
+            return _this5.alphaRegex.test(newValue);
           });
-          this.alphaNumericRegex = /^[a-z]+$/i;
+          this.alphaRegex = /^[a-z]+$/i;
         }
 
-        _inherits(AlphaValidationRule, _ValidationRule13);
+        _inherits(AlphaValidationRule, _ValidationRule15);
 
         return AlphaValidationRule;
       })(ValidationRule);
 
       _export('AlphaValidationRule', AlphaValidationRule);
 
-      AlphaOrWhitespaceValidationRule = (function (_ValidationRule14) {
+      AlphaOrWhitespaceValidationRule = (function (_ValidationRule16) {
         function AlphaOrWhitespaceValidationRule() {
           var _this6 = this;
 
@@ -341,14 +387,14 @@ System.register(['../validation/validation'], function (_export) {
           this.alphaNumericRegex = /^[a-z\s]+$/i;
         }
 
-        _inherits(AlphaOrWhitespaceValidationRule, _ValidationRule14);
+        _inherits(AlphaOrWhitespaceValidationRule, _ValidationRule16);
 
         return AlphaOrWhitespaceValidationRule;
       })(ValidationRule);
 
       _export('AlphaOrWhitespaceValidationRule', AlphaOrWhitespaceValidationRule);
 
-      AlphaNumericOrWhitespaceValidationRule = (function (_ValidationRule15) {
+      AlphaNumericOrWhitespaceValidationRule = (function (_ValidationRule17) {
         function AlphaNumericOrWhitespaceValidationRule() {
           var _this7 = this;
 
@@ -360,14 +406,14 @@ System.register(['../validation/validation'], function (_export) {
           this.alphaNumericRegex = /^[a-z0-9\s]+$/i;
         }
 
-        _inherits(AlphaNumericOrWhitespaceValidationRule, _ValidationRule15);
+        _inherits(AlphaNumericOrWhitespaceValidationRule, _ValidationRule17);
 
         return AlphaNumericOrWhitespaceValidationRule;
       })(ValidationRule);
 
       _export('AlphaNumericOrWhitespaceValidationRule', AlphaNumericOrWhitespaceValidationRule);
 
-      MediumPasswordValidationRule = (function (_ValidationRule16) {
+      MediumPasswordValidationRule = (function (_ValidationRule18) {
         function MediumPasswordValidationRule(minimumComplexityLevel) {
           _classCallCheck(this, MediumPasswordValidationRule);
 
@@ -383,7 +429,7 @@ System.register(['../validation/validation'], function (_export) {
           });
         }
 
-        _inherits(MediumPasswordValidationRule, _ValidationRule16);
+        _inherits(MediumPasswordValidationRule, _ValidationRule18);
 
         return MediumPasswordValidationRule;
       })(ValidationRule);
@@ -404,7 +450,7 @@ System.register(['../validation/validation'], function (_export) {
 
       _export('StrongPasswordValidationRule', StrongPasswordValidationRule);
 
-      EqualityValidationRuleBase = (function (_ValidationRule17) {
+      EqualityValidationRuleBase = (function (_ValidationRule19) {
         function EqualityValidationRuleBase(otherValue, equality, otherValueLabel) {
           _classCallCheck(this, EqualityValidationRuleBase);
 
@@ -418,7 +464,7 @@ System.register(['../validation/validation'], function (_export) {
           });
         }
 
-        _inherits(EqualityValidationRuleBase, _ValidationRule17);
+        _inherits(EqualityValidationRuleBase, _ValidationRule19);
 
         return EqualityValidationRuleBase;
       })(ValidationRule);
@@ -481,7 +527,7 @@ System.register(['../validation/validation'], function (_export) {
 
       _export('InEqualityWithOtherLabelValidationRule', InEqualityWithOtherLabelValidationRule);
 
-      InCollectionValidationRule = (function (_ValidationRule18) {
+      InCollectionValidationRule = (function (_ValidationRule20) {
         function InCollectionValidationRule(collection) {
           _classCallCheck(this, InCollectionValidationRule);
 
@@ -493,7 +539,7 @@ System.register(['../validation/validation'], function (_export) {
           });
         }
 
-        _inherits(InCollectionValidationRule, _ValidationRule18);
+        _inherits(InCollectionValidationRule, _ValidationRule20);
 
         return InCollectionValidationRule;
       })(ValidationRule);

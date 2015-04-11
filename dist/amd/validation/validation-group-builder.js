@@ -38,35 +38,45 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
         return this.validationGroup;
       }
     }, {
-      key: 'notEmpty',
-      value: function notEmpty() {
-        this.validationRuleCollections[0].notEmpty();
+      key: 'isNotEmpty',
+      value: function isNotEmpty() {
+        this.validationRuleCollections[0].isNotEmpty();
         this.checkLast();
         return this.validationGroup;
       }
     }, {
-      key: 'minimum',
-      value: function minimum(minimumValue) {
+      key: 'isGreaterThan',
+      value: function isGreaterThan(minimumValue) {
         return this.passesRule(new _validationValidationRules.MinimumValueValidationRule(minimumValue));
       }
     }, {
-      key: 'between',
-      value: function between(minimumValue, maximumValue) {
+      key: 'isGreaterThanOrEqualTo',
+      value: function isGreaterThanOrEqualTo(minimumValue) {
+        return this.passesRule(new _validationValidationRules.MinimumInclusiveValueValidationRule(minimumValue));
+      }
+    }, {
+      key: 'isBetween',
+      value: function isBetween(minimumValue, maximumValue) {
         return this.passesRule(new _validationValidationRules.BetweenValueValidationRule(minimumValue, maximumValue));
       }
     }, {
-      key: 'in',
-      value: function _in(collection) {
+      key: 'isIn',
+      value: function isIn(collection) {
         return this.passesRule(new _validationValidationRules.InCollectionValidationRule(collection));
       }
     }, {
-      key: 'maximum',
-      value: function maximum(maximumValue) {
+      key: 'isLessThan',
+      value: function isLessThan(maximumValue) {
         return this.passesRule(new _validationValidationRules.MaximumValueValidationRule(maximumValue));
       }
     }, {
-      key: 'equals',
-      value: function equals(otherValue, otherValueLabel) {
+      key: 'isLessThanOrEqualTo',
+      value: function isLessThanOrEqualTo(maximumValue) {
+        return this.passesRule(new _validationValidationRules.MaximumInclusiveValueValidationRule(maximumValue));
+      }
+    }, {
+      key: 'isEqualTo',
+      value: function isEqualTo(otherValue, otherValueLabel) {
         if (!otherValueLabel) {
           return this.passesRule(new _validationValidationRules.EqualityValidationRule(otherValue));
         } else {
@@ -74,8 +84,8 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
         }
       }
     }, {
-      key: 'notEquals',
-      value: function notEquals(otherValue, otherValueLabel) {
+      key: 'isNotEqualTo',
+      value: function isNotEqualTo(otherValue, otherValueLabel) {
         if (!otherValueLabel) {
           return this.passesRule(new _validationValidationRules.InEqualityValidationRule(otherValue));
         } else {
@@ -83,64 +93,68 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
         }
       }
     }, {
-      key: 'email',
-      value: function email() {
+      key: 'isEmail',
+      value: function isEmail() {
         return this.passesRule(new _validationValidationRules.EmailValidationRule());
       }
     }, {
-      key: 'minLength',
-      value: function minLength(minimumValue) {
+      key: 'hasMinLength',
+      value: function hasMinLength(minimumValue) {
         return this.passesRule(new _validationValidationRules.MinimumLengthValidationRule(minimumValue));
       }
     }, {
-      key: 'maxLength',
-      value: function maxLength(maximumValue) {
+      key: 'hasMaxLength',
+      value: function hasMaxLength(maximumValue) {
         return this.passesRule(new _validationValidationRules.MaximumLengthValidationRule(maximumValue));
       }
     }, {
-      key: 'betweenLength',
-      value: function betweenLength(minimumValue, maximumValue) {
+      key: 'hasLengthBetween',
+      value: function hasLengthBetween(minimumValue, maximumValue) {
         return this.passesRule(new _validationValidationRules.BetweenLengthValidationRule(minimumValue, maximumValue));
       }
     }, {
-      key: 'isNumeric',
-      value: function isNumeric() {
+      key: 'isNumber',
+      value: function isNumber() {
         return this.passesRule(new _validationValidationRules.NumericValidationRule());
       }
     }, {
-      key: 'isDigit',
-      value: function isDigit() {
+      key: 'containsOnlyDigits',
+      value: function containsOnlyDigits() {
         return this.passesRule(new _validationValidationRules.DigitValidationRule());
       }
     }, {
-      key: 'isAlpha',
-      value: function isAlpha() {
+      key: 'containsOnlyAlpha',
+      value: function containsOnlyAlpha() {
         return this.passesRule(new _validationValidationRules.AlphaValidationRule());
       }
     }, {
-      key: 'isAlphaOrWhitespace',
-      value: function isAlphaOrWhitespace() {
+      key: 'containsOnlyAlphaOrWhitespace',
+      value: function containsOnlyAlphaOrWhitespace() {
         return this.passesRule(new _validationValidationRules.AlphaOrWhitespaceValidationRule());
       }
     }, {
-      key: 'isAlphanumeric',
-      value: function isAlphanumeric() {
+      key: 'containsOnlyAlphanumerics',
+      value: function containsOnlyAlphanumerics() {
         return this.passesRule(new _validationValidationRules.AlphaNumericValidationRule());
       }
     }, {
-      key: 'isAlphanumericOrWhitespace',
-      value: function isAlphanumericOrWhitespace() {
+      key: 'containsOnlyAlphanumericsOrWhitespace',
+      value: function containsOnlyAlphanumericsOrWhitespace() {
         return this.passesRule(new _validationValidationRules.AlphaNumericOrWhitespaceValidationRule());
       }
     }, {
       key: 'isStrongPassword',
       value: function isStrongPassword(minimumComplexityLevel) {
-        return this.passesRule(new _validationValidationRules.StrongPasswordValidationRule(minimumComplexityLevel));
+        if (minimumComplexityLevel === 4) {
+          return this.passesRule(new _validationValidationRules.StrongPasswordValidationRule());
+        } else {
+          return this.passesRule(new _validationValidationRules.MediumPasswordValidationRule(minimumComplexityLevel));
+        }
       }
     }, {
-      key: 'matchesRegex',
-      value: function matchesRegex(regexString) {
-        return this.matches(new RegExp(regexString));
+      key: 'containsOnly',
+      value: function containsOnly(regex) {
+        return this.passesRule(new _validationValidationRules.ContainsOnlyValidationRule(regex));
       }
     }, {
       key: 'matches',

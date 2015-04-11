@@ -57,98 +57,123 @@ define(['exports', '../validation/validation-group-builder', '../validation/vali
       }
     }, {
       key: 'ensure',
-      value: function ensure(propertyPath) {
-        return this.builder.ensure(propertyPath);
+      value: function ensure(bindingPatch) {
+        return this.builder.ensure(bindingPatch);
       }
     }, {
-      key: 'notEmpty',
-      value: function notEmpty() {
-        return this.builder.notEmpty();
+      key: 'isNotEmpty',
+      value: function isNotEmpty() {
+        return this.builder.isNotEmpty();
       }
     }, {
-      key: 'minimum',
-      value: function minimum(minimumValue) {
-        return this.builder.minimum(minimumValue);
+      key: 'isGreaterThanOrEqualTo',
+      value: function isGreaterThanOrEqualTo(minimumValue) {
+        return this.builder.isGreaterThanOrEqualTo(minimumValue);
       }
     }, {
-      key: 'between',
-      value: function between(minimumValue, maximumValue) {
-        return this.builder.between(minimumValue, maximumValue);
+      key: 'isGreaterThan',
+      value: function isGreaterThan(minimumValue) {
+        return this.builder.isGreaterThan(minimumValue);
       }
     }, {
-      key: 'maximum',
-      value: function maximum(maximumValue) {
-        return this.builder.maximum(maximumValue);
+      key: 'isBetween',
+      value: function isBetween(minimumValue, maximumValue) {
+        return this.builder.isBetween(minimumValue, maximumValue);
       }
     }, {
-      key: 'equals',
-      value: function equals(otherValue, otherValueLabel) {
-        return this.builder.equals(otherValue, otherValueLabel);
+      key: 'isLessThanOrEqualTo',
+      value: function isLessThanOrEqualTo(maximumValue) {
+        return this.builder.isLessThanOrEqualTo(maximumValue);
       }
     }, {
-      key: 'notEquals',
-      value: function notEquals(otherValue, otherValueLabel) {
-        return this.builder.notEquals(otherValue, otherValueLabel);
+      key: 'isLessThan',
+      value: function isLessThan(maximumValue) {
+        return this.builder.isLessThan(maximumValue);
       }
     }, {
-      key: 'email',
-      value: function email() {
-        return this.builder.email();
+      key: 'isEqualTo',
+      value: function isEqualTo(otherValue, otherValueLabel) {
+        return this.builder.isEqualTo(otherValue, otherValueLabel);
       }
     }, {
-      key: 'in',
-      value: function _in(collection) {
-        return this.builder['in'](collection);
+      key: 'isNotEqualTo',
+      value: function isNotEqualTo(otherValue, otherValueLabel) {
+        return this.builder.isNotEqualTo(otherValue, otherValueLabel);
       }
     }, {
-      key: 'minLength',
-      value: function minLength(minimumValue) {
-        return this.builder.minLength(minimumValue);
+      key: 'isEmail',
+      value: function isEmail() {
+        return this.builder.isEmail();
       }
     }, {
-      key: 'maxLength',
-      value: function maxLength(maximumValue) {
-        return this.builder.maxLength(maximumValue);
+      key: 'isIn',
+      value: function isIn(collection) {
+        return this.builder.isIn(collection);
       }
     }, {
-      key: 'betweenLength',
-      value: function betweenLength(minimumValue, maximumValue) {
-        return this.builder.betweenLength(minimumValue, maximumValue);
+      key: 'hasMinLength',
+      value: function hasMinLength(minimumValue) {
+        return this.builder.hasMinLength(minimumValue);
       }
     }, {
-      key: 'isNumeric',
-      value: function isNumeric() {
-        return this.builder.isNumeric();
+      key: 'hasMaxLength',
+      value: function hasMaxLength(maximumValue) {
+        return this.builder.hasMaxLength(maximumValue);
       }
     }, {
-      key: 'isDigit',
-      value: function isDigit() {
-        return this.builder.isDigit();
+      key: 'hasLengthBetween',
+      value: function hasLengthBetween(minimumValue, maximumValue) {
+        return this.builder.hasLengthBetween(minimumValue, maximumValue);
       }
     }, {
-      key: 'isAlpha',
-      value: function isAlpha() {
-        return this.builder.isAlpha();
+      key: 'isNumber',
+      value: function isNumber() {
+        return this.builder.isNumber();
       }
     }, {
-      key: 'isAlphanumeric',
-      value: function isAlphanumeric() {
-        return this.builder.isAlphanumeric();
+      key: 'containsOnlyDigits',
+      value: function containsOnlyDigits() {
+        return this.builder.containsOnlyDigits();
       }
     }, {
-      key: 'isAlphanumericOrWhitespace',
-      value: function isAlphanumericOrWhitespace() {
-        return this.builder.isAlphanumericOrWhitespace();
+      key: 'containsOnly',
+      value: function containsOnly(regex) {
+        return this.builder.containsOnly(regex);
+      }
+    }, {
+      key: 'containsOnlyAlpha',
+      value: function containsOnlyAlpha() {
+        return this.builder.containsOnlyAlpha();
+      }
+    }, {
+      key: 'containsOnlyAlphaOrWhitespace',
+      value: function containsOnlyAlphaOrWhitespace() {
+        return this.builder.containsOnlyAlphaOrWhitespace();
+      }
+    }, {
+      key: 'containsOnlyLetters',
+      value: function containsOnlyLetters() {
+        return this.builder.containsOnlyAlpha();
+      }
+    }, {
+      key: 'containsOnlyLettersOrWhitespace',
+      value: function containsOnlyLettersOrWhitespace() {
+        return this.builder.containsOnlyAlphaOrWhitespace();
+      }
+    }, {
+      key: 'containsOnlyAlphanumerics',
+      value: function containsOnlyAlphanumerics() {
+        return this.builder.containsOnlyAlphanumerics();
+      }
+    }, {
+      key: 'containsOnlyAlphanumericsOrWhitespace',
+      value: function containsOnlyAlphanumericsOrWhitespace() {
+        return this.builder.containsOnlyAlphanumericsOrWhitespace();
       }
     }, {
       key: 'isStrongPassword',
       value: function isStrongPassword(minimumComplexityLevel) {
         return this.builder.isStrongPassword(minimumComplexityLevel);
-      }
-    }, {
-      key: 'matchesRegex',
-      value: function matchesRegex(regexString) {
-        return this.builder.matchesRegex(regexString);
       }
     }, {
       key: 'matches',
