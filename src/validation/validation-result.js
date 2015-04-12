@@ -30,6 +30,7 @@ export class ValidationResultProperty {
     this.message = null;
     this.failingRule = null;
     this.onValidateCallbacks = [];
+    this.latestValue = null;
   }
 
   onValidate(onValidateCallback) {
@@ -47,7 +48,7 @@ export class ValidationResultProperty {
     this.message = validationResponse.message;
     this.failingRule = validationResponse.failingRule;
     this.isValid = validationResponse.isValid; //Set isValid last in case someone has observed 'isValid'
-
+    this.latestValue = validationResponse.latestValue;
     if (this.isValid !== this.group.isValid)
       this.group.checkValidity();
 

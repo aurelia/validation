@@ -1,10 +1,8 @@
-System.register(['../resources/defaults'], function (_export) {
-  var ValidationLocaleDefaults, _classCallCheck, _createClass, ValidationLocaleRepository;
+System.register([], function (_export) {
+  var _classCallCheck, _createClass, ValidationLocale, ValidationLocaleRepository;
 
   return {
-    setters: [function (_resourcesDefaults) {
-      ValidationLocaleDefaults = _resourcesDefaults.ValidationLocaleDefaults;
-    }],
+    setters: [],
     execute: function () {
       'use strict';
 
@@ -12,38 +10,15 @@ System.register(['../resources/defaults'], function (_export) {
 
       _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      ValidationLocaleRepository = (function () {
-        function ValidationLocaleRepository() {
-          _classCallCheck(this, ValidationLocaleRepository);
+      ValidationLocale = (function () {
+        function ValidationLocale(defaults, data) {
+          _classCallCheck(this, ValidationLocale);
 
-          this.defaults = new ValidationLocaleDefaults();
-          this.currentLocale = null;
-          this.currentLocaleIdentifier = null;
+          this.defaults = defaults;
+          this.currentLocale = data;
         }
 
-        _createClass(ValidationLocaleRepository, [{
-          key: 'reset',
-          value: function reset() {
-            this.currentLocaleIdentifier = null;
-            this.currentLocale = null;
-          }
-        }, {
-          key: 'load',
-          value: function load(lang) {
-            var self = this;
-            return new Promise(function (resolve, reject) {
-              if (self.currentLocaleIdentifier === lang && self.currentLocale !== null) {
-                resolve(true);
-                return;
-              }
-              self.currentLocaleIdentifier = lang;
-              System['import']('./src/resources/' + self.currentLocaleIdentifier).then(function (resource) {
-                self.currentLocale = resource.data;
-                resolve(true);
-              });
-            });
-          }
-        }, {
+        _createClass(ValidationLocale, [{
           key: 'getValueFor',
           value: function getValueFor(identifier, category) {
             if (this.currentLocale && this.currentLocale[category]) {
@@ -58,7 +33,7 @@ System.register(['../resources/defaults'], function (_export) {
                 return defaultSetting;
               }
             }
-            throw 'Could not find validation : ' + identifier + ' in category: ' + category;
+            throw 'validation: I18N: Could not find: ' + identifier + ' in category: ' + category;
           }
         }, {
           key: 'setting',
@@ -79,10 +54,54 @@ System.register(['../resources/defaults'], function (_export) {
           }
         }]);
 
+        return ValidationLocale;
+      })();
+
+      _export('ValidationLocale', ValidationLocale);
+
+      ValidationLocaleRepository = (function () {
+        function ValidationLocaleRepository() {
+          _classCallCheck(this, ValidationLocaleRepository);
+
+          this['default'] = null;
+          this.instances = new Map();
+          this.defaults = {
+            settings: {
+              numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
+            },
+            messages: {}
+          };
+        }
+
+        _createClass(ValidationLocaleRepository, [{
+          key: 'load',
+          value: function load(localeIdentifier) {
+            var _this = this;
+
+            return new Promise(function (resolve, reject) {
+              if (_this.instances.has(localeIdentifier)) {
+                resolve(_this.instances.get(localeIdentifier));
+              } else {
+                System['import']('./src/resources/' + localeIdentifier).then(function (resource) {
+                  resolve(_this.addLocale(localeIdentifier, resource.data));
+                });
+              }
+            });
+          }
+        }, {
+          key: 'addLocale',
+          value: function addLocale(localeIdentifier, data) {
+            var instance = new ValidationLocale(this.defaults, data);
+            this.instances.set(localeIdentifier, instance);
+            if (this['default'] === null) this['default'] = instance;
+            return instance;
+          }
+        }]);
+
         return ValidationLocaleRepository;
       })();
 
-      _export('ValidationLocaleRepository', ValidationLocaleRepository);
+      ValidationLocale.Repository = new ValidationLocaleRepository();
     }
   };
 });

@@ -1,8 +1,6 @@
-//en-US is loaded by default.
-//to the rest of the world: I'm so very sorry.
-export
-let
-data = {
+import {Utilities} from '../validation/utilities';
+
+export let data = {
   settings: {
     'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
   },
@@ -21,10 +19,10 @@ data = {
       return `can contain only letters or spaces`;
     },
     'BetweenLengthValidationRule': (newValue, threshold) => {
-      return `needs to be at between ${threshold.minimumLength} and ${threshold.maximumLength} characters long`;
+      return `needs to be at between ${Utilities.getValue(threshold.minimumLength)} and ${Utilities.getValue(threshold.maximumLength)} characters long`;
     },
     'BetweenValueValidationRule': (newValue, threshold) => {
-      return `needs to be between ${threshold.minimumValue} and ${threshold.maximumValue}`;
+      return `needs to be between ${Utilities.getValue(threshold.minimumValue)} and ${Utilities.getValue(threshold.maximumValue)}`;
     },
     'CustomFunctionValidationRule': (newValue, threshold) => {
       return `not a valid value`
@@ -36,37 +34,37 @@ data = {
       return `is not a valid email address`;
     },
     'EqualityValidationRule': (newValue, threshold) => {
-      return `should be ${threshold.otherValue}`;
+      return `should be ${Utilities.getValue(threshold.otherValue)}`;
     },
     'InEqualityValidationRule' : (newValue, threshold) => {
-        return `cannot be ${threshold.otherValue}`;
+        return `cannot be ${Utilities.getValue(threshold.otherValue)}`;
     },
     'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
-      return `does not match ${threshold.otherValueLabel}`;
+      return `does not match ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
     'InEqualityWithOtherLabelValidationRule' : (newValue, threshold) => {
-      return `cannot match ${threshold.otherValueLabel}`;
+      return `cannot match ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
       return `not a valid value`;
     },
     'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
-      return `needs to be ${threshold} or more`;
+      return `needs to be ${Utilities.getValue(threshold)} or more`;
     },
     'MinimumLengthValidationRule': (newValue, threshold) => {
-      return `needs to be at least ${threshold} characters long`;
+      return `needs to be at least ${Utilities.getValue(threshold)} characters long`;
     },
     'MinimumValueValidationRule': (newValue, threshold) => {
-      return `needs to be more than ${threshold}`;
+      return `needs to be more than ${Utilities.getValue(threshold)}`;
     },
     'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
-      return `needs to be ${threshold} or less`;
+      return `needs to be ${Utilities.getValue(threshold)} or less`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
-      return `cannot be longer then ${threshold} characters`;
+      return `cannot be longer then ${Utilities.getValue(threshold)} characters`;
     },
     'MaximumValueValidationRule': (newValue, threshold) => {
-      return `needs to be less than ${threshold}`;
+      return `needs to be less than ${Utilities.getValue(threshold)}`;
     },
     'NumericValidationRule': (newValue, threshold) => {
       return `needs to be a number`;
@@ -81,7 +79,7 @@ data = {
       return `should contain a combination of lowercase letters, uppercase letters, digits and special characters`;
     },
     'MediumPasswordValidationRule' : (newValue, threshold) => {
-      return `should contain at least ${threshold} of the following groups: lowercase letters, uppercase letters, digits or special characters`;
+      return `should contain at least ${Utilities.getValue(threshold)} of the following groups: lowercase letters, uppercase letters, digits or special characters`;
     }
   }
 };

@@ -1,4 +1,5 @@
-import {Validation} from '../validation/validation'
+import {Utilities} from '../validation/utilities';
+import {ValidationLocale} from '../validation/validation-locale';
 
 export class ValidationRule {
   constructor(threshold, onValidate, message) {
@@ -9,7 +10,6 @@ export class ValidationRule {
     this.ruleName = this.constructor.name;
   }
 
-
   withMessage(message) {
     this.message = message;
   }
@@ -18,7 +18,7 @@ export class ValidationRule {
     return this.errorMessage;
   }
 
-  setResult(result, currentValue) {
+  setResult(result, currentValue, locale) {
     if (result === true || result === undefined || result === null || result === '' ) {
       this.errorMessage = null;
       return true;
@@ -39,7 +39,7 @@ export class ValidationRule {
             throw 'Unable to handle the error message:' + this.message;
         }
         else {
-          this.errorMessage = Validation.Locale.translate(this.ruleName, currentValue, this.threshold);
+          this.errorMessage = locale.translate(this.ruleName, currentValue, this.threshold);
         }
       }
       return false;
@@ -49,19 +49,25 @@ export class ValidationRule {
   /**
    * Validation rules: return a promise that fulfills and resolves to true/false
    */
-  validate(currentValue) {
-    var result = this.onValidate(currentValue, this.threshold);
+  validate(currentValue, locale) {
+    if(locale === undefined)
+    {
+      locale = ValidationLocale.Repository.default;
+    }
+
+    currentValue = Utilities.getValue(currentValue);
+    var result = this.onValidate(currentValue, this.threshold, locale);
     var promise = Promise.resolve(result);
 
     var nextPromise = promise.then(
       (promiseResult) => {
-        return this.setResult(promiseResult, currentValue);
+        return this.setResult(promiseResult, currentValue, locale);
       },
       (promiseFailure) => {
         if( typeof(promiseFailure) === 'string' && promiseFailure !== '')
-          return this.setResult(promiseFailure, currentValue);
+          return this.setResult(promiseFailure, currentValue, locale);
         else
-          return this.setResult(false, currentValue);
+          return this.setResult(false, currentValue, locale);
       }
     );
     return nextPromise;
@@ -157,8 +163,8 @@ export class NumericValidationRule extends ValidationRule {
   constructor() {
     super(
       null,
-      (newValue) => {
-        var numericRegex = Validation.Locale.setting('numericRegex');
+      (newValue, threshold, locale) => {
+        var numericRegex = locale.setting('numericRegex');
         var floatValue = parseFloat(newValue);
         return !Number.isNaN(parseFloat(floatValue))
           && Number.isFinite(floatValue)
@@ -190,7 +196,7 @@ export class MinimumValueValidationRule extends ValidationRule {
     super(
       minimumValue,
       (newValue, minimumValue) => {
-        return minimumValue < newValue;
+        return Utilities.getValue(minimumValue) < newValue;
       }
     );
   }
@@ -201,7 +207,7 @@ export class MinimumInclusiveValueValidationRule extends ValidationRule {
     super(
       minimumValue,
       (newValue, minimumValue) => {
-        return minimumValue <= newValue;
+        return Utilities.getValue(minimumValue) <= newValue;
       }
     );
   }
@@ -212,7 +218,7 @@ export class MaximumValueValidationRule extends ValidationRule {
     super(
       maximumValue,
       (newValue, maximumValue) => {
-        return newValue < maximumValue;
+        return newValue < Utilities.getValue(maximumValue);
       }
     );
   }
@@ -223,7 +229,7 @@ export class MaximumInclusiveValueValidationRule extends ValidationRule{
     super(
       maximumValue,
       (newValue, maximumValue) => {
-        return newValue <= maximumValue;
+        return newValue <= Utilities.getValue(maximumValue);
       }
     );
   }
@@ -234,7 +240,7 @@ export class BetweenValueValidationRule extends ValidationRule {
     super(
       {minimumValue: minimumValue, maximumValue: maximumValue},
       (newValue, threshold) => {
-        return threshold.minimumValue <= newValue && newValue <= threshold.maximumValue;
+        return Utilities.getValue(threshold.minimumValue) <= newValue && newValue <= Utilities.getValue(threshold.maximumValue);
       }
     );
   }
@@ -338,9 +344,10 @@ export class EqualityValidationRuleBase extends ValidationRule {
         otherValueLabel: otherValueLabel
       },
       (newValue, threshold) => {
-        if (newValue instanceof Date && threshold.otherValue instanceof Date)
-          return threshold.equality === (newValue.getTime() === threshold.otherValue.getTime());
-        return threshold.equality === (newValue === threshold.otherValue);
+        var otherValue = Utilities.getValue(threshold.otherValue);
+        if (newValue instanceof Date && otherValue instanceof Date)
+          return threshold.equality === (newValue.getTime() === otherValue.getTime());
+        return threshold.equality === (newValue === otherValue);
       }
     );
   }
@@ -376,6 +383,7 @@ export class InCollectionValidationRule extends ValidationRule {
     super(
       collection,
       (newValue, threshold) => {
+        var collection = Utilities.getValue(threshold);
         for (let i = 0; i < collection.length; i++) {
           if (newValue === collection[i])
             return true;

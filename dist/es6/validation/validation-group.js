@@ -1,5 +1,7 @@
 import {ValidationGroupBuilder} from '../validation/validation-group-builder';
 import {ValidationResult} from '../validation/validation-result';
+import {ValidationLocale} from '../validation/validation-locale';
+
 
 /**
  * Encapsulates validation rules and their current validation state for a given subject
@@ -11,12 +13,19 @@ export class ValidationGroup {
    * Instantiates a new {ValidationGroup}
    * @param subject The subject to evaluate
    * @param observerLocator The observerLocator used to monitor changes on the subject
+   * @param config The configuration
    */
-  constructor(subject, observerLocator) {
+  constructor(subject, observerLocator, config) {
     this.result = new ValidationResult();
     this.subject = subject;
     this.validationProperties = [];
+    this.config = config;
     this.builder = new ValidationGroupBuilder(observerLocator, this);
+    this.onDestroy = config.onLocaleChanged( () => {this.validate(false) ;});
+  }
+
+  destroy(){
+    this.onDestroy(); //todo: what else needs to be done for proper cleanup?
   }
 
   /**
@@ -28,14 +37,14 @@ export class ValidationGroup {
   }
 
   /**
-   * Causes complete re-evaluation: gets the latest value, marks the property as 'dirty', runs validation rules asynchronously and updates this.result
+   * Causes complete re-evaluation: gets the latest value, marks the property as 'dirty' (unless false is passed), runs validation rules asynchronously and updates this.result
    * @returns {Promise} A promise that fulfils when valid, rejects when invalid.
    */
-  validate() {
+  validate(forceDirty = true) {
     var promise = Promise.resolve(true);
     for (let i = this.validationProperties.length - 1; i >= 0; i--) {
       let validatorProperty = this.validationProperties[i];
-      promise = promise.then( () => { return validatorProperty.validateCurrentValue(true); });
+      promise = promise.then( () => { return validatorProperty.validateCurrentValue(forceDirty); });
     }
     promise = promise.catch( () => {
       console.log("Should never get here: a validation property should always resolve to true/false!");
@@ -57,11 +66,12 @@ export class ValidationGroup {
 
   /**
    * Adds a validation property for the specified path
-   * @param {String} bindingPatch the path of the property/field, for example 'firstName' or 'address.muncipality.zipCode'
+   * @param {String} bindingPath the path of the property/field, for example 'firstName' or 'address.muncipality.zipCode'
+   * @param configCallback a configuration callback
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  ensure(bindingPatch) {
-    return this.builder.ensure(bindingPatch);
+  ensure(bindingPath, configCallback) {
+    return this.builder.ensure(bindingPath, configCallback);
   }
 
   /**
@@ -249,7 +259,7 @@ export class ValidationGroup {
 
   /**
    * Adds a validation rule that checks a value for matching a particular regex
-   * @param regexString {Regex} the regex to match
+   * @param regex the regex to match
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
   matches(regex) {

@@ -8,40 +8,15 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _ValidationLocaleDefaults = require('../resources/defaults');
+var ValidationLocale = (function () {
+  function ValidationLocale(defaults, data) {
+    _classCallCheck(this, ValidationLocale);
 
-var ValidationLocaleRepository = (function () {
-  function ValidationLocaleRepository() {
-    _classCallCheck(this, ValidationLocaleRepository);
-
-    this.defaults = new _ValidationLocaleDefaults.ValidationLocaleDefaults();
-    this.currentLocale = null;
-    this.currentLocaleIdentifier = null;
+    this.defaults = defaults;
+    this.currentLocale = data;
   }
 
-  _createClass(ValidationLocaleRepository, [{
-    key: 'reset',
-    value: function reset() {
-      this.currentLocaleIdentifier = null;
-      this.currentLocale = null;
-    }
-  }, {
-    key: 'load',
-    value: function load(lang) {
-      var self = this;
-      return new Promise(function (resolve, reject) {
-        if (self.currentLocaleIdentifier === lang && self.currentLocale !== null) {
-          resolve(true);
-          return;
-        }
-        self.currentLocaleIdentifier = lang;
-        System['import']('./src/resources/' + self.currentLocaleIdentifier).then(function (resource) {
-          self.currentLocale = resource.data;
-          resolve(true);
-        });
-      });
-    }
-  }, {
+  _createClass(ValidationLocale, [{
     key: 'getValueFor',
     value: function getValueFor(identifier, category) {
       if (this.currentLocale && this.currentLocale[category]) {
@@ -56,7 +31,7 @@ var ValidationLocaleRepository = (function () {
           return defaultSetting;
         }
       }
-      throw 'Could not find validation : ' + identifier + ' in category: ' + category;
+      throw 'validation: I18N: Could not find: ' + identifier + ' in category: ' + category;
     }
   }, {
     key: 'setting',
@@ -77,7 +52,51 @@ var ValidationLocaleRepository = (function () {
     }
   }]);
 
+  return ValidationLocale;
+})();
+
+exports.ValidationLocale = ValidationLocale;
+
+var ValidationLocaleRepository = (function () {
+  function ValidationLocaleRepository() {
+    _classCallCheck(this, ValidationLocaleRepository);
+
+    this['default'] = null;
+    this.instances = new Map();
+    this.defaults = {
+      settings: {
+        numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
+      },
+      messages: {}
+    };
+  }
+
+  _createClass(ValidationLocaleRepository, [{
+    key: 'load',
+    value: function load(localeIdentifier) {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        if (_this.instances.has(localeIdentifier)) {
+          resolve(_this.instances.get(localeIdentifier));
+        } else {
+          System['import']('./src/resources/' + localeIdentifier).then(function (resource) {
+            resolve(_this.addLocale(localeIdentifier, resource.data));
+          });
+        }
+      });
+    }
+  }, {
+    key: 'addLocale',
+    value: function addLocale(localeIdentifier, data) {
+      var instance = new ValidationLocale(this.defaults, data);
+      this.instances.set(localeIdentifier, instance);
+      if (this['default'] === null) this['default'] = instance;
+      return instance;
+    }
+  }]);
+
   return ValidationLocaleRepository;
 })();
 
-exports.ValidationLocaleRepository = ValidationLocaleRepository;
+ValidationLocale.Repository = new ValidationLocaleRepository();

@@ -1,7 +1,9 @@
-System.register([], function (_export) {
-  var data;
+System.register(['../validation/utilities'], function (_export) {
+  var Utilities, data;
   return {
-    setters: [],
+    setters: [function (_validationUtilities) {
+      Utilities = _validationUtilities.Utilities;
+    }],
     execute: function () {
       'use strict';
 
@@ -24,10 +26,10 @@ System.register([], function (_export) {
             return 'can contain only letters or spaces';
           },
           BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
-            return 'needs to be at between ' + threshold.minimumLength + ' and ' + threshold.maximumLength + ' characters long';
+            return 'needs to be at between ' + Utilities.getValue(threshold.minimumLength) + ' and ' + Utilities.getValue(threshold.maximumLength) + ' characters long';
           },
           BetweenValueValidationRule: function BetweenValueValidationRule(newValue, threshold) {
-            return 'needs to be between ' + threshold.minimumValue + ' and ' + threshold.maximumValue;
+            return 'needs to be between ' + Utilities.getValue(threshold.minimumValue) + ' and ' + Utilities.getValue(threshold.maximumValue);
           },
           CustomFunctionValidationRule: function CustomFunctionValidationRule(newValue, threshold) {
             return 'not a valid value';
@@ -39,37 +41,37 @@ System.register([], function (_export) {
             return 'is not a valid email address';
           },
           EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-            return 'should be ' + threshold.otherValue;
+            return 'should be ' + Utilities.getValue(threshold.otherValue);
           },
           InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
-            return 'cannot be ' + threshold.otherValue;
+            return 'cannot be ' + Utilities.getValue(threshold.otherValue);
           },
           EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-            return 'does not match ' + threshold.otherValueLabel;
+            return 'does not match ' + Utilities.getValue(threshold.otherValueLabel);
           },
           InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-            return 'cannot match ' + threshold.otherValueLabel;
+            return 'cannot match ' + Utilities.getValue(threshold.otherValueLabel);
           },
           InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
             return 'not a valid value';
           },
           MinimumInclusiveValueValidationRule: function MinimumInclusiveValueValidationRule(newValue, threshold) {
-            return 'needs to be ' + threshold + ' or more';
+            return 'needs to be ' + Utilities.getValue(threshold) + ' or more';
           },
           MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
-            return 'needs to be at least ' + threshold + ' characters long';
+            return 'needs to be at least ' + Utilities.getValue(threshold) + ' characters long';
           },
           MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-            return 'needs to be more than ' + threshold;
+            return 'needs to be more than ' + Utilities.getValue(threshold);
           },
           MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
-            return 'needs to be ' + threshold + ' or less';
+            return 'needs to be ' + Utilities.getValue(threshold) + ' or less';
           },
           MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
-            return 'cannot be longer then ' + threshold + ' characters';
+            return 'cannot be longer then ' + Utilities.getValue(threshold) + ' characters';
           },
           MaximumValueValidationRule: function MaximumValueValidationRule(newValue, threshold) {
-            return 'needs to be less than ' + threshold;
+            return 'needs to be less than ' + Utilities.getValue(threshold);
           },
           NumericValidationRule: function NumericValidationRule(newValue, threshold) {
             return 'needs to be a number';
@@ -84,7 +86,7 @@ System.register([], function (_export) {
             return 'should contain a combination of lowercase letters, uppercase letters, digits and special characters';
           },
           MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
-            return 'should contain at least ' + threshold + ' of the following groups: lowercase letters, uppercase letters, digits or special characters';
+            return 'should contain at least ' + Utilities.getValue(threshold) + ' of the following groups: lowercase letters, uppercase letters, digits or special characters';
           }
         }
       };

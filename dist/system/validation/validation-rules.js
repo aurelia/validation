@@ -1,9 +1,11 @@
-System.register(['../validation/validation'], function (_export) {
-  var Validation, _get, _inherits, _classCallCheck, _createClass, ValidationRule, EmailValidationRule, MinimumLengthValidationRule, MaximumLengthValidationRule, BetweenLengthValidationRule, CustomFunctionValidationRule, NumericValidationRule, RegexValidationRule, ContainsOnlyValidationRule, MinimumValueValidationRule, MinimumInclusiveValueValidationRule, MaximumValueValidationRule, MaximumInclusiveValueValidationRule, BetweenValueValidationRule, DigitValidationRule, AlphaNumericValidationRule, AlphaValidationRule, AlphaOrWhitespaceValidationRule, AlphaNumericOrWhitespaceValidationRule, MediumPasswordValidationRule, StrongPasswordValidationRule, EqualityValidationRuleBase, EqualityValidationRule, EqualityWithOtherLabelValidationRule, InEqualityValidationRule, InEqualityWithOtherLabelValidationRule, InCollectionValidationRule;
+System.register(['../validation/utilities', '../validation/validation-locale'], function (_export) {
+  var Utilities, ValidationLocale, _get, _inherits, _classCallCheck, _createClass, ValidationRule, EmailValidationRule, MinimumLengthValidationRule, MaximumLengthValidationRule, BetweenLengthValidationRule, CustomFunctionValidationRule, NumericValidationRule, RegexValidationRule, ContainsOnlyValidationRule, MinimumValueValidationRule, MinimumInclusiveValueValidationRule, MaximumValueValidationRule, MaximumInclusiveValueValidationRule, BetweenValueValidationRule, DigitValidationRule, AlphaNumericValidationRule, AlphaValidationRule, AlphaOrWhitespaceValidationRule, AlphaNumericOrWhitespaceValidationRule, MediumPasswordValidationRule, StrongPasswordValidationRule, EqualityValidationRuleBase, EqualityValidationRule, EqualityWithOtherLabelValidationRule, InEqualityValidationRule, InEqualityWithOtherLabelValidationRule, InCollectionValidationRule;
 
   return {
-    setters: [function (_validationValidation) {
-      Validation = _validationValidation.Validation;
+    setters: [function (_validationUtilities) {
+      Utilities = _validationUtilities.Utilities;
+    }, function (_validationValidationLocale) {
+      ValidationLocale = _validationValidationLocale.ValidationLocale;
     }],
     execute: function () {
       'use strict';
@@ -39,7 +41,7 @@ System.register(['../validation/validation'], function (_export) {
           }
         }, {
           key: 'setResult',
-          value: function setResult(result, currentValue) {
+          value: function setResult(result, currentValue, locale) {
             if (result === true || result === undefined || result === null || result === '') {
               this.errorMessage = null;
               return true;
@@ -54,7 +56,7 @@ System.register(['../validation/validation'], function (_export) {
                     this.errorMessage = this.message;
                   } else throw 'Unable to handle the error message:' + this.message;
                 } else {
-                  this.errorMessage = Validation.Locale.translate(this.ruleName, currentValue, this.threshold);
+                  this.errorMessage = locale.translate(this.ruleName, currentValue, this.threshold);
                 }
               }
               return false;
@@ -62,16 +64,21 @@ System.register(['../validation/validation'], function (_export) {
           }
         }, {
           key: 'validate',
-          value: function validate(currentValue) {
+          value: function validate(currentValue, locale) {
             var _this = this;
 
-            var result = this.onValidate(currentValue, this.threshold);
+            if (locale === undefined) {
+              locale = ValidationLocale.Repository['default'];
+            }
+
+            currentValue = Utilities.getValue(currentValue);
+            var result = this.onValidate(currentValue, this.threshold, locale);
             var promise = Promise.resolve(result);
 
             var nextPromise = promise.then(function (promiseResult) {
-              return _this.setResult(promiseResult, currentValue);
+              return _this.setResult(promiseResult, currentValue, locale);
             }, function (promiseFailure) {
-              if (typeof promiseFailure === 'string' && promiseFailure !== '') return _this.setResult(promiseFailure, currentValue);else return _this.setResult(false, currentValue);
+              if (typeof promiseFailure === 'string' && promiseFailure !== '') return _this.setResult(promiseFailure, currentValue, locale);else return _this.setResult(false, currentValue, locale);
             });
             return nextPromise;
           }
@@ -194,8 +201,8 @@ System.register(['../validation/validation'], function (_export) {
         function NumericValidationRule() {
           _classCallCheck(this, NumericValidationRule);
 
-          _get(Object.getPrototypeOf(NumericValidationRule.prototype), 'constructor', this).call(this, null, function (newValue) {
-            var numericRegex = Validation.Locale.setting('numericRegex');
+          _get(Object.getPrototypeOf(NumericValidationRule.prototype), 'constructor', this).call(this, null, function (newValue, threshold, locale) {
+            var numericRegex = locale.setting('numericRegex');
             var floatValue = parseFloat(newValue);
             return !Number.isNaN(parseFloat(floatValue)) && Number.isFinite(floatValue) && numericRegex.test(newValue);
           });
@@ -243,7 +250,7 @@ System.register(['../validation/validation'], function (_export) {
           _classCallCheck(this, MinimumValueValidationRule);
 
           _get(Object.getPrototypeOf(MinimumValueValidationRule.prototype), 'constructor', this).call(this, minimumValue, function (newValue, minimumValue) {
-            return minimumValue < newValue;
+            return Utilities.getValue(minimumValue) < newValue;
           });
         }
 
@@ -259,7 +266,7 @@ System.register(['../validation/validation'], function (_export) {
           _classCallCheck(this, MinimumInclusiveValueValidationRule);
 
           _get(Object.getPrototypeOf(MinimumInclusiveValueValidationRule.prototype), 'constructor', this).call(this, minimumValue, function (newValue, minimumValue) {
-            return minimumValue <= newValue;
+            return Utilities.getValue(minimumValue) <= newValue;
           });
         }
 
@@ -275,7 +282,7 @@ System.register(['../validation/validation'], function (_export) {
           _classCallCheck(this, MaximumValueValidationRule);
 
           _get(Object.getPrototypeOf(MaximumValueValidationRule.prototype), 'constructor', this).call(this, maximumValue, function (newValue, maximumValue) {
-            return newValue < maximumValue;
+            return newValue < Utilities.getValue(maximumValue);
           });
         }
 
@@ -291,7 +298,7 @@ System.register(['../validation/validation'], function (_export) {
           _classCallCheck(this, MaximumInclusiveValueValidationRule);
 
           _get(Object.getPrototypeOf(MaximumInclusiveValueValidationRule.prototype), 'constructor', this).call(this, maximumValue, function (newValue, maximumValue) {
-            return newValue <= maximumValue;
+            return newValue <= Utilities.getValue(maximumValue);
           });
         }
 
@@ -307,7 +314,7 @@ System.register(['../validation/validation'], function (_export) {
           _classCallCheck(this, BetweenValueValidationRule);
 
           _get(Object.getPrototypeOf(BetweenValueValidationRule.prototype), 'constructor', this).call(this, { minimumValue: minimumValue, maximumValue: maximumValue }, function (newValue, threshold) {
-            return threshold.minimumValue <= newValue && newValue <= threshold.maximumValue;
+            return Utilities.getValue(threshold.minimumValue) <= newValue && newValue <= Utilities.getValue(threshold.maximumValue);
           });
         }
 
@@ -459,8 +466,9 @@ System.register(['../validation/validation'], function (_export) {
             equality: equality,
             otherValueLabel: otherValueLabel
           }, function (newValue, threshold) {
-            if (newValue instanceof Date && threshold.otherValue instanceof Date) return threshold.equality === (newValue.getTime() === threshold.otherValue.getTime());
-            return threshold.equality === (newValue === threshold.otherValue);
+            var otherValue = Utilities.getValue(threshold.otherValue);
+            if (newValue instanceof Date && otherValue instanceof Date) return threshold.equality === (newValue.getTime() === otherValue.getTime());
+            return threshold.equality === (newValue === otherValue);
           });
         }
 
@@ -532,6 +540,7 @@ System.register(['../validation/validation'], function (_export) {
           _classCallCheck(this, InCollectionValidationRule);
 
           _get(Object.getPrototypeOf(InCollectionValidationRule.prototype), 'constructor', this).call(this, collection, function (newValue, threshold) {
+            var collection = Utilities.getValue(threshold);
             for (var i = 0; i < collection.length; i++) {
               if (newValue === collection[i]) return true;
             }

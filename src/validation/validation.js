@@ -2,8 +2,8 @@ import {ObserverLocator} from 'aurelia-binding';
 import * as AllRules from '../validation/validation-rules';
 import * as AllCollections from '../validation/validation-rules-collection'
 import {ValidationGroup} from '../validation/validation-group';
-import {ValidationLocaleRepository} from '../validation/validation-locale-repository';
 import {inject} from 'aurelia-dependency-injection';
+import {ValidationConfig} from '../validation/validation-config';
 
 /**
  * A lightweight validation plugin
@@ -15,9 +15,11 @@ export class Validation {
   /**
    * Instantiates a new {Validation}
    * @param observerLocator the observerLocator used to observer properties
+   * @param validationConfig the configuration
    */
-  constructor(observerLocator) {
+  constructor(observerLocator, validationConfig) {
     this.observerLocator = observerLocator;
+    this.config = validationConfig ? validationConfig : Validation.defaults;
   }
 
   /**
@@ -25,40 +27,13 @@ export class Validation {
    * @param subject The subject to validate
    * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
    */
-  on(subject) {
-    return new ValidationGroup(subject, this.observerLocator);
+  on(subject, configCallback) {
+    var conf = new ValidationConfig(this.config);
+    if(configCallback !== null && configCallback !== undefined && typeof(configCallback) === 'function')
+    {
+      configCallback(conf);
+    }
+    return new ValidationGroup(subject, this.observerLocator, conf);
   }
 }
-
-Validation.Utilities = {
-  isEmptyValue(val) {
-    if (typeof val === 'function') {
-      return this.isEmptyValue(val());
-    }
-    if (val === undefined) {
-      return true;
-    }
-    if (val === null) {
-      return true;
-    }
-    if (val === "") {
-      return true;
-    }
-    if (typeof (val) === 'string') {
-      if (String.prototype.trim) {
-        val = val.trim();
-      }
-      else {
-        val = val.replace(/^\s+|\s+$/g, '');
-      }
-    }
-
-    if (val.length !== undefined) {
-      return 0 === val.length;
-    }
-    return false;
-  }
-};
-Validation.Locale = new ValidationLocaleRepository();
-
-Validation.debounceTime = 150;
+Validation.defaults = new ValidationConfig();

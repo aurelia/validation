@@ -10,10 +10,11 @@ define(['exports', '../validation/validation'], function (exports, _validationVa
   });
 
   var Debouncer = (function () {
-    function Debouncer() {
+    function Debouncer(debounceTimeout) {
       _classCallCheck(this, Debouncer);
 
       this.currentFunction = null;
+      this.debounceTimeout = debounceTimeout;
     }
 
     _createClass(Debouncer, [{
@@ -29,7 +30,7 @@ define(['exports', '../validation/validation'], function (exports, _validationVa
               func();
             }
           }
-        }, _validationValidation.Validation.debounceTime);
+        }, this.debounceTimeout);
       }
     }]);
 

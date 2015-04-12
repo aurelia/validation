@@ -22,21 +22,26 @@ var AllCollections = _interopRequireWildcard(_import2);
 
 var _ValidationGroup = require('../validation/validation-group');
 
-var _ValidationLocaleRepository = require('../validation/validation-locale-repository');
-
 var _inject = require('aurelia-dependency-injection');
 
+var _ValidationConfig = require('../validation/validation-config');
+
 var Validation = (function () {
-  function Validation(observerLocator) {
+  function Validation(observerLocator, validationConfig) {
     _classCallCheck(this, _Validation);
 
     this.observerLocator = observerLocator;
+    this.config = validationConfig ? validationConfig : Validation.defaults;
   }
 
   _createClass(Validation, [{
     key: 'on',
-    value: function on(subject) {
-      return new _ValidationGroup.ValidationGroup(subject, this.observerLocator);
+    value: function on(subject, configCallback) {
+      var conf = new _ValidationConfig.ValidationConfig(this.config);
+      if (configCallback !== null && configCallback !== undefined && typeof configCallback === 'function') {
+        configCallback(conf);
+      }
+      return new _ValidationGroup.ValidationGroup(subject, this.observerLocator, conf);
     }
   }]);
 
@@ -47,34 +52,4 @@ var Validation = (function () {
 
 exports.Validation = Validation;
 
-Validation.Utilities = {
-  isEmptyValue: function isEmptyValue(val) {
-    if (typeof val === 'function') {
-      return this.isEmptyValue(val());
-    }
-    if (val === undefined) {
-      return true;
-    }
-    if (val === null) {
-      return true;
-    }
-    if (val === '') {
-      return true;
-    }
-    if (typeof val === 'string') {
-      if (String.prototype.trim) {
-        val = val.trim();
-      } else {
-        val = val.replace(/^\s+|\s+$/g, '');
-      }
-    }
-
-    if (val.length !== undefined) {
-      return 0 === val.length;
-    }
-    return false;
-  }
-};
-Validation.Locale = new _ValidationLocaleRepository.ValidationLocaleRepository();
-
-Validation.debounceTime = 150;
+Validation.defaults = new _ValidationConfig.ValidationConfig();

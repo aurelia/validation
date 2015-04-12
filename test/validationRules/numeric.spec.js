@@ -23,7 +23,7 @@ describe('Tests on NumericValidationRule', () => {
     var rule = new NumericValidationRule();
     expectations.expectAsync(rule.validate(3.01)).toBe(true);
     expectations.expectAsync(rule.validate(-3.15)).toBe(true);
-    expectations.expectAsync(rule.validate(-1, 234, 567.890123)).toBe(true);
+    expectations.expectAsync(rule.validate(-1234567.890123)).toBe(true);
     expectations.validate();
   });
   it('should be working with properly formatted numbers', (done) => {

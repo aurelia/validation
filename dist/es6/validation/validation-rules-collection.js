@@ -1,4 +1,5 @@
-import {Validation} from '../validation/validation';
+import {Utilities} from '../validation/utilities';
+import {ValidationLocale} from '../validation/validation-locale';
 
 export class ValidationRulesCollection {
   constructor() {
@@ -7,21 +8,23 @@ export class ValidationRulesCollection {
     this.validationCollections = [];
   }
 
-
-
-
   /**
    * Returns a promise that fulfils and resolves to simple result status object.
    */
-  validate(newValue) {
+  validate(newValue, locale) {
+    if(locale === undefined)
+    {
+      locale = ValidationLocale.Repository.default;
+    }
+    newValue = Utilities.getValue(newValue);
     let executeRules = true;
 
     //Is required?
-    if (Validation.Utilities.isEmptyValue(newValue)) {
+    if (Utilities.isEmptyValue(newValue)) {
       if (this.isRequired) {
         return Promise.resolve({
           isValid: false,
-          message: Validation.Locale.translate('isRequired'),
+          message: locale.translate('isRequired'),
           failingRule: 'isRequired'
         });
       }
@@ -33,7 +36,8 @@ export class ValidationRulesCollection {
     var checks = Promise.resolve({
       isValid: true,
       message: '',
-      failingRule: null
+      failingRule: null,
+      latestValue: newValue
     });
 
     //validate rules
@@ -48,12 +52,13 @@ export class ValidationRulesCollection {
           }
           else
           {
-            return rule.validate(newValue).then( (thisRuleResult) => {
+            return rule.validate(newValue, locale).then( (thisRuleResult) => {
               if(thisRuleResult === false) {
                 return {
                   isValid: false,
                   message: rule.explain(),
-                  failingRule: rule.ruleName
+                  failingRule: rule.ruleName,
+                  latestValue: newValue
                 };
               }
               else
@@ -76,7 +81,7 @@ export class ValidationRulesCollection {
       let validationCollection = this.validationCollections[i];
       checks = checks.then( (previousValidationResult)=> {
         if(previousValidationResult.isValid)
-          return validationCollection.validate(newValue);
+          return validationCollection.validate(newValue, locale);
         else
           return previousValidationResult;
       });
@@ -143,12 +148,12 @@ export class SwitchCaseValidationRulesCollection {
     return null;
   }
 
-  validate(newValue) {
+  validate(newValue, locale) {
     var collection = this.getCurrentCollection(this.conditionExpression(newValue));
     if (collection !== null)
-      return collection.validate(newValue);
+      return collection.validate(newValue, locale);
     else
-      return this.defaultCollection.validate(newValue);
+      return this.defaultCollection.validate(newValue, locale);
   }
 
   addValidationRule(validationRule) {

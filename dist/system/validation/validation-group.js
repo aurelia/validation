@@ -1,11 +1,13 @@
-System.register(['../validation/validation-group-builder', '../validation/validation-result'], function (_export) {
-  var ValidationGroupBuilder, ValidationResult, _classCallCheck, _createClass, ValidationGroup;
+System.register(['../validation/validation-group-builder', '../validation/validation-result', '../validation/validation-locale'], function (_export) {
+  var ValidationGroupBuilder, ValidationResult, ValidationLocale, _classCallCheck, _createClass, ValidationGroup;
 
   return {
     setters: [function (_validationValidationGroupBuilder) {
       ValidationGroupBuilder = _validationValidationGroupBuilder.ValidationGroupBuilder;
     }, function (_validationValidationResult) {
       ValidationResult = _validationValidationResult.ValidationResult;
+    }, function (_validationValidationLocale) {
+      ValidationLocale = _validationValidationLocale.ValidationLocale;
     }],
     execute: function () {
       'use strict';
@@ -15,16 +17,27 @@ System.register(['../validation/validation-group-builder', '../validation/valida
       _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
       ValidationGroup = (function () {
-        function ValidationGroup(subject, observerLocator) {
+        function ValidationGroup(subject, observerLocator, config) {
+          var _this = this;
+
           _classCallCheck(this, ValidationGroup);
 
           this.result = new ValidationResult();
           this.subject = subject;
           this.validationProperties = [];
+          this.config = config;
           this.builder = new ValidationGroupBuilder(observerLocator, this);
+          this.onDestroy = config.onLocaleChanged(function () {
+            _this.validate(false);
+          });
         }
 
         _createClass(ValidationGroup, [{
+          key: 'destroy',
+          value: function destroy() {
+            this.onDestroy();
+          }
+        }, {
           key: 'checkAll',
           value: function checkAll() {
             throw 'The synchronous "checkAll()" function is no longer supported. Use "validate()" which returns a promise that fulfils when valid, rejects when invalid';
@@ -32,14 +45,16 @@ System.register(['../validation/validation-group-builder', '../validation/valida
         }, {
           key: 'validate',
           value: function validate() {
-            var _this = this;
+            var _this2 = this;
+
+            var forceDirty = arguments[0] === undefined ? true : arguments[0];
 
             var promise = Promise.resolve(true);
 
             var _loop = function (i) {
-              var validatorProperty = _this.validationProperties[i];
+              var validatorProperty = _this2.validationProperties[i];
               promise = promise.then(function () {
-                return validatorProperty.validateCurrentValue(true);
+                return validatorProperty.validateCurrentValue(forceDirty);
               });
             };
 
@@ -53,17 +68,17 @@ System.register(['../validation/validation-group-builder', '../validation/valida
             });
 
             return promise.then(function () {
-              if (_this.result.isValid) {
-                return Promise.resolve(_this.result);
+              if (_this2.result.isValid) {
+                return Promise.resolve(_this2.result);
               } else {
-                return Promise.reject(_this.result);
+                return Promise.reject(_this2.result);
               }
             });
           }
         }, {
           key: 'ensure',
-          value: function ensure(bindingPatch) {
-            return this.builder.ensure(bindingPatch);
+          value: function ensure(bindingPath, configCallback) {
+            return this.builder.ensure(bindingPath, configCallback);
           }
         }, {
           key: 'isNotEmpty',

@@ -1,4 +1,4 @@
-define(['exports', 'aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', '../validation/validation-locale-repository', 'aurelia-dependency-injection'], function (exports, _aureliaBinding, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroup, _validationValidationLocaleRepository, _aureliaDependencyInjection) {
+define(['exports', 'aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', 'aurelia-dependency-injection', '../validation/validation-config'], function (exports, _aureliaBinding, _validationValidationRules, _validationValidationRulesCollection, _validationValidationGroup, _aureliaDependencyInjection, _validationValidationConfig) {
   'use strict';
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -10,16 +10,21 @@ define(['exports', 'aurelia-binding', '../validation/validation-rules', '../vali
   });
 
   var Validation = (function () {
-    function Validation(observerLocator) {
+    function Validation(observerLocator, validationConfig) {
       _classCallCheck(this, _Validation);
 
       this.observerLocator = observerLocator;
+      this.config = validationConfig ? validationConfig : Validation.defaults;
     }
 
     _createClass(Validation, [{
       key: 'on',
-      value: function on(subject) {
-        return new _validationValidationGroup.ValidationGroup(subject, this.observerLocator);
+      value: function on(subject, configCallback) {
+        var conf = new _validationValidationConfig.ValidationConfig(this.config);
+        if (configCallback !== null && configCallback !== undefined && typeof configCallback === 'function') {
+          configCallback(conf);
+        }
+        return new _validationValidationGroup.ValidationGroup(subject, this.observerLocator, conf);
       }
     }]);
 
@@ -30,35 +35,5 @@ define(['exports', 'aurelia-binding', '../validation/validation-rules', '../vali
 
   exports.Validation = Validation;
 
-  Validation.Utilities = {
-    isEmptyValue: function isEmptyValue(val) {
-      if (typeof val === 'function') {
-        return this.isEmptyValue(val());
-      }
-      if (val === undefined) {
-        return true;
-      }
-      if (val === null) {
-        return true;
-      }
-      if (val === '') {
-        return true;
-      }
-      if (typeof val === 'string') {
-        if (String.prototype.trim) {
-          val = val.trim();
-        } else {
-          val = val.replace(/^\s+|\s+$/g, '');
-        }
-      }
-
-      if (val.length !== undefined) {
-        return 0 === val.length;
-      }
-      return false;
-    }
-  };
-  Validation.Locale = new _validationValidationLocaleRepository.ValidationLocaleRepository();
-
-  Validation.debounceTime = 150;
+  Validation.defaults = new _validationValidationConfig.ValidationConfig();
 });

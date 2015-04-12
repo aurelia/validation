@@ -1,6 +1,7 @@
 import {Validation} from '../src/validation/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
+import {ValidationConfig} from '../src/validation/validation-config';
 
 class APITest{
   constructor(propertyValue, validation)
@@ -22,8 +23,6 @@ class APITest{
 
 //Note: tests are kept short for readability. For each rule, there are extensive tests in test/validationRules
 describe('Some simple API tests', ()=>{
-
-
   it('on containsOnly()', (done) => {
     var expectations = new Expectations(expect, done);
     APITest.Assert(expectations, (v) => { return v.containsOnly(/^[a-z]+$/i);}, 'a', true);
@@ -235,5 +234,46 @@ describe('Some simple API tests', ()=>{
     APITest.Assert(expectations, (v) => { return  v.isEqualTo('a').withMessage('a custom message');}, 'a', true);
     APITest.Assert(expectations, (v) => { return  v.isEqualTo('a').withMessage('a custom message');}, 'b', false);
     expectations.validate();
+  });
+});
+
+describe('Some simple configuration API tests', ()=>{
+  it('on computedFrom with a single dependencies', (done) => {
+    let subject = { password : 'Abc*12345', confirmPassword : 'Abc*12345' };
+    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
+      .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword()
+      .ensure('confirmPassword', (c) => {c.computedFrom('password')}).isNotEmpty().isEqualTo(() => { return subject.password});
+
+    setTimeout(()=>{
+      expect(subject.validation.result.properties.password.isValid).toBe(true);
+      expect(subject.validation.result.properties.confirmPassword.isValid).toBe(true);
+
+      subject.password = 'aBc!54321';
+      setTimeout(()=>{
+        debugger;
+        expect(subject.validation.result.properties.password.isValid).toBe(true);
+        expect(subject.validation.result.properties.confirmPassword.isValid).toBe(false);
+        done();
+      },10);
+    });
+  });
+  it('on computedFrom with an array of string dependencies', (done) => {
+    let subject = { password : 'Abc*12345', confirmPassword : 'Abc*12345' };
+    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
+      .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword()
+      .ensure('confirmPassword', (c) => {c.computedFrom(['someProperty','password'])}).isNotEmpty().isEqualTo(() => { return subject.password});
+
+    setTimeout(()=>{
+      expect(subject.validation.result.properties.password.isValid).toBe(true);
+      expect(subject.validation.result.properties.confirmPassword.isValid).toBe(true);
+
+      subject.password = 'aBc!54321';
+      setTimeout(()=>{
+        debugger;
+        expect(subject.validation.result.properties.password.isValid).toBe(true);
+        expect(subject.validation.result.properties.confirmPassword.isValid).toBe(false);
+        done();
+      },10);
+    });
   });
 });

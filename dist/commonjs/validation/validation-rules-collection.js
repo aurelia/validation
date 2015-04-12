@@ -8,7 +8,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _Validation = require('../validation/validation');
+var _Utilities = require('../validation/utilities');
+
+var _ValidationLocale = require('../validation/validation-locale');
 
 var ValidationRulesCollection = (function () {
   function ValidationRulesCollection() {
@@ -21,16 +23,20 @@ var ValidationRulesCollection = (function () {
 
   _createClass(ValidationRulesCollection, [{
     key: 'validate',
-    value: function validate(newValue) {
+    value: function validate(newValue, locale) {
       var _this = this;
 
+      if (locale === undefined) {
+        locale = _ValidationLocale.ValidationLocale.Repository['default'];
+      }
+      newValue = _Utilities.Utilities.getValue(newValue);
       var executeRules = true;
 
-      if (_Validation.Validation.Utilities.isEmptyValue(newValue)) {
+      if (_Utilities.Utilities.isEmptyValue(newValue)) {
         if (this.isRequired) {
           return Promise.resolve({
             isValid: false,
-            message: _Validation.Validation.Locale.translate('isRequired'),
+            message: locale.translate('isRequired'),
             failingRule: 'isRequired'
           });
         } else {
@@ -41,7 +47,8 @@ var ValidationRulesCollection = (function () {
       var checks = Promise.resolve({
         isValid: true,
         message: '',
-        failingRule: null
+        failingRule: null,
+        latestValue: newValue
       });
 
       if (executeRules) {
@@ -51,12 +58,13 @@ var ValidationRulesCollection = (function () {
             if (previousRuleResult.isValid === false) {
               return previousRuleResult;
             } else {
-              return rule.validate(newValue).then(function (thisRuleResult) {
+              return rule.validate(newValue, locale).then(function (thisRuleResult) {
                 if (thisRuleResult === false) {
                   return {
                     isValid: false,
                     message: rule.explain(),
-                    failingRule: rule.ruleName
+                    failingRule: rule.ruleName,
+                    latestValue: newValue
                   };
                 } else {
                   if (!previousRuleResult.isValid) {
@@ -77,7 +85,7 @@ var ValidationRulesCollection = (function () {
       var _loop2 = function (i) {
         var validationCollection = _this.validationCollections[i];
         checks = checks.then(function (previousValidationResult) {
-          if (previousValidationResult.isValid) return validationCollection.validate(newValue);else return previousValidationResult;
+          if (previousValidationResult.isValid) return validationCollection.validate(newValue, locale);else return previousValidationResult;
         });
       };
 
@@ -163,12 +171,12 @@ var SwitchCaseValidationRulesCollection = (function () {
     }
   }, {
     key: 'validate',
-    value: function validate(newValue) {
+    value: function validate(newValue, locale) {
       var collection = this.getCurrentCollection(this.conditionExpression(newValue));
       if (collection !== null) {
-        return collection.validate(newValue);
+        return collection.validate(newValue, locale);
       } else {
-        return this.defaultCollection.validate(newValue);
+        return this.defaultCollection.validate(newValue, locale);
       }
     }
   }, {

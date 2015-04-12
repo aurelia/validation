@@ -12,17 +12,30 @@ var _ValidationGroupBuilder = require('../validation/validation-group-builder');
 
 var _ValidationResult = require('../validation/validation-result');
 
+var _ValidationLocale = require('../validation/validation-locale');
+
 var ValidationGroup = (function () {
-  function ValidationGroup(subject, observerLocator) {
+  function ValidationGroup(subject, observerLocator, config) {
+    var _this = this;
+
     _classCallCheck(this, ValidationGroup);
 
     this.result = new _ValidationResult.ValidationResult();
     this.subject = subject;
     this.validationProperties = [];
+    this.config = config;
     this.builder = new _ValidationGroupBuilder.ValidationGroupBuilder(observerLocator, this);
+    this.onDestroy = config.onLocaleChanged(function () {
+      _this.validate(false);
+    });
   }
 
   _createClass(ValidationGroup, [{
+    key: 'destroy',
+    value: function destroy() {
+      this.onDestroy();
+    }
+  }, {
     key: 'checkAll',
     value: function checkAll() {
       throw 'The synchronous "checkAll()" function is no longer supported. Use "validate()" which returns a promise that fulfils when valid, rejects when invalid';
@@ -30,14 +43,16 @@ var ValidationGroup = (function () {
   }, {
     key: 'validate',
     value: function validate() {
-      var _this = this;
+      var _this2 = this;
+
+      var forceDirty = arguments[0] === undefined ? true : arguments[0];
 
       var promise = Promise.resolve(true);
 
       var _loop = function (i) {
-        var validatorProperty = _this.validationProperties[i];
+        var validatorProperty = _this2.validationProperties[i];
         promise = promise.then(function () {
-          return validatorProperty.validateCurrentValue(true);
+          return validatorProperty.validateCurrentValue(forceDirty);
         });
       };
 
@@ -51,17 +66,17 @@ var ValidationGroup = (function () {
       });
 
       return promise.then(function () {
-        if (_this.result.isValid) {
-          return Promise.resolve(_this.result);
+        if (_this2.result.isValid) {
+          return Promise.resolve(_this2.result);
         } else {
-          return Promise.reject(_this.result);
+          return Promise.reject(_this2.result);
         }
       });
     }
   }, {
     key: 'ensure',
-    value: function ensure(bindingPatch) {
-      return this.builder.ensure(bindingPatch);
+    value: function ensure(bindingPath, configCallback) {
+      return this.builder.ensure(bindingPath, configCallback);
     }
   }, {
     key: 'isNotEmpty',

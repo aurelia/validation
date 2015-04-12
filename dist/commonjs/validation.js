@@ -9,9 +9,34 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.install = install;
 
-var _validationValidationLocaleRepository = require('./validation/validation-locale-repository');
+var _Validation = require('./validation/validation');
 
-_defaults(exports, _interopRequireWildcard(_validationValidationLocaleRepository));
+var _Utilities = require('./validation/utilities');
+
+Object.defineProperty(exports, 'Utilities', {
+  enumerable: true,
+  get: function get() {
+    return _Utilities.Utilities;
+  }
+});
+
+var _ValidationConfig = require('./validation/validation-config');
+
+Object.defineProperty(exports, 'ValidationConfig', {
+  enumerable: true,
+  get: function get() {
+    return _ValidationConfig.ValidationConfig;
+  }
+});
+
+var _ValidationLocale = require('./validation/validation-locale');
+
+Object.defineProperty(exports, 'ValidationLocale', {
+  enumerable: true,
+  get: function get() {
+    return _ValidationLocale.ValidationLocale;
+  }
+});
 
 var _validationValidationResult = require('./validation/validation-result');
 
@@ -21,30 +46,35 @@ var _validationValidationRules = require('./validation/validation-rules');
 
 _defaults(exports, _interopRequireWildcard(_validationValidationRules));
 
-var _validationValidationRulesCollection = require('./validation/validation-rules-collection');
+Object.defineProperty(exports, 'Validation', {
+  enumerable: true,
+  get: function get() {
+    return _Validation.Validation;
+  }
+});
 
-_defaults(exports, _interopRequireWildcard(_validationValidationRulesCollection));
+var _ValidateAttachedBehavior = require('./validation/validate-attached-behavior');
 
-var _validationValidationGroupBuilder = require('./validation/validation-group-builder');
+Object.defineProperty(exports, 'ValidateAttachedBehavior', {
+  enumerable: true,
+  get: function get() {
+    return _ValidateAttachedBehavior.ValidateAttachedBehavior;
+  }
+});
 
-_defaults(exports, _interopRequireWildcard(_validationValidationGroupBuilder));
+var _ValidateAttachedBehaviorConfig = require('./validation/validate-attached-behavior-config');
 
-var _validationValidation = require('./validation/validation');
+Object.defineProperty(exports, 'ValidateAttachedBehaviorConfig', {
+  enumerable: true,
+  get: function get() {
+    return _ValidateAttachedBehaviorConfig.ValidateAttachedBehaviorConfig;
+  }
+});
 
-_defaults(exports, _interopRequireWildcard(_validationValidation));
-
-var _validationValidateAttachedBehavior = require('./validation/validate-attached-behavior');
-
-_defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehavior));
-
-var _validationValidateAttachedBehaviorConfig = require('./validation/validate-attached-behavior-config');
-
-_defaults(exports, _interopRequireWildcard(_validationValidateAttachedBehaviorConfig));
-
-var _validationDebouncer = require('./validation/debouncer');
-
-_defaults(exports, _interopRequireWildcard(_validationDebouncer));
-
-function install(aurelia) {
+function install(aurelia, configCallback) {
   aurelia.globalizeResources('./validation/validate-attached-behavior');
+  if (configCallback !== undefined && typeof (configCallback === 'function')) {
+    configCallback(_Validation.Validation.defaults);
+  }
+  return _Validation.Validation.defaults.locale();
 }

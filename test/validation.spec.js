@@ -1,19 +1,20 @@
 import {Validation} from '../src/validation/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
-
-Validation.debounceTime = 1;
+import {ValidationConfig} from '../src/validation/validation-config';
 
 class TestSubject {
   constructor(validation, firstName) {
     this.firstName = firstName;
-    this.validation = validation.on(this)
-      .ensure('firstName')
-      .isNotEmpty();
+    this.validation = validation.on(this);
   }
 
-  static createInstance(firstName) {
-    return new TestSubject(new Validation(new ObserverLocator()), firstName);
+  static createInstance(firstName, config) {
+    var subject = new TestSubject(new Validation(new ObserverLocator(), config), firstName);
+    subject.validation
+      .ensure('firstName')
+      .isNotEmpty();
+    return subject;
   }
 }
 
@@ -136,6 +137,7 @@ describe('Basic validation tests', () => {
 
 
   it('should update the validation automatically when the property changes', (done) => {
+
     var subject = TestSubject.createInstance(null);
 
     setTimeout(() => {
@@ -151,9 +153,8 @@ describe('Basic validation tests', () => {
   });
 
 
-  it('should not update if the value continuously changes', (done) => {
-    Validation.debounceTime = 50;
-    var subject = TestSubject.createInstance(null);
+  it('should not update if the value continuously changes and a debounce time is set on the validation', (done) => {
+    var subject = TestSubject.createInstance(null, new ValidationConfig().useDebounceTimeout(50));
     subject.validation.ensure('firstName').isNotEmpty().hasLengthBetween(5, 10);
 
     setTimeout(() => { //Do setTimout 0 to allow initial validation
@@ -168,11 +169,33 @@ describe('Basic validation tests', () => {
           expect(subject.validation.result.isValid).toBe(false);
           setTimeout(() => { //property did not change in last x ms, property should be validated
             expect(subject.validation.result.isValid).toBe(true);
-            Validation.debounceTime = 0;
             done();
           }, 21);
-        }, Validation.debounceTime - 10);
-      }, Validation.debounceTime - 10);
+        }, 40);
+      }, 40);
+    }, 0);
+  });
+
+  it('should not update if the value continuously changes and a debounce time is set on the property', (done) => {
+    var subject = new TestSubject(new Validation(new ObserverLocator(), new ValidationConfig()), null);
+    subject.validation.ensure('firstName', (config) => {config.useDebounceTimeout(50)}).isNotEmpty().hasLengthBetween(5, 10);
+
+    setTimeout(() => { //Do setTimout 0 to allow initial validation
+      expect(subject.validation.result.isValid).toBe(false);
+
+      subject.firstName = 'Bob';
+      setTimeout(() =>{ //Do setTimout 190, property should not be validated
+        expect(subject.validation.result.isValid).toBe(false);
+
+        subject.firstName = 'Bobby';
+        setTimeout( () => { //Property changed before x ms, property should not be validated
+          expect(subject.validation.result.isValid).toBe(false);
+          setTimeout(() => { //property did not change in last x ms, property should be validated
+            expect(subject.validation.result.isValid).toBe(true);
+            done();
+          }, 21);
+        }, 40);
+      }, 40);
     }, 0);
   });
 

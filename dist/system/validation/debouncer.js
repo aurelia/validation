@@ -13,10 +13,11 @@ System.register(['../validation/validation'], function (_export) {
       _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
       Debouncer = (function () {
-        function Debouncer() {
+        function Debouncer(debounceTimeout) {
           _classCallCheck(this, Debouncer);
 
           this.currentFunction = null;
+          this.debounceTimeout = debounceTimeout;
         }
 
         _createClass(Debouncer, [{
@@ -32,7 +33,7 @@ System.register(['../validation/validation'], function (_export) {
                   func();
                 }
               }
-            }, Validation.debounceTime);
+            }, this.debounceTimeout);
           }
         }]);
 

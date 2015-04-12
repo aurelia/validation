@@ -11,10 +11,11 @@ Object.defineProperty(exports, '__esModule', {
 var _Validation = require('../validation/validation');
 
 var Debouncer = (function () {
-  function Debouncer() {
+  function Debouncer(debounceTimeout) {
     _classCallCheck(this, Debouncer);
 
     this.currentFunction = null;
+    this.debounceTimeout = debounceTimeout;
   }
 
   _createClass(Debouncer, [{
@@ -30,7 +31,7 @@ var Debouncer = (function () {
             func();
           }
         }
-      }, _Validation.Validation.debounceTime);
+      }, this.debounceTimeout);
     }
   }]);
 

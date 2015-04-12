@@ -1,10 +1,9 @@
-define(['exports'], function (exports) {
+define(['exports', '../validation/utilities'], function (exports, _validationUtilities) {
   'use strict';
 
   Object.defineProperty(exports, '__esModule', {
     value: true
   });
-
   var data = {
     settings: {
       numericRegex: /^-?(?:\d+)(?:\,\d+)?$/
@@ -24,10 +23,10 @@ define(['exports'], function (exports) {
         return 'kan enkel letters of spaties bevatten';
       },
       BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
-        return 'moet tussen ' + threshold.minimumLength + ' en ' + threshold.maximumLength + ' tekens lang zijn';
+        return 'moet tussen ' + _validationUtilities.Utilities.getValue(threshold.minimumLength) + ' en ' + _validationUtilities.Utilities.getValue(threshold.maximumLength) + ' tekens lang zijn';
       },
       BetweenValueValidationRule: function BetweenValueValidationRule(newValue, threshold) {
-        return 'moet tussen ' + threshold.minimumValue + ' en ' + threshold.maximumValue + ' zijn';
+        return 'moet tussen ' + _validationUtilities.Utilities.getValue(threshold.minimumValue) + ' en ' + _validationUtilities.Utilities.getValue(threshold.maximumValue) + ' zijn';
       },
       DigitValidationRule: function DigitValidationRule(newValue, threshold) {
         return 'mag enkel cijfers bevatten';
@@ -39,37 +38,37 @@ define(['exports'], function (exports) {
         return 'is geen geldig email adres';
       },
       EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-        return 'moet ' + threshold.otherValue + ' zijn';
+        return 'moet ' + _validationUtilities.Utilities.getValue(threshold.otherValue) + ' zijn';
       },
       InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
-        return 'mag niet ' + threshold.otherValue + ' zijn';
+        return 'mag niet ' + _validationUtilities.Utilities.getValue(threshold.otherValue) + ' zijn';
       },
       EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-        return 'moet overeen komen met ' + threshold.otherValueLabel;
+        return 'moet overeen komen met ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
       },
       InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-        return 'mag niet overeen komen met ' + threshold.otherValueLabel;
+        return 'mag niet overeen komen met ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
       },
       InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
         return 'is geen geldige waarde';
       },
       MinimumInclusiveValueValidationRule: function MinimumInclusiveValueValidationRule(newValue, threshold) {
-        return 'moet op zijn minst ' + threshold + ' zijn';
+        return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
       },
       MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
-        return 'moet op zijn minst ' + threshold + ' tekens lang zijn';
+        return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' tekens lang zijn';
       },
       MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-        return 'moet op meer dan ' + threshold + ' zijn';
+        return 'moet op meer dan ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
       },
       MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
-        return 'moet op zijn meest ' + threshold + ' zijn';
+        return 'moet op zijn meest ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
       },
       MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
-        return 'moet minder dan ' + threshold + ' tekens lang zijn';
+        return 'moet minder dan ' + _validationUtilities.Utilities.getValue(threshold) + ' tekens lang zijn';
       },
       MaximumValueValidationRule: function MaximumValueValidationRule(newValue, threshold) {
-        return 'moet minder dan ' + threshold + ' zijn';
+        return 'moet minder dan ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
       },
       NumericValidationRule: function NumericValidationRule(newValue, threshold) {
         return 'moet een getal zijn';
@@ -84,7 +83,7 @@ define(['exports'], function (exports) {
         return 'moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn';
       },
       MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
-        return 'moet op zijn minst ' + threshold + ' van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens';
+        return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens';
       }
     }
   };

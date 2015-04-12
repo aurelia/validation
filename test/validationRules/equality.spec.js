@@ -21,6 +21,13 @@ describe('Tests on EqualityValidationRule', () => {
     expectations.validate();
   });
 
+  it('should be working with a function', (done) => {
+    var expectations = new Expectations(expect, done);
+    expectations.expectAsync(new EqualityValidationRule(() => {return 'a';}).validate('a')).toBe(true);
+    expectations.expectAsync(new EqualityValidationRule(() => {return 'a';}).validate('b')).toBe(false);
+    expectations.validate();
+  });
+
   it('should be working with inequality', (done) => {
     var expectations = new Expectations(expect, done);
     expectations.expectAsync(new InEqualityValidationRule('a', false).validate('a')).toBe(false);

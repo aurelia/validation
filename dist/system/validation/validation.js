@@ -1,5 +1,5 @@
-System.register(['aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', '../validation/validation-locale-repository', 'aurelia-dependency-injection'], function (_export) {
-  var ObserverLocator, AllRules, AllCollections, ValidationGroup, ValidationLocaleRepository, inject, _classCallCheck, _createClass, Validation;
+System.register(['aurelia-binding', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-group', 'aurelia-dependency-injection', '../validation/validation-config'], function (_export) {
+  var ObserverLocator, AllRules, AllCollections, ValidationGroup, inject, ValidationConfig, _classCallCheck, _createClass, Validation;
 
   return {
     setters: [function (_aureliaBinding) {
@@ -10,10 +10,10 @@ System.register(['aurelia-binding', '../validation/validation-rules', '../valida
       AllCollections = _validationValidationRulesCollection;
     }, function (_validationValidationGroup) {
       ValidationGroup = _validationValidationGroup.ValidationGroup;
-    }, function (_validationValidationLocaleRepository) {
-      ValidationLocaleRepository = _validationValidationLocaleRepository.ValidationLocaleRepository;
     }, function (_aureliaDependencyInjection) {
       inject = _aureliaDependencyInjection.inject;
+    }, function (_validationValidationConfig) {
+      ValidationConfig = _validationValidationConfig.ValidationConfig;
     }],
     execute: function () {
       'use strict';
@@ -23,16 +23,21 @@ System.register(['aurelia-binding', '../validation/validation-rules', '../valida
       _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
       Validation = (function () {
-        function Validation(observerLocator) {
+        function Validation(observerLocator, validationConfig) {
           _classCallCheck(this, _Validation);
 
           this.observerLocator = observerLocator;
+          this.config = validationConfig ? validationConfig : Validation.defaults;
         }
 
         _createClass(Validation, [{
           key: 'on',
-          value: function on(subject) {
-            return new ValidationGroup(subject, this.observerLocator);
+          value: function on(subject, configCallback) {
+            var conf = new ValidationConfig(this.config);
+            if (configCallback !== null && configCallback !== undefined && typeof configCallback === 'function') {
+              configCallback(conf);
+            }
+            return new ValidationGroup(subject, this.observerLocator, conf);
           }
         }]);
 
@@ -43,37 +48,7 @@ System.register(['aurelia-binding', '../validation/validation-rules', '../valida
 
       _export('Validation', Validation);
 
-      Validation.Utilities = {
-        isEmptyValue: function isEmptyValue(val) {
-          if (typeof val === 'function') {
-            return this.isEmptyValue(val());
-          }
-          if (val === undefined) {
-            return true;
-          }
-          if (val === null) {
-            return true;
-          }
-          if (val === '') {
-            return true;
-          }
-          if (typeof val === 'string') {
-            if (String.prototype.trim) {
-              val = val.trim();
-            } else {
-              val = val.replace(/^\s+|\s+$/g, '');
-            }
-          }
-
-          if (val.length !== undefined) {
-            return 0 === val.length;
-          }
-          return false;
-        }
-      };
-      Validation.Locale = new ValidationLocaleRepository();
-
-      Validation.debounceTime = 150;
+      Validation.defaults = new ValidationConfig();
     }
   };
 });

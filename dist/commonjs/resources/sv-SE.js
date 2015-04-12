@@ -4,6 +4,8 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
+var _Utilities = require('../validation/utilities');
+
 var data = {
   settings: {
     numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
@@ -23,10 +25,10 @@ var data = {
       return 'kan enbart innehålla bokstäver';
     },
     BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
-      return 'måste vara mellan ' + threshold.minimumLength + ' och ' + threshold.maximumLength + ' tecken långt';
+      return 'måste vara mellan ' + _Utilities.Utilities.getValue(threshold.minimumLength) + ' och ' + _Utilities.Utilities.getValue(threshold.maximumLength) + ' tecken långt';
     },
     BetweenValueValidationRule: function BetweenValueValidationRule(newValue, threshold) {
-      return 'måste vara mellan ' + threshold.minimumValue + ' och ' + threshold.maximumValue;
+      return 'måste vara mellan ' + _Utilities.Utilities.getValue(threshold.minimumValue) + ' och ' + _Utilities.Utilities.getValue(threshold.maximumValue);
     },
     CustomFunctionValidationRule: function CustomFunctionValidationRule(newValue, threshold) {
       return 'är inte ett giltigt värde';
@@ -38,37 +40,37 @@ var data = {
       return 'är inte en giltig e-postadress';
     },
     EqualityValidationRule: function EqualityValidationRule(newValue, threshold) {
-      return 'ska vara ' + threshold.otherValue;
+      return 'ska vara ' + _Utilities.Utilities.getValue(threshold.otherValue);
     },
     InEqualityValidationRule: function InEqualityValidationRule(newValue, threshold) {
-      return 'kan inte vara ' + threshold.otherValue;
+      return 'kan inte vara ' + _Utilities.Utilities.getValue(threshold.otherValue);
     },
     EqualityWithOtherLabelValidationRule: function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-      return 'matchar inte ' + threshold.otherValueLabel;
+      return 'matchar inte ' + _Utilities.Utilities.getValue(threshold.otherValueLabel);
     },
     InEqualityWithOtherLabelValidationRule: function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-      return 'får inte matcha ' + threshold.otherValueLabel;
+      return 'får inte matcha ' + _Utilities.Utilities.getValue(threshold.otherValueLabel);
     },
     InCollectionValidationRule: function InCollectionValidationRule(newValue, threshold) {
       return 'är inget giltigt värde';
     },
     MinimumInclusiveValueValidationRule: function MinimumInclusiveValueValidationRule(newValue, threshold) {
-      return 'måste vara ' + threshold + ' eller mer';
+      return 'måste vara ' + _Utilities.Utilities.getValue(threshold) + ' eller mer';
     },
     MinimumLengthValidationRule: function MinimumLengthValidationRule(newValue, threshold) {
-      return 'behöver vara minst ' + threshold + ' tecken långt';
+      return 'behöver vara minst ' + _Utilities.Utilities.getValue(threshold) + ' tecken långt';
     },
     MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-      return 'måste vara mer än ' + threshold;
+      return 'måste vara mer än ' + _Utilities.Utilities.getValue(threshold);
     },
     MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
-      return 'måste vara ' + threshold + ' eller mindre';
+      return 'måste vara ' + _Utilities.Utilities.getValue(threshold) + ' eller mindre';
     },
     MaximumLengthValidationRule: function MaximumLengthValidationRule(newValue, threshold) {
-      return 'kan inte vara längre än ' + threshold + ' tecken';
+      return 'kan inte vara längre än ' + _Utilities.Utilities.getValue(threshold) + ' tecken';
     },
     MaximumValueValidationRule: function MaximumValueValidationRule(newValue, threshold) {
-      return 'måste vara mindre än ' + threshold;
+      return 'måste vara mindre än ' + _Utilities.Utilities.getValue(threshold);
     },
     NumericValidationRule: function NumericValidationRule(newValue, threshold) {
       return 'måste vara ett nummer';
@@ -83,7 +85,7 @@ var data = {
       return 'ska innehålla en kombination av gemener, versaler, siffror och specialtecken';
     },
     MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
-      return 'ska innehålla minst ' + threshold + ' av följande grupperingar: gemener, versaler, siffror eller specialtecken';
+      return 'ska innehålla minst ' + _Utilities.Utilities.getValue(threshold) + ' av följande grupperingar: gemener, versaler, siffror eller specialtecken';
     }
   }
 };

@@ -54,6 +54,7 @@ System.register([], function (_export) {
           this.message = null;
           this.failingRule = null;
           this.onValidateCallbacks = [];
+          this.latestValue = null;
         }
 
         _createClass(ValidationResultProperty, [{
@@ -70,7 +71,7 @@ System.register([], function (_export) {
             this.message = validationResponse.message;
             this.failingRule = validationResponse.failingRule;
             this.isValid = validationResponse.isValid;
-
+            this.latestValue = validationResponse.latestValue;
             if (this.isValid !== this.group.isValid) this.group.checkValidity();
 
             if (notifyObservers) {

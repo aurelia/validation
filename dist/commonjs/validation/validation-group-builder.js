@@ -20,6 +20,8 @@ var AllCollections = _interopRequireWildcard(_import2);
 
 var _ValidationProperty = require('../validation/validation-property');
 
+var _ValidationConfig = require('../validation/validation-config');
+
 var ValidationGroupBuilder = (function () {
   function ValidationGroupBuilder(observerLocator, validationGroup) {
     _classCallCheck(this, ValidationGroupBuilder);
@@ -31,21 +33,29 @@ var ValidationGroupBuilder = (function () {
 
   _createClass(ValidationGroupBuilder, [{
     key: 'ensure',
-    value: function ensure(propertyName) {
+    value: function ensure(propertyName, configurationCallback) {
       var newValidationProperty = null;
       this.validationRuleCollections = [];
+
       for (var i = 0; i < this.validationGroup.validationProperties.length; i++) {
         if (this.validationGroup.validationProperties[i].propertyName === propertyName) {
           newValidationProperty = this.validationGroup.validationProperties[i];
+          if (configurationCallback !== undefined && typeof configurationCallback === 'function') {
+            throw Error('When creating validation rules on binding path ' + propertyName + ' a configuration callback function was provided, but validation rules have previously already been instantiated for this binding path');
+          }
           break;
         }
       }
       if (newValidationProperty === null) {
         var propertyResult = this.validationGroup.result.addProperty(propertyName);
-        newValidationProperty = new _ValidationProperty.ValidationProperty(this.observerLocator, propertyName, this.validationGroup, propertyResult);
+        var config = new _ValidationConfig.ValidationConfig(this.validationGroup.config);
+        if (configurationCallback !== undefined && typeof configurationCallback === 'function') {
+          configurationCallback(config);
+        }
+        newValidationProperty = new _ValidationProperty.ValidationProperty(this.observerLocator, propertyName, this.validationGroup, propertyResult, config);
         this.validationGroup.validationProperties.push(newValidationProperty);
       }
-      this.validationRuleCollections.unshift(newValidationProperty.validationRules);
+      this.validationRuleCollections.unshift(newValidationProperty.collectionOfValidationRules);
       return this.validationGroup;
     }
   }, {

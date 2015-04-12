@@ -12,7 +12,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _Validation = require('../validation/validation');
+var _Utilities = require('../validation/utilities');
+
+var _ValidationLocale = require('../validation/validation-locale');
 
 var ValidationRule = (function () {
   function ValidationRule(threshold, onValidate, message) {
@@ -37,7 +39,7 @@ var ValidationRule = (function () {
     }
   }, {
     key: 'setResult',
-    value: function setResult(result, currentValue) {
+    value: function setResult(result, currentValue, locale) {
       if (result === true || result === undefined || result === null || result === '') {
         this.errorMessage = null;
         return true;
@@ -52,7 +54,7 @@ var ValidationRule = (function () {
               this.errorMessage = this.message;
             } else throw 'Unable to handle the error message:' + this.message;
           } else {
-            this.errorMessage = _Validation.Validation.Locale.translate(this.ruleName, currentValue, this.threshold);
+            this.errorMessage = locale.translate(this.ruleName, currentValue, this.threshold);
           }
         }
         return false;
@@ -60,16 +62,21 @@ var ValidationRule = (function () {
     }
   }, {
     key: 'validate',
-    value: function validate(currentValue) {
+    value: function validate(currentValue, locale) {
       var _this = this;
 
-      var result = this.onValidate(currentValue, this.threshold);
+      if (locale === undefined) {
+        locale = _ValidationLocale.ValidationLocale.Repository['default'];
+      }
+
+      currentValue = _Utilities.Utilities.getValue(currentValue);
+      var result = this.onValidate(currentValue, this.threshold, locale);
       var promise = Promise.resolve(result);
 
       var nextPromise = promise.then(function (promiseResult) {
-        return _this.setResult(promiseResult, currentValue);
+        return _this.setResult(promiseResult, currentValue, locale);
       }, function (promiseFailure) {
-        if (typeof promiseFailure === 'string' && promiseFailure !== '') return _this.setResult(promiseFailure, currentValue);else return _this.setResult(false, currentValue);
+        if (typeof promiseFailure === 'string' && promiseFailure !== '') return _this.setResult(promiseFailure, currentValue, locale);else return _this.setResult(false, currentValue, locale);
       });
       return nextPromise;
     }
@@ -192,8 +199,8 @@ var NumericValidationRule = (function (_ValidationRule6) {
   function NumericValidationRule() {
     _classCallCheck(this, NumericValidationRule);
 
-    _get(Object.getPrototypeOf(NumericValidationRule.prototype), 'constructor', this).call(this, null, function (newValue) {
-      var numericRegex = _Validation.Validation.Locale.setting('numericRegex');
+    _get(Object.getPrototypeOf(NumericValidationRule.prototype), 'constructor', this).call(this, null, function (newValue, threshold, locale) {
+      var numericRegex = locale.setting('numericRegex');
       var floatValue = parseFloat(newValue);
       return !Number.isNaN(parseFloat(floatValue)) && Number.isFinite(floatValue) && numericRegex.test(newValue);
     });
@@ -241,7 +248,7 @@ var MinimumValueValidationRule = (function (_ValidationRule8) {
     _classCallCheck(this, MinimumValueValidationRule);
 
     _get(Object.getPrototypeOf(MinimumValueValidationRule.prototype), 'constructor', this).call(this, minimumValue, function (newValue, minimumValue) {
-      return minimumValue < newValue;
+      return _Utilities.Utilities.getValue(minimumValue) < newValue;
     });
   }
 
@@ -257,7 +264,7 @@ var MinimumInclusiveValueValidationRule = (function (_ValidationRule9) {
     _classCallCheck(this, MinimumInclusiveValueValidationRule);
 
     _get(Object.getPrototypeOf(MinimumInclusiveValueValidationRule.prototype), 'constructor', this).call(this, minimumValue, function (newValue, minimumValue) {
-      return minimumValue <= newValue;
+      return _Utilities.Utilities.getValue(minimumValue) <= newValue;
     });
   }
 
@@ -273,7 +280,7 @@ var MaximumValueValidationRule = (function (_ValidationRule10) {
     _classCallCheck(this, MaximumValueValidationRule);
 
     _get(Object.getPrototypeOf(MaximumValueValidationRule.prototype), 'constructor', this).call(this, maximumValue, function (newValue, maximumValue) {
-      return newValue < maximumValue;
+      return newValue < _Utilities.Utilities.getValue(maximumValue);
     });
   }
 
@@ -289,7 +296,7 @@ var MaximumInclusiveValueValidationRule = (function (_ValidationRule11) {
     _classCallCheck(this, MaximumInclusiveValueValidationRule);
 
     _get(Object.getPrototypeOf(MaximumInclusiveValueValidationRule.prototype), 'constructor', this).call(this, maximumValue, function (newValue, maximumValue) {
-      return newValue <= maximumValue;
+      return newValue <= _Utilities.Utilities.getValue(maximumValue);
     });
   }
 
@@ -305,7 +312,7 @@ var BetweenValueValidationRule = (function (_ValidationRule12) {
     _classCallCheck(this, BetweenValueValidationRule);
 
     _get(Object.getPrototypeOf(BetweenValueValidationRule.prototype), 'constructor', this).call(this, { minimumValue: minimumValue, maximumValue: maximumValue }, function (newValue, threshold) {
-      return threshold.minimumValue <= newValue && newValue <= threshold.maximumValue;
+      return _Utilities.Utilities.getValue(threshold.minimumValue) <= newValue && newValue <= _Utilities.Utilities.getValue(threshold.maximumValue);
     });
   }
 
@@ -457,8 +464,9 @@ var EqualityValidationRuleBase = (function (_ValidationRule19) {
       equality: equality,
       otherValueLabel: otherValueLabel
     }, function (newValue, threshold) {
-      if (newValue instanceof Date && threshold.otherValue instanceof Date) return threshold.equality === (newValue.getTime() === threshold.otherValue.getTime());
-      return threshold.equality === (newValue === threshold.otherValue);
+      var otherValue = _Utilities.Utilities.getValue(threshold.otherValue);
+      if (newValue instanceof Date && otherValue instanceof Date) return threshold.equality === (newValue.getTime() === otherValue.getTime());
+      return threshold.equality === (newValue === otherValue);
     });
   }
 
@@ -530,6 +538,7 @@ var InCollectionValidationRule = (function (_ValidationRule20) {
     _classCallCheck(this, InCollectionValidationRule);
 
     _get(Object.getPrototypeOf(InCollectionValidationRule.prototype), 'constructor', this).call(this, collection, function (newValue, threshold) {
+      var collection = _Utilities.Utilities.getValue(threshold);
       for (var i = 0; i < collection.length; i++) {
         if (newValue === collection[i]) return true;
       }

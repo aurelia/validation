@@ -1,4 +1,4 @@
-define(['exports', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-property'], function (exports, _validationValidationRules, _validationValidationRulesCollection, _validationValidationProperty) {
+define(['exports', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-property', '../validation/validation-config'], function (exports, _validationValidationRules, _validationValidationRulesCollection, _validationValidationProperty, _validationValidationConfig) {
   'use strict';
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -20,21 +20,29 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
 
     _createClass(ValidationGroupBuilder, [{
       key: 'ensure',
-      value: function ensure(propertyName) {
+      value: function ensure(propertyName, configurationCallback) {
         var newValidationProperty = null;
         this.validationRuleCollections = [];
+
         for (var i = 0; i < this.validationGroup.validationProperties.length; i++) {
           if (this.validationGroup.validationProperties[i].propertyName === propertyName) {
             newValidationProperty = this.validationGroup.validationProperties[i];
+            if (configurationCallback !== undefined && typeof configurationCallback === 'function') {
+              throw Error('When creating validation rules on binding path ' + propertyName + ' a configuration callback function was provided, but validation rules have previously already been instantiated for this binding path');
+            }
             break;
           }
         }
         if (newValidationProperty === null) {
           var propertyResult = this.validationGroup.result.addProperty(propertyName);
-          newValidationProperty = new _validationValidationProperty.ValidationProperty(this.observerLocator, propertyName, this.validationGroup, propertyResult);
+          var config = new _validationValidationConfig.ValidationConfig(this.validationGroup.config);
+          if (configurationCallback !== undefined && typeof configurationCallback === 'function') {
+            configurationCallback(config);
+          }
+          newValidationProperty = new _validationValidationProperty.ValidationProperty(this.observerLocator, propertyName, this.validationGroup, propertyResult, config);
           this.validationGroup.validationProperties.push(newValidationProperty);
         }
-        this.validationRuleCollections.unshift(newValidationProperty.validationRules);
+        this.validationRuleCollections.unshift(newValidationProperty.collectionOfValidationRules);
         return this.validationGroup;
       }
     }, {

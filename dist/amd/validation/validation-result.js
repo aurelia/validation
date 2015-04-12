@@ -53,6 +53,7 @@ define(["exports"], function (exports) {
       this.message = null;
       this.failingRule = null;
       this.onValidateCallbacks = [];
+      this.latestValue = null;
     }
 
     _createClass(ValidationResultProperty, [{
@@ -69,7 +70,7 @@ define(["exports"], function (exports) {
         this.message = validationResponse.message;
         this.failingRule = validationResponse.failingRule;
         this.isValid = validationResponse.isValid;
-
+        this.latestValue = validationResponse.latestValue;
         if (this.isValid !== this.group.isValid) this.group.checkValidity();
 
         if (notifyObservers) {

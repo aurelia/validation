@@ -1,8 +1,9 @@
 import {Validation} from '../validation/validation';
 
 export class Debouncer{
-  constructor(){
+  constructor(debounceTimeout){
     this.currentFunction = null;
+    this.debounceTimeout = debounceTimeout;
   }
 
   debounce(func)
@@ -16,6 +17,6 @@ export class Debouncer{
             func();
           }
         }
-    }, Validation.debounceTime);
+    }, this.debounceTimeout);
   }
 }
