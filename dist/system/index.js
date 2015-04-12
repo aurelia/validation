@@ -5,7 +5,7 @@ System.register(['./validation/validation', './validation/utilities', './validat
 
   function install(aurelia, configCallback) {
     aurelia.globalizeResources('./validation/validate-attached-behavior');
-    if (configCallback !== undefined && typeof (configCallback === 'function')) {
+    if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(Validation.defaults);
     }
     return Validation.defaults.locale();

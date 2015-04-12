@@ -73,7 +73,7 @@ Object.defineProperty(exports, 'ValidateAttachedBehaviorConfig', {
 
 function install(aurelia, configCallback) {
   aurelia.globalizeResources('./validation/validate-attached-behavior');
-  if (configCallback !== undefined && typeof (configCallback === 'function')) {
+  if (configCallback !== undefined && typeof configCallback === 'function') {
     configCallback(_Validation.Validation.defaults);
   }
   return _Validation.Validation.defaults.locale();
