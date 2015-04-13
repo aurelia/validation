@@ -74,14 +74,15 @@ define(['exports'], function (exports) {
 
     _createClass(ValidationLocaleRepository, [{
       key: 'load',
-      value: function load(localeIdentifier) {
+      value: function load(localeIdentifier, basePath) {
         var _this = this;
 
+        if (!basePath) basePath = './resources/';
         return new Promise(function (resolve, reject) {
           if (_this.instances.has(localeIdentifier)) {
             resolve(_this.instances.get(localeIdentifier));
           } else {
-            System['import']('./src/resources/' + localeIdentifier).then(function (resource) {
+            System['import'](basePath + localeIdentifier).then(function (resource) {
               resolve(_this.addLocale(localeIdentifier, resource.data));
             });
           }

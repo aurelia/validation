@@ -13,12 +13,18 @@ define(['exports', '../validation/validation-locale'], function (exports, _valid
     _classCallCheck(this, ValidationConfigDefaults);
   };
 
+  exports.ValidationConfigDefaults = ValidationConfigDefaults;
+
+  ValidationConfigDefaults._defaults = {
+    debounceTimeout: 0,
+    dependencies: [],
+    locale: 'en-US',
+    localeResources: './resources/'
+  };
   ValidationConfigDefaults.defaults = function () {
-    return {
-      debounceTimeout: 0,
-      dependencies: [],
-      locale: 'en-US'
-    };
+    var defaults = {};
+    Object.assign(defaults, ValidationConfigDefaults._defaults);
+    return defaults;
   };
 
   var ValidationConfig = (function () {
@@ -108,7 +114,7 @@ define(['exports', '../validation/validation-locale'], function (exports, _valid
     }, {
       key: 'locale',
       value: function locale() {
-        return _validationValidationLocale.ValidationLocale.Repository.load(this.getValue('locale'));
+        return _validationValidationLocale.ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
       }
     }]);
 

@@ -1,13 +1,17 @@
 import {ValidationLocale} from '../validation/validation-locale';
 
-class ValidationConfigDefaults{
+export class ValidationConfigDefaults{
 }
+ValidationConfigDefaults._defaults = {
+  debounceTimeout : 0,
+  dependencies : [],
+  locale : 'en-US',
+  localeResources : './resources/'
+};
 ValidationConfigDefaults.defaults = function(){
-  return {
-    debounceTimeout : 0,
-    dependencies : [],
-    locale : 'en-US'
-  }
+  var defaults = {};
+  Object.assign(defaults, ValidationConfigDefaults._defaults);
+  return defaults;
 };
 
 export class ValidationConfig {
@@ -81,7 +85,7 @@ export class ValidationConfig {
   }
 
   locale(){
-    return ValidationLocale.Repository.load(this.getValue('locale'));
+    return ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
   }
 }
 ValidationConfig.uniqueListenerId = 0;

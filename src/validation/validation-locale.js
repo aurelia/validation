@@ -46,13 +46,15 @@ class ValidationLocaleRepository  {
       messages: {}
     };
   }
-  load(localeIdentifier) { 
+  load(localeIdentifier, basePath) {
+    if(!basePath)
+      basePath = './resources/';
     return new Promise((resolve, reject) => {
       if(this.instances.has(localeIdentifier)) {
         resolve(this.instances.get(localeIdentifier));
       }
       else {
-        System.import('./src/resources/' + localeIdentifier).then((resource) => {
+        System.import(basePath + localeIdentifier).then((resource) => {
           resolve(this.addLocale(localeIdentifier, resource.data));
         });
       }
