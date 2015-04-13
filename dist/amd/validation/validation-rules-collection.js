@@ -34,7 +34,8 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
             return Promise.resolve({
               isValid: false,
               message: locale.translate('isRequired'),
-              failingRule: 'isRequired'
+              failingRule: 'isRequired',
+              latestValue: newValue
             });
           } else {
             executeRules = false;

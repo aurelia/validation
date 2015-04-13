@@ -303,4 +303,25 @@ describe('Basic validation tests', () => {
       done();
     });
   });
+
+  it('should only set the result based on the latest value', (done) => {
+    var subject = new TestSubject(new Validation(new ObserverLocator()), '');
+    subject.validation.ensure('firstName').passes( () => { return new Promise((fulfil) => {
+      setTimeout(()=>{
+        fulfil(false);
+      }, 10);
+    })});
+    subject.firstName = 'Bob';
+    //Trigger validation on 'Bob', it will fail in 10 ms.
+    subject.validation.validate().then( ()=> {}, ()=> {});
+    setTimeout( () => {
+      subject.firstName = ''; //Meanwhile, set firstName to ''. This is a valid value
+      setTimeout(()=> {
+        //Check that the result from the delayed validation on 'Bob' does not overwrite the reesult of ''.
+        expect(subject.validation.result.properties.firstName.isValid).toBe(true);
+        expect(subject.validation.result.properties.firstName.message).toBe('');
+        done();
+      }, 10);
+    }, 5);
+  });
 });

@@ -29,6 +29,7 @@ var ValidationProperty = (function () {
     this.validationGroup = validationGroup;
     this.collectionOfValidationRules = new AllCollections.ValidationRulesCollection();
     this.config = config;
+    this.latestValue = undefined;
 
     this.observer = new _PathObserver.PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
 
@@ -70,9 +71,10 @@ var ValidationProperty = (function () {
     value: function validate(newValue, shouldBeDirty) {
       var _this2 = this;
 
+      this.latestValue = newValue;
       return this.config.locale().then(function (locale) {
         return _this2.collectionOfValidationRules.validate(newValue, locale).then(function (validationResponse) {
-          _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
+          if (_this2.latestValue === validationResponse.latestValue) _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
           return validationResponse.isValid;
         })['catch'](function (err) {
           console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);

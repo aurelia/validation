@@ -9,6 +9,7 @@ export class ValidationProperty {
     this.validationGroup = validationGroup;
     this.collectionOfValidationRules = new AllCollections.ValidationRulesCollection();
     this.config = config;
+    this.latestValue = undefined;
 
     this.observer = new PathObserver(observerLocator, validationGroup.subject, propertyName)
       .getObserver();
@@ -46,11 +47,13 @@ export class ValidationProperty {
    * returns a promise that fulfils and resolves to true/false
    */
   validate(newValue, shouldBeDirty) {
+    this.latestValue = newValue;
     return this.config.locale().then( (locale) => {
       return this.collectionOfValidationRules.validate(newValue, locale)
         .then( (validationResponse) => {
-        this.propertyResult.setValidity(validationResponse, shouldBeDirty);
-        return validationResponse.isValid;
+          if(this.latestValue === validationResponse.latestValue)
+            this.propertyResult.setValidity(validationResponse, shouldBeDirty);
+          return validationResponse.isValid;
       })
       .catch( (err) => {
         console.log("Unexpected behavior: a validation-rules-collection should always fulfil", err);

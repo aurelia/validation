@@ -250,7 +250,6 @@ describe('Some simple configuration API tests', ()=>{
 
       subject.password = 'aBc!54321';
       setTimeout(()=>{
-        debugger;
         expect(subject.validation.result.properties.password.isValid).toBe(true);
         expect(subject.validation.result.properties.confirmPassword.isValid).toBe(false);
         done();
@@ -269,7 +268,6 @@ describe('Some simple configuration API tests', ()=>{
 
       subject.password = 'aBc!54321';
       setTimeout(()=>{
-        debugger;
         expect(subject.validation.result.properties.password.isValid).toBe(true);
         expect(subject.validation.result.properties.confirmPassword.isValid).toBe(false);
         done();

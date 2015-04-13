@@ -20,6 +20,7 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
       this.validationGroup = validationGroup;
       this.collectionOfValidationRules = new _validationValidationRulesCollection.ValidationRulesCollection();
       this.config = config;
+      this.latestValue = undefined;
 
       this.observer = new _validationPathObserver.PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
 
@@ -61,9 +62,10 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
       value: function validate(newValue, shouldBeDirty) {
         var _this2 = this;
 
+        this.latestValue = newValue;
         return this.config.locale().then(function (locale) {
           return _this2.collectionOfValidationRules.validate(newValue, locale).then(function (validationResponse) {
-            _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
+            if (_this2.latestValue === validationResponse.latestValue) _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
             return validationResponse.isValid;
           })['catch'](function (err) {
             console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);
