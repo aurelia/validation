@@ -1,4 +1,5 @@
 import {ValidationLocale} from '../validation/validation-locale';
+import {ValidateAttachedBehaviorStrategy} from '../validation/validate-attached-behavior-strategy';
 
 export class ValidationConfigDefaults{
 }
@@ -6,7 +7,8 @@ ValidationConfigDefaults._defaults = {
   debounceTimeout : 0,
   dependencies : [],
   locale : 'en-US',
-  localeResources : 'aurelia-validation/resources/'
+  localeResources : 'aurelia-validation/resources/',
+  viewStrategy : ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage
 };
 ValidationConfigDefaults.defaults = function(){
   var defaults = {};
@@ -87,5 +89,15 @@ export class ValidationConfig {
   locale(){
     return ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
   }
+
+  useViewStrategy(viewStrategy){
+    return this.setValue('viewStrategy', viewStrategy);
+  }
+
+  getViewStrategy()
+  {
+    return this.getValue('viewStrategy');
+  }
+
 }
 ValidationConfig.uniqueListenerId = 0;

@@ -1,9 +1,11 @@
-System.register(['../validation/validation-locale'], function (_export) {
-  var ValidationLocale, _createClass, _classCallCheck, ValidationConfigDefaults, ValidationConfig;
+System.register(['../validation/validation-locale', '../validation/validate-attached-behavior-strategy'], function (_export) {
+  var ValidationLocale, ValidateAttachedBehaviorStrategy, _createClass, _classCallCheck, ValidationConfigDefaults, ValidationConfig;
 
   return {
     setters: [function (_validationValidationLocale) {
       ValidationLocale = _validationValidationLocale.ValidationLocale;
+    }, function (_validationValidateAttachedBehaviorStrategy) {
+      ValidateAttachedBehaviorStrategy = _validationValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy;
     }],
     execute: function () {
       'use strict';
@@ -22,7 +24,8 @@ System.register(['../validation/validation-locale'], function (_export) {
         debounceTimeout: 0,
         dependencies: [],
         locale: 'en-US',
-        localeResources: 'aurelia-validation/resources/'
+        localeResources: 'aurelia-validation/resources/',
+        viewStrategy: ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage
       };
       ValidationConfigDefaults.defaults = function () {
         var defaults = {};
@@ -118,6 +121,16 @@ System.register(['../validation/validation-locale'], function (_export) {
           key: 'locale',
           value: function locale() {
             return ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
+          }
+        }, {
+          key: 'useViewStrategy',
+          value: function useViewStrategy(viewStrategy) {
+            return this.setValue('viewStrategy', viewStrategy);
+          }
+        }, {
+          key: 'getViewStrategy',
+          value: function getViewStrategy() {
+            return this.getValue('viewStrategy');
           }
         }]);
 

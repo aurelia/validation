@@ -1,4 +1,4 @@
-System.register(['./validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-attached-behavior', './validation/validate-attached-behavior-config'], function (_export) {
+System.register(['./validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-attached-behavior', './validation/validate-attached-behavior-strategy'], function (_export) {
   var Validation;
 
   _export('install', install);
@@ -32,8 +32,8 @@ System.register(['./validation/validation', './validation/utilities', './validat
       }
     }, function (_validationValidateAttachedBehavior) {
       _export('ValidateAttachedBehavior', _validationValidateAttachedBehavior.ValidateAttachedBehavior);
-    }, function (_validationValidateAttachedBehaviorConfig) {
-      _export('ValidateAttachedBehaviorConfig', _validationValidateAttachedBehaviorConfig.ValidateAttachedBehaviorConfig);
+    }, function (_validationValidateAttachedBehaviorStrategy) {
+      _export('ValidateAttachedBehaviorStrategy', _validationValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy);
     }],
     execute: function () {
       'use strict';

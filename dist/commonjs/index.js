@@ -62,12 +62,12 @@ Object.defineProperty(exports, 'ValidateAttachedBehavior', {
   }
 });
 
-var _ValidateAttachedBehaviorConfig = require('./validation/validate-attached-behavior-config');
+var _ValidateAttachedBehaviorStrategy = require('./validation/validate-attached-behavior-strategy');
 
-Object.defineProperty(exports, 'ValidateAttachedBehaviorConfig', {
+Object.defineProperty(exports, 'ValidateAttachedBehaviorStrategy', {
   enumerable: true,
   get: function get() {
-    return _ValidateAttachedBehaviorConfig.ValidateAttachedBehaviorConfig;
+    return _ValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy;
   }
 });
 

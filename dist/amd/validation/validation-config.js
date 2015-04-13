@@ -1,4 +1,4 @@
-define(['exports', '../validation/validation-locale'], function (exports, _validationValidationLocale) {
+define(['exports', '../validation/validation-locale', '../validation/validate-attached-behavior-strategy'], function (exports, _validationValidationLocale, _validationValidateAttachedBehaviorStrategy) {
   'use strict';
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19,7 +19,8 @@ define(['exports', '../validation/validation-locale'], function (exports, _valid
     debounceTimeout: 0,
     dependencies: [],
     locale: 'en-US',
-    localeResources: 'aurelia-validation/resources/'
+    localeResources: 'aurelia-validation/resources/',
+    viewStrategy: _validationValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage
   };
   ValidationConfigDefaults.defaults = function () {
     var defaults = {};
@@ -115,6 +116,16 @@ define(['exports', '../validation/validation-locale'], function (exports, _valid
       key: 'locale',
       value: function locale() {
         return _validationValidationLocale.ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
+      }
+    }, {
+      key: 'useViewStrategy',
+      value: function useViewStrategy(viewStrategy) {
+        return this.setValue('viewStrategy', viewStrategy);
+      }
+    }, {
+      key: 'getViewStrategy',
+      value: function getViewStrategy() {
+        return this.getValue('viewStrategy');
       }
     }]);
 

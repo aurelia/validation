@@ -1,4 +1,4 @@
-define(['exports', './validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-attached-behavior', './validation/validate-attached-behavior-config'], function (exports, _validationValidation, _validationUtilities, _validationValidationConfig, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidateAttachedBehavior, _validationValidateAttachedBehaviorConfig) {
+define(['exports', './validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-attached-behavior', './validation/validate-attached-behavior-strategy'], function (exports, _validationValidation, _validationUtilities, _validationValidationConfig, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidateAttachedBehavior, _validationValidateAttachedBehaviorStrategy) {
   'use strict';
 
   var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -44,10 +44,10 @@ define(['exports', './validation/validation', './validation/utilities', './valid
       return _validationValidateAttachedBehavior.ValidateAttachedBehavior;
     }
   });
-  Object.defineProperty(exports, 'ValidateAttachedBehaviorConfig', {
+  Object.defineProperty(exports, 'ValidateAttachedBehaviorStrategy', {
     enumerable: true,
     get: function get() {
-      return _validationValidateAttachedBehaviorConfig.ValidateAttachedBehaviorConfig;
+      return _validationValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy;
     }
   });
 

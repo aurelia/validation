@@ -5,7 +5,7 @@ export * from './validation/validation-result';
 export * from './validation/validation-rules';
 export {Validation} from './validation/validation';
 export {ValidateAttachedBehavior} from './validation/validate-attached-behavior';
-export {ValidateAttachedBehaviorConfig} from './validation/validate-attached-behavior-config';
+export {ValidateAttachedBehaviorStrategy} from './validation/validate-attached-behavior-strategy';
 
 import {Validation} from './validation/validation';
 
