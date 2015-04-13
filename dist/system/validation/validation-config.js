@@ -22,7 +22,7 @@ System.register(['../validation/validation-locale'], function (_export) {
         debounceTimeout: 0,
         dependencies: [],
         locale: 'en-US',
-        localeResources: './resources/'
+        localeResources: 'aurelia-validation/resources/'
       };
       ValidationConfigDefaults.defaults = function () {
         var defaults = {};

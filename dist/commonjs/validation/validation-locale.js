@@ -76,7 +76,7 @@ var ValidationLocaleRepository = (function () {
     value: function load(localeIdentifier, basePath) {
       var _this = this;
 
-      if (!basePath) basePath = './resources/';
+      if (!basePath) basePath = 'aurelia-validation/resources/';
       return new Promise(function (resolve, reject) {
         if (_this.instances.has(localeIdentifier)) {
           resolve(_this.instances.get(localeIdentifier));

@@ -48,7 +48,7 @@ class ValidationLocaleRepository  {
   }
   load(localeIdentifier, basePath) {
     if(!basePath)
-      basePath = './resources/';
+      basePath = 'aurelia-validation/resources/';
     return new Promise((resolve, reject) => {
       if(this.instances.has(localeIdentifier)) {
         resolve(this.instances.get(localeIdentifier));

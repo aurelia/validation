@@ -19,7 +19,7 @@ define(['exports', '../validation/validation-locale'], function (exports, _valid
     debounceTimeout: 0,
     dependencies: [],
     locale: 'en-US',
-    localeResources: './resources/'
+    localeResources: 'aurelia-validation/resources/'
   };
   ValidationConfigDefaults.defaults = function () {
     var defaults = {};
