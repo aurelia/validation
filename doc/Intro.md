@@ -186,7 +186,7 @@ Validates that the value entered has a length less than or equal to the provided
 
 ####isBetween(minValue, maxValue)
 Validates that the value entered is greater than or equal to the provided *minValue* and less than or equal to the provided *maxValue*.
-Arguments can be values or functions that return a value. See 'config.computedFrom'.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isEmail()
 Validates that the value entered is a properly formed isEmail address.
@@ -194,27 +194,27 @@ Validates that the value entered is a properly formed isEmail address.
 ####isEqualTo(otherValue, otherValueLabel)
 Validates that the value entered is strictly equal to the *otherValue*.
 Optionally takes an *otherValueLabel*, which will be used in the error message.
-Arguments can be values or functions that return a value. See 'config.computedFrom'.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isGreaterThan(minValue)
 Validates that the value entered is strictly greater than the provided *minValue*.
-Arguments can be values or functions that return a value. See 'config.computedFrom'.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isGreaterThanOrEqualTo(minValue)
 Validates that the value entered is greater than or equal to the provided *minValue*.
-Arguments can be values or functions that return a value. See 'config.computedFrom'.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isLessThan(maxValue)
 Validates that the value entered is strictly smaller than the provided *maxValue*.
-Arguments can be values or functions that return a value. See 'config.computedFrom'.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isLessThanOrEqualTo(maxValue)
 Validates that the value entered is smaller than or equal to the provided *maxValue*.
-Arguments can be values or functions that return a value. See 'config.computedFrom'.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isIn(collection)
 Validates that at least one of the values in the *collection* is equal to the value entered.
-Arguments can be values or functions that return a value. See 'config.computedFrom'.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isNumber()
 Validates that the value entered is numeric.
@@ -243,7 +243,7 @@ Your *customFunction* is a function that takes two arguments: *newValue* (the va
 - a promise that rejects to a non-empty string: for invalid. Your non-empty string will be used as the validation message.
 - a promise that rejects to anything else: for invalid. 
  
-See 'config.computedFrom'.
+>See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 >Note: there is a default message for failing *passes()* rules which states 'invalid value'. For UX purposes, it's suggested to have your custom function return a message, return a promise that resolves or rejects to a message, or  follow the call to *passes()* by a call to *withMessage()*
 
@@ -262,7 +262,7 @@ Pass a function (*conditionalExpression*) that returns true of false.
 Any conditions that come after the *if(conditionalExpression)* operator will only be evaluated if the *conditionalExpression* evaluates to true.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom('country')} )
                 .if(() => { return subject.country === 'US'; })
                     .isIn(['TX', 'FL'])
                 .endIf()
@@ -273,7 +273,7 @@ Any conditions that come after the *if(conditionalExpression)* operator will onl
 Optionally, chain any *if(conditionalExpression)* with an *else()*. Any conditions that come after the *else()* will only be evaluated if the *conditionalExpression* evaluates to false.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom('country')} )
                 .if(() => { return subject.country === 'US'; })
                     .isIn(['TX', 'FL'])
                 .else()
@@ -285,7 +285,7 @@ Optionally, chain any *if(conditionalExpression)* with an *else()*. Any conditio
 The *if(conditionalExpression)* is automatically terminated when you move to the next property (*ensure(propertyName)*). However we suggest you always close your conditional statements with an *endIf* for readability. Especially when nesting statements...
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom(['country', 'age'])} )
                 .if(() => { return subject.country === 'US'; })
                     .isIn(['TX', 'FL'])
                     .if( () => { return subject.state === 'FL'})
@@ -303,7 +303,7 @@ Pass a function (*conditionalExpression*) that returns any label (string, number
 Only the validation statements chained to the *case(label)* that isEqualTo the returned label, will be evaluated.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom('country')} )
             .isNotEmpty()
             .switch(() => {return subject.country;})
                 .case('US')
@@ -318,7 +318,7 @@ If for a given switch statement, no label is matched, the switch will be evaluat
 To add a default case, use the *default()* method.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom('country')} )
             .isNotEmpty()
             .switch(() => {return subject.country;})
                 .case('US')
@@ -334,7 +334,7 @@ To add a default case, use the *default()* method.
 If *switch()* is being called without a *conditionExpression*, it will use the currently evaluated value of the underlying property as a label.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('customerLevel')
+            .ensure('customerLevel', (config) => {config.computedFrom('income')} )
             .isNotEmpty()
             .switch()
                 .case('Gold')
@@ -373,8 +373,9 @@ You can optionally pass a failureCallback which will be executed if your validat
 #I18N
 
 ####Changing locale
-Changing the locale is done on a 'global' level by calling *config.useLocale(localeIdentifier)* (see 'Supported locales').
-See 'Configuration'. 
+Changing the locale is done on a 'global' level by calling *config.useLocale(localeIdentifier)*.
+
+See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance). 
 
 >Note: error messages already resolved are will be automatically updated when the locale changes.
 
@@ -496,7 +497,7 @@ The validate custom attribute uses a strategy based onTwitter Bootstrap by defau
 
 ```
 
-To change the default visualisation, see 'config.useViewStrategy'.
+To change the default visualisation, see ['config.useViewStrategy'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance).
 
 ##How are elements and validation rules matched
 The validate custom attribute, once bound to a validation instance, will loop over every child element and try to match elements against validation rules.
@@ -662,7 +663,7 @@ The configuration on the property level will delegate missing config to it's par
 import {ValidationConfig} from 'aurelia-validation';
 import {inject} from 'aurelia-framework';
 
-@inject(ValidationConfig)
+//@inject(ValidationConfig) 
 export class MyVM{
   constructor(config)
   {
