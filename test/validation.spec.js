@@ -304,6 +304,20 @@ describe('Basic validation tests', () => {
     });
   });
 
+
+  it('should set isValidating when validating', (done) => {
+    var subject = TestSubject.createInstance('Bob');
+
+    expect(subject.validation.isValidating).toBe(false);
+    var validation =     subject.validation.validate();
+    expect(subject.validation.isValidating).toBe(true);
+
+    validation.then(() => {
+      expect(subject.validation.isValidating).toBe(false);
+      done();
+    });
+  });
+
   it('should only set the result based on the latest value', (done) => {
     var subject = new TestSubject(new Validation(new ObserverLocator()), '');
     subject.validation.ensure('firstName').passes( () => { return new Promise((fulfil) => {

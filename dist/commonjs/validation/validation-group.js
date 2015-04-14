@@ -26,6 +26,7 @@ var ValidationGroup = (function () {
     this.config = config;
     this.builder = new _ValidationGroupBuilder.ValidationGroupBuilder(observerLocator, this);
     this.onValidateCallback = null;
+    this.isValidating = false;
     this.onDestroy = config.onLocaleChanged(function () {
       _this.validate(false);
     });
@@ -43,6 +44,7 @@ var ValidationGroup = (function () {
 
       var forceDirty = arguments[0] === undefined ? true : arguments[0];
 
+      this.isValidating = true;
       var promise = Promise.resolve(true);
 
       var _loop = function (i) {
@@ -103,6 +105,7 @@ var ValidationGroup = (function () {
         });
       }
       promise = promise.then(function () {
+        _this2.isValidating = false;
         if (_this2.result.isValid) {
           return Promise.resolve(_this2.result);
         } else {

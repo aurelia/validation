@@ -28,6 +28,7 @@ System.register(['../validation/validation-group-builder', '../validation/valida
           this.config = config;
           this.builder = new ValidationGroupBuilder(observerLocator, this);
           this.onValidateCallback = null;
+          this.isValidating = false;
           this.onDestroy = config.onLocaleChanged(function () {
             _this.validate(false);
           });
@@ -45,6 +46,7 @@ System.register(['../validation/validation-group-builder', '../validation/valida
 
             var forceDirty = arguments[0] === undefined ? true : arguments[0];
 
+            this.isValidating = true;
             var promise = Promise.resolve(true);
 
             var _loop = function (i) {
@@ -105,6 +107,7 @@ System.register(['../validation/validation-group-builder', '../validation/valida
               });
             }
             promise = promise.then(function () {
+              _this2.isValidating = false;
               if (_this2.result.isValid) {
                 return Promise.resolve(_this2.result);
               } else {

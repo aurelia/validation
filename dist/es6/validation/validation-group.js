@@ -22,6 +22,7 @@ export class ValidationGroup {
     this.config = config;
     this.builder = new ValidationGroupBuilder(observerLocator, this);
     this.onValidateCallback = null;
+    this.isValidating = false;
     this.onDestroy = config.onLocaleChanged( () => {this.validate(false) ;});
   }
 
@@ -34,6 +35,7 @@ export class ValidationGroup {
    * @returns {Promise} A promise that fulfils when valid, rejects when invalid.
    */
   validate(forceDirty = true) {
+    this.isValidating = true;
     var promise = Promise.resolve(true);
     for (let i = this.validationProperties.length - 1; i >= 0; i--) {
       let validatorProperty = this.validationProperties[i];
@@ -91,6 +93,7 @@ export class ValidationGroup {
     }
     promise = promise
     .then(() => {
+      this.isValidating = false;
       if(this.result.isValid)
       {
         return Promise.resolve(this.result);
