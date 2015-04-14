@@ -13,6 +13,7 @@ System.register(['../validation/utilities'], function (_export) {
         },
         messages: {
           isRequired: 'är obligatoriskt',
+          onValidateCallback: 'är inte ett giltigt värde',
           AlphaNumericOrWhitespaceValidationRule: function AlphaNumericOrWhitespaceValidationRule(newValue, threshold) {
             return 'kan enbart innehålla alfanumeriska tecken eller mellanslag';
           },

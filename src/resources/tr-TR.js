@@ -6,6 +6,7 @@ export let data = {
   },
   messages: {
     'isRequired': 'gereklidir',
+    'onValidateCallback' : 'geçerli bir değer giriniz',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
       return `sadece alfanumerik karakterler veya boşluk girebilirsiniz`;
     },

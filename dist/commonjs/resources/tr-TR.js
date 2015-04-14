@@ -12,6 +12,7 @@ var data = {
   },
   messages: {
     isRequired: 'gereklidir',
+    onValidateCallback: 'geçerli bir değer giriniz',
     AlphaNumericOrWhitespaceValidationRule: function AlphaNumericOrWhitespaceValidationRule(newValue, threshold) {
       return 'sadece alfanumerik karakterler veya boşluk girebilirsiniz';
     },

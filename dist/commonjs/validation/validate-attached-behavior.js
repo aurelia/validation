@@ -41,7 +41,6 @@ var ValidateAttachedBehavior = (function () {
       this.viewStrategy = this.value.config.getViewStrategy();
       var validationProperty = this.viewStrategy.getValidationProperty(this.value, currentElement);
       if (validationProperty !== null && validationProperty !== undefined) {
-        debugger;
         this.viewStrategy.prepareElement(validationProperty, currentElement);
         validationProperty.onValidate(function (vp) {
           _this.viewStrategy.updateElement(vp, currentElement);

@@ -10,6 +10,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
     },
     messages: {
       isRequired: 'wird benötigt',
+      onValidateCallback: 'ist kein gültiger Wert',
       AlphaNumericOrWhitespaceValidationRule: function AlphaNumericOrWhitespaceValidationRule(newValue, threshold) {
         return 'darf nur alphanumerische Zeichen oder Leerzeichen beinhalten';
       },

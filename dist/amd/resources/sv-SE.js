@@ -10,6 +10,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
     },
     messages: {
       isRequired: 'är obligatoriskt',
+      onValidateCallback: 'är inte ett giltigt värde',
       AlphaNumericOrWhitespaceValidationRule: function AlphaNumericOrWhitespaceValidationRule(newValue, threshold) {
         return 'kan enbart innehålla alfanumeriska tecken eller mellanslag';
       },

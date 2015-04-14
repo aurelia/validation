@@ -79,10 +79,12 @@ var ValidationLocaleRepository = (function () {
       if (!basePath) basePath = 'aurelia-validation/resources/';
       return new Promise(function (resolve, reject) {
         if (_this.instances.has(localeIdentifier)) {
-          resolve(_this.instances.get(localeIdentifier));
+          var locale = _this.instances.get(localeIdentifier);
+          resolve(locale);
         } else {
           System['import'](basePath + localeIdentifier).then(function (resource) {
-            resolve(_this.addLocale(localeIdentifier, resource.data));
+            var locale = _this.addLocale(localeIdentifier, resource.data);
+            resolve(locale);
           });
         }
       });

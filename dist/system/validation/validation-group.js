@@ -27,6 +27,7 @@ System.register(['../validation/validation-group-builder', '../validation/valida
           this.validationProperties = [];
           this.config = config;
           this.builder = new ValidationGroupBuilder(observerLocator, this);
+          this.onValidateCallback = null;
           this.onDestroy = config.onLocaleChanged(function () {
             _this.validate(false);
           });
@@ -36,11 +37,6 @@ System.register(['../validation/validation-group-builder', '../validation/valida
           key: 'destroy',
           value: function destroy() {
             this.onDestroy();
-          }
-        }, {
-          key: 'checkAll',
-          value: function checkAll() {
-            throw 'The synchronous "checkAll()" function is no longer supported. Use "validate()" which returns a promise that fulfils when valid, rejects when invalid';
           }
         }, {
           key: 'validate',
@@ -66,14 +62,58 @@ System.register(['../validation/validation-group-builder', '../validation/valida
               debugger;
               throw Error('Should never get here: a validation property should always resolve to true/false!');
             });
+            if (this.onValidateCallback) {
+              promise = promise.then(function () {
+                return _this2.config.locale();
+              }).then(function (locale) {
+                return Promise.resolve(_this2.onValidateCallback.validationFunction()).then(function (callbackResult) {
+                  for (var prop in callbackResult) {
+                    var resultProp = _this2.result.addProperty(prop);
+                    var result = callbackResult[prop];
+                    var newPropResult = {
+                      latestValue: resultProp.latestValue
+                    };
 
-            return promise.then(function () {
+                    if (result === true || result === null || result === '') {
+                      if (!resultProp.isValid) {
+                        newPropResult.failingRule = null;
+                        newPropResult.message = '';
+                        newPropResult.isValid = true;
+                        resultProp.setValidity(newPropResult, true);
+                      }
+                    } else {
+                      newPropResult.failingRule = 'onValidateCallback';
+                      newPropResult.isValid = false;
+                      if (typeof result === 'string') {
+                        newPropResult.message = result;
+                      } else {
+                        newPropResult.message = locale.translate(newPropResult.failingRule);
+                      }
+                      resultProp.setValidity(newPropResult, true);
+                    }
+                  }
+                  _this2.result.checkValidity();
+                }, function (a, b, c, d, e) {
+                  _this2.result.isValid = false;
+                  if (_this2.onValidateCallback.validationFunctionFailedCallback) {
+                    _this2.onValidateCallback.validationFunctionFailedCallback(a, b, c, d, e);
+                  }
+                });
+              });
+            }
+            promise = promise.then(function () {
               if (_this2.result.isValid) {
                 return Promise.resolve(_this2.result);
               } else {
                 return Promise.reject(_this2.result);
               }
             });
+            return promise;
+          }
+        }, {
+          key: 'onValidate',
+          value: function onValidate(validationFunction, validationFunctionFailedCallback) {
+            this.onValidateCallback = { validationFunction: validationFunction, validationFunctionFailedCallback: validationFunctionFailedCallback };
           }
         }, {
           key: 'ensure',

@@ -10,6 +10,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
     },
     messages: {
       isRequired: 'gereklidir',
+      onValidateCallback: 'geçerli bir değer giriniz',
       AlphaNumericOrWhitespaceValidationRule: function AlphaNumericOrWhitespaceValidationRule(newValue, threshold) {
         return 'sadece alfanumerik karakterler veya boşluk girebilirsiniz';
       },

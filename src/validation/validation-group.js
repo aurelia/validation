@@ -21,19 +21,12 @@ export class ValidationGroup {
     this.validationProperties = [];
     this.config = config;
     this.builder = new ValidationGroupBuilder(observerLocator, this);
+    this.onValidateCallback = null;
     this.onDestroy = config.onLocaleChanged( () => {this.validate(false) ;});
   }
 
   destroy(){
     this.onDestroy(); //todo: what else needs to be done for proper cleanup?
-  }
-
-  /**
-   * @deprecated
-   * The synchronous "checkAll()" function is no longer supported. Use "validate()" which returns a promise that fulfils when valid, rejects when invalid
-   */
-  checkAll() {
-    throw 'The synchronous "checkAll()" function is no longer supported. Use "validate()" which returns a promise that fulfils when valid, rejects when invalid';
   }
 
   /**
@@ -51,8 +44,49 @@ export class ValidationGroup {
       debugger;
       throw Error("Should never get here: a validation property should always resolve to true/false!");
     });
+    if(this.onValidateCallback) {
+      promise = promise.then(() => {return this.config.locale();}).then((locale) => {
+        return Promise.resolve(this.onValidateCallback.validationFunction()).then((callbackResult) => {
+          for (var prop in callbackResult) {
+            let resultProp = this.result.addProperty(prop);
+            let result = callbackResult[prop];
+            let newPropResult = {
+              latestValue : resultProp.latestValue
+              };
 
-    return promise.then( () => {
+            if (result === true || result === null || result === '' ) {
+              if(!resultProp.isValid ) {
+                newPropResult.failingRule = null;
+                newPropResult.message = '';
+                newPropResult.isValid = true;
+                resultProp.setValidity(newPropResult, true);
+              }
+            }
+            else {
+              newPropResult.failingRule = 'onValidateCallback';
+              newPropResult.isValid = false;
+              if (typeof(result) === 'string') {
+                newPropResult.message = result;
+              }
+              else {
+                newPropResult.message = locale.translate(newPropResult.failingRule);
+              }
+              resultProp.setValidity(newPropResult, true);
+            }
+          }
+          this.result.checkValidity();
+        },
+        (a,b,c,d,e) => {
+          this.result.isValid = false;
+          if(this.onValidateCallback.validationFunctionFailedCallback)
+          {
+            this.onValidateCallback.validationFunctionFailedCallback(a,b,c,d,e);
+          }
+        });
+      });
+    }
+    promise = promise
+    .then(() => {
       if(this.result.isValid)
       {
         return Promise.resolve(this.result);
@@ -62,6 +96,11 @@ export class ValidationGroup {
         return Promise.reject(this.result);
       }
     });
+      return promise;
+  };
+
+  onValidate(validationFunction, validationFunctionFailedCallback){
+    this.onValidateCallback ={ validationFunction,validationFunctionFailedCallback} ;
   }
 
   /**

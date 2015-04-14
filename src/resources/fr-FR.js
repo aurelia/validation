@@ -6,6 +6,7 @@ export let data = {
   },
   messages: {
     'isRequired': 'est obligatoire',
+    'onValidateCallback' : `n'est pas une valeur valide`,
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
       return `ne peut contenir que des caractères alphanumériques ou des espaces`;
     },

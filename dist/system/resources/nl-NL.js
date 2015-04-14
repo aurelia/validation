@@ -13,6 +13,7 @@ System.register(['../validation/utilities'], function (_export) {
         },
         messages: {
           isRequired: 'is verplicht',
+          onValidateCallback: 'geen geldige waarde',
           AlphaNumericOrWhitespaceValidationRule: function AlphaNumericOrWhitespaceValidationRule(newValue, threshold) {
             return 'kan enkel alfanumerieke tekens of spaties bevatten';
           },

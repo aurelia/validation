@@ -29,7 +29,6 @@ export class ValidateAttachedBehavior {
     var validationProperty = this.viewStrategy.getValidationProperty(this.value, currentElement);
     if(validationProperty !== null && validationProperty !== undefined)
     {
-      debugger;
       this.viewStrategy.prepareElement(validationProperty, currentElement);
       validationProperty.onValidate(
         (vp) => {
