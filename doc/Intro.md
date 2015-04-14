@@ -556,6 +556,10 @@ You will have the following user experience:
 - when the user hit submit, all input elements on the form will show validation messages & visual clues
 - if all validation rules have passed, the form submission code will actually run. If not, the user will clearly see what properties are valid, which are invalid, and why
     
+If you expect the validation to take a while (AJAX call) you can still disable your submit button while validation is taking place:
+``` html
+<button type=submit" disabled.bind="!validation.isValidating" >
+```
 
 #ValidationResult
 If you need more information about your model's validation status or if you want to bind your validation messages yourself, you can investigate the *validation.result* property.
