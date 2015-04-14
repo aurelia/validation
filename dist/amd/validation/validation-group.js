@@ -61,6 +61,9 @@ define(['exports', '../validation/validation-group-builder', '../validation/vali
           }).then(function (locale) {
             return Promise.resolve(_this2.onValidateCallback.validationFunction()).then(function (callbackResult) {
               for (var prop in callbackResult) {
+                if (!_this2.result.properties[prop]) {
+                  _this2.ensure(prop);
+                }
                 var resultProp = _this2.result.addProperty(prop);
                 var result = callbackResult[prop];
                 var newPropResult = {

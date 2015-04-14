@@ -48,6 +48,10 @@ export class ValidationGroup {
       promise = promise.then(() => {return this.config.locale();}).then((locale) => {
         return Promise.resolve(this.onValidateCallback.validationFunction()).then((callbackResult) => {
           for (var prop in callbackResult) {
+            if(!this.result.properties[prop])
+            {  //set up empty validation on the property
+              this.ensure(prop);
+            }
             let resultProp = this.result.addProperty(prop);
             let result = callbackResult[prop];
             let newPropResult = {

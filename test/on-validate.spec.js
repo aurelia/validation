@@ -5,6 +5,7 @@ import {Expectations} from './expectations';
 class TestSubject {
   constructor(validation, firstName) {
     this.firstName = firstName;
+    this.lastName = 'kinda random';
     this.validation = validation.on(this)
       .ensure('firstName').isNotEmpty().hasMinLength(5) ;
   }
@@ -135,7 +136,21 @@ describe('Tests on onValidate callbacks', () => {
       return subject.validation.validate();
     }, true);
     expectations.validate();
+  });
 
+
+  it('should not have to return values for properties that are now valid and have no other validation rules', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance('Bobbette');
+    subject.validation.onValidate( () => {
+      return { lastName : false }
+    });
+    expectations.assert(subject.validation.validate(), false);
+    expectations.assert( () => {
+      subject.validation.onValidate( () => {return { };});
+      return subject.validation.validate();
+    }, true);
+    expectations.validate();
   });
 
   it('should have a mechanism to determine rejected promises', (done) => {
