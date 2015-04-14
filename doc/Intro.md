@@ -127,13 +127,13 @@ We now have a working validation, but nothing changes behaviorally. If the valid
 First, let's make sure that the 'welcome' function can only be executed if the validation is valid:
 ``` javascript
   welcome(){
-    if(this.validation.validate()) //add this
+    if(this.validation.validate()) //the validate will fulfil when validation is valid, and reject if not
       .then( () => {
         alert(`Welcome, ${this.fullName}! `);
       });
   }
 ```
-Secondly, let's provide some visual hints to the users. Open your **welcome.html** file and add the validate attached behavior:
+Secondly, let's provide some visual hints to the users. Open your **welcome.html** file and add the validate custom attribute:
 ``` html 
     <form role="form" submit.delegate="welcome()" validate.bind="validation" > 
 ```
@@ -148,65 +148,91 @@ tl;dr: [watch these samples](http://aurelia.io/validation/#/validators)
 ####isNotEmpty()
 This is a special case, dictating that the field is 'required' and cannot be empty.
 Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
->Note: strings are always trimmed before they evaluated.
 >The isNotEmpty rule is always checked first before any other validation rule.  This means that without the isNotEmpty rule, the .hasMinLength(5) rule would still consider a value of '' as valid because the field is allowed to be empty.
 
-####isBetweenOrEqualTo(minimumValue, maximumValue)
-Validates that the value entered is greater than or equal to the provided *minimumValue* and strictly smaller than the provided *maximumValue*.
+####containsOnly(regex)
+Validates that value entered tests true for the given *regex*.
+> Note: for now this is a synonymn for *matches(regegx)*, however in the future we will try to add the possibility to prevent invalid input for any of the *containsOnly* validation rules.
 
-####hasLengthBetween(minimumLength, maximumLength)
-Validates that the length of the value entered is greater than or equal to the provided *minimumLength* and strictly less than the provided *maximumLength*.
+####containsOnlyAlpha()
+Validates that the value entered contains only alpha (lowercase and uppercase letters).
+
+####containsOnlyAlphaOrWhitespace()
+Validates that the value entered contains only alpha (lowercase and uppercase letters) or whitespaces.
+
+####containsOnlyAlphanumerics()
+Validates that the value entered contains only alphanumerics.
+
+####containsOnlyAlphanumericsOrWhitespace()
+Validates that the value entered contains only alphanumerics or whitespaces.
+
+####containsOnlyDigits()
+Validates that the value entered contains only digits (0-9)
+
+####containsOnlyLetters()
+Synonymn for *containsOnlyAlpha()*
+
+####containsOnlyLettersOrWhitespace()
+Synonymn for *containsOnlyAlphaOrWhitespace()*
+
+####hasLengthBetween(minimumValue, maximumValue)
+Validates that the value entered is greater than or equal to the provided *minimumValue* and less than or equal to the provided *maximumValue*. 
+
+####hasMinLength(minimumLength)
+Validates that the value entered has a length greater than or equal to the provided *minimumLength*.
+
+####hasMaxLength(maximumLength)
+Validates that the value entered has a length less than or equal to the provided *maximumLength*.
+
+####isBetween(minValue, maxValue)
+Validates that the value entered is greater than or equal to the provided *minValue* and less than or equal to the provided *maxValue*.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isEmail()
 Validates that the value entered is a properly formed isEmail address.
 
 ####isEqualTo(otherValue, otherValueLabel)
-Validates that the value entered isEqualTo the *otherValue*.
+Validates that the value entered is strictly equal to the *otherValue*.
 Optionally takes an *otherValueLabel*, which will be used in the error message.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
+
+####isGreaterThan(minValue)
+Validates that the value entered is strictly greater than the provided *minValue*.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
+
+####isGreaterThanOrEqualTo(minValue)
+Validates that the value entered is greater than or equal to the provided *minValue*.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
+
+####isLessThan(maxValue)
+Validates that the value entered is strictly smaller than the provided *maxValue*.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
+
+####isLessThanOrEqualTo(maxValue)
+Validates that the value entered is smaller than or equal to the provided *maxValue*.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isIn(collection)
 Validates that at least one of the values in the *collection* is equal to the value entered.
+>Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
-####containsOnlyAlphanumerics()
-Validates that the value entered contains only lowercase characters, uppercase characters, or digits.
-
-####containsOnlyAlphanumericsOrWhitespace()
-Validates that the value entered contains only lowercase characters, uppercase characters, digits or whitespace.
-
-####containsOnlyDigits()
-Validates that the value entered contains only digits.
+####isNumber()
+Validates that the value entered is numeric.
+This supports properly formatted numbers, like '-1,000.00'. (Accepted format depends on the current locale, see **I18N**)
 
 ####isStrongPassword(minimumComplexityLevel)
 Validates that the value entered is a strong password. A strong password contains each of the following groups: lowercase characters, uppercase characters, digits and special characters.
 Optionally takes a *minumumComplexityLevel* of 2, 3 or 4 (default) to allow weak, medium or strong passwords only.
 This matches the number of groups (lowercase/uppercase/digits/special characters) that need to be present.
 >Note: optimal user experience when preceded with .hasLengthBetween(8,16)
-
-####isNumber()
-Validates that the value entered is numeric.
-This supports properly formatted numbers, like '-1,000.00'. (This depends on the current locale, see **I18N**)
-
-####hasMinLength(minimumLength)
-Validates that the length of the value entered is greater than or equal to the provided *minimumLength*.
-
-####isGreaterThanOrEqualTo(minimumValue)
-Validates that the value entered is greater than or equal to the provided *minimumValue*.
-
+ 
+####isNotEqualTo(otherValue, otherValueLabel)
+Validates that the value entered is not stritly equal to the *otherValue*.
+Optionally takes an *otherValueLabel*, which will be used in the error message.
+Arguments can be values or functions that return a value. See 'config.computedFrom'.
+ 
 ####matches(regex)
 Validates that the value entered is valid according to the provided *regex* (RegExp).
-
-####matchesRegex(regexString)
-Validates that the value entered is valid according to the provided *regexString* (string).
-
-####hasMaxLength(maximumLength)
-Validates that the length of the value entered is strictly less than the provided *maximumLength*.
-
-####isLessThanOrEqualTo(maximumValue)
-Validates that the value entered is strictly smaller than the provided *maximumValue*.
-
-####isNotEqualTo(otherValue, otherValueLabel)
-Validates that the value entered does not equal the *otherValue*. 
-Optionally takes an *otherValueLabel*, which will be used in the error message.
 
 ####passes(customFunction, threshold)
 Validates that the value entered is valid according to the provided *customFunction*.
@@ -216,6 +242,8 @@ Your *customFunction* is a function that takes two arguments: *newValue* (the va
 - false, any other object or a promise that resolves to the forementioned values: for invalid.
 - a promise that rejects to a non-empty string: for invalid. Your non-empty string will be used as the validation message.
 - a promise that rejects to anything else: for invalid. 
+ 
+>See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 >Note: there is a default message for failing *passes()* rules which states 'invalid value'. For UX purposes, it's suggested to have your custom function return a message, return a promise that resolves or rejects to a message, or  follow the call to *passes()* by a call to *withMessage()*
 
@@ -234,7 +262,7 @@ Pass a function (*conditionalExpression*) that returns true of false.
 Any conditions that come after the *if(conditionalExpression)* operator will only be evaluated if the *conditionalExpression* evaluates to true.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom('country')} )
                 .if(() => { return subject.country === 'US'; })
                     .isIn(['TX', 'FL'])
                 .endIf()
@@ -245,7 +273,7 @@ Any conditions that come after the *if(conditionalExpression)* operator will onl
 Optionally, chain any *if(conditionalExpression)* with an *else()*. Any conditions that come after the *else()* will only be evaluated if the *conditionalExpression* evaluates to false.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom('country')} )
                 .if(() => { return subject.country === 'US'; })
                     .isIn(['TX', 'FL'])
                 .else()
@@ -257,7 +285,7 @@ Optionally, chain any *if(conditionalExpression)* with an *else()*. Any conditio
 The *if(conditionalExpression)* is automatically terminated when you move to the next property (*ensure(propertyName)*). However we suggest you always close your conditional statements with an *endIf* for readability. Especially when nesting statements...
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom(['country', 'age'])} )
                 .if(() => { return subject.country === 'US'; })
                     .isIn(['TX', 'FL'])
                     .if( () => { return subject.state === 'FL'})
@@ -275,7 +303,7 @@ Pass a function (*conditionalExpression*) that returns any label (string, number
 Only the validation statements chained to the *case(label)* that isEqualTo the returned label, will be evaluated.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom('country')} )
             .isNotEmpty()
             .switch(() => {return subject.country;})
                 .case('US')
@@ -290,7 +318,7 @@ If for a given switch statement, no label is matched, the switch will be evaluat
 To add a default case, use the *default()* method.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('state')
+            .ensure('state', (config) => {config.computedFrom('country')} )
             .isNotEmpty()
             .switch(() => {return subject.country;})
                 .case('US')
@@ -306,7 +334,7 @@ To add a default case, use the *default()* method.
 If *switch()* is being called without a *conditionExpression*, it will use the currently evaluated value of the underlying property as a label.
 ```javascript
         this.validation = validation.on(this)
-            .ensure('customerLevel')
+            .ensure('customerLevel', (config) => {config.computedFrom('income')} )
             .isNotEmpty()
             .switch()
                 .case('Gold')
@@ -323,21 +351,33 @@ The *if(conditionalExpression)* is automatically terminated when you move to the
 Especially when nesting statements...
 
 
+#onValidate(validationCallback, failureCallback)
+Using the .onValidate(), you can register a callback that is called when the entire subject is validated.  Your function should return an object (or a promise that resolves to an object) that has properties matching each validation property you want to modify, for example:
+```javacript
+validation = validation.on(this) 
+  .ensure('firstName').isNotEmpty()
+  .onValidate( () => {
+    return {
+      firstName : true, //is valid
+      lastName : null, //is valid
+      middleName : '', //is valid
+      addressLine1 : false, //is not valid
+      addressLine2 : 'should be in Antarctica' //is not valid with custom message
+    });
+```
+
+You're not required to return each property in the validation group, and you're not required to return the same properties every time.
+
+You can optionally pass a failureCallback which will be executed if your validationCallback function fails (ie: an exception occurs). Also, if your validationCallback function fails, the validation group will not be considered valid.
+
 #I18N
 
 ####Changing locale
-Changing the locale is done on a 'global' level by calling *Validation.Locale.load(localeIdentifier)*
+Changing the locale is done on a 'global' level by calling *config.useLocale(localeIdentifier)*.
 
-``` javascript
-import {Validation} from 'aurelia-validation';
-//Then, when you need to change the locale
-Validation.Locale.load('nl-BE')
-    .then(()=>{
-        var currentLocale = Validation.Locale.currentLocaleIdentifier; //'nl-BE'
-    });
-```
-The *load* method takes a *localeIdentifier* (see 'Supported locales') and returns a promise that completes when the locale is fully loaded.
->Note: error messages already resolved are not currently updated when the locale changes
+See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance). 
+
+>Note: error messages already resolved are will be automatically updated when the locale changes.
 
 
 ####Supported locales
@@ -358,14 +398,14 @@ If you need a complex validation rule, you can extract that into a seperate clas
 For example:
 ``` javascript
 import {ValidationRule} from './plugins/validation/'; 
-export class MinimumLengthValidationRule extends ValidationRule{
-	constructor (minimumLength) {
+export class MyValidationRule extends ValidationRule{
+	constructor (isValid) {
 		super(
-			minimumLength,
-			(newValue, minimumLength) => {
-				 return newValue.length !== undefined && newValue.length >= minimumLength;
+			isValid, //pass any object as 'threshold'
+			(newValue, threshold) => { //pass a validation function
+				 return threshold;
 			}
-			(newValue, threshold) => {
+			(newValue, threshold) => { //Optionally pass a function that will provide an error message
 				return `needs to be at least ${threshold} characters long`;
 			},
 		);
@@ -428,17 +468,18 @@ Then, when you're setting up validation, you can use your new method:
               .isNotEmpty()
               .SSN();
 ```
-#Customizing the visualization
+
+#Visualization (ValidateCustomAttribute)
 ##Basic usage
-To show validation messages, add the validateAttachedBehavior to any DOM element (the form element is most common) and bind it to your validation instance.
+To show validation messages, add the validate custom attribute to any DOM element (the form element is most common) and bind it to your validation instance.
 ``` html 
     <form role="form" submit.delegate="welcome()" validate.bind="validation" > 
 ```
 
-The validateAttachedBehavior will loop through all nested child elements and try to determine which controls are data-bound to which properties, and if there are validation rules for those properties, it will show visual clues.
+The validateCustomAttribute will loop through all nested child elements and try to determine which controls are data-bound to which properties, and if there are validation rules for those properties, it will show visual clues.
 
 ##Visual clues and customization
-The validateAttachedBehavior uses TW Bootstrap by default to provide visual clues about valid/invalid properties.
+The validate custom attribute uses a strategy based onTwitter Bootstrap by default (see 'configuration') to provide visual clues about valid/invalid properties.
 - for each input element, it will tyr to find the parent form-group element and add the appropriate TW BS has-error or has-success classes
 - for each input element, it will try to find the labels for that element and append a message with the TW BS help-block class. The content of this element is kept in sync with the validation message (or left empty for valid properties)
 - this added message element will have a aurelia-valiation-message class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label and the label is colored without adding a TW bootstrap "control-label" class, you can add these style to styles/styles.css:
@@ -456,22 +497,10 @@ The validateAttachedBehavior uses TW Bootstrap by default to provide visual clue
 
 ```
 
-On a global application level, you can prevent the validateAttachedBehavior from appending this message to the labels, or you can have it append this message to the input control themselves. To do this, inject the *validateAttachedBehaviorConfig* instance in your app and set the *appendMessageToLabel* or *appendMessageToInput* properties.
-
-```javascript 
-import {ValidateAttachedBehaviorConfig} from 'aurelia-validation';
-export class App {
-  static inject() { return [ValidateAttachedBehaviorConfig]; }
-  constructor(validateAttachedBehaviorConfig) { 
-    //Configuring the way validation shows messages:
-    validateAttachedBehaviorConfig.appendMessageToLabel = false;
-    validateAttachedBehaviorConfig.appendMessageToInput = true;
-  }
-}
-```
+To change the default visualisation, see ['config.useViewStrategy'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance).
 
 ##How are elements and validation rules matched
-The validateAttachedBehavior, once bound to a validation instance, will loop over every child element and try to match elements against validation rules.
+The validate custom attribute, once bound to a validation instance, will loop over every child element and try to match elements against validation rules.
 A simple example:
 ```javascript
 this.validation = validation.on(this).ensure('firstName').isNotEmpty();
@@ -484,9 +513,9 @@ this.validation = validation.on(this).ensure('firstName').isNotEmpty();
   </div> 
 </form>
 ```
-In this case, the validateAttachedBehavior will recognize the *value.bind="firstName"* attribute and match it against the validation rule you set up with *ensure('firstName')*.
+In this case, the validate custom attribute will recognize the *value.bind="firstName"* attribute and match it against the validation rule you set up with *ensure('firstName')*.
 
-As your viewmodels become more complex or if you start using binding converters, the binding path you used to set up the validation rules might be different than the binding path you used in your view, so you'll need to give the validateAttachedBehavior some extra clues as to which elements should be matched against which validation rules.
+As your viewmodels become more complex or if you start using binding converters, the binding path you used to set up the validation rules might be different than the binding path you used in your view, so you'll need to give the validate custom attribute some extra clues as to which elements should be matched against which validation rules.
 
 Consider this more complex example:
 ```javascript
@@ -501,27 +530,26 @@ this.contact.validation = validation.on(this.contact).ensure('firstName').isNotE
   </div> 
 </form>
 ```
-Pay attention to the two validateAttachedBehavior attributes in this example's HTML:
-- *validate.bind="contact.validation"* this validateAttachedBehavior will bind the validation to the form.
-- *validate="firstName"* this validateAttachedBehavior will only tell the parent validateAttachedBehavior that this input element should be decorated with the validation result of the rules for *"firstName"*.  This is only needed because the validation rule was created with *ensure('firstName')*, whereas the binding for the same input element has a different binding path: *value.bind="contact.FirstName"*
-
-There is an array property named *bindingPathAttributes* on the *validateAttachedBehaviorConfig* instance that you can inject in your app, which holds the attributes that the validateAttachedBehavior will try to use to match elements to validationRules.
+Pay attention to the two validate custom attributes in this example's HTML:
+- *validate.bind="contact.validation"* this validate custom attribute will bind the validation to the form.
+- *validate="firstName"* this validateCustomAttribute will only tell the parent validateCustomAttribute that this input element should be decorated with the validation result of the rules for *"firstName"*.  This is only needed because the validation rule was created with *ensure('firstName')*, whereas the binding for the same input element has a different binding path: *value.bind="contact.FirstName"*
 
 ##Preventing form submission
 tl;dr: [watch these samples](http://aurelia.io/validation/#/form-submission)
 You could disable your submit function by binding it to the *validation.result.isValid* property: 
-```html
+``` html
 <button type=submit" disabled.bind="!validation.result.isValid" >
 ```
 This has a bit of a weird side effect: a validation message is only shown if the user actually changes the value of a form element, ie. the underlying field is 'dirty'.  Again: there are no visual clues as to what form elements are invalid until the user actually changes the value of a field.
 In contrast, calling the *validation.validate()* function will force all validation rules to be re-evaluated, as well as forcing every field to be considered 'dirty', then return a promise that will either resolve or reject, indicating if the entire validation has passed or failed.
 In summary: if you do not disable the submit button, but instead call the *validate()* function in your code
 
-```javascript
+``` javascript
 this.validation.validate().then( () => {
-  //perform action on form submission
+  //validation is valid, perform action on form submission
 });
 ```
+
 You will have the following user experience:
 - all fields in a form show no validation messages
 - when the user changes the value, validation messages & visual clues will be shown for each field he/she has edited
@@ -571,6 +599,7 @@ Each property contains four pieces of information:
 - *message* : a localized error message. See **I18N**
 - *failingRule* : a non localized error message identifier of the first rule that failed. Possible values are
   - 'isRequired'
+  - 'onValidateCallback'
   - 'AlphaNumericOrWhitespaceValidationRule'
   - 'AlphaNumericValidationRule'
   - 'BetweenLengthValidationRule'
@@ -579,6 +608,9 @@ Each property contains four pieces of information:
   - 'DigitValidationRule'
   - 'EmailValidationRule'
   - 'EqualityValidationRule'
+  - 'InEqualityValidationRule'
+  - 'EqualityWithOtherLabelValidationRule'
+  - 'InEqualityWithOtherLabelValidationRule'
   - 'InCollectionValidationRule'
   - 'MinimumLengthValidationRule'
   - 'MinimumValueValidationRule'
@@ -586,7 +618,9 @@ Each property contains four pieces of information:
   - 'MaximumValueValidationRule'
   - 'NumericValidationRule'
   - 'RegexValidationRule'
+  - 'ContainsOnlyValidationRule'
   - 'StrongPasswordValidationRule'
+  - 'MediumPasswordValidationRule'
 
 In addition, each allows you to register a callback that is notified when the property has been re-evaluated and it caused a change in the *isValid*, *isDirty*, *message* or *failingRule*.
 ```javascript
@@ -600,3 +634,82 @@ In addition, each allows you to register a callback that is notified when the pr
             }
         );
 ```
+
+#Configuration
+##One config to rule them all
+The validation plugin has one global configuration instance, which is passed to an optional callback function when you first install the plugin:
+``` javascript
+export function configure(aurelia) {
+  aurelia.use
+    .standardConfiguration()
+    .developmentLogging()
+    .plugin('aurelia-validation', (config) => { config.useLocale('nl-NL') }); 
+
+  aurelia.start().then(a => a.setRoot('app', document.body)); 
+}
+```
+
+When setting up a validation, or when setting up a validation rule, a child config is passed to an optional callback function as well.
+``` javascript
+this.validation = validation.on(this, (config) => { config.useDebounceTimeout(150) } )
+  .ensure('confirmPassword', (config) => { (config) => {config.computedFrom('password') })
+    .isEqualTo( () => { return this.password; });
+```
+
+The configuration on the property level will delegate missing config to it's parent at the group-level, which in turn will delegate missing config to it's parent at the global level, which in turn will delegate missing config to the plugin's defaults.
+
+>Note: if you want to access the global configuration instance at a later point in time, you can inject it:
+``` javascript
+import {ValidationConfig} from 'aurelia-validation';
+import {inject} from 'aurelia-framework';
+
+//@inject(ValidationConfig) 
+export class MyVM{
+  constructor(config)
+  {
+    
+  }
+}
+```
+
+##Possible configuration
+>Note: all these can be chained: 
+``` javascript
+(config) => { config.useLocale('tr-TR').useDebounceTimeout(150) }
+```
+
+###config.useDebounceTimeout(debounceTimeout)
+``` javascript
+(config) => {config.useDebounceTimemout(150) }
+```
+Sets the debounce timeout, in ms.  Default is 0. 
+Whenever the value changes, the validation plugin will wait the assigned debounce timeout and will only evaluate if there are no subsequent changes within the allowed timeout. 
+This is especially useful when using asyncrhoneous validation, to avoid doing validation calls while the user is typing.
+Valid on:
+- global level
+- group level
+- property level
+
+###config.computedFrom([arrayOfBindingPaths])
+``` javascript
+.ensure('confirmPassword', (config) => {config.computedFrom(['password'])})
+  .isEqualTo( () => {return this.password }, 'the entered password');
+```
+Signals that validation on one property should be re-evaluated when a dependent property changes. There is no default.
+Valid on:
+- property level
+ 
+###config.useLocale(localeIdentifier)
+``` javascript
+(config) => {config.useLocale('fr-FR') }
+```
+Uses the specified locale. Default is ('en-US').
+Valid on:
+- global level
+- group level
+ 
+###config.useViewStrategy(viewStrategyInstance)
+``` javascript
+(config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput }
+```
+Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage, ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput and any class that inherits from ValidateCustomAttributeViewStrategyBase.
