@@ -53,26 +53,26 @@ Object.defineProperty(exports, 'Validation', {
   }
 });
 
-var _ValidateAttachedBehavior = require('./validation/validate-attached-behavior');
+var _ValidateCustomAttribute = require('./validation/validate-custom-attribute');
 
-Object.defineProperty(exports, 'ValidateAttachedBehavior', {
+Object.defineProperty(exports, 'ValidateCustomAttribute', {
   enumerable: true,
   get: function get() {
-    return _ValidateAttachedBehavior.ValidateAttachedBehavior;
+    return _ValidateCustomAttribute.ValidateCustomAttribute;
   }
 });
 
-var _ValidateAttachedBehaviorStrategy = require('./validation/validate-attached-behavior-strategy');
+var _ValidateCustomAttributeViewStrategy = require('./validation/validate-custom-attribute-view-strategy');
 
-Object.defineProperty(exports, 'ValidateAttachedBehaviorStrategy', {
+Object.defineProperty(exports, 'ValidateCustomAttributeViewStrategy', {
   enumerable: true,
   get: function get() {
-    return _ValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy;
+    return _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
   }
 });
 
 function install(aurelia, configCallback) {
-  aurelia.globalizeResources('./validation/validate-attached-behavior');
+  aurelia.globalizeResources('./validation/validate-custom-attribute');
   if (configCallback !== undefined && typeof configCallback === 'function') {
     configCallback(_Validation.Validation.defaults);
   }

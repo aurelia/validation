@@ -1,5 +1,5 @@
 System.register([], function (_export) {
-  var _get, _inherits, _classCallCheck, _createClass, ValidateAttachedBehaviorViewStrategyBase, TWBootstrapViewStrategy, ValidateAttachedBehaviorStrategy;
+  var _get, _inherits, _classCallCheck, _createClass, ValidateCustomAttributeViewStrategyBase, TWBootstrapViewStrategy, ValidateCustomAttributeViewStrategy;
 
   return {
     setters: [],
@@ -14,14 +14,14 @@ System.register([], function (_export) {
 
       _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      ValidateAttachedBehaviorViewStrategyBase = (function () {
-        function ValidateAttachedBehaviorViewStrategyBase() {
-          _classCallCheck(this, ValidateAttachedBehaviorViewStrategyBase);
+      ValidateCustomAttributeViewStrategyBase = (function () {
+        function ValidateCustomAttributeViewStrategyBase() {
+          _classCallCheck(this, ValidateCustomAttributeViewStrategyBase);
 
           this.bindingPathAttributes = ['validate', 'value.bind', 'value.two-way'];
         }
 
-        _createClass(ValidateAttachedBehaviorViewStrategyBase, [{
+        _createClass(ValidateCustomAttributeViewStrategyBase, [{
           key: 'getValidationProperty',
           value: function getValidationProperty(validation, element) {
             var atts = element.attributes;
@@ -53,12 +53,12 @@ System.register([], function (_export) {
           }
         }]);
 
-        return ValidateAttachedBehaviorViewStrategyBase;
+        return ValidateCustomAttributeViewStrategyBase;
       })();
 
-      _export('ValidateAttachedBehaviorViewStrategyBase', ValidateAttachedBehaviorViewStrategyBase);
+      _export('ValidateCustomAttributeViewStrategyBase', ValidateCustomAttributeViewStrategyBase);
 
-      TWBootstrapViewStrategy = (function (_ValidateAttachedBehaviorViewStrategyBase) {
+      TWBootstrapViewStrategy = (function (_ValidateCustomAttributeViewStrategyBase) {
         function TWBootstrapViewStrategy(appendMessageToInput, appendMessageToLabel, helpBlockClass) {
           _classCallCheck(this, TWBootstrapViewStrategy);
 
@@ -68,7 +68,7 @@ System.register([], function (_export) {
           this.helpBlockClass = helpBlockClass;
         }
 
-        _inherits(TWBootstrapViewStrategy, _ValidateAttachedBehaviorViewStrategyBase);
+        _inherits(TWBootstrapViewStrategy, _ValidateCustomAttributeViewStrategyBase);
 
         _createClass(TWBootstrapViewStrategy, [{
           key: 'searchFormGroup',
@@ -169,18 +169,18 @@ System.register([], function (_export) {
         }]);
 
         return TWBootstrapViewStrategy;
-      })(ValidateAttachedBehaviorViewStrategyBase);
+      })(ValidateCustomAttributeViewStrategyBase);
 
       _export('TWBootstrapViewStrategy', TWBootstrapViewStrategy);
 
-      ValidateAttachedBehaviorStrategy = function ValidateAttachedBehaviorStrategy() {
-        _classCallCheck(this, ValidateAttachedBehaviorStrategy);
+      ValidateCustomAttributeViewStrategy = function ValidateCustomAttributeViewStrategy() {
+        _classCallCheck(this, ValidateCustomAttributeViewStrategy);
       };
 
-      _export('ValidateAttachedBehaviorStrategy', ValidateAttachedBehaviorStrategy);
+      _export('ValidateCustomAttributeViewStrategy', ValidateCustomAttributeViewStrategy);
 
-      ValidateAttachedBehaviorStrategy.TWBootstrapAppendToInput = new TWBootstrapViewStrategy(true, false, 'aurelia-validation-message');
-      ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage = new TWBootstrapViewStrategy(false, true, 'aurelia-validation-message');
+      ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput = new TWBootstrapViewStrategy(true, false, 'aurelia-validation-message');
+      ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage = new TWBootstrapViewStrategy(false, true, 'aurelia-validation-message');
     }
   };
 });

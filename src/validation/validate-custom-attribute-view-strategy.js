@@ -1,4 +1,4 @@
-export class ValidateAttachedBehaviorViewStrategyBase{
+export class ValidateCustomAttributeViewStrategyBase{
   constructor(){
     this.bindingPathAttributes = ['validate', 'value.bind', 'value.two-way'];
   }
@@ -34,7 +34,7 @@ export class ValidateAttachedBehaviorViewStrategyBase{
   }
 }
 
-export class TWBootstrapViewStrategy extends ValidateAttachedBehaviorViewStrategyBase {
+export class TWBootstrapViewStrategy extends ValidateCustomAttributeViewStrategyBase {
   constructor(appendMessageToInput, appendMessageToLabel,helpBlockClass)
   {
     super();
@@ -140,6 +140,6 @@ export class TWBootstrapViewStrategy extends ValidateAttachedBehaviorViewStrateg
     this.appendUIVisuals(validationProperty, element);
   }
 }
-export class ValidateAttachedBehaviorStrategy { }
-ValidateAttachedBehaviorStrategy.TWBootstrapAppendToInput = new TWBootstrapViewStrategy(true, false, 'aurelia-validation-message');
-ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage = new TWBootstrapViewStrategy(false, true, 'aurelia-validation-message');
+export class ValidateCustomAttributeViewStrategy { }
+ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput = new TWBootstrapViewStrategy(true, false, 'aurelia-validation-message');
+ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage = new TWBootstrapViewStrategy(false, true, 'aurelia-validation-message');

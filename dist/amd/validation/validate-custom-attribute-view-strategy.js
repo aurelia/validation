@@ -13,14 +13,14 @@ define(['exports'], function (exports) {
     value: true
   });
 
-  var ValidateAttachedBehaviorViewStrategyBase = (function () {
-    function ValidateAttachedBehaviorViewStrategyBase() {
-      _classCallCheck(this, ValidateAttachedBehaviorViewStrategyBase);
+  var ValidateCustomAttributeViewStrategyBase = (function () {
+    function ValidateCustomAttributeViewStrategyBase() {
+      _classCallCheck(this, ValidateCustomAttributeViewStrategyBase);
 
       this.bindingPathAttributes = ['validate', 'value.bind', 'value.two-way'];
     }
 
-    _createClass(ValidateAttachedBehaviorViewStrategyBase, [{
+    _createClass(ValidateCustomAttributeViewStrategyBase, [{
       key: 'getValidationProperty',
       value: function getValidationProperty(validation, element) {
         var atts = element.attributes;
@@ -52,12 +52,12 @@ define(['exports'], function (exports) {
       }
     }]);
 
-    return ValidateAttachedBehaviorViewStrategyBase;
+    return ValidateCustomAttributeViewStrategyBase;
   })();
 
-  exports.ValidateAttachedBehaviorViewStrategyBase = ValidateAttachedBehaviorViewStrategyBase;
+  exports.ValidateCustomAttributeViewStrategyBase = ValidateCustomAttributeViewStrategyBase;
 
-  var TWBootstrapViewStrategy = (function (_ValidateAttachedBehaviorViewStrategyBase) {
+  var TWBootstrapViewStrategy = (function (_ValidateCustomAttributeViewStrategyBase) {
     function TWBootstrapViewStrategy(appendMessageToInput, appendMessageToLabel, helpBlockClass) {
       _classCallCheck(this, TWBootstrapViewStrategy);
 
@@ -67,7 +67,7 @@ define(['exports'], function (exports) {
       this.helpBlockClass = helpBlockClass;
     }
 
-    _inherits(TWBootstrapViewStrategy, _ValidateAttachedBehaviorViewStrategyBase);
+    _inherits(TWBootstrapViewStrategy, _ValidateCustomAttributeViewStrategyBase);
 
     _createClass(TWBootstrapViewStrategy, [{
       key: 'searchFormGroup',
@@ -168,16 +168,16 @@ define(['exports'], function (exports) {
     }]);
 
     return TWBootstrapViewStrategy;
-  })(ValidateAttachedBehaviorViewStrategyBase);
+  })(ValidateCustomAttributeViewStrategyBase);
 
   exports.TWBootstrapViewStrategy = TWBootstrapViewStrategy;
 
-  var ValidateAttachedBehaviorStrategy = function ValidateAttachedBehaviorStrategy() {
-    _classCallCheck(this, ValidateAttachedBehaviorStrategy);
+  var ValidateCustomAttributeViewStrategy = function ValidateCustomAttributeViewStrategy() {
+    _classCallCheck(this, ValidateCustomAttributeViewStrategy);
   };
 
-  exports.ValidateAttachedBehaviorStrategy = ValidateAttachedBehaviorStrategy;
+  exports.ValidateCustomAttributeViewStrategy = ValidateCustomAttributeViewStrategy;
 
-  ValidateAttachedBehaviorStrategy.TWBootstrapAppendToInput = new TWBootstrapViewStrategy(true, false, 'aurelia-validation-message');
-  ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage = new TWBootstrapViewStrategy(false, true, 'aurelia-validation-message');
+  ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput = new TWBootstrapViewStrategy(true, false, 'aurelia-validation-message');
+  ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage = new TWBootstrapViewStrategy(false, true, 'aurelia-validation-message');
 });

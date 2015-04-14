@@ -84,7 +84,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn';
       },
       MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
-        return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' van de volgende groupen bevatten: letters, hoofdletters, cijfers of speciale tekens';
+        return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' van de volgende groepen bevatten: letters, hoofdletters, cijfers of speciale tekens';
       }
     }
   };

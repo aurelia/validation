@@ -1,11 +1,11 @@
-System.register(['../validation/validation-locale', '../validation/validate-attached-behavior-strategy'], function (_export) {
-  var ValidationLocale, ValidateAttachedBehaviorStrategy, _createClass, _classCallCheck, ValidationConfigDefaults, ValidationConfig;
+System.register(['../validation/validation-locale', '../validation/validate-custom-attribute-view-strategy'], function (_export) {
+  var ValidationLocale, ValidateCustomAttributeViewStrategy, _createClass, _classCallCheck, ValidationConfigDefaults, ValidationConfig;
 
   return {
     setters: [function (_validationValidationLocale) {
       ValidationLocale = _validationValidationLocale.ValidationLocale;
-    }, function (_validationValidateAttachedBehaviorStrategy) {
-      ValidateAttachedBehaviorStrategy = _validationValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy;
+    }, function (_validationValidateCustomAttributeViewStrategy) {
+      ValidateCustomAttributeViewStrategy = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
     }],
     execute: function () {
       'use strict';
@@ -25,7 +25,7 @@ System.register(['../validation/validation-locale', '../validation/validate-atta
         dependencies: [],
         locale: 'en-US',
         localeResources: 'aurelia-validation/resources/',
-        viewStrategy: ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage
+        viewStrategy: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage
       };
       ValidationConfigDefaults.defaults = function () {
         var defaults = {};

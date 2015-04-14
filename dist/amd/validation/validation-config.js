@@ -1,4 +1,4 @@
-define(['exports', '../validation/validation-locale', '../validation/validate-attached-behavior-strategy'], function (exports, _validationValidationLocale, _validationValidateAttachedBehaviorStrategy) {
+define(['exports', '../validation/validation-locale', '../validation/validate-custom-attribute-view-strategy'], function (exports, _validationValidationLocale, _validationValidateCustomAttributeViewStrategy) {
   'use strict';
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -20,7 +20,7 @@ define(['exports', '../validation/validation-locale', '../validation/validate-at
     dependencies: [],
     locale: 'en-US',
     localeResources: 'aurelia-validation/resources/',
-    viewStrategy: _validationValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage
+    viewStrategy: _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage
   };
   ValidationConfigDefaults.defaults = function () {
     var defaults = {};

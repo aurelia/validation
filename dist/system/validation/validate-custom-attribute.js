@@ -1,5 +1,5 @@
 System.register(['aurelia-dependency-injection', 'aurelia-templating'], function (_export) {
-  var inject, customAttribute, Behavior, _classCallCheck, _createClass, ValidateAttachedBehavior;
+  var inject, customAttribute, Behavior, _classCallCheck, _createClass, ValidateCustomAttribute;
 
   return {
     setters: [function (_aureliaDependencyInjection) {
@@ -15,16 +15,16 @@ System.register(['aurelia-dependency-injection', 'aurelia-templating'], function
 
       _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      ValidateAttachedBehavior = (function () {
-        function ValidateAttachedBehavior(element) {
-          _classCallCheck(this, _ValidateAttachedBehavior);
+      ValidateCustomAttribute = (function () {
+        function ValidateCustomAttribute(element) {
+          _classCallCheck(this, _ValidateCustomAttribute);
 
           this.element = element;
           this.processedValidation = null;
           this.viewStrategy = null;
         }
 
-        _createClass(ValidateAttachedBehavior, [{
+        _createClass(ValidateCustomAttribute, [{
           key: 'valueChanged',
           value: function valueChanged(newValue) {
             if (this.value === null || this.value === undefined) {
@@ -64,13 +64,13 @@ System.register(['aurelia-dependency-injection', 'aurelia-templating'], function
           }
         }]);
 
-        var _ValidateAttachedBehavior = ValidateAttachedBehavior;
-        ValidateAttachedBehavior = customAttribute('validate')(ValidateAttachedBehavior) || ValidateAttachedBehavior;
-        ValidateAttachedBehavior = inject(Element)(ValidateAttachedBehavior) || ValidateAttachedBehavior;
-        return ValidateAttachedBehavior;
+        var _ValidateCustomAttribute = ValidateCustomAttribute;
+        ValidateCustomAttribute = customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
+        ValidateCustomAttribute = inject(Element)(ValidateCustomAttribute) || ValidateCustomAttribute;
+        return ValidateCustomAttribute;
       })();
 
-      _export('ValidateAttachedBehavior', ValidateAttachedBehavior);
+      _export('ValidateCustomAttribute', ValidateCustomAttribute);
     }
   };
 });

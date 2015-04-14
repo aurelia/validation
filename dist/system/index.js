@@ -1,10 +1,10 @@
-System.register(['./validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-attached-behavior', './validation/validate-attached-behavior-strategy'], function (_export) {
+System.register(['./validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (_export) {
   var Validation;
 
   _export('install', install);
 
   function install(aurelia, configCallback) {
-    aurelia.globalizeResources('./validation/validate-attached-behavior');
+    aurelia.globalizeResources('./validation/validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(Validation.defaults);
     }
@@ -30,10 +30,10 @@ System.register(['./validation/validation', './validation/utilities', './validat
       for (var _key2 in _validationValidationRules) {
         _export(_key2, _validationValidationRules[_key2]);
       }
-    }, function (_validationValidateAttachedBehavior) {
-      _export('ValidateAttachedBehavior', _validationValidateAttachedBehavior.ValidateAttachedBehavior);
-    }, function (_validationValidateAttachedBehaviorStrategy) {
-      _export('ValidateAttachedBehaviorStrategy', _validationValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy);
+    }, function (_validationValidateCustomAttribute) {
+      _export('ValidateCustomAttribute', _validationValidateCustomAttribute.ValidateCustomAttribute);
+    }, function (_validationValidateCustomAttributeViewStrategy) {
+      _export('ValidateCustomAttributeViewStrategy', _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy);
     }],
     execute: function () {
       'use strict';

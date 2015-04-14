@@ -1,4 +1,4 @@
-define(['exports', './validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-attached-behavior', './validation/validate-attached-behavior-strategy'], function (exports, _validationValidation, _validationUtilities, _validationValidationConfig, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidateAttachedBehavior, _validationValidateAttachedBehaviorStrategy) {
+define(['exports', './validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (exports, _validationValidation, _validationUtilities, _validationValidationConfig, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidateCustomAttribute, _validationValidateCustomAttributeViewStrategy) {
   'use strict';
 
   var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -38,21 +38,21 @@ define(['exports', './validation/validation', './validation/utilities', './valid
       return _validationValidation.Validation;
     }
   });
-  Object.defineProperty(exports, 'ValidateAttachedBehavior', {
+  Object.defineProperty(exports, 'ValidateCustomAttribute', {
     enumerable: true,
     get: function get() {
-      return _validationValidateAttachedBehavior.ValidateAttachedBehavior;
+      return _validationValidateCustomAttribute.ValidateCustomAttribute;
     }
   });
-  Object.defineProperty(exports, 'ValidateAttachedBehaviorStrategy', {
+  Object.defineProperty(exports, 'ValidateCustomAttributeViewStrategy', {
     enumerable: true,
     get: function get() {
-      return _validationValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy;
+      return _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
     }
   });
 
   function install(aurelia, configCallback) {
-    aurelia.globalizeResources('./validation/validate-attached-behavior');
+    aurelia.globalizeResources('./validation/validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(_validationValidation.Validation.defaults);
     }

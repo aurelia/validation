@@ -10,7 +10,7 @@ Object.defineProperty(exports, '__esModule', {
 
 var _ValidationLocale = require('../validation/validation-locale');
 
-var _ValidateAttachedBehaviorStrategy = require('../validation/validate-attached-behavior-strategy');
+var _ValidateCustomAttributeViewStrategy = require('../validation/validate-custom-attribute-view-strategy');
 
 var ValidationConfigDefaults = function ValidationConfigDefaults() {
   _classCallCheck(this, ValidationConfigDefaults);
@@ -23,7 +23,7 @@ ValidationConfigDefaults._defaults = {
   dependencies: [],
   locale: 'en-US',
   localeResources: 'aurelia-validation/resources/',
-  viewStrategy: _ValidateAttachedBehaviorStrategy.ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage
+  viewStrategy: _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage
 };
 ValidationConfigDefaults.defaults = function () {
   var defaults = {};

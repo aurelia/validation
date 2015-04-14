@@ -9,16 +9,16 @@ define(['exports', 'aurelia-dependency-injection', 'aurelia-templating'], functi
     value: true
   });
 
-  var ValidateAttachedBehavior = (function () {
-    function ValidateAttachedBehavior(element) {
-      _classCallCheck(this, _ValidateAttachedBehavior);
+  var ValidateCustomAttribute = (function () {
+    function ValidateCustomAttribute(element) {
+      _classCallCheck(this, _ValidateCustomAttribute);
 
       this.element = element;
       this.processedValidation = null;
       this.viewStrategy = null;
     }
 
-    _createClass(ValidateAttachedBehavior, [{
+    _createClass(ValidateCustomAttribute, [{
       key: 'valueChanged',
       value: function valueChanged(newValue) {
         if (this.value === null || this.value === undefined) {
@@ -58,11 +58,11 @@ define(['exports', 'aurelia-dependency-injection', 'aurelia-templating'], functi
       }
     }]);
 
-    var _ValidateAttachedBehavior = ValidateAttachedBehavior;
-    ValidateAttachedBehavior = _aureliaTemplating.customAttribute('validate')(ValidateAttachedBehavior) || ValidateAttachedBehavior;
-    ValidateAttachedBehavior = _aureliaDependencyInjection.inject(Element)(ValidateAttachedBehavior) || ValidateAttachedBehavior;
-    return ValidateAttachedBehavior;
+    var _ValidateCustomAttribute = ValidateCustomAttribute;
+    ValidateCustomAttribute = _aureliaTemplating.customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
+    ValidateCustomAttribute = _aureliaDependencyInjection.inject(Element)(ValidateCustomAttribute) || ValidateCustomAttribute;
+    return ValidateCustomAttribute;
   })();
 
-  exports.ValidateAttachedBehavior = ValidateAttachedBehavior;
+  exports.ValidateCustomAttribute = ValidateCustomAttribute;
 });

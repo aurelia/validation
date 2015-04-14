@@ -1,5 +1,5 @@
 import {ValidationLocale} from '../validation/validation-locale';
-import {ValidateAttachedBehaviorStrategy} from '../validation/validate-attached-behavior-strategy';
+import {ValidateCustomAttributeViewStrategy} from '../validation/validate-custom-attribute-view-strategy';
 
 export class ValidationConfigDefaults{
 }
@@ -8,7 +8,7 @@ ValidationConfigDefaults._defaults = {
   dependencies : [],
   locale : 'en-US',
   localeResources : 'aurelia-validation/resources/',
-  viewStrategy : ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage
+  viewStrategy : ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage
 };
 ValidationConfigDefaults.defaults = function(){
   var defaults = {};

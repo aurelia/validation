@@ -5,7 +5,7 @@ import {Behavior} from 'aurelia-templating';
 
 @customAttribute('validate')
 @inject(Element)
-export class ValidateAttachedBehavior {
+export class ValidateCustomAttribute {
   constructor(element) {
     this.element = element;
     this.processedValidation = null;

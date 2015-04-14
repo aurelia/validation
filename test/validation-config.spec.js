@@ -1,5 +1,5 @@
 import {ValidationConfig} from '../src/validation/validation-config';
-import {ValidateAttachedBehaviorStrategy} from '../src/validation/validate-attached-behavior-strategy';
+import {ValidateCustomAttributeViewStrategy} from '../src/validation/validate-custom-attribute-view-strategy';
 
 describe('ValidationConfig', () => {
   it('should have default values', () => {
@@ -8,7 +8,7 @@ describe('ValidationConfig', () => {
     expect(config.getDebounceTimeout()).toBe(0);
     expect(config.getDependencies().length).toBe(0);
     expect(config.getValue('locale')).toBe('en-US');
-    expect(config.getViewStrategy()).toBe(ValidateAttachedBehaviorStrategy.TWBootstrapAppendToMessage);
+    expect(config.getViewStrategy()).toBe(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage);
   });
 
   it('should be configurable (API check)', () => {
@@ -29,8 +29,8 @@ describe('ValidationConfig', () => {
     expect(config.getValue('locale')).toBe('nl-BE');
 
     config = new ValidationConfig();
-    expect(config.useViewStrategy(ValidateAttachedBehaviorStrategy.TWBootstrapAppendToInput)).toBe(config);// fluent API check
-    expect(config.getViewStrategy()).toBe(ValidateAttachedBehaviorStrategy.TWBootstrapAppendToInput);
+    expect(config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput)).toBe(config);// fluent API check
+    expect(config.getViewStrategy()).toBe(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput);
   });
 
   it('should never change the defaults', () => {

@@ -1,6 +1,6 @@
 import {Validation} from '../../src/validation/validation';
-import {ValidateAttachedBehavior} from '../../src/validation/validate-attached-behavior';
-import {ValidateAttachedBehaviorStrategy} from '../../src/validation/validate-attached-behavior-strategy';
+import {ValidateCustomAttribute} from '../../src/validation/validate-custom-attribute';
+import {ValidateCustomAttributeViewStrategy} from '../../src/validation/validate-custom-attribute-view-strategy';
 import {Expectations} from '../expectations';
 import {ObserverLocator} from 'aurelia-binding';
 
@@ -62,7 +62,7 @@ class TestDOM {
   }
 }
 
-describe('Tests on ValidateAttachedBehavior', () => {
+describe('Tests on ValidateCustomAttribute', () => {
   it('should be working with a simple use case', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance();
@@ -77,7 +77,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML);
+    var behavior = new ValidateCustomAttribute(testHTML);
     behavior.value = subject.validation;
     behavior.attached();
 
@@ -118,7 +118,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
 
   it('should be working with a different view strategy', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance( (config) => {config.useViewStrategy(ValidateAttachedBehaviorStrategy.TWBootstrapAppendToInput)});
+    var subject = TestSubject.createInstance( (config) => {config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput)});
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
             <div class="form-group" id="formGroupFirstName">
             <label for="fn" id="labelFirstName" >First Name</label>
@@ -130,7 +130,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML);
+    var behavior = new ValidateCustomAttribute(testHTML);
     behavior.value = subject.validation;
     behavior.attached();
 
@@ -184,7 +184,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML);
+    var behavior = new ValidateCustomAttribute(testHTML);
     behavior.value = subject.validation;
     behavior.attached();
 
@@ -234,7 +234,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML);
+    var behavior = new ValidateCustomAttribute(testHTML);
     behavior.value = subject.validation;
     behavior.attached();
 
@@ -275,7 +275,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML);
+    var behavior = new ValidateCustomAttribute(testHTML);
     behavior.value = subject.validation;
     behavior.attached();
 
@@ -307,7 +307,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
   });
 
 
-  describe('Tests on ValidateAttachedBehavior', () => {
+  describe('Tests on ValidateCustomAttribute', () => {
     it('should be working if labels have no proper "for" attribute', (done) => {
       var expectations = new Expectations(expect, done);
       var subject = TestSubject.createInstance();
@@ -322,7 +322,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-      var behavior = new ValidateAttachedBehavior(testHTML);
+      var behavior = new ValidateCustomAttribute(testHTML);
       behavior.value = subject.validation;
       behavior.attached();
 
@@ -377,7 +377,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML);
+    var behavior = new ValidateCustomAttribute(testHTML);
     behavior.value = subject.validationNested;
     behavior.attached();
 
@@ -429,7 +429,7 @@ describe('Tests on ValidateAttachedBehavior', () => {
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
             </form>`);
-    var behavior = new ValidateAttachedBehavior(testHTML);
+    var behavior = new ValidateCustomAttribute(testHTML);
     behavior.value = subject.validation;
     behavior.attached();
 

@@ -4,13 +4,13 @@ export {ValidationLocale} from './validation/validation-locale';
 export * from './validation/validation-result';
 export * from './validation/validation-rules';
 export {Validation} from './validation/validation';
-export {ValidateAttachedBehavior} from './validation/validate-attached-behavior';
-export {ValidateAttachedBehaviorStrategy} from './validation/validate-attached-behavior-strategy';
+export {ValidateCustomAttribute} from './validation/validate-custom-attribute';
+export {ValidateCustomAttributeViewStrategy} from './validation/validate-custom-attribute-view-strategy';
 
 import {Validation} from './validation/validation';
 
 export function install(aurelia, configCallback) {
-  aurelia.globalizeResources('./validation/validate-attached-behavior');
+  aurelia.globalizeResources('./validation/validate-custom-attribute');
   if(configCallback !== undefined && typeof(configCallback) === 'function')
   {
     configCallback(Validation.defaults);
