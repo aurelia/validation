@@ -558,7 +558,7 @@ You will have the following user experience:
     
 If you expect the validation to take a while (AJAX call) you can still disable your submit button while validation is taking place:
 ``` html
-<button type=submit" disabled.bind="!validation.isValidating" >
+<button type=submit" disabled.bind="validation.isValidating" >
 ```
 
 #ValidationResult
