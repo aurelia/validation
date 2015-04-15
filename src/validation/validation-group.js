@@ -108,6 +108,7 @@ export class ValidationGroup {
 
   onValidate(validationFunction, validationFunctionFailedCallback){
     this.onValidateCallback ={ validationFunction,validationFunctionFailedCallback} ;
+    return this;
   }
 
   /**

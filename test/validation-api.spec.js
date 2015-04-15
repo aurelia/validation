@@ -235,6 +235,13 @@ describe('Some simple API tests', ()=>{
     APITest.Assert(expectations, (v) => { return  v.isEqualTo('a').withMessage('a custom message');}, 'b', false);
     expectations.validate();
   });
+
+  it('on onValidate()', (done) => {
+    var expectations = new Expectations(expect, done);
+    APITest.Assert(expectations, (v) => { return  v.onValidate(() => { return  {  'propertyValue' : false }; }) }, 'a', false);
+    expectations.validate();
+  });
+
 });
 
 describe('Some simple configuration API tests', ()=>{

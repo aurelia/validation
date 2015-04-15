@@ -120,6 +120,7 @@ System.register(['../validation/validation-group-builder', '../validation/valida
           key: 'onValidate',
           value: function onValidate(validationFunction, validationFunctionFailedCallback) {
             this.onValidateCallback = { validationFunction: validationFunction, validationFunctionFailedCallback: validationFunctionFailedCallback };
+            return this;
           }
         }, {
           key: 'ensure',

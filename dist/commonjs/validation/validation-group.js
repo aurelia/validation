@@ -118,6 +118,7 @@ var ValidationGroup = (function () {
     key: 'onValidate',
     value: function onValidate(validationFunction, validationFunctionFailedCallback) {
       this.onValidateCallback = { validationFunction: validationFunction, validationFunctionFailedCallback: validationFunctionFailedCallback };
+      return this;
     }
   }, {
     key: 'ensure',
