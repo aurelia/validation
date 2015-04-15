@@ -8,7 +8,7 @@ var _Utilities = require('../validation/utilities');
 
 var data = {
   settings: {
-    numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
+    numericRegex: /^-?(?:\d+)(?:\,\d+)?$/
   },
   messages: {
     isRequired: 'est obligatoire',

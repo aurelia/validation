@@ -9,7 +9,7 @@ System.register(['../validation/utilities'], function (_export) {
 
       data = {
         settings: {
-          numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
+          numericRegex: /^-?(?:\d+)(?:\,\d+)?$/
         },
         messages: {
           isRequired: 'är obligatoriskt',

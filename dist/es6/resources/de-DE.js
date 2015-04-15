@@ -2,7 +2,7 @@ import {Utilities} from '../validation/utilities';
 
 export let data = {
   settings: {
-    'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
+    'numericRegex': /^-?(?:\d+)(?:\,\d+)?$/
   },
   messages: {
     'isRequired': 'wird benötigt',

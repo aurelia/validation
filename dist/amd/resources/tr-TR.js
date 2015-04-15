@@ -6,7 +6,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
   });
   var data = {
     settings: {
-      numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
+      numericRegex: /^-?(?:\d+)(?:\,\d+)?$/
     },
     messages: {
       isRequired: 'gereklidir',
