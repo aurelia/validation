@@ -1,5 +1,5 @@
-System.register(['./validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (_export) {
-  var Validation;
+System.register(['./validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (_export) {
+  var ValidationConfig, Validation;
 
   _export('install', install);
 
@@ -14,14 +14,16 @@ System.register(['./validation/validation', './validation/utilities', './validat
   }
 
   return {
-    setters: [function (_validationValidation) {
+    setters: [function (_validationValidationConfig) {
+      ValidationConfig = _validationValidationConfig.ValidationConfig;
+
+      _export('ValidationConfig', _validationValidationConfig.ValidationConfig);
+    }, function (_validationValidation) {
       Validation = _validationValidation.Validation;
 
       _export('Validation', _validationValidation.Validation);
     }, function (_validationUtilities) {
       _export('Utilities', _validationUtilities.Utilities);
-    }, function (_validationValidationConfig) {
-      _export('ValidationConfig', _validationValidationConfig.ValidationConfig);
     }, function (_validationValidationLocale) {
       _export('ValidationLocale', _validationValidationLocale.ValidationLocale);
     }, function (_validationValidationResult) {

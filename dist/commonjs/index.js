@@ -9,6 +9,8 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.install = install;
 
+var _ValidationConfig = require('./validation/validation-config');
+
 var _Validation = require('./validation/validation');
 
 var _Utilities = require('./validation/utilities');
@@ -19,9 +21,6 @@ Object.defineProperty(exports, 'Utilities', {
     return _Utilities.Utilities;
   }
 });
-
-var _ValidationConfig = require('./validation/validation-config');
-
 Object.defineProperty(exports, 'ValidationConfig', {
   enumerable: true,
   get: function get() {
@@ -77,6 +76,6 @@ function install(aurelia, configCallback) {
   if (configCallback !== undefined && typeof configCallback === 'function') {
     configCallback(_Validation.Validation.defaults);
   }
-  aurelia.container.registerInstance(ValidationConfig, _Validation.Validation.defaults);
+  aurelia.container.registerInstance(_ValidationConfig.ValidationConfig, _Validation.Validation.defaults);
   return _Validation.Validation.defaults.locale();
 }

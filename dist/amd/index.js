@@ -1,4 +1,4 @@
-define(['exports', './validation/validation', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (exports, _validationValidation, _validationUtilities, _validationValidationConfig, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidateCustomAttribute, _validationValidateCustomAttributeViewStrategy) {
+define(['exports', './validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (exports, _validationValidationConfig, _validationValidation, _validationUtilities, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidateCustomAttribute, _validationValidateCustomAttributeViewStrategy) {
   'use strict';
 
   var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -57,7 +57,7 @@ define(['exports', './validation/validation', './validation/utilities', './valid
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(_validationValidation.Validation.defaults);
     }
-    aurelia.container.registerInstance(ValidationConfig, _validationValidation.Validation.defaults);
+    aurelia.container.registerInstance(_validationValidationConfig.ValidationConfig, _validationValidation.Validation.defaults);
     return _validationValidation.Validation.defaults.locale();
   }
 });

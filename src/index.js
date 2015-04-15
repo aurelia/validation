@@ -7,6 +7,8 @@ export {Validation} from './validation/validation';
 export {ValidateCustomAttribute} from './validation/validate-custom-attribute';
 export {ValidateCustomAttributeViewStrategy} from './validation/validate-custom-attribute-view-strategy';
 
+
+import {ValidationConfig} from './validation/validation-config';
 import {Validation} from './validation/validation';
 
 export function install(aurelia, configCallback) {
