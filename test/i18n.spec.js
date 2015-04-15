@@ -103,6 +103,19 @@ describe('I18N tests: messages', () => {
   });
 
 
+  it('should result in properly translated default error message for es-MX', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance((c) => { c.useLocale('es-MX'); });
+    expectations.assert(() => {
+      return subject.validation.validate();
+    }, false);
+    expectations.assert(() => {
+      expect(subject.validation.result.properties.firstName.message).toBe('es obligatorio');
+      return subject.validation.validate();
+    }, false);
+    expectations.validate();
+  });
+
   it('should result in properly translated default error message for en-US', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('en-US'); });
