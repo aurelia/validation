@@ -27,7 +27,7 @@
     "dependencies": {
       "aurelia-binding": "github:aurelia/binding@^0.5.0",
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.6.0",
-      "aurelia-templating": "github:aurelia/templating@^0.10.0"
+      "aurelia-templating": "github:aurelia/templating@^0.10.3"
     }
   },
   "devDependencies": {
