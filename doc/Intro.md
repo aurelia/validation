@@ -388,6 +388,7 @@ See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intr
 - de-DE
 - sv-SE
 - tr-TR
+- es-MX
 
 > We could use a little help here...
 
