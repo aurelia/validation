@@ -52,10 +52,12 @@ define(['exports', './validation/validation', './validation/utilities', './valid
   });
 
   function install(aurelia, configCallback) {
+
     aurelia.globalizeResources('./validation/validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(_validationValidation.Validation.defaults);
     }
+    aurelia.container.registerInstance(ValidationConfig, _validationValidation.Validation.defaults);
     return _validationValidation.Validation.defaults.locale();
   }
 });

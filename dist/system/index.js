@@ -4,10 +4,12 @@ System.register(['./validation/validation', './validation/utilities', './validat
   _export('install', install);
 
   function install(aurelia, configCallback) {
+
     aurelia.globalizeResources('./validation/validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(Validation.defaults);
     }
+    aurelia.container.registerInstance(ValidationConfig, Validation.defaults);
     return Validation.defaults.locale();
   }
 

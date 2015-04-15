@@ -10,10 +10,12 @@ export {ValidateCustomAttributeViewStrategy} from './validation/validate-custom-
 import {Validation} from './validation/validation';
 
 export function install(aurelia, configCallback) {
+
   aurelia.globalizeResources('./validation/validate-custom-attribute');
   if(configCallback !== undefined && typeof(configCallback) === 'function')
   {
     configCallback(Validation.defaults);
   }
+  aurelia.container.registerInstance(ValidationConfig, Validation.defaults);
   return Validation.defaults.locale();
 }

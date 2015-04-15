@@ -72,9 +72,11 @@ Object.defineProperty(exports, 'ValidateCustomAttributeViewStrategy', {
 });
 
 function install(aurelia, configCallback) {
+
   aurelia.globalizeResources('./validation/validate-custom-attribute');
   if (configCallback !== undefined && typeof configCallback === 'function') {
     configCallback(_Validation.Validation.defaults);
   }
+  aurelia.container.registerInstance(ValidationConfig, _Validation.Validation.defaults);
   return _Validation.Validation.defaults.locale();
 }
