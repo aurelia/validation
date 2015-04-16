@@ -20,7 +20,7 @@ export let data = {
       return `can contain only letters or spaces`;
     },
     'BetweenLengthValidationRule': (newValue, threshold) => {
-      return `needs to be at between ${Utilities.getValue(threshold.minimumLength)} and ${Utilities.getValue(threshold.maximumLength)} characters long`;
+      return `needs to be between ${Utilities.getValue(threshold.minimumLength)} and ${Utilities.getValue(threshold.maximumLength)} characters long`;
     },
     'BetweenValueValidationRule': (newValue, threshold) => {
       return `needs to be between ${Utilities.getValue(threshold.minimumValue)} and ${Utilities.getValue(threshold.maximumValue)}`;

@@ -26,7 +26,7 @@ var data = {
       return 'can contain only letters or spaces';
     },
     BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
-      return 'needs to be at between ' + _Utilities.Utilities.getValue(threshold.minimumLength) + ' and ' + _Utilities.Utilities.getValue(threshold.maximumLength) + ' characters long';
+      return 'needs to be between ' + _Utilities.Utilities.getValue(threshold.minimumLength) + ' and ' + _Utilities.Utilities.getValue(threshold.maximumLength) + ' characters long';
     },
     BetweenValueValidationRule: function BetweenValueValidationRule(newValue, threshold) {
       return 'needs to be between ' + _Utilities.Utilities.getValue(threshold.minimumValue) + ' and ' + _Utilities.Utilities.getValue(threshold.maximumValue);

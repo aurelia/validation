@@ -1,3 +1,17 @@
+### 0.2.2 (2015-04-16)
+
+
+#### Bug Fixes
+
+* **withMessage:** withMessage after isNotEmpty() ([69e27af5](https://github.com/aurelia/validation/commit/69e27af5e51f34fc844200d13ab1a68c0f8e6b8c), closes [#43](https://github.com/aurelia/validation/issues/43))
+
+
+#### Features
+
+* **I18N:** added es-MX ([edab3939](https://github.com/aurelia/validation/commit/edab39390daf928396a6c9b3dad27296b6c79f77))
+* **i18n:** added resource for language es-MX ([55f65257](https://github.com/aurelia/validation/commit/55f6525769133b342289c4e262ba616f63dfd2eb))
+
+
 ### 0.2.1 (2015-04-14)
 
 

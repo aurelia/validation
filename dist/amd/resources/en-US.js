@@ -24,7 +24,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'can contain only letters or spaces';
       },
       BetweenLengthValidationRule: function BetweenLengthValidationRule(newValue, threshold) {
-        return 'needs to be at between ' + _validationUtilities.Utilities.getValue(threshold.minimumLength) + ' and ' + _validationUtilities.Utilities.getValue(threshold.maximumLength) + ' characters long';
+        return 'needs to be between ' + _validationUtilities.Utilities.getValue(threshold.minimumLength) + ' and ' + _validationUtilities.Utilities.getValue(threshold.maximumLength) + ' characters long';
       },
       BetweenValueValidationRule: function BetweenValueValidationRule(newValue, threshold) {
         return 'needs to be between ' + _validationUtilities.Utilities.getValue(threshold.minimumValue) + ' and ' + _validationUtilities.Utilities.getValue(threshold.maximumValue);
