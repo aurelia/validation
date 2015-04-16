@@ -6,6 +6,7 @@ export class ValidationRulesCollection {
     this.isRequired = false;
     this.validationRules = [];
     this.validationCollections = [];
+    this.isRequiredMessage = null;
   }
 
   /**
@@ -24,7 +25,9 @@ export class ValidationRulesCollection {
       if (this.isRequired) {
         return Promise.resolve({
           isValid: false,
-          message: locale.translate('isRequired'),
+          message: this.isRequiredMessage ?
+            ( (typeof(this.isRequiredMessage) === 'function') ? this.isRequiredMessage(newValue) : this.isRequiredMessage  ) :
+            locale.translate('isRequired'),
           failingRule: 'isRequired',
           latestValue: newValue
         });
@@ -106,7 +109,10 @@ export class ValidationRulesCollection {
   }
 
   withMessage(message) {
-    this.validationRules[this.validationRules.length - 1].withMessage(message);
+    if(this.validationRules.length === 0)
+      this.isRequiredMessage = message;
+    else
+      this.validationRules[this.validationRules.length - 1].withMessage(message);
   }
 }
 

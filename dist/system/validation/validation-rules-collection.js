@@ -21,6 +21,7 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
           this.isRequired = false;
           this.validationRules = [];
           this.validationCollections = [];
+          this.isRequiredMessage = null;
         }
 
         _createClass(ValidationRulesCollection, [{
@@ -38,7 +39,7 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
               if (this.isRequired) {
                 return Promise.resolve({
                   isValid: false,
-                  message: locale.translate('isRequired'),
+                  message: this.isRequiredMessage ? typeof this.isRequiredMessage === 'function' ? this.isRequiredMessage(newValue) : this.isRequiredMessage : locale.translate('isRequired'),
                   failingRule: 'isRequired',
                   latestValue: newValue
                 });
@@ -117,7 +118,7 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
         }, {
           key: 'withMessage',
           value: function withMessage(message) {
-            this.validationRules[this.validationRules.length - 1].withMessage(message);
+            if (this.validationRules.length === 0) this.isRequiredMessage = message;else this.validationRules[this.validationRules.length - 1].withMessage(message);
           }
         }]);
 

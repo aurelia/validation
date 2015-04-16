@@ -233,6 +233,9 @@ describe('Some simple API tests', ()=>{
     var expectations = new Expectations(expect, done);
     APITest.Assert(expectations, (v) => { return  v.isEqualTo('a').withMessage('a custom message');}, 'a', true);
     APITest.Assert(expectations, (v) => { return  v.isEqualTo('a').withMessage('a custom message');}, 'b', false);
+    APITest.Assert(expectations, (v) => { return  v.isEqualTo('a').withMessage( (newValue, threshold) => { return 'a custom message from a function';});}, 'b', false);
+    APITest.Assert(expectations, (y) => { return  y.isNotEmpty().withMessage('a custom message');}, '', false);
+    APITest.Assert(expectations, (y) => { return  y.isNotEmpty().withMessage( (newValue) => { return 'a custom message from a function';}) ;}, '', false);
     expectations.validate();
   });
 
