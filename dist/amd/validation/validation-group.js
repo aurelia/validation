@@ -43,7 +43,8 @@ define(['exports', '../validation/validation-group-builder', '../validation/vali
         this.onPropertyValidate(function (propertyBindingPath) {
           _this2.passes(function () {
             breezeEntity.entityAspect.validateProperty(propertyBindingPath);
-            return true;
+            var errors = breezeEntity.entityAspect.getValidationErrors(propertyBindingPath);
+            if (errors.length === 0) return true;else return errors[0].errorMessage;
           });
         });
         this.onValidate(function () {
