@@ -1,3 +1,18 @@
+### 0.2.3 (2015-04-26)
+
+
+#### Bug Fixes
+
+
+#### Features
+
+* **breeze:**
+  * documentation ([6751be32](https://github.com/aurelia/validation/commit/6751be32000280ece9e5e00c20b097fc2c3decac))
+  * further development ([772f332b](https://github.com/aurelia/validation/commit/772f332b852407e1163c6a461571e75506d48a98))
+  * initial binding to breeze entities ([acb3e26a](https://github.com/aurelia/validation/commit/acb3e26af1cff4e9e09a3e875c5db3bab3a24a56))
+* **clear:** validation.result.clear() resets validation result ([5c5deafb](https://github.com/aurelia/validation/commit/5c5deafb2f37eb1f9333fdd3321bd2391e21d14d), closes [#44](https://github.com/aurelia/validation/issues/44))
+
+
 ### 0.2.2 (2015-04-16)
 
 
