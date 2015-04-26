@@ -80,14 +80,16 @@ define(['exports', '../validation/validation-group-builder', '../validation/vali
                     resultProp.setValidity(newPropResult, true);
                   }
                 } else {
-                  newPropResult.failingRule = 'onValidateCallback';
-                  newPropResult.isValid = false;
-                  if (typeof result === 'string') {
-                    newPropResult.message = result;
-                  } else {
-                    newPropResult.message = locale.translate(newPropResult.failingRule);
+                  if (resultProp.isValid) {
+                    newPropResult.failingRule = 'onValidateCallback';
+                    newPropResult.isValid = false;
+                    if (typeof result === 'string') {
+                      newPropResult.message = result;
+                    } else {
+                      newPropResult.message = locale.translate(newPropResult.failingRule);
+                    }
+                    resultProp.setValidity(newPropResult, true);
                   }
-                  resultProp.setValidity(newPropResult, true);
                 }
               }
               _this2.result.checkValidity();

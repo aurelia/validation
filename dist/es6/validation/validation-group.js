@@ -69,15 +69,17 @@ export class ValidationGroup {
               }
             }
             else {
-              newPropResult.failingRule = 'onValidateCallback';
-              newPropResult.isValid = false;
-              if (typeof(result) === 'string') {
-                newPropResult.message = result;
+              if(resultProp.isValid) {
+                newPropResult.failingRule = 'onValidateCallback';
+                newPropResult.isValid = false;
+                if (typeof(result) === 'string') {
+                  newPropResult.message = result;
+                }
+                else {
+                  newPropResult.message = locale.translate(newPropResult.failingRule);
+                }
+                resultProp.setValidity(newPropResult, true);
               }
-              else {
-                newPropResult.message = locale.translate(newPropResult.failingRule);
-              }
-              resultProp.setValidity(newPropResult, true);
             }
           }
           this.result.checkValidity();
