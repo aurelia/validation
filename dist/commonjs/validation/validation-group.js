@@ -116,7 +116,6 @@ var ValidationGroup = (function () {
               var newPropResult = {
                 latestValue: resultProp.latestValue
               };
-
               if (result === true || result === null || result === '') {
                 if (!resultProp.isValid && resultProp.failingRule === 'onValidateCallback') {
                   newPropResult.failingRule = null;
@@ -125,14 +124,16 @@ var ValidationGroup = (function () {
                   resultProp.setValidity(newPropResult, true);
                 }
               } else {
-                newPropResult.failingRule = 'onValidateCallback';
-                newPropResult.isValid = false;
-                if (typeof result === 'string') {
-                  newPropResult.message = result;
-                } else {
-                  newPropResult.message = locale.translate(newPropResult.failingRule);
+                if (resultProp.isValid) {
+                  newPropResult.failingRule = 'onValidateCallback';
+                  newPropResult.isValid = false;
+                  if (typeof result === 'string') {
+                    newPropResult.message = result;
+                  } else {
+                    newPropResult.message = locale.translate(newPropResult.failingRule);
+                  }
+                  resultProp.setValidity(newPropResult, true);
                 }
-                resultProp.setValidity(newPropResult, true);
               }
             }
             _this3.result.checkValidity();

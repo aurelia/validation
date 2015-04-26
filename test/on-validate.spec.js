@@ -28,6 +28,7 @@ describe('Tests on onValidate callbacks', () => {
 
     expectations.assert(subject.validation.validate(), false);
     expectations.expectAsync(() => { return wasCalled;}).toBe(true);
+    expectations.expectAsync(() => { return subject.validation.result.properties.firstName.failingRule;}).toBe('MinimumLengthValidationRule');
     expectations.validate();
   });
 
@@ -84,6 +85,16 @@ describe('Tests on onValidate callbacks', () => {
     expectations.validate();
   });
 
+  it('should not overwrite an already failing property', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance('Bob');
+    subject.validation.onValidate( () => {
+      return {firstName : false }
+    });
+    expectations.assert(subject.validation.validate(), false);
+    expectations.expectAsync(() => { return subject.validation.result.properties.firstName.failingRule;}).toBe('MinimumLengthValidationRule');
+    expectations.validate();
+  });
 
 
   it('should correctly handle the result of the callback if it returns a promise that returns false for a property', (done) => {

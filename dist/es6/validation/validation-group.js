@@ -100,7 +100,6 @@ export class ValidationGroup {
               let newPropResult = {
                 latestValue : resultProp.latestValue
               };
-
               if (result === true || result === null || result === '' ) {
                 if(!resultProp.isValid && resultProp.failingRule === 'onValidateCallback' ) {
                   newPropResult.failingRule = null;
@@ -110,15 +109,17 @@ export class ValidationGroup {
                 }
               }
               else {
-                newPropResult.failingRule = 'onValidateCallback';
-                newPropResult.isValid = false;
-                if (typeof(result) === 'string') {
-                  newPropResult.message = result;
+                if (resultProp.isValid) {
+                  newPropResult.failingRule = 'onValidateCallback';
+                  newPropResult.isValid = false;
+                  if (typeof(result) === 'string') {
+                    newPropResult.message = result;
+                  }
+                  else {
+                    newPropResult.message = locale.translate(newPropResult.failingRule);
+                  }
+                  resultProp.setValidity(newPropResult, true);
                 }
-                else {
-                  newPropResult.message = locale.translate(newPropResult.failingRule);
-                }
-                resultProp.setValidity(newPropResult, true);
               }
             }
             this.result.checkValidity();

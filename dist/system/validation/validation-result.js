@@ -4,11 +4,11 @@ System.register([], function (_export) {
   return {
     setters: [],
     execute: function () {
-      "use strict";
+      'use strict';
 
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-      _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+      _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
       ValidationResult = (function () {
         function ValidationResult() {
@@ -19,7 +19,7 @@ System.register([], function (_export) {
         }
 
         _createClass(ValidationResult, [{
-          key: "addProperty",
+          key: 'addProperty',
           value: function addProperty(name) {
             if (!this.properties[name]) {
               this.properties[name] = new ValidationResultProperty(this);
@@ -27,7 +27,7 @@ System.register([], function (_export) {
             return this.properties[name];
           }
         }, {
-          key: "checkValidity",
+          key: 'checkValidity',
           value: function checkValidity() {
             for (var propertyName in this.properties) {
               if (!this.properties[propertyName].isValid) {
@@ -37,33 +37,55 @@ System.register([], function (_export) {
             }
             this.isValid = true;
           }
+        }, {
+          key: 'clear',
+          value: function clear() {
+            for (var propertyName in this.properties) {
+              this.properties[propertyName].clear();
+            }
+            this.isValid = true;
+          }
         }]);
 
         return ValidationResult;
       })();
 
-      _export("ValidationResult", ValidationResult);
+      _export('ValidationResult', ValidationResult);
 
       ValidationResultProperty = (function () {
         function ValidationResultProperty(group) {
           _classCallCheck(this, ValidationResultProperty);
 
           this.group = group;
-          this.isValid = true;
-          this.isDirty = false;
-          this.message = null;
-          this.failingRule = null;
           this.onValidateCallbacks = [];
-          this.latestValue = null;
+          this.clear();
         }
 
         _createClass(ValidationResultProperty, [{
-          key: "onValidate",
+          key: 'clear',
+          value: function clear() {
+            this.isValid = true;
+            this.isDirty = false;
+            this.message = '';
+            this.failingRule = null;
+            this.latestValue = null;
+            this.notifyObserversOfChange();
+          }
+        }, {
+          key: 'onValidate',
           value: function onValidate(onValidateCallback) {
             this.onValidateCallbacks.push(onValidateCallback);
           }
         }, {
-          key: "setValidity",
+          key: 'notifyObserversOfChange',
+          value: function notifyObserversOfChange() {
+            for (var i = 0; i < this.onValidateCallbacks.length; i++) {
+              var callback = this.onValidateCallbacks[i];
+              callback(this);
+            }
+          }
+        }, {
+          key: 'setValidity',
           value: function setValidity(validationResponse, shouldBeDirty) {
             var notifyObservers = !this.isDirty && shouldBeDirty || this.isValid !== validationResponse.isValid || this.message !== validationResponse.message;
 
@@ -75,10 +97,7 @@ System.register([], function (_export) {
             if (this.isValid !== this.group.isValid) this.group.checkValidity();
 
             if (notifyObservers) {
-              for (var i = 0; i < this.onValidateCallbacks.length; i++) {
-                var callback = this.onValidateCallbacks[i];
-                callback(this);
-              }
+              this.notifyObserversOfChange();
             }
           }
         }]);
@@ -86,7 +105,7 @@ System.register([], function (_export) {
         return ValidationResultProperty;
       })();
 
-      _export("ValidationResultProperty", ValidationResultProperty);
+      _export('ValidationResultProperty', ValidationResultProperty);
     }
   };
 });

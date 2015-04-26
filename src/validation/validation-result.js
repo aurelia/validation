@@ -20,21 +20,39 @@ export class ValidationResult {
     }
     this.isValid = true;
   }
+  clear() {
+    for (let propertyName in this.properties) {
+      this.properties[propertyName].clear();
+    }
+    this.isValid = true;
+  }
 }
 
 export class ValidationResultProperty {
   constructor(group) {
     this.group = group;
+    this.onValidateCallbacks = [];
+    this.clear();
+  }
+
+  clear(){
     this.isValid = true;
     this.isDirty = false;
-    this.message = null;
+    this.message = '';
     this.failingRule = null;
-    this.onValidateCallbacks = [];
     this.latestValue = null;
+    this.notifyObserversOfChange();
   }
 
   onValidate(onValidateCallback) {
     this.onValidateCallbacks.push(onValidateCallback);
+  }
+
+  notifyObserversOfChange(){
+    for (var i = 0; i < this.onValidateCallbacks.length; i++) {
+      var callback = this.onValidateCallbacks[i];
+      callback(this);
+    }
   }
 
   setValidity(validationResponse, shouldBeDirty) {
@@ -53,10 +71,7 @@ export class ValidationResultProperty {
       this.group.checkValidity();
 
     if (notifyObservers) {
-      for (var i = 0; i < this.onValidateCallbacks.length; i++) {
-        var callback = this.onValidateCallbacks[i];
-        callback(this);
-      }
+      this.notifyObserversOfChange();
     }
   }
 }
