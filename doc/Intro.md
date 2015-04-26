@@ -370,6 +370,44 @@ You're not required to return each property in the validation group, and you're 
 
 You can optionally pass a failureCallback which will be executed if your validationCallback function fails (ie: an exception occurs). Also, if your validationCallback function fails, the validation group will not be considered valid.
 
+#3rd party frameworks
+##Breeze (.onBreezeEntity(entity))
+If you are working with breeze.js, your entityManager might already have validation rules in place to protect the integrity of your breeze entities.
+Using the validation.onBreezeEntity(entity), you can wrap an 'aurelia-validation' validation over the 'breeze' validation.
+``` javascript
+  createTodo(initialValues, validation) {
+    var entity = this.manager.createEntity('TodoItem', initialValues);
+    entity.validation = validation.onBreezeEntity(entity);
+    return entity;
+  }
+```
+This gives you the added benefit that you can bind the 'breeze' validation errors in your client using the validate-custom-element:
+
+``` HTML
+<form submit.delegate="addItem()" validate.bind="newTodoItem.validation">
+        <div class="form-group">
+          <label >What needs to be done?</label>
+          <input type="text" value.bind="newTodoItem.Description" validate="Description" placeholder="What needs to be done?">
+        </div>
+        <div class="form-group">
+          <button type="submit">Add it</button>
+        </div>
+      </form>
+```
+Both client 'breeze' validation errors as the additional ones sent back from the server when attempting to save, will be displayed in the UI.
+
+Additionally, you can use 'aurelia-validation' 's beautiful API to add additional validation rules on top of the 'breeze' validation:
+``` javascript
+  createTodo(initialValues, validation) {
+    var entity = this.manager.createEntity('TodoItem', initialValues);
+    entity.validation = validation.onBreezeEntity(entity)
+      //optionally add more validation rules
+      .ensure("Description").isNotEmpty().hasMinLength(5);
+    return entity;
+  }
+```
+
+
 #I18N
 
 ####Changing locale
