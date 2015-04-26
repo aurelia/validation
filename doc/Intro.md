@@ -678,6 +678,8 @@ In addition, each allows you to register a callback that is notified when the pr
         );
 ```
 
+If you need to clear or reset the validationResult, calling *.clear()* will cause the entire validationResult to be reset to valid and non-dirty.
+
 #Configuration
 ##One config to rule them all
 The validation plugin has one global configuration instance, which is passed to an optional callback function when you first install the plugin:
