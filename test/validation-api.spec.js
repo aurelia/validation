@@ -247,6 +247,63 @@ describe('Some simple API tests', ()=>{
 
 });
 
+describe('Some simple tests on .result', ()=>{
+  it('on individual valid properties', (done) => {
+    var expectations = new Expectations(expect, done);
+
+    let subject = { password : 'Abc*12345' };
+    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
+      .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword();
+
+    expectations.assert(subject.validation.validate(), true);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.isValid }).toBe(true);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.isDirty }).toBe(true);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.message }).toBe('');
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.failingRule }).toBe(null);
+    expectations.validate();
+  });
+  it('on individual invalid properties', (done) => {
+    var expectations = new Expectations(expect, done);
+
+    let subject = { password : 'abc' };
+    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
+      .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword();
+
+    expectations.assert(subject.validation.validate(), false);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.isValid }).toBe(false);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.isDirty }).toBe(true);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.message }).toBe('needs to be at least 8 characters long');
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.failingRule }).toBe('MinimumLengthValidationRule');
+    expectations.validate();
+  });
+
+  it('on individual invalid properties after reset', (done) => {
+    var expectations = new Expectations(expect, done);
+
+    let subject = { password : 'abc' };
+    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
+      .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword();
+
+    expectations.assert(subject.validation.validate(), false);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.isValid }).toBe(false);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.isDirty }).toBe(true);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.message }).toBe('needs to be at least 8 characters long');
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.failingRule }).toBe('MinimumLengthValidationRule');
+
+
+    expectations.expectAsync(() =>{
+      subject.validation.result.clear();
+      return true;
+    }).toBe(true);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.isValid }).toBe(true);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.isDirty }).toBe(false);
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.message }).toBe('');
+    expectations.expectAsync( () => { return subject.validation.result.properties.password.failingRule }).toBe(null);
+    expectations.validate();
+  });
+
+});
+
 describe('Some simple configuration API tests', ()=>{
   it('on computedFrom with a single dependencies', (done) => {
     let subject = { password : 'Abc*12345', confirmPassword : 'Abc*12345' };

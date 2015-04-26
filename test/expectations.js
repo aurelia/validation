@@ -29,6 +29,8 @@ export class Expectations {
           } )
           .then( (promiseResult) => {
             this.expect(promiseResult).toBe(shouldSucceed);
+          }, (failResult) => {
+            this.expect(failResult).toBe('assertion should not fail');
           });
       }
     };

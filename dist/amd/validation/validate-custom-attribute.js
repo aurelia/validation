@@ -18,7 +18,9 @@ define(['exports', 'aurelia-dependency-injection', 'aurelia-templating'], functi
       this.viewStrategy = null;
     }
 
-    _createClass(ValidateCustomAttribute, [{
+    var _ValidateCustomAttribute = ValidateCustomAttribute;
+
+    _createClass(_ValidateCustomAttribute, [{
       key: 'valueChanged',
       value: function valueChanged(newValue) {
         if (this.value === null || this.value === undefined) {
@@ -58,9 +60,8 @@ define(['exports', 'aurelia-dependency-injection', 'aurelia-templating'], functi
       }
     }]);
 
-    var _ValidateCustomAttribute = ValidateCustomAttribute;
-    ValidateCustomAttribute = _aureliaTemplating.customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
     ValidateCustomAttribute = _aureliaDependencyInjection.inject(Element)(ValidateCustomAttribute) || ValidateCustomAttribute;
+    ValidateCustomAttribute = _aureliaTemplating.customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
     return ValidateCustomAttribute;
   })();
 

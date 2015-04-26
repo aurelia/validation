@@ -21,7 +21,9 @@ var ValidateCustomAttribute = (function () {
     this.viewStrategy = null;
   }
 
-  _createClass(ValidateCustomAttribute, [{
+  var _ValidateCustomAttribute = ValidateCustomAttribute;
+
+  _createClass(_ValidateCustomAttribute, [{
     key: 'valueChanged',
     value: function valueChanged(newValue) {
       if (this.value === null || this.value === undefined) {
@@ -61,9 +63,8 @@ var ValidateCustomAttribute = (function () {
     }
   }]);
 
-  var _ValidateCustomAttribute = ValidateCustomAttribute;
-  ValidateCustomAttribute = _customAttribute.customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
   ValidateCustomAttribute = _inject.inject(Element)(ValidateCustomAttribute) || ValidateCustomAttribute;
+  ValidateCustomAttribute = _customAttribute.customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
   return ValidateCustomAttribute;
 })();
 

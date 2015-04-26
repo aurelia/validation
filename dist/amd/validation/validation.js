@@ -17,7 +17,9 @@ define(['exports', 'aurelia-binding', '../validation/validation-rules', '../vali
       this.config = validationConfig ? validationConfig : Validation.defaults;
     }
 
-    _createClass(Validation, [{
+    var _Validation = Validation;
+
+    _createClass(_Validation, [{
       key: 'on',
       value: function on(subject, configCallback) {
         var conf = new _validationValidationConfig.ValidationConfig(this.config);
@@ -28,7 +30,6 @@ define(['exports', 'aurelia-binding', '../validation/validation-rules', '../vali
       }
     }]);
 
-    var _Validation = Validation;
     Validation = _aureliaDependencyInjection.inject(_aureliaBinding.ObserverLocator)(Validation) || Validation;
     return Validation;
   })();
