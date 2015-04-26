@@ -7,7 +7,7 @@ A validation plugin for [Aurelia](http://aurelia.io) that uses a fluent API.
 ``` javascript
 this.validation = validation.on(this)
                       .ensure('awesomeLevel')
-                            .min(9000)
+                            .isGreaterThan(9000)
                       .ensure('readMe')
                             .isNotEmpty()
                             .hasMinLength(5)
