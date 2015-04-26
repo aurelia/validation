@@ -39,6 +39,13 @@ System.register(['aurelia-binding', '../validation/validation-rules', '../valida
             }
             return new ValidationGroup(subject, this.observerLocator, conf);
           }
+        }, {
+          key: 'onBreezeEntity',
+          value: function onBreezeEntity(breezeEntity, configCallback) {
+            var validation = this.on(breezeEntity, configCallback);
+            validation.onBreezeEntity();
+            return validation;
+          }
         }]);
 
         var _Validation = Validation;

@@ -21,7 +21,8 @@ export class ValidationGroup {
     this.validationProperties = [];
     this.config = config;
     this.builder = new ValidationGroupBuilder(observerLocator, this);
-    this.onValidateCallback = null;
+    this.onValidateCallbacks = [];
+    this.onPropertyValidationCallbacks = [];
     this.isValidating = false;
     this.onDestroy = config.onLocaleChanged( () => {this.validate(false) ;});
   }
@@ -29,6 +30,44 @@ export class ValidationGroup {
   destroy(){
     this.onDestroy(); //todo: what else needs to be done for proper cleanup?
   }
+
+
+
+  onBreezeEntity(){
+    let breezeEntity = this.subject;
+    let me = this;
+    this.onPropertyValidate( (propertyBindingPath) => {
+      this.passes( () => {
+        breezeEntity.entityAspect.validateProperty(propertyBindingPath);
+        return true;
+      });
+    });
+    this.onValidate( () => {
+      breezeEntity.entityAspect.validateEntity();
+      return {};
+    });
+
+    breezeEntity.entityAspect.validationErrorsChanged.subscribe(function () {
+      breezeEntity.entityAspect.getValidationErrors().forEach( (validationError) => {
+          let propertyName = validationError.propertyName;
+          if (!me.result.properties[propertyName]) {  //set up empty validation on the property
+            me.ensure(propertyName);
+          }
+
+          let currentResultProp = me.result.addProperty(propertyName);
+          if (currentResultProp.isValid) {
+
+            currentResultProp.setValidity({
+              isValid: false,
+              message: validationError.errorMessage,
+              failingRule: 'breeze',
+              latestValue: currentResultProp.latestValue
+            }, true);
+          }
+      });
+    });
+  }
+
 
   /**
    * Causes complete re-evaluation: gets the latest value, marks the property as 'dirty' (unless false is passed), runs validation rules asynchronously and updates this.result
@@ -46,51 +85,54 @@ export class ValidationGroup {
       debugger;
       throw Error("Should never get here: a validation property should always resolve to true/false!");
     });
-    if(this.onValidateCallback) {
+
+
+    this.onValidateCallbacks.forEach( (onValidateCallback) => {
       promise = promise.then(() => {return this.config.locale();}).then((locale) => {
-        return Promise.resolve(this.onValidateCallback.validationFunction()).then((callbackResult) => {
-          for (var prop in callbackResult) {
-            if(!this.result.properties[prop])
-            {  //set up empty validation on the property
-              this.ensure(prop);
-            }
-            let resultProp = this.result.addProperty(prop);
-            let result = callbackResult[prop];
-            let newPropResult = {
-              latestValue : resultProp.latestValue
+        return Promise.resolve(onValidateCallback.validationFunction()).then((callbackResult) => {
+            for (var prop in callbackResult) {
+              if(!this.result.properties[prop])
+              {  //set up empty validation on the property
+                this.ensure(prop);
+              }
+              let resultProp = this.result.addProperty(prop);
+              let result = callbackResult[prop];
+              let newPropResult = {
+                latestValue : resultProp.latestValue
               };
 
-            if (result === true || result === null || result === '' ) {
-              if(!resultProp.isValid ) {
-                newPropResult.failingRule = null;
-                newPropResult.message = '';
-                newPropResult.isValid = true;
+              if (result === true || result === null || result === '' ) {
+                if(!resultProp.isValid && resultProp.failingRule === 'onValidateCallback' ) {
+                  newPropResult.failingRule = null;
+                  newPropResult.message = '';
+                  newPropResult.isValid = true;
+                  resultProp.setValidity(newPropResult, true);
+                }
+              }
+              else {
+                newPropResult.failingRule = 'onValidateCallback';
+                newPropResult.isValid = false;
+                if (typeof(result) === 'string') {
+                  newPropResult.message = result;
+                }
+                else {
+                  newPropResult.message = locale.translate(newPropResult.failingRule);
+                }
                 resultProp.setValidity(newPropResult, true);
               }
             }
-            else {
-              newPropResult.failingRule = 'onValidateCallback';
-              newPropResult.isValid = false;
-              if (typeof(result) === 'string') {
-                newPropResult.message = result;
-              }
-              else {
-                newPropResult.message = locale.translate(newPropResult.failingRule);
-              }
-              resultProp.setValidity(newPropResult, true);
+            this.result.checkValidity();
+          },
+          (a,b,c,d,e) => {
+            debugger;
+            this.result.isValid = false;
+            if(onValidateCallback.validationFunctionFailedCallback)
+            {
+              onValidateCallback.validationFunctionFailedCallback(a,b,c,d,e);
             }
-          }
-          this.result.checkValidity();
-        },
-        (a,b,c,d,e) => {
-          this.result.isValid = false;
-          if(this.onValidateCallback.validationFunctionFailedCallback)
-          {
-            this.onValidateCallback.validationFunctionFailedCallback(a,b,c,d,e);
-          }
-        });
+          });
       });
-    }
+    });
     promise = promise
     .then(() => {
       this.isValidating = false;
@@ -107,7 +149,13 @@ export class ValidationGroup {
   };
 
   onValidate(validationFunction, validationFunctionFailedCallback){
-    this.onValidateCallback ={ validationFunction,validationFunctionFailedCallback} ;
+    this.onValidateCallbacks.push( { validationFunction,validationFunctionFailedCallback}) ;
+    return this;
+  }
+
+  onPropertyValidate(validationFunction)
+  {
+    this.onPropertyValidationCallbacks.push(validationFunction);
     return this;
   }
 
@@ -118,7 +166,9 @@ export class ValidationGroup {
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
   ensure(bindingPath, configCallback) {
-    return this.builder.ensure(bindingPath, configCallback);
+    this.builder.ensure(bindingPath, configCallback);
+    this.onPropertyValidationCallbacks.forEach((callback) => { callback(bindingPath); });
+    return this;
   }
 
   /**

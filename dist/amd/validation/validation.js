@@ -26,6 +26,13 @@ define(['exports', 'aurelia-binding', '../validation/validation-rules', '../vali
         }
         return new _validationValidationGroup.ValidationGroup(subject, this.observerLocator, conf);
       }
+    }, {
+      key: 'onBreezeEntity',
+      value: function onBreezeEntity(breezeEntity, configCallback) {
+        var validation = this.on(breezeEntity, configCallback);
+        validation.onBreezeEntity();
+        return validation;
+      }
     }]);
 
     var _Validation = Validation;

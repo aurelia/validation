@@ -125,14 +125,18 @@ describe('Tests on onValidate callbacks', () => {
   });
 
   it('should not have to return values for properties that are now valid', (done) => {
+    var shouldFail = true;
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance('Bobbette');
     subject.validation.onValidate( () => {
-      return {firstName : false }
+      if(shouldFail)
+        return {firstName : false };
+      else
+       return {};
     });
     expectations.assert(subject.validation.validate(), false);
     expectations.assert( () => {
-      subject.validation.onValidate( () => {return { };});
+      shouldFail = false;
       return subject.validation.validate();
     }, true);
     expectations.validate();
@@ -140,24 +144,30 @@ describe('Tests on onValidate callbacks', () => {
 
 
   it('should not have to return values for properties that are now valid and have no other validation rules', (done) => {
+    var shouldFail = true;
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance('Bobbette');
     subject.validation.onValidate( () => {
-      return { lastName : false }
+      if(shouldFail)
+        return { lastName : false };
+      else
+        return {};
     });
     expectations.assert(subject.validation.validate(), false);
     expectations.assert( () => {
-      subject.validation.onValidate( () => {return { };});
+      shouldFail = false;
       return subject.validation.validate();
     }, true);
     expectations.validate();
   });
 
   it('should have a mechanism to determine rejected promises', (done) => {
+    var shouldFail = true;
     var wasCalled = false;
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance('Bobbette');
     subject.validation.onValidate( () => {
+        debugger;
       return Promise.reject('something went wrong...');
     }, () => {
         wasCalled = true;

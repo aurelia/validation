@@ -43,6 +43,13 @@ var Validation = (function () {
       }
       return new _ValidationGroup.ValidationGroup(subject, this.observerLocator, conf);
     }
+  }, {
+    key: 'onBreezeEntity',
+    value: function onBreezeEntity(breezeEntity, configCallback) {
+      var validation = this.on(breezeEntity, configCallback);
+      validation.onBreezeEntity();
+      return validation;
+    }
   }]);
 
   var _Validation = Validation;

@@ -35,5 +35,11 @@ export class Validation {
     }
     return new ValidationGroup(subject, this.observerLocator, conf);
   }
+
+  onBreezeEntity(breezeEntity, configCallback){
+    var validation = this.on(breezeEntity, configCallback);
+    validation.onBreezeEntity();
+    return validation;
+  }
 }
 Validation.defaults = new ValidationConfig();
