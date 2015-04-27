@@ -678,7 +678,14 @@ In addition, each allows you to register a callback that is notified when the pr
         );
 ```
 
-If you need to clear or reset the validationResult, calling *.clear()* will cause the entire validationResult to be reset to valid and non-dirty.
+If you need to clear or reset the validationResult, calling *.clear()* on the validation itself will cause the entire validationResult to be reset to valid and non-dirty.
+``` javascript
+reset(){
+  this.firstName = "John";
+  this.lastName = "Doe";
+  this.validation.clear();
+}
+```
 
 #Configuration
 ##One config to rule them all
