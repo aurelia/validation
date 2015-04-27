@@ -24,14 +24,18 @@ export class ValidationGroup {
     this.onValidateCallbacks = [];
     this.onPropertyValidationCallbacks = [];
     this.isValidating = false;
-    this.onDestroy = config.onLocaleChanged( () => {this.validate(false) ;});
+    this.onDestroy = config.onLocaleChanged( () => {
+      this.validate(false, true) ;});
   }
 
   destroy(){
     this.onDestroy(); //todo: what else needs to be done for proper cleanup?
   }
 
-
+  clear(){
+    this.validationProperties.forEach( (prop) => { prop.clear();});
+    this.result.clear();
+  }
 
   onBreezeEntity(){
     let breezeEntity = this.subject;
@@ -77,12 +81,12 @@ export class ValidationGroup {
    * Causes complete re-evaluation: gets the latest value, marks the property as 'dirty' (unless false is passed), runs validation rules asynchronously and updates this.result
    * @returns {Promise} A promise that fulfils when valid, rejects when invalid.
    */
-  validate(forceDirty = true) {
+  validate(forceDirty = true, forceExecution = true) {
     this.isValidating = true;
     var promise = Promise.resolve(true);
     for (let i = this.validationProperties.length - 1; i >= 0; i--) {
       let validatorProperty = this.validationProperties[i];
-      promise = promise.then( () => { return validatorProperty.validateCurrentValue(forceDirty); });
+      promise = promise.then( () => { return validatorProperty.validateCurrentValue(forceDirty, forceExecution); });
     }
     promise = promise.catch( () => {
       console.log("Should never get here: a validation property should always resolve to true/false!");

@@ -40,9 +40,6 @@ System.register([], function (_export) {
         }, {
           key: 'clear',
           value: function clear() {
-            for (var propertyName in this.properties) {
-              this.properties[propertyName].clear();
-            }
             this.isValid = true;
           }
         }]);

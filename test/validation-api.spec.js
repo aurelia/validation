@@ -292,7 +292,7 @@ describe('Some simple tests on .result', ()=>{
 
 
     expectations.expectAsync(() =>{
-      subject.validation.result.clear();
+      subject.validation.clear();
       return true;
     }).toBe(true);
     expectations.expectAsync( () => { return subject.validation.result.properties.password.isValid }).toBe(true);

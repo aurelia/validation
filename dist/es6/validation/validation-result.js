@@ -21,9 +21,6 @@ export class ValidationResult {
     this.isValid = true;
   }
   clear() {
-    for (let propertyName in this.properties) {
-      this.properties[propertyName].clear();
-    }
     this.isValid = true;
   }
 }

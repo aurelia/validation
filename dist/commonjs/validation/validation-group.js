@@ -29,7 +29,7 @@ var ValidationGroup = (function () {
     this.onPropertyValidationCallbacks = [];
     this.isValidating = false;
     this.onDestroy = config.onLocaleChanged(function () {
-      _this.validate(false);
+      _this.validate(false, true);
     });
   }
 
@@ -37,6 +37,14 @@ var ValidationGroup = (function () {
     key: 'destroy',
     value: function destroy() {
       this.onDestroy();
+    }
+  }, {
+    key: 'clear',
+    value: function clear() {
+      this.validationProperties.forEach(function (prop) {
+        prop.clear();
+      });
+      this.result.clear();
     }
   }, {
     key: 'onBreezeEntity',
@@ -83,6 +91,7 @@ var ValidationGroup = (function () {
       var _this3 = this;
 
       var forceDirty = arguments[0] === undefined ? true : arguments[0];
+      var forceExecution = arguments[1] === undefined ? true : arguments[1];
 
       this.isValidating = true;
       var promise = Promise.resolve(true);
@@ -90,7 +99,7 @@ var ValidationGroup = (function () {
       var _loop = function (i) {
         var validatorProperty = _this3.validationProperties[i];
         promise = promise.then(function () {
-          return validatorProperty.validateCurrentValue(forceDirty);
+          return validatorProperty.validateCurrentValue(forceDirty, forceExecution);
         });
       };
 

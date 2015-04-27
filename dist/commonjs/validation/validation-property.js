@@ -63,27 +63,35 @@ var ValidationProperty = (function () {
     }
   }, {
     key: 'validateCurrentValue',
-    value: function validateCurrentValue(forceDirty) {
-      return this.validate(this.observer.getValue(), forceDirty);
+    value: function validateCurrentValue(forceDirty, forceExecution) {
+      return this.validate(this.observer.getValue(), forceDirty, forceExecution);
+    }
+  }, {
+    key: 'clear',
+    value: function clear() {
+      this.latestValue = this.observer.getValue();
+      this.propertyResult.clear();
     }
   }, {
     key: 'validate',
-    value: function validate(newValue, shouldBeDirty) {
+    value: function validate(newValue, shouldBeDirty, forceExecution) {
       var _this2 = this;
 
-      this.latestValue = newValue;
-      return this.config.locale().then(function (locale) {
-        return _this2.collectionOfValidationRules.validate(newValue, locale).then(function (validationResponse) {
-          if (_this2.latestValue === validationResponse.latestValue) _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
-          return validationResponse.isValid;
-        })['catch'](function (err) {
-          console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);
-          debugger;
-          throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
+      if (shouldBeDirty || this.latestValue !== newValue || forceExecution) {
+        this.latestValue = newValue;
+        return this.config.locale().then(function (locale) {
+          return _this2.collectionOfValidationRules.validate(newValue, locale).then(function (validationResponse) {
+            if (_this2.latestValue === validationResponse.latestValue) _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
+            return validationResponse.isValid;
+          })['catch'](function (err) {
+            console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);
+            debugger;
+            throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
+          });
+        }, function () {
+          throw Error('An exception occurred while trying to load the locale');
         });
-      }, function () {
-        throw Error('An exception occurred while trying to load the locale');
-      });
+      }
     }
   }]);
 

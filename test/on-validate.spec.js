@@ -178,7 +178,6 @@ describe('Tests on onValidate callbacks', () => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance('Bobbette');
     subject.validation.onValidate( () => {
-        debugger;
       return Promise.reject('something went wrong...');
     }, () => {
         wasCalled = true;
