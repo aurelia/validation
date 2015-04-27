@@ -28,7 +28,10 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
 
       this.observer.subscribe(function () {
         _this.debouncer.debounce(function () {
-          _this.validateCurrentValue(true);
+          var newValue = _this.observer.getValue();
+          if (newValue !== _this.latestValue) {
+            _this.validate(newValue, true);
+          }
         });
       });
 
@@ -68,7 +71,7 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
       value: function validate(newValue, shouldBeDirty, forceExecution) {
         var _this2 = this;
 
-        if (shouldBeDirty || this.latestValue !== newValue || forceExecution) {
+        if (!this.propertyResult.isDirty && shouldBeDirty || this.latestValue !== newValue || forceExecution) {
           this.latestValue = newValue;
           return this.config.locale().then(function (locale) {
             return _this2.collectionOfValidationRules.validate(newValue, locale).then(function (validationResponse) {

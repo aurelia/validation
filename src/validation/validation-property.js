@@ -17,7 +17,12 @@ export class ValidationProperty {
     this.debouncer = new Debouncer(config.getDebounceTimeout());
 
     this.observer.subscribe(() => {
-      this.debouncer.debounce( () => { this.validateCurrentValue(true); });
+      this.debouncer.debounce( () => {
+        var newValue =   this.observer.getValue();
+        if(newValue !== this.latestValue) {
+          this.validate(newValue, true);
+        }
+      });
     });
 
     this.dependencyObservers = [];
@@ -26,7 +31,9 @@ export class ValidationProperty {
       let dependencyObserver = new PathObserver(observerLocator, validationGroup.subject, dependencies[i])
         .getObserver();
       dependencyObserver.subscribe(() => {
-        this.debouncer.debounce( () => { this.validateCurrentValue(true); });
+        this.debouncer.debounce( () => {
+          this.validateCurrentValue(true);
+        });
       });
       this.dependencyObservers.push(dependencyObserver);
     }
@@ -52,7 +59,7 @@ export class ValidationProperty {
    * returns a promise that fulfils and resolves to true/false
    */
   validate(newValue, shouldBeDirty, forceExecution) {
-    if(shouldBeDirty || this.latestValue !== newValue || forceExecution) {
+    if( (!this.propertyResult.isDirty && shouldBeDirty) || this.latestValue !== newValue || forceExecution) {
       this.latestValue = newValue;
       return this.config.locale().then((locale) => {
           return this.collectionOfValidationRules.validate(newValue, locale)
