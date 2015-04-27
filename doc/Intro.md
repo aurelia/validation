@@ -370,7 +370,31 @@ You're not required to return each property in the validation group, and you're 
 
 You can optionally pass a failureCallback which will be executed if your validationCallback function fails (ie: an exception occurs). Also, if your validationCallback function fails, the validation group will not be considered valid.
 
-#3rd party frameworks
+#Alternative validation setup
+##The @ensure decorator
+TL:DR; [Here's an example](http://aurelia.io/validation/#/).
+Having a fluent API allows you to keep your code that sets up the validation logic tightly together. However, some people prefer to keep each aspect of their validation close to the property on which it reflects.  You can do this by adding a decorator called @ensure on each property that requires validation.  
+The @ensure decorator takes a callback function that will be called when validation is actually set up.
+For example:
+``` javascript
+import {Validation} from 'aurelia-validation';
+import {ensure} from 'aurelia-validation';
+import {inject} from 'aurelia-framework';
+
+@inject(Validation)
+export class Person {
+  @ensure(function(it){ it.isNotEmpty().hasLengthBetween(3,10) })
+  firstName = 'John';
+
+  constructor(validation) {
+    this.validation = validation.on(this);
+  }
+}
+```
+As you can see in the example, the callback function you pass to your @ensure decorator can use any of [the validation types mentioned above](https://github.com/aurelia/validation/blob/master/doc/Intro.md#validation-types).
+
+When setting up the validation (*validation.on(this)*), the validation will automaticaly loop over your properties and set up the decorated validation rules for each one.
+
 ##Breeze (.onBreezeEntity(entity))
 If you are working with breeze.js, your entityManager might already have validation rules in place to protect the integrity of your breeze entities.
 Using the validation.onBreezeEntity(entity), you can wrap an 'aurelia-validation' validation over the 'breeze' validation.
