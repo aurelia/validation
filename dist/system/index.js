@@ -1,5 +1,5 @@
-System.register(['./validation/decorators', './validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (_export) {
-  var ensure, ValidationConfig, Validation;
+System.register(['./validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy', './validation/decorators'], function (_export) {
+  var ValidationConfig, Validation;
 
   _export('install', install);
 
@@ -14,9 +14,7 @@ System.register(['./validation/decorators', './validation/validation-config', '.
   }
 
   return {
-    setters: [function (_validationDecorators) {
-      ensure = _validationDecorators.ensure;
-    }, function (_validationValidationConfig) {
+    setters: [function (_validationValidationConfig) {
       ValidationConfig = _validationValidationConfig.ValidationConfig;
 
       _export('ValidationConfig', _validationValidationConfig.ValidationConfig);
@@ -40,6 +38,8 @@ System.register(['./validation/decorators', './validation/validation-config', '.
       _export('ValidateCustomAttribute', _validationValidateCustomAttribute.ValidateCustomAttribute);
     }, function (_validationValidateCustomAttributeViewStrategy) {
       _export('ValidateCustomAttributeViewStrategy', _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy);
+    }, function (_validationDecorators) {
+      _export('ensure', _validationDecorators.ensure);
     }],
     execute: function () {
       'use strict';

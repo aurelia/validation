@@ -9,8 +9,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.install = install;
 
-var _ensure = require('./validation/decorators');
-
 var _ValidationConfig = require('./validation/validation-config');
 
 var _Validation = require('./validation/validation');
@@ -69,6 +67,15 @@ Object.defineProperty(exports, 'ValidateCustomAttributeViewStrategy', {
   enumerable: true,
   get: function get() {
     return _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
+  }
+});
+
+var _ensure = require('./validation/decorators');
+
+Object.defineProperty(exports, 'ensure', {
+  enumerable: true,
+  get: function get() {
+    return _ensure.ensure;
   }
 });
 

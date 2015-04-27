@@ -1,4 +1,4 @@
-define(['exports', './validation/decorators', './validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (exports, _validationDecorators, _validationValidationConfig, _validationValidation, _validationUtilities, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidateCustomAttribute, _validationValidateCustomAttributeViewStrategy) {
+define(['exports', './validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy', './validation/decorators'], function (exports, _validationValidationConfig, _validationValidation, _validationUtilities, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidateCustomAttribute, _validationValidateCustomAttributeViewStrategy, _validationDecorators) {
   'use strict';
 
   var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -48,6 +48,12 @@ define(['exports', './validation/decorators', './validation/validation-config', 
     enumerable: true,
     get: function get() {
       return _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
+    }
+  });
+  Object.defineProperty(exports, 'ensure', {
+    enumerable: true,
+    get: function get() {
+      return _validationDecorators.ensure;
     }
   });
 
