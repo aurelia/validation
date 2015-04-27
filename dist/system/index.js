@@ -1,5 +1,5 @@
-System.register(['./validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (_export) {
-  var ValidationConfig, Validation;
+System.register(['./validation/decorators', './validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy'], function (_export) {
+  var ensure, ValidationConfig, Validation;
 
   _export('install', install);
 
@@ -14,7 +14,9 @@ System.register(['./validation/validation-config', './validation/validation', '.
   }
 
   return {
-    setters: [function (_validationValidationConfig) {
+    setters: [function (_validationDecorators) {
+      ensure = _validationDecorators.ensure;
+    }, function (_validationValidationConfig) {
       ValidationConfig = _validationValidationConfig.ValidationConfig;
 
       _export('ValidationConfig', _validationValidationConfig.ValidationConfig);

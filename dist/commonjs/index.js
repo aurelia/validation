@@ -9,6 +9,8 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.install = install;
 
+var _ensure = require('./validation/decorators');
+
 var _ValidationConfig = require('./validation/validation-config');
 
 var _Validation = require('./validation/validation');

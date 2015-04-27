@@ -26,6 +26,15 @@ export class ValidationGroup {
     this.isValidating = false;
     this.onDestroy = config.onLocaleChanged( () => {
       this.validate(false, true) ;});
+
+
+
+
+    if(this.subject.__proto__._validationMetadata)
+    {
+      this.subject.__proto__._validationMetadata.setup(this);
+    }
+
   }
 
   destroy(){

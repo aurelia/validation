@@ -33,6 +33,10 @@ System.register(['../validation/validation-group-builder', '../validation/valida
           this.onDestroy = config.onLocaleChanged(function () {
             _this.validate(false, true);
           });
+
+          if (this.subject.__proto__._validationMetadata) {
+            this.subject.__proto__._validationMetadata.setup(this);
+          }
         }
 
         _createClass(ValidationGroup, [{
