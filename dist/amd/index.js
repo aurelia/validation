@@ -8,7 +8,7 @@ define(['exports', './validation/validation-config', './validation/validation', 
   Object.defineProperty(exports, '__esModule', {
     value: true
   });
-  exports.install = install;
+  exports.configure = configure;
   Object.defineProperty(exports, 'Utilities', {
     enumerable: true,
     get: function get() {
@@ -57,7 +57,7 @@ define(['exports', './validation/validation-config', './validation/validation', 
     }
   });
 
-  function install(aurelia, configCallback) {
+  function configure(aurelia, configCallback) {
 
     aurelia.globalizeResources('./validation/validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {

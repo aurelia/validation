@@ -7,7 +7,7 @@ var _defaults = function (obj, defaults) { var keys = Object.getOwnPropertyNames
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.install = install;
+exports.configure = configure;
 
 var _ValidationConfig = require('./validation/validation-config');
 
@@ -79,7 +79,7 @@ Object.defineProperty(exports, 'ensure', {
   }
 });
 
-function install(aurelia, configCallback) {
+function configure(aurelia, configCallback) {
 
   aurelia.globalizeResources('./validation/validate-custom-attribute');
   if (configCallback !== undefined && typeof configCallback === 'function') {

@@ -1,9 +1,9 @@
 System.register(['./validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy', './validation/decorators'], function (_export) {
   var ValidationConfig, Validation;
 
-  _export('install', install);
+  _export('configure', configure);
 
-  function install(aurelia, configCallback) {
+  function configure(aurelia, configCallback) {
 
     aurelia.globalizeResources('./validation/validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {
