@@ -1,12 +1,8 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+exports.__esModule = true;
 
 var _ValidationLocale = require('../validation/validation-locale');
 
@@ -40,97 +36,84 @@ var ValidationConfig = (function () {
     this.changedHandlers = new Map();
   }
 
-  _createClass(ValidationConfig, [{
-    key: 'getValue',
-    value: function getValue(identifier) {
-      if (this.values.hasOwnProperty(identifier) !== null && this.values[identifier] !== undefined) {
-        return this.values[identifier];
-      }
-      if (this.innerConfig !== null) {
-        return this.innerConfig.getValue(identifier);
-      }
-      throw Error('Config not found: ' + identifier);
+  ValidationConfig.prototype.getValue = function getValue(identifier) {
+    if (this.values.hasOwnProperty(identifier) !== null && this.values[identifier] !== undefined) {
+      return this.values[identifier];
     }
-  }, {
-    key: 'setValue',
-    value: function setValue(identifier, value) {
-      this.values[identifier] = value;
-      return this;
+    if (this.innerConfig !== null) {
+      return this.innerConfig.getValue(identifier);
     }
-  }, {
-    key: 'onLocaleChanged',
-    value: function onLocaleChanged(callback) {
-      var _this = this;
+    throw Error('Config not found: ' + identifier);
+  };
 
-      if (this.innerConfig !== undefined) {
-        return this.innerConfig.onLocaleChanged(callback);
-      } else {
-        var _ret = (function () {
-          var id = ++ValidationConfig.uniqueListenerId;
-          _this.changedHandlers.set(id, callback);
-          return {
-            v: function () {
-              changedHandlers['delete'](id);
-            }
-          };
-        })();
+  ValidationConfig.prototype.setValue = function setValue(identifier, value) {
+    this.values[identifier] = value;
+    return this;
+  };
 
-        if (typeof _ret === 'object') {
-          return _ret.v;
-        }
+  ValidationConfig.prototype.onLocaleChanged = function onLocaleChanged(callback) {
+    var _this = this;
+
+    if (this.innerConfig !== undefined) {
+      return this.innerConfig.onLocaleChanged(callback);
+    } else {
+      var _ret = (function () {
+        var id = ++ValidationConfig.uniqueListenerId;
+        _this.changedHandlers.set(id, callback);
+        return {
+          v: function () {
+            changedHandlers['delete'](id);
+          }
+        };
+      })();
+
+      if (typeof _ret === 'object') {
+        return _ret.v;
       }
     }
-  }, {
-    key: 'getDebounceTimeout',
-    value: function getDebounceTimeout() {
-      return this.getValue('debounceTimeout');
+  };
+
+  ValidationConfig.prototype.getDebounceTimeout = function getDebounceTimeout() {
+    return this.getValue('debounceTimeout');
+  };
+
+  ValidationConfig.prototype.useDebounceTimeout = function useDebounceTimeout(value) {
+    return this.setValue('debounceTimeout', value);
+  };
+
+  ValidationConfig.prototype.getDependencies = function getDependencies() {
+    return this.getValue('dependencies');
+  };
+
+  ValidationConfig.prototype.computedFrom = function computedFrom(dependencies) {
+    var deps = dependencies;
+    if (typeof dependencies === 'string') {
+      deps = [];
+      deps.push(dependencies);
     }
-  }, {
-    key: 'useDebounceTimeout',
-    value: function useDebounceTimeout(value) {
-      return this.setValue('debounceTimeout', value);
+    return this.setValue('dependencies', deps);
+  };
+
+  ValidationConfig.prototype.useLocale = function useLocale(localeIdentifier) {
+    this.setValue('locale', localeIdentifier);
+    var callbacks = Array.from(this.changedHandlers.values());
+    for (var i = 0; i < callbacks.length; i++) {
+      callbacks[i]();
     }
-  }, {
-    key: 'getDependencies',
-    value: function getDependencies() {
-      return this.getValue('dependencies');
-    }
-  }, {
-    key: 'computedFrom',
-    value: function computedFrom(dependencies) {
-      var deps = dependencies;
-      if (typeof dependencies === 'string') {
-        deps = [];
-        deps.push(dependencies);
-      }
-      return this.setValue('dependencies', deps);
-    }
-  }, {
-    key: 'useLocale',
-    value: function useLocale(localeIdentifier) {
-      this.setValue('locale', localeIdentifier);
-      var callbacks = Array.from(this.changedHandlers.values());
-      for (var i = 0; i < callbacks.length; i++) {
-        callbacks[i]();
-      }
-      return this;
-    }
-  }, {
-    key: 'locale',
-    value: function locale() {
-      return _ValidationLocale.ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
-    }
-  }, {
-    key: 'useViewStrategy',
-    value: function useViewStrategy(viewStrategy) {
-      return this.setValue('viewStrategy', viewStrategy);
-    }
-  }, {
-    key: 'getViewStrategy',
-    value: function getViewStrategy() {
-      return this.getValue('viewStrategy');
-    }
-  }]);
+    return this;
+  };
+
+  ValidationConfig.prototype.locale = function locale() {
+    return _ValidationLocale.ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
+  };
+
+  ValidationConfig.prototype.useViewStrategy = function useViewStrategy(viewStrategy) {
+    return this.setValue('viewStrategy', viewStrategy);
+  };
+
+  ValidationConfig.prototype.getViewStrategy = function getViewStrategy() {
+    return this.getValue('viewStrategy');
+  };
 
   return ValidationConfig;
 })();

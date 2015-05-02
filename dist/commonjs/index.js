@@ -4,9 +4,7 @@ var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? ob
 
 var _defaults = function (obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; };
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+exports.__esModule = true;
 exports.configure = configure;
 
 var _ValidationConfig = require('./validation/validation-config');
@@ -15,27 +13,12 @@ var _Validation = require('./validation/validation');
 
 var _Utilities = require('./validation/utilities');
 
-Object.defineProperty(exports, 'Utilities', {
-  enumerable: true,
-  get: function get() {
-    return _Utilities.Utilities;
-  }
-});
-Object.defineProperty(exports, 'ValidationConfig', {
-  enumerable: true,
-  get: function get() {
-    return _ValidationConfig.ValidationConfig;
-  }
-});
+exports.Utilities = _Utilities.Utilities;
+exports.ValidationConfig = _ValidationConfig.ValidationConfig;
 
 var _ValidationLocale = require('./validation/validation-locale');
 
-Object.defineProperty(exports, 'ValidationLocale', {
-  enumerable: true,
-  get: function get() {
-    return _ValidationLocale.ValidationLocale;
-  }
-});
+exports.ValidationLocale = _ValidationLocale.ValidationLocale;
 
 var _validationValidationResult = require('./validation/validation-result');
 
@@ -45,39 +28,19 @@ var _validationValidationRules = require('./validation/validation-rules');
 
 _defaults(exports, _interopRequireWildcard(_validationValidationRules));
 
-Object.defineProperty(exports, 'Validation', {
-  enumerable: true,
-  get: function get() {
-    return _Validation.Validation;
-  }
-});
+exports.Validation = _Validation.Validation;
 
 var _ValidateCustomAttribute = require('./validation/validate-custom-attribute');
 
-Object.defineProperty(exports, 'ValidateCustomAttribute', {
-  enumerable: true,
-  get: function get() {
-    return _ValidateCustomAttribute.ValidateCustomAttribute;
-  }
-});
+exports.ValidateCustomAttribute = _ValidateCustomAttribute.ValidateCustomAttribute;
 
 var _ValidateCustomAttributeViewStrategy = require('./validation/validate-custom-attribute-view-strategy');
 
-Object.defineProperty(exports, 'ValidateCustomAttributeViewStrategy', {
-  enumerable: true,
-  get: function get() {
-    return _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
-  }
-});
+exports.ValidateCustomAttributeViewStrategy = _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
 
 var _ensure = require('./validation/decorators');
 
-Object.defineProperty(exports, 'ensure', {
-  enumerable: true,
-  get: function get() {
-    return _ensure.ensure;
-  }
-});
+exports.ensure = _ensure.ensure;
 
 function configure(aurelia, configCallback) {
 

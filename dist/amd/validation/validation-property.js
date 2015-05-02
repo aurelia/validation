@@ -3,11 +3,7 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-  Object.defineProperty(exports, '__esModule', {
-    value: true
-  });
+  exports.__esModule = true;
 
   var ValidationProperty = (function () {
     function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult, config) {
@@ -48,46 +44,40 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
       }
     }
 
-    _createClass(ValidationProperty, [{
-      key: 'addValidationRule',
-      value: function addValidationRule(validationRule) {
-        if (validationRule.validate === undefined) throw new exception('That\'s not a valid validationRule');
-        this.collectionOfValidationRules.addValidationRule(validationRule);
-        this.validateCurrentValue(false);
-      }
-    }, {
-      key: 'validateCurrentValue',
-      value: function validateCurrentValue(forceDirty, forceExecution) {
-        return this.validate(this.observer.getValue(), forceDirty, forceExecution);
-      }
-    }, {
-      key: 'clear',
-      value: function clear() {
-        this.latestValue = this.observer.getValue();
-        this.propertyResult.clear();
-      }
-    }, {
-      key: 'validate',
-      value: function validate(newValue, shouldBeDirty, forceExecution) {
-        var _this2 = this;
+    ValidationProperty.prototype.addValidationRule = function addValidationRule(validationRule) {
+      if (validationRule.validate === undefined) throw new exception('That\'s not a valid validationRule');
+      this.collectionOfValidationRules.addValidationRule(validationRule);
+      this.validateCurrentValue(false);
+    };
 
-        if (!this.propertyResult.isDirty && shouldBeDirty || this.latestValue !== newValue || forceExecution) {
-          this.latestValue = newValue;
-          return this.config.locale().then(function (locale) {
-            return _this2.collectionOfValidationRules.validate(newValue, locale).then(function (validationResponse) {
-              if (_this2.latestValue === validationResponse.latestValue) _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
-              return validationResponse.isValid;
-            })['catch'](function (err) {
-              console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);
-              debugger;
-              throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
-            });
-          }, function () {
-            throw Error('An exception occurred while trying to load the locale');
+    ValidationProperty.prototype.validateCurrentValue = function validateCurrentValue(forceDirty, forceExecution) {
+      return this.validate(this.observer.getValue(), forceDirty, forceExecution);
+    };
+
+    ValidationProperty.prototype.clear = function clear() {
+      this.latestValue = this.observer.getValue();
+      this.propertyResult.clear();
+    };
+
+    ValidationProperty.prototype.validate = function validate(newValue, shouldBeDirty, forceExecution) {
+      var _this2 = this;
+
+      if (!this.propertyResult.isDirty && shouldBeDirty || this.latestValue !== newValue || forceExecution) {
+        this.latestValue = newValue;
+        return this.config.locale().then(function (locale) {
+          return _this2.collectionOfValidationRules.validate(newValue, locale).then(function (validationResponse) {
+            if (_this2.latestValue === validationResponse.latestValue) _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
+            return validationResponse.isValid;
+          })['catch'](function (err) {
+            console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);
+            debugger;
+            throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
           });
-        }
+        }, function () {
+          throw Error('An exception occurred while trying to load the locale');
+        });
       }
-    }]);
+    };
 
     return ValidationProperty;
   })();

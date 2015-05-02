@@ -1,9 +1,7 @@
 define(['exports', '../validation/utilities'], function (exports, _validationUtilities) {
   'use strict';
 
-  Object.defineProperty(exports, '__esModule', {
-    value: true
-  });
+  exports.__esModule = true;
   var data = {
     settings: {
       numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/

@@ -4,11 +4,7 @@ var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? ob
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+exports.__esModule = true;
 
 var _ObserverLocator = require('aurelia-binding');
 
@@ -34,23 +30,19 @@ var Validation = (function () {
     this.config = validationConfig ? validationConfig : Validation.defaults;
   }
 
-  _createClass(Validation, [{
-    key: 'on',
-    value: function on(subject, configCallback) {
-      var conf = new _ValidationConfig.ValidationConfig(this.config);
-      if (configCallback !== null && configCallback !== undefined && typeof configCallback === 'function') {
-        configCallback(conf);
-      }
-      return new _ValidationGroup.ValidationGroup(subject, this.observerLocator, conf);
+  Validation.prototype.on = function on(subject, configCallback) {
+    var conf = new _ValidationConfig.ValidationConfig(this.config);
+    if (configCallback !== null && configCallback !== undefined && typeof configCallback === 'function') {
+      configCallback(conf);
     }
-  }, {
-    key: 'onBreezeEntity',
-    value: function onBreezeEntity(breezeEntity, configCallback) {
-      var validation = this.on(breezeEntity, configCallback);
-      validation.onBreezeEntity();
-      return validation;
-    }
-  }]);
+    return new _ValidationGroup.ValidationGroup(subject, this.observerLocator, conf);
+  };
+
+  Validation.prototype.onBreezeEntity = function onBreezeEntity(breezeEntity, configCallback) {
+    var validation = this.on(breezeEntity, configCallback);
+    validation.onBreezeEntity();
+    return validation;
+  };
 
   var _Validation = Validation;
   Validation = _inject.inject(_ObserverLocator.ObserverLocator)(Validation) || Validation;

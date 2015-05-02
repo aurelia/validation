@@ -5,57 +5,20 @@ define(['exports', './validation/validation-config', './validation/validation', 
 
   var _defaults = function (obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; };
 
-  Object.defineProperty(exports, '__esModule', {
-    value: true
-  });
+  exports.__esModule = true;
   exports.configure = configure;
-  Object.defineProperty(exports, 'Utilities', {
-    enumerable: true,
-    get: function get() {
-      return _validationUtilities.Utilities;
-    }
-  });
-  Object.defineProperty(exports, 'ValidationConfig', {
-    enumerable: true,
-    get: function get() {
-      return _validationValidationConfig.ValidationConfig;
-    }
-  });
-  Object.defineProperty(exports, 'ValidationLocale', {
-    enumerable: true,
-    get: function get() {
-      return _validationValidationLocale.ValidationLocale;
-    }
-  });
+  exports.Utilities = _validationUtilities.Utilities;
+  exports.ValidationConfig = _validationValidationConfig.ValidationConfig;
+  exports.ValidationLocale = _validationValidationLocale.ValidationLocale;
 
   _defaults(exports, _interopRequireWildcard(_validationValidationResult));
 
   _defaults(exports, _interopRequireWildcard(_validationValidationRules));
 
-  Object.defineProperty(exports, 'Validation', {
-    enumerable: true,
-    get: function get() {
-      return _validationValidation.Validation;
-    }
-  });
-  Object.defineProperty(exports, 'ValidateCustomAttribute', {
-    enumerable: true,
-    get: function get() {
-      return _validationValidateCustomAttribute.ValidateCustomAttribute;
-    }
-  });
-  Object.defineProperty(exports, 'ValidateCustomAttributeViewStrategy', {
-    enumerable: true,
-    get: function get() {
-      return _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
-    }
-  });
-  Object.defineProperty(exports, 'ensure', {
-    enumerable: true,
-    get: function get() {
-      return _validationDecorators.ensure;
-    }
-  });
+  exports.Validation = _validationValidation.Validation;
+  exports.ValidateCustomAttribute = _validationValidateCustomAttribute.ValidateCustomAttribute;
+  exports.ValidateCustomAttributeViewStrategy = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
+  exports.ensure = _validationDecorators.ensure;
 
   function configure(aurelia, configCallback) {
 

@@ -1,3 +1,19 @@
+### 0.2.4 (2015-05-01)
+
+
+#### Bug Fixes
+
+* **decorators:** @ensure was imported, not exported ([d421c299](https://github.com/aurelia/validation/commit/d421c29957d4afb2a6d6b5c4efb8817b17401201))
+
+#### Features
+
+* **breeze:**
+  * documentation ([6751be32](https://github.com/aurelia/validation/commit/6751be32000280ece9e5e00c20b097fc2c3decac))
+  * further development ([772f332b](https://github.com/aurelia/validation/commit/772f332b852407e1163c6a461571e75506d48a98))
+  * initial binding to breeze entities ([acb3e26a](https://github.com/aurelia/validation/commit/acb3e26af1cff4e9e09a3e875c5db3bab3a24a56))
+* **decorators:** introducing the @ensure property decorator ([784e73f2](https://github.com/aurelia/validation/commit/784e73f28ed44a357d78528ac9ddc4b26a7cf794))
+
+
 ### 0.2.3 (2015-04-26)
 
 
