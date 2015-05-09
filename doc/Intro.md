@@ -189,7 +189,7 @@ Validates that the value entered is greater than or equal to the provided *minVa
 >Arguments can be values or functions that return a value. See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 ####isEmail()
-Validates that the value entered is a properly formed isEmail address.
+Validates that the value entered is a properly formed email address.
 
 ####isEqualTo(otherValue, otherValueLabel)
 Validates that the value entered is strictly equal to the *otherValue*.
