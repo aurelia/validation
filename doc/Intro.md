@@ -127,7 +127,7 @@ We now have a working validation, but nothing changes behaviorally. If the valid
 First, let's make sure that the 'welcome' function can only be executed if the validation is valid:
 ``` javascript
   welcome(){
-    if(this.validation.validate()) //the validate will fulfil when validation is valid, and reject if not
+    this.validation.validate() //the validate will fulfil when validation is valid, and reject if not
       .then( () => {
         alert(`Welcome, ${this.fullName}! `);
       });
