@@ -25,9 +25,9 @@
       "lib": "dist/system"
     },
     "dependencies": {
-      "aurelia-binding": "github:aurelia/binding@^0.6.0",
-      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.7.0",
-      "aurelia-templating": "github:aurelia/templating@^0.11.0"
+      "aurelia-binding": "github:aurelia/binding@^0.6.1",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.7.1",
+      "aurelia-templating": "github:aurelia/templating@^0.11.2"
     }
   },
   "devDependencies": {
