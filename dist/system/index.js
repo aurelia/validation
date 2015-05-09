@@ -9,7 +9,7 @@ System.register(['./validation/validation-config', './validation/validation', '.
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(Validation.defaults);
     }
-    aurelia.container.registerInstance(ValidationConfig, Validation.defaults);
+    aurelia.withSingleton(ValidationConfig, Validation.defaults);
     return Validation.defaults.locale();
   }
 

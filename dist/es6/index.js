@@ -19,6 +19,6 @@ export function configure(aurelia, configCallback) {
   {
     configCallback(Validation.defaults);
   }
-  aurelia.container.registerInstance(ValidationConfig, Validation.defaults);
+  aurelia.withSingleton(ValidationConfig, Validation.defaults);
   return Validation.defaults.locale();
 }

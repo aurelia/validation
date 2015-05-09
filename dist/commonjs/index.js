@@ -48,6 +48,6 @@ function configure(aurelia, configCallback) {
   if (configCallback !== undefined && typeof configCallback === 'function') {
     configCallback(_Validation.Validation.defaults);
   }
-  aurelia.container.registerInstance(_ValidationConfig.ValidationConfig, _Validation.Validation.defaults);
+  aurelia.withSingleton(_ValidationConfig.ValidationConfig, _Validation.Validation.defaults);
   return _Validation.Validation.defaults.locale();
 }

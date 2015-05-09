@@ -26,7 +26,7 @@ define(['exports', './validation/validation-config', './validation/validation', 
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(_validationValidation.Validation.defaults);
     }
-    aurelia.container.registerInstance(_validationValidationConfig.ValidationConfig, _validationValidation.Validation.defaults);
+    aurelia.withSingleton(_validationValidationConfig.ValidationConfig, _validationValidation.Validation.defaults);
     return _validationValidation.Validation.defaults.locale();
   }
 });
