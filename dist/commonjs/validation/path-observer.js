@@ -81,8 +81,10 @@ var PathObserver = (function () {
 
   PathObserver.prototype.getObserver = function getObserver() {
     if (this.path.length == 1) {
+      var resolve = this.subject[this.path[0]];
       return this.observerLocator.getObserver(this.subject, this.path[0]);
-    }return this;
+    }
+    return this;
   };
 
   PathObserver.prototype.getValue = function getValue() {

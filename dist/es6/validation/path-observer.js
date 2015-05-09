@@ -74,8 +74,10 @@ export class PathObserver {
   }
 
   getObserver() {
-    if (this.path.length == 1)
+    if (this.path.length == 1) {
+      var resolve = this.subject[this.path[0]]; //binding issue with @bindable properties, see: https://github.com/aurelia/binding/issues/89
       return this.observerLocator.getObserver(this.subject, this.path[0]);
+    }
     return this;
   }
 
