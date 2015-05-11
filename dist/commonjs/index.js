@@ -37,6 +37,7 @@ exports.ValidateCustomAttribute = _ValidateCustomAttribute.ValidateCustomAttribu
 var _ValidateCustomAttributeViewStrategy = require('./validation/validate-custom-attribute-view-strategy');
 
 exports.ValidateCustomAttributeViewStrategy = _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
+exports.ValidateCustomAttributeViewStrategyBase = _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategyBase;
 
 var _ensure = require('./validation/decorators');
 

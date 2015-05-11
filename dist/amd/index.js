@@ -18,6 +18,7 @@ define(['exports', './validation/validation-config', './validation/validation', 
   exports.Validation = _validationValidation.Validation;
   exports.ValidateCustomAttribute = _validationValidateCustomAttribute.ValidateCustomAttribute;
   exports.ValidateCustomAttributeViewStrategy = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
+  exports.ValidateCustomAttributeViewStrategyBase = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategyBase;
   exports.ensure = _validationDecorators.ensure;
 
   function configure(aurelia, configCallback) {

@@ -38,6 +38,8 @@ System.register(['./validation/validation-config', './validation/validation', '.
       _export('ValidateCustomAttribute', _validationValidateCustomAttribute.ValidateCustomAttribute);
     }, function (_validationValidateCustomAttributeViewStrategy) {
       _export('ValidateCustomAttributeViewStrategy', _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy);
+
+      _export('ValidateCustomAttributeViewStrategyBase', _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategyBase);
     }, function (_validationDecorators) {
       _export('ensure', _validationDecorators.ensure);
     }],

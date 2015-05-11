@@ -6,6 +6,7 @@ export * from './validation/validation-rules';
 export {Validation} from './validation/validation';
 export {ValidateCustomAttribute} from './validation/validate-custom-attribute';
 export {ValidateCustomAttributeViewStrategy} from './validation/validate-custom-attribute-view-strategy';
+export {ValidateCustomAttributeViewStrategyBase} from './validation/validate-custom-attribute-view-strategy';
 export {ensure} from './validation/decorators';
 
 
