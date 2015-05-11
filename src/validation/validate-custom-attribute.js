@@ -1,7 +1,5 @@
 import {inject} from 'aurelia-dependency-injection';
 import {customAttribute} from 'aurelia-templating';
-import {Behavior} from 'aurelia-templating';
-
 
 @customAttribute('validate')
 @inject(Element)
