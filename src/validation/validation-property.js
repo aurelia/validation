@@ -41,7 +41,7 @@ export class ValidationProperty {
 
   addValidationRule(validationRule) {
     if (validationRule.validate === undefined) //Can ES6 check on base class??
-      throw new exception("That's not a valid validationRule");
+      throw new Error("That's not a valid validationRule");
     this.collectionOfValidationRules.addValidationRule(validationRule);
     this.validateCurrentValue(false);
   }
