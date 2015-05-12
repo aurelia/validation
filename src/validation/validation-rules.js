@@ -166,7 +166,7 @@ export class NumericValidationRule extends ValidationRule {
       (newValue, threshold, locale) => {
         var numericRegex = locale.setting('numericRegex');
         var floatValue = parseFloat(newValue);
-        return !Number.isNaN(parseFloat(floatValue))
+        return !Number.isNaN(parseFloat(newValue))
           && Number.isFinite(floatValue)
           && numericRegex.test(newValue);
       }
