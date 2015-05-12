@@ -49,7 +49,7 @@ export class ValidationConfig {
       let id = ++ValidationConfig.uniqueListenerId;
       this.changedHandlers.set(id, callback);
       return () => {
-        changedHandlers.delete(id);
+        this.changedHandlers.delete(id);
       };
     }
   }
