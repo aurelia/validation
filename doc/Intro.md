@@ -451,6 +451,7 @@ See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intr
 - sv-SE
 - tr-TR
 - es-MX
+- bg-BG
 
 > We could use a little help here...
 
