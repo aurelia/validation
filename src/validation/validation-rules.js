@@ -75,14 +75,170 @@ export class ValidationRule {
 }
 
 export class URLValidationRule extends ValidationRule{
-  constructor() {
+  //https://github.com/chriso/validator.js/blob/master/LICENSE
+  constructor(threshold) {
+    var default_url_options = {
+      protocols: [ 'http', 'https', 'ftp' ]
+      , require_tld: true
+      , require_protocol: false
+      , allow_underscores: true
+      , allow_trailing_dot: false
+      , allow_protocol_relative_urls: true
+    };
+    if(threshold === undefined)
+    {
+      threshold = default_url_options;
+    }
+
     super(
-      null,
+      threshold,
       (newValue, threshold) =>
       {
+        let url = newValue;
+        if (!url || url.length >= 2083 || /\s/.test(url)) {
+          return false;
+        }
+        if (url.indexOf('mailto:') === 0) {
+          return false;
+        } 
+        var protocol, auth, host, hostname, port,
+          port_str, split;
+        split = url.split('://');
+        if (split.length > 1) {
+          protocol = split.shift();
+          if (threshold.protocols.indexOf(protocol) === -1) {
+            return false;
+          }
+        } else if (threshold.require_protocol) {
+          return false;
+        }  else if (threshold.allow_protocol_relative_urls && url.substr(0, 2) === '//') {
+          split[0] = url.substr(2);
+        }
+        url = split.join('://');
+        split = url.split('#');
+        url = split.shift();
+
+        split = url.split('?');
+        url = split.shift();
+
+        split = url.split('/');
+        url = split.shift();
+        split = url.split('@');
+        if (split.length > 1) {
+          auth = split.shift();
+          if (auth.indexOf(':') >= 0 && auth.split(':').length > 2) {
+            return false;
+          }
+        }
+        hostname = split.join('@');
+        split = hostname.split(':');
+        host = split.shift();
+        if (split.length) {
+          port_str = split.join(':');
+          port = parseInt(port_str, 10);
+          if (!/^[0-9]+$/.test(port_str) || port <= 0 || port > 65535) {
+            return false;
+          }
+        }
+        if (!this.isIP(host) && !this.isFQDN(host, threshold) &&
+          host !== 'localhost') {
+          return false;
+        }
+        if (threshold.host_whitelist &&
+          threshold.host_whitelist.indexOf(host) === -1) {
+          return false;
+        }
+        if (threshold.host_blacklist &&
+          threshold.host_blacklist.indexOf(host) !== -1) {
+          return false;
+        }
         return true;
       }
     );
+    this.isIP = function (str, version) {
+      var ipv4Maybe = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
+        , ipv6Block = /^[0-9A-F]{1,4}$/i;
+
+      if (!version) {
+        return this.isIP(str, 4) || this.isIP(str, 6);
+      } else if (version === 4) {
+        if (!ipv4Maybe.test(str)) {
+          return false;
+        }
+        var parts = str.split('.').sort(function (a, b) {
+          return a - b;
+        });
+        return parts[3] <= 255;
+      } else if (version === 6) {
+        var blocks = str.split(':');
+        var foundOmissionBlock = false; // marker to indicate ::
+
+        if (blocks.length > 8)
+          return false;
+
+        // initial or final ::
+        if (str === '::') {
+          return true;
+        } else if (str.substr(0, 2) === '::') {
+          blocks.shift();
+          blocks.shift();
+          foundOmissionBlock = true;
+        } else if (str.substr(str.length - 2) === '::') {
+          blocks.pop();
+          blocks.pop();
+          foundOmissionBlock = true;
+        }
+
+        for (var i = 0; i < blocks.length; ++i) {
+          // test for a :: which can not be at the string start/end
+          // since those cases have been handled above
+          if (blocks[i] === '' && i > 0 && i < blocks.length -1) {
+            if (foundOmissionBlock)
+              return false; // multiple :: in address
+            foundOmissionBlock = true;
+          } else if (!ipv6Block.test(blocks[i])) {
+            return false;
+          }
+        }
+
+        if (foundOmissionBlock) {
+          return blocks.length >= 1;
+        } else {
+          return blocks.length === 8;
+        }
+      }
+      return false;
+    };
+    this.isFQDN = function (str, options) {
+      /* Remove the optional trailing dot before checking validity */
+      if (options.allow_trailing_dot && str[str.length - 1] === '.') {
+        str = str.substring(0, str.length - 1);
+      }
+      var parts = str.split('.');
+      if (options.require_tld) {
+        var tld = parts.pop();
+        if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+          return false;
+        }
+      }
+      for (var part, i = 0; i < parts.length; i++) {
+        part = parts[i];
+        if (options.allow_underscores) {
+          if (part.indexOf('__') >= 0) {
+            return false;
+          }
+          part = part.replace(/_/g, '');
+        }
+        if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+          return false;
+        }
+        if (part[0] === '-' || part[part.length - 1] === '-' ||
+          part.indexOf('---') >= 0) {
+          return false;
+        }
+      }
+      return true;
+    };
   }
 
 }
