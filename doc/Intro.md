@@ -150,6 +150,9 @@ This is a special case, dictating that the field is 'required' and cannot be emp
 Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
 >The isNotEmpty rule is always checked first before any other validation rule.  This means that without the isNotEmpty rule, the .hasMinLength(5) rule would still consider a value of '' as valid because the field is allowed to be empty.
 
+####containsNoSpaces()
+Validates that the value entered contains no whitespaces.
+
 ####containsOnly(regex)
 Validates that value entered tests true for the given *regex*.
 > Note: for now this is a synonymn for *matches(regegx)*, however in the future we will try to add the possibility to prevent invalid input for any of the *containsOnly* validation rules.
@@ -230,6 +233,10 @@ This matches the number of groups (lowercase/uppercase/digits/special characters
 Validates that the value entered is not stritly equal to the *otherValue*.
 Optionally takes an *otherValueLabel*, which will be used in the error message.
 Arguments can be values or functions that return a value. See 'config.computedFrom'.
+
+####isURL()
+Validates that the value entered is a valid URL.
+Supports web addresses, 'localhost', IP4 and IP6 addresses. Supports query parameters. Supports no protocol, ftp, http or https.
  
 ####matches(regex)
 Validates that the value entered is valid according to the provided *regex* (RegExp).
