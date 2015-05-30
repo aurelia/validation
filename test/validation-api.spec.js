@@ -90,6 +90,13 @@ describe('Some simple API tests', ()=>{
     expectations.validate();
   });
 
+  it('on containsNoSpaces()', (done) => {
+    var expectations = new Expectations(expect, done);
+    APITest.Assert(expectations, (v) => { return  v.containsNoSpaces();}, 'a', true);
+    APITest.Assert(expectations, (v) => { return  v.containsNoSpaces();}, ' a', false);
+    expectations.validate();
+  });
+
   it('on hasLengthBetween()', (done) => {
     var expectations = new Expectations(expect, done);
     APITest.Assert(expectations, (v) => { return  v.hasLengthBetween(2,4);}, 'a', false);
@@ -126,6 +133,13 @@ describe('Some simple API tests', ()=>{
     var expectations = new Expectations(expect, done);
     APITest.Assert(expectations, (v) => { return  v.isEmail();}, 'bob@thebuilder.com', true);
     APITest.Assert(expectations, (v) => { return  v.isEmail();}, 'bob', false);
+    expectations.validate();
+  });
+
+  it('on isURL()', (done) =>{
+    var expectations = new Expectations(expect, done);
+    APITest.Assert(expectations, (v) => { return  v.isURL();}, 'www.google.com', true);
+    APITest.Assert(expectations, (v) => { return  v.isURL();}, 'www google com', false);
     expectations.validate();
   });
 
