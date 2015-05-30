@@ -58,6 +58,9 @@ export let data = {
     'NumericValidationRule': (newValue, threshold) => {
       return `muss eine Nummer sein`;
     },
+    'NoSpacesValidationRule' : (newValue, threshold) => {
+      return `darf keine Leerzeichen enthalten`;
+    },
     'RegexValidationRule': (newValue, threshold) => {
       return `ist kein gültiger Wert`;
     },
@@ -69,6 +72,9 @@ export let data = {
     },
     'MediumPasswordValidationRule' : (newValue, threshold) => {
         return `sollte zumindest ${Utilities.getValue(threshold)} der folgenden Gruppen enthalten: Kleinbuchstaben, Großbuchstaben, Zahlen oder Sonderzeichen`;
+    },
+    'URLValidationRule' : (newValue, threshold) =>{
+      return `ist keine gültige URL`;
     }
   }
 };

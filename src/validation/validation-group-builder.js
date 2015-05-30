@@ -85,6 +85,10 @@ export class ValidationGroupBuilder {
     return this.passesRule(new AllRules.EmailValidationRule());
   }
 
+  isURL(){
+    return this.passesRule(new AllRules.URLValidationRule());
+  }
+
   hasMinLength(minimumValue) {
     return this.passesRule(new AllRules.MinimumLengthValidationRule(minimumValue));
   }
@@ -99,6 +103,10 @@ export class ValidationGroupBuilder {
 
   isNumber() {
     return this.passesRule(new AllRules.NumericValidationRule());
+  }
+
+  containsNoSpaces(){
+    return this.passesRule(new AllRules.NoSpacesValidationRule());
   }
 
   containsOnlyDigits() {

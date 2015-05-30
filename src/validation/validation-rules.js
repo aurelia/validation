@@ -74,6 +74,19 @@ export class ValidationRule {
   }
 }
 
+export class URLValidationRule extends ValidationRule{
+  constructor() {
+    super(
+      null,
+      (newValue, threshold) =>
+      {
+        return true;
+      }
+    );
+  }
+
+}
+
 export class EmailValidationRule extends ValidationRule {
   //https://github.com/chriso/validator.js/blob/master/LICENSE
   constructor() {
@@ -255,6 +268,18 @@ export class DigitValidationRule extends ValidationRule {
       }
     );
     this.digitRegex = /^\d+$/;
+  }
+}
+
+export class NoSpacesValidationRule extends ValidationRule{
+  constructor() {
+    super(
+      null,
+      (newValue, threshold) => {
+        return this.regex.test(newValue);
+      }
+    );
+    this.regex =/^\S*$/;
   }
 }
 
