@@ -1,12 +1,11 @@
 System.register(['aurelia-dependency-injection', 'aurelia-templating'], function (_export) {
-  var inject, customAttribute, Behavior, _classCallCheck, ValidateCustomAttribute;
+  var inject, customAttribute, _classCallCheck, ValidateCustomAttribute;
 
   return {
     setters: [function (_aureliaDependencyInjection) {
       inject = _aureliaDependencyInjection.inject;
     }, function (_aureliaTemplating) {
       customAttribute = _aureliaTemplating.customAttribute;
-      Behavior = _aureliaTemplating.Behavior;
     }],
     execute: function () {
       'use strict';

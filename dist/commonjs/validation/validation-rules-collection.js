@@ -93,7 +93,7 @@ var ValidationRulesCollection = (function () {
   };
 
   ValidationRulesCollection.prototype.addValidationRule = function addValidationRule(validationRule) {
-    if (validationRule.validate === undefined) throw new exception('That\'s not a valid validationRule');
+    if (validationRule.validate === undefined) throw new Error('That\'s not a valid validationRule');
     this.validationRules.push(validationRule);
   };
 

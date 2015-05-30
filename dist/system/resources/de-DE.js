@@ -65,6 +65,9 @@ System.register(['../validation/utilities'], function (_export) {
           NumericValidationRule: function NumericValidationRule(newValue, threshold) {
             return 'muss eine Nummer sein';
           },
+          NoSpacesValidationRule: function NoSpacesValidationRule(newValue, threshold) {
+            return 'darf keine Leerzeichen enthalten';
+          },
           RegexValidationRule: function RegexValidationRule(newValue, threshold) {
             return 'ist kein gültiger Wert';
           },
@@ -76,6 +79,9 @@ System.register(['../validation/utilities'], function (_export) {
           },
           MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
             return 'sollte zumindest ' + Utilities.getValue(threshold) + ' der folgenden Gruppen enthalten: Kleinbuchstaben, Großbuchstaben, Zahlen oder Sonderzeichen';
+          },
+          URLValidationRule: function URLValidationRule(newValue, threshold) {
+            return 'ist keine gültige URL';
           }
         }
       };

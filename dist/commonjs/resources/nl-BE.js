@@ -74,6 +74,9 @@ var data = {
     NumericValidationRule: function NumericValidationRule(newValue, threshold) {
       return 'moet een getal zijn';
     },
+    NoSpacesValidationRule: function NoSpacesValidationRule(newValue, threshold) {
+      return 'mag geen spaties bevatten';
+    },
     RegexValidationRule: function RegexValidationRule(newValue, threshold) {
       return 'is geen geldige waarde';
     },
@@ -85,6 +88,9 @@ var data = {
     },
     MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
       return 'moet op zijn minst ' + _Utilities.Utilities.getValue(threshold) + ' van de volgende groepen bevatten: letters, hoofdletters, cijfers of speciale tekens';
+    },
+    URLValidationRule: function URLValidationRule(newValue, threshold) {
+      return 'is geen geldige URL';
     }
   }
 };

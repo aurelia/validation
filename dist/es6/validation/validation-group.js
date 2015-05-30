@@ -268,6 +268,13 @@ export class ValidationGroup {
   isEmail() {
     return this.builder.isEmail();
   }
+  /**
+   * Adds a validation rule that checks a value for being a valid URL
+   * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
+   */
+  isURL(){
+    return this.builder.isURL();
+  }
 
   /**
    * Adds a validation rule that checks a value for being equal to at least one other value in a particular collection
@@ -313,6 +320,14 @@ export class ValidationGroup {
   isNumber() {
     return this.builder.isNumber();
   }
+  /**
+   * Adds a validation rule that checks a value for containing not a single whitespace
+   * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
+   */
+  containsNoSpaces() {
+    return this.builder.containsNoSpaces();
+  }
+
 
   /**
    * Adds a validation rule that checks a value for being strictly numeric, this excludes formatted numbers like '-3,600.25'

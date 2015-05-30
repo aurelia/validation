@@ -74,6 +74,9 @@ var data = {
     NumericValidationRule: function NumericValidationRule(newValue, threshold) {
       return 'sadece sayı girebilirsiniz';
     },
+    NoSpacesValidationRule: function NoSpacesValidationRule(newValue, threshold) {
+      return 'boşluk içeremez';
+    },
     RegexValidationRule: function RegexValidationRule(newValue, threshold) {
       return 'geçerli bir değer giriniz';
     },
@@ -85,6 +88,9 @@ var data = {
     },
     MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
       return 'küçük harfler, büyük harfler, sayılar veya işaretlerden en az ' + _Utilities.Utilities.getValue(threshold) + ' değişik tip olmalı';
+    },
+    URLValidationRule: function URLValidationRule(newValue, threshold) {
+      return 'Geçerli bir URL değil';
     }
   }
 };

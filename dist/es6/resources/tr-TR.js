@@ -70,6 +70,9 @@ export let data = {
     'NumericValidationRule': (newValue, threshold) => {
       return `sadece sayı girebilirsiniz`;
     },
+    'NoSpacesValidationRule' : (newValue, threshold) => {
+      return `boşluk içeremez`;
+    },
     'RegexValidationRule': (newValue, threshold) => {
       return `geçerli bir değer giriniz`;
     },
@@ -81,6 +84,9 @@ export let data = {
     },
     'MediumPasswordValidationRule' : (newValue, threshold) => {
       return `küçük harfler, büyük harfler, sayılar veya işaretlerden en az ${Utilities.getValue(threshold)} değişik tip olmalı`;
+    },
+    'URLValidationRule' : (newValue, threshold) =>{
+      return `Geçerli bir URL değil`
     }
   }
 };

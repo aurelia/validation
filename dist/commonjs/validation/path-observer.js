@@ -75,7 +75,7 @@ var PathObserver = (function () {
 
   PathObserver.prototype.observePart = function observePart(part) {
     if (part !== this.path[this.path.length - 1]) {
-      this.observerParts();
+      this.observeParts();
     }
   };
 

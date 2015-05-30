@@ -70,6 +70,9 @@ export let data = {
     'NumericValidationRule': (newValue, threshold) => {
       return `moet een getal zijn`;
     },
+    'NoSpacesValidationRule' : (newValue, threshold) => {
+      return `mag geen spaties bevatten`;
+    },
     'RegexValidationRule': (newValue, threshold) => {
       return `is geen geldige waarde`;
     },
@@ -81,6 +84,9 @@ export let data = {
     },
     'MediumPasswordValidationRule' : (newValue, threshold) => {
         return `moet op zijn minst ${Utilities.getValue(threshold)} van de volgende groepen bevatten: letters, hoofdletters, cijfers of speciale tekens`;
+    },
+    'URLValidationRule' : (newValue, threshold) =>{
+      return `is geen geldige URL`
     }
   }
 };

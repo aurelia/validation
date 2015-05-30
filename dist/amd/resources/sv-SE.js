@@ -72,6 +72,9 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
       NumericValidationRule: function NumericValidationRule(newValue, threshold) {
         return 'måste vara ett nummer';
       },
+      NoSpacesValidationRule: function NoSpacesValidationRule(newValue, threshold) {
+        return 'kan inte innehålla mellanslag';
+      },
       RegexValidationRule: function RegexValidationRule(newValue, threshold) {
         return 'är inte ett giltigt värde';
       },
@@ -83,6 +86,9 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
       },
       MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
         return 'ska innehålla minst ' + _validationUtilities.Utilities.getValue(threshold) + ' av följande grupperingar: gemener, versaler, siffror eller specialtecken';
+      },
+      URLValidationRule: function URLValidationRule(newValue, threshold) {
+        return 'är inte en giltig webbadress';
       }
     }
   };

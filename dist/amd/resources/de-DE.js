@@ -60,6 +60,9 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
       NumericValidationRule: function NumericValidationRule(newValue, threshold) {
         return 'muss eine Nummer sein';
       },
+      NoSpacesValidationRule: function NoSpacesValidationRule(newValue, threshold) {
+        return 'darf keine Leerzeichen enthalten';
+      },
       RegexValidationRule: function RegexValidationRule(newValue, threshold) {
         return 'ist kein gültiger Wert';
       },
@@ -71,6 +74,9 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
       },
       MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
         return 'sollte zumindest ' + _validationUtilities.Utilities.getValue(threshold) + ' der folgenden Gruppen enthalten: Kleinbuchstaben, Großbuchstaben, Zahlen oder Sonderzeichen';
+      },
+      URLValidationRule: function URLValidationRule(newValue, threshold) {
+        return 'ist keine gültige URL';
       }
     }
   };

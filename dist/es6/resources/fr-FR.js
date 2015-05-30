@@ -70,6 +70,9 @@ export let data = {
     'NumericValidationRule': (newValue, threshold) => {
       return `doit être une valeur numérique`;
     },
+    'NoSpacesValidationRule' : (newValue, threshold) => {
+      return `ne peut pas contenir d'espaces`;
+    },
     'RegexValidationRule': (newValue, threshold) => {
       return `n'est pas une valeur valide`;
     },
@@ -81,6 +84,9 @@ export let data = {
     },
     'MediumPasswordValidationRule' : (newValue, threshold) => {
       return `doit contenir au moins ${Utilities.getValue(threshold)} des caractéristiques suivantes : lettres minuscules, lettres majuscules, caractères numériques ou caractères spéciaux`;
+    },
+    'URLValidationRule' : (newValue, threshold) =>{
+      return `est pas un URL valide`;
     }
   }
 };

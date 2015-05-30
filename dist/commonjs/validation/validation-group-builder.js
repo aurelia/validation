@@ -103,6 +103,10 @@ var ValidationGroupBuilder = (function () {
     return this.passesRule(new AllRules.EmailValidationRule());
   };
 
+  ValidationGroupBuilder.prototype.isURL = function isURL() {
+    return this.passesRule(new AllRules.URLValidationRule());
+  };
+
   ValidationGroupBuilder.prototype.hasMinLength = function hasMinLength(minimumValue) {
     return this.passesRule(new AllRules.MinimumLengthValidationRule(minimumValue));
   };
@@ -117,6 +121,10 @@ var ValidationGroupBuilder = (function () {
 
   ValidationGroupBuilder.prototype.isNumber = function isNumber() {
     return this.passesRule(new AllRules.NumericValidationRule());
+  };
+
+  ValidationGroupBuilder.prototype.containsNoSpaces = function containsNoSpaces() {
+    return this.passesRule(new AllRules.NoSpacesValidationRule());
   };
 
   ValidationGroupBuilder.prototype.containsOnlyDigits = function containsOnlyDigits() {

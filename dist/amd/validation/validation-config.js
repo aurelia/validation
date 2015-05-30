@@ -59,7 +59,7 @@ define(['exports', '../validation/validation-locale', '../validation/validate-cu
           _this.changedHandlers.set(id, callback);
           return {
             v: function () {
-              changedHandlers['delete'](id);
+              _this.changedHandlers['delete'](id);
             }
           };
         })();

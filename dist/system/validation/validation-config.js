@@ -66,7 +66,7 @@ System.register(['../validation/validation-locale', '../validation/validate-cust
               _this.changedHandlers.set(id, callback);
               return {
                 v: function () {
-                  changedHandlers['delete'](id);
+                  _this.changedHandlers['delete'](id);
                 }
               };
             })();

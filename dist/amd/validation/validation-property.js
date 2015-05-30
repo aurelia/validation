@@ -45,7 +45,7 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
     }
 
     ValidationProperty.prototype.addValidationRule = function addValidationRule(validationRule) {
-      if (validationRule.validate === undefined) throw new exception('That\'s not a valid validationRule');
+      if (validationRule.validate === undefined) throw new Error('That\'s not a valid validationRule');
       this.collectionOfValidationRules.addValidationRule(validationRule);
       this.validateCurrentValue(false);
     };

@@ -77,6 +77,9 @@ System.register(['../validation/utilities'], function (_export) {
           NumericValidationRule: function NumericValidationRule(newValue, threshold) {
             return 'doit être une valeur numérique';
           },
+          NoSpacesValidationRule: function NoSpacesValidationRule(newValue, threshold) {
+            return 'ne peut pas contenir d\'espaces';
+          },
           RegexValidationRule: function RegexValidationRule(newValue, threshold) {
             return 'n\'est pas une valeur valide';
           },
@@ -88,6 +91,9 @@ System.register(['../validation/utilities'], function (_export) {
           },
           MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
             return 'doit contenir au moins ' + Utilities.getValue(threshold) + ' des caractéristiques suivantes : lettres minuscules, lettres majuscules, caractères numériques ou caractères spéciaux';
+          },
+          URLValidationRule: function URLValidationRule(newValue, threshold) {
+            return 'est pas un URL valide';
           }
         }
       };

@@ -220,6 +220,10 @@ System.register(['../validation/validation-group-builder', '../validation/valida
           return this.builder.isEmail();
         };
 
+        ValidationGroup.prototype.isURL = function isURL() {
+          return this.builder.isURL();
+        };
+
         ValidationGroup.prototype.isIn = function isIn(collection) {
           return this.builder.isIn(collection);
         };
@@ -238,6 +242,10 @@ System.register(['../validation/validation-group-builder', '../validation/valida
 
         ValidationGroup.prototype.isNumber = function isNumber() {
           return this.builder.isNumber();
+        };
+
+        ValidationGroup.prototype.containsNoSpaces = function containsNoSpaces() {
+          return this.builder.containsNoSpaces();
         };
 
         ValidationGroup.prototype.containsOnlyDigits = function containsOnlyDigits() {

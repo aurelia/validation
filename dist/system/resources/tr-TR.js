@@ -77,6 +77,9 @@ System.register(['../validation/utilities'], function (_export) {
           NumericValidationRule: function NumericValidationRule(newValue, threshold) {
             return 'sadece sayı girebilirsiniz';
           },
+          NoSpacesValidationRule: function NoSpacesValidationRule(newValue, threshold) {
+            return 'boşluk içeremez';
+          },
           RegexValidationRule: function RegexValidationRule(newValue, threshold) {
             return 'geçerli bir değer giriniz';
           },
@@ -88,6 +91,9 @@ System.register(['../validation/utilities'], function (_export) {
           },
           MediumPasswordValidationRule: function MediumPasswordValidationRule(newValue, threshold) {
             return 'küçük harfler, büyük harfler, sayılar veya işaretlerden en az ' + Utilities.getValue(threshold) + ' değişik tip olmalı';
+          },
+          URLValidationRule: function URLValidationRule(newValue, threshold) {
+            return 'Geçerli bir URL değil';
           }
         }
       };

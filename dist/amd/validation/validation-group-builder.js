@@ -90,6 +90,10 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
       return this.passesRule(new _validationValidationRules.EmailValidationRule());
     };
 
+    ValidationGroupBuilder.prototype.isURL = function isURL() {
+      return this.passesRule(new _validationValidationRules.URLValidationRule());
+    };
+
     ValidationGroupBuilder.prototype.hasMinLength = function hasMinLength(minimumValue) {
       return this.passesRule(new _validationValidationRules.MinimumLengthValidationRule(minimumValue));
     };
@@ -104,6 +108,10 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
 
     ValidationGroupBuilder.prototype.isNumber = function isNumber() {
       return this.passesRule(new _validationValidationRules.NumericValidationRule());
+    };
+
+    ValidationGroupBuilder.prototype.containsNoSpaces = function containsNoSpaces() {
+      return this.passesRule(new _validationValidationRules.NoSpacesValidationRule());
     };
 
     ValidationGroupBuilder.prototype.containsOnlyDigits = function containsOnlyDigits() {
