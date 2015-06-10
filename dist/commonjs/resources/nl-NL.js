@@ -60,7 +60,7 @@ var data = {
       return 'moet op zijn minst ' + _Utilities.Utilities.getValue(threshold) + ' tekens lang zijn';
     },
     MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-      return 'moet op meer dan ' + _Utilities.Utilities.getValue(threshold) + ' zijn';
+      return 'moet meer dan ' + _Utilities.Utilities.getValue(threshold) + ' zijn';
     },
     MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
       return 'moet op zijn meest ' + _Utilities.Utilities.getValue(threshold) + ' zijn';

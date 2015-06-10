@@ -63,7 +63,7 @@ System.register(['../validation/utilities'], function (_export) {
             return 'moet op zijn minst ' + Utilities.getValue(threshold) + ' tekens lang zijn';
           },
           MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-            return 'moet op meer dan ' + Utilities.getValue(threshold) + ' zijn';
+            return 'moet meer dan ' + Utilities.getValue(threshold) + ' zijn';
           },
           MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
             return 'moet op zijn meest ' + Utilities.getValue(threshold) + ' zijn';

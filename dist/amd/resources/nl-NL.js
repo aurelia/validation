@@ -58,7 +58,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' tekens lang zijn';
       },
       MinimumValueValidationRule: function MinimumValueValidationRule(newValue, threshold) {
-        return 'moet op meer dan ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
+        return 'moet meer dan ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
       },
       MaximumInclusiveValueValidationRule: function MaximumInclusiveValueValidationRule(newValue, threshold) {
         return 'moet op zijn meest ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
