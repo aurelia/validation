@@ -370,7 +370,8 @@ validation = validation.on(this)
       middleName : '', //is valid
       addressLine1 : false, //is not valid
       addressLine2 : 'should be in Antarctica' //is not valid with custom message
-    });
+    }
+  });
 ```
 
 You're not required to return each property in the validation group, and you're not required to return the same properties every time.
@@ -550,7 +551,7 @@ The validateCustomAttribute will loop through all nested child elements and try 
 
 ##Visual clues and customization
 The validate custom attribute uses a strategy based onTwitter Bootstrap by default (see 'configuration') to provide visual clues about valid/invalid properties.
-- for each input element, it will tyr to find the parent form-group element and add the appropriate TW BS has-error or has-success classes
+- for each input element, it will try to find the parent form-group element and add the appropriate TW BS has-error or has-success classes
 - for each input element, it will try to find the labels for that element and append a message with the TW BS help-block class. The content of this element is kept in sync with the validation message (or left empty for valid properties)
 - this added message element will have a aurelia-valiation-message class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label and the label is colored without adding a TW bootstrap "control-label" class, you can add these style to styles/styles.css:
 ```css
