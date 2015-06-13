@@ -793,6 +793,6 @@ Valid on:
  
 ###config.useViewStrategy(viewStrategyInstance)
 ``` javascript
-(config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput }
+(config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput); }
 ```
 Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage, ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput and any class that inherits from ValidateCustomAttributeViewStrategyBase.
