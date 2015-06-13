@@ -38,7 +38,11 @@ export class ValidationGroup {
   }
 
   destroy(){
-    this.onDestroy(); //todo: what else needs to be done for proper cleanup?
+    for (var i = this.validationProperties.length - 1; i >= 0; i--) {
+      this.validationProperties[i].destroy();
+    }
+    this.onDestroy();
+    // TODO: what else needs to be done for proper cleanup?
   }
 
   clear(){

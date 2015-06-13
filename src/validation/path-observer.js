@@ -114,8 +114,18 @@ export class PathObserver {
   subscribe(callback) {
     this.callbacks.unshift(callback);
     if (this.observers.length === this.path.length) {
-      return this.observers[this.observers.length - 1].subscribe(callback);
+      this.subscription = this.observers[this.observers.length - 1].subscribe(callback);
+      return () => this.unsubscribe();
     }
-    //TODO proper cleanup of callbacks
+  }
+
+  unsubscribe() {
+    if(this.subscription) this.subscription();
+    for (let i = this.observers.length - 1; i >= 0; i--) {
+      var observer = this.observers.pop();
+      if (observer && observer.subscription) {
+        observer.subscription();
+      }
+    }
   }
 }

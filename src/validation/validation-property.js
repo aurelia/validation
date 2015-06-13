@@ -16,7 +16,7 @@ export class ValidationProperty {
 
     this.debouncer = new Debouncer(config.getDebounceTimeout());
 
-    this.observer.subscribe(() => {
+    this.subscription = this.observer.subscribe(() => {
       this.debouncer.debounce( () => {
         var newValue =   this.observer.getValue();
         if(newValue !== this.latestValue) {
@@ -53,6 +53,11 @@ export class ValidationProperty {
   clear(){
     this.latestValue = this.observer.getValue();
     this.propertyResult.clear();
+  }
+
+  destroy() {
+    if(this.subscription) this.subscription();
+    // TODO: what else needs to be done for proper cleanup?
   }
 
   /**
