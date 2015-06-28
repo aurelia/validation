@@ -75,7 +75,6 @@ export class ValidationProperty {
             })
             .catch((err) => {
               console.log("Unexpected behavior: a validation-rules-collection should always fulfil", err);
-              debugger;
               throw Error("Unexpected behavior: a validation-rules-collection should always fulfil");
             });
         },

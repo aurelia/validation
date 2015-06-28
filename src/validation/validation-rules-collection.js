@@ -3,8 +3,6 @@ import {ValidationLocale} from '../validation/validation-locale';
 
 export class ValidationRulesCollection {
   constructor(config) {
-    if(config)
-    debugger;
     this.isRequired = config ? config.getValue('allPropertiesAreMandatory') : false;
     this.validationRules = [];
     this.validationCollections = [];

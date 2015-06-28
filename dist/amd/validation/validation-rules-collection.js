@@ -9,7 +9,6 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     function ValidationRulesCollection(config) {
       _classCallCheck(this, ValidationRulesCollection);
 
-      if (config) debugger;
       this.isRequired = config ? config.getValue('allPropertiesAreMandatory') : false;
       this.validationRules = [];
       this.validationCollections = [];

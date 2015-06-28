@@ -110,7 +110,6 @@ System.register(['../validation/validation-group-builder', '../validation/valida
           }
           promise = promise['catch'](function () {
             console.log('Should never get here: a validation property should always resolve to true/false!');
-            debugger;
             throw Error('Should never get here: a validation property should always resolve to true/false!');
           });
 

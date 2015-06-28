@@ -1,3 +1,17 @@
+### 0.2.6 (2015-06-28)
+
+
+#### Bug Fixes
+* **jspm:** Fixes config.js fork issue ([20c3f5d0](https://github.com/aurelia/validation/commit/20c3f5d0519e163d8baa8ec094e0ea01bca12deb), closes [#63](https://github.com/aurelia/validation/issues/63))
+* **validation-group:** clean up of path observer subscriptions on validation group destroy ([2187489a](https://github.com/aurelia/validation/commit/2187489aae24c4b714addb2d1d29e4b81c649b6f))
+
+#### Features
+
+* **i18n:**
+  * add resource for language bg-BG ([99fbbaa8](https://github.com/aurelia/validation/commit/99fbbaa8d3d79e16f6800daaa59a807daff6e828))
+  * add resource for language zh-CN ([299065d2](https://github.com/aurelia/validation/commit/299065d2dc7eab52b5c83209198105051c988554))
+* **treatAllPropertiesAsMandatory:** now supports 'isMandatory' by default. ([45699688](https://github.com/aurelia/validation/commit/45699688040e38f3fd09ac3857c8edb7428bf521))
+
 ### 0.2.5 (2015-06-10)
 
 

@@ -74,7 +74,6 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
             return validationResponse.isValid;
           })['catch'](function (err) {
             console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);
-            debugger;
             throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
           });
         }, function () {

@@ -103,7 +103,6 @@ export class ValidationGroup {
     }
     promise = promise.catch( () => {
       console.log("Should never get here: a validation property should always resolve to true/false!");
-      debugger;
       throw Error("Should never get here: a validation property should always resolve to true/false!");
     });
 
