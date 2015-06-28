@@ -128,6 +128,19 @@ describe('I18N tests: messages', () => {
     }, false);
     expectations.validate();
   });
+
+  it('should result in properly translated default error message for bg-BG', (done) => {
+    var expectations = new Expectations(expect, done);
+    var subject = TestSubject.createInstance((c) => { c.useLocale('bg-BG'); });
+    expectations.assert(() => {
+      return subject.validation.validate();
+    }, false);
+    expectations.assert(() => {
+      expect(subject.validation.result.properties.firstName.message).toBe('е задължително');
+      return subject.validation.validate();
+    }, false);
+    expectations.validate();
+  });
 });
 
 describe('I18N tests: number', () => {
