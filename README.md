@@ -127,10 +127,10 @@ To run the unit tests, first ensure that you have followed the steps above in or
 	```shell
 	npm install -g jspm
 	```
-3. Download the [SystemJS](https://github.com/systemjs/systemjs) module loader:
+3. Install the client-side dependencies with jspm:
 
 	```shell
-	jspm dl-loader
+	jspm install
 	```
 
 4. You can now run the tests with this command:
