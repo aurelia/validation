@@ -134,7 +134,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
             return false;
           }
         }
-        if (!isIP(host) && !isFQDN(host, threshold) && host !== 'localhost') {
+        if (!URLValidationRule.isIP(host) && !URLValidationRule.isFQDN(host, threshold) && host !== 'localhost') {
           return false;
         }
         if (threshold.host_whitelist && threshold.host_whitelist.indexOf(host) === -1) {
@@ -245,10 +245,10 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
         var domain = parts.pop();
         var user = parts.join('@');
 
-        if (!isFQDN(domain)) {
+        if (!EmailValidationRule.isFQDN(domain)) {
           return false;
         }
-        return testEmailUserUtf8Regex(user);
+        return EmailValidationRule.testEmailUserUtf8Regex(user);
       });
     }
 

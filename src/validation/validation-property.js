@@ -7,7 +7,7 @@ export class ValidationProperty {
     this.propertyResult = propertyResult;
     this.propertyName = propertyName;
     this.validationGroup = validationGroup;
-    this.collectionOfValidationRules = new AllCollections.ValidationRulesCollection();
+    this.collectionOfValidationRules = new AllCollections.ValidationRulesCollection(config);
     this.config = config;
     this.latestValue = undefined;
 

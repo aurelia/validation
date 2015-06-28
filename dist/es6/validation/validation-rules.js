@@ -224,7 +224,7 @@ export class URLValidationRule extends ValidationRule {
             return false;
           }
         }
-        if (!isIP(host) && !isFQDN(host, threshold) &&
+        if (!URLValidationRule.isIP(host) && !URLValidationRule.isFQDN(host, threshold) &&
           host !== 'localhost') {
           return false;
         }
@@ -280,10 +280,10 @@ export class EmailValidationRule extends ValidationRule {
         var domain = parts.pop();
         var user = parts.join('@');
 
-        if (!isFQDN(domain)) {
+        if (!EmailValidationRule.isFQDN(domain)) {
           return false;
         }
-        return testEmailUserUtf8Regex(user);
+        return EmailValidationRule.testEmailUserUtf8Regex(user);
       }
     );
 

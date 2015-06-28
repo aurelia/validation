@@ -9,6 +9,7 @@ describe('ValidationConfig', () => {
     expect(config.getDependencies().length).toBe(0);
     expect(config.getValue('locale')).toBe('en-US');
     expect(config.getViewStrategy()).toBe(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage);
+    expect(config.getValue('allPropertiesAreMandatory')).toBe(false);
   });
 
   it('should be configurable (API check)', () => {
@@ -31,6 +32,14 @@ describe('ValidationConfig', () => {
     config = new ValidationConfig();
     expect(config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput)).toBe(config);// fluent API check
     expect(config.getViewStrategy()).toBe(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput);
+
+    config = new ValidationConfig();
+    expect(config.treatAllPropertiesAsMandatory()).toBe(config); // fluent API check
+    expect(config.getValue('allPropertiesAreMandatory')).toBe(true);
+
+    config = new ValidationConfig();
+    expect(config.treatAllPropertiesAsOptional()).toBe(config);// fluent API check
+    expect(config.getValue('allPropertiesAreMandatory')).toBe(false);
   });
 
   it('should never change the defaults', () => {

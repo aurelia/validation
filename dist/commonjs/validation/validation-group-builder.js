@@ -59,6 +59,12 @@ var ValidationGroupBuilder = (function () {
     return this.validationGroup;
   };
 
+  ValidationGroupBuilder.prototype.canBeEmpty = function canBeEmpty() {
+    this.validationRuleCollections[0].canBeEmpty();
+    this.checkLast();
+    return this.validationGroup;
+  };
+
   ValidationGroupBuilder.prototype.isGreaterThan = function isGreaterThan(minimumValue) {
     return this.passesRule(new AllRules.MinimumValueValidationRule(minimumValue));
   };

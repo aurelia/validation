@@ -2,8 +2,10 @@ import {Utilities} from '../validation/utilities';
 import {ValidationLocale} from '../validation/validation-locale';
 
 export class ValidationRulesCollection {
-  constructor() {
-    this.isRequired = false;
+  constructor(config) {
+    if(config)
+    debugger;
+    this.isRequired = config ? config.getValue('allPropertiesAreMandatory') : false;
     this.validationRules = [];
     this.validationCollections = [];
     this.isRequiredMessage = null;
@@ -108,6 +110,10 @@ export class ValidationRulesCollection {
     this.isRequired = true;
   }
 
+  canBeEmpty(){
+    this.isRequired = false;
+  }
+
   withMessage(message) {
     if(this.validationRules.length === 0)
       this.isRequiredMessage = message;
@@ -118,10 +124,11 @@ export class ValidationRulesCollection {
 
 export class SwitchCaseValidationRulesCollection {
 
-  constructor(conditionExpression) {
+  constructor(conditionExpression, config) {
     this.conditionExpression = conditionExpression;
+    this.config = config;
     this.innerCollections = [];
-    this.defaultCollection = new ValidationRulesCollection();
+    this.defaultCollection = new ValidationRulesCollection(this.config);
     this.caseLabel = '';
     this.defaultCaseLabel = {description: 'this is the case label for \'default\''};
   }
@@ -147,7 +154,7 @@ export class SwitchCaseValidationRulesCollection {
     if (createIfNotExists) {
       currentCollection = {
         caseLabel: caseLabel,
-        collection: new ValidationRulesCollection()
+        collection: new ValidationRulesCollection(this.config)
       };
       this.innerCollections.push(currentCollection);
       return currentCollection.collection;
@@ -179,6 +186,14 @@ export class SwitchCaseValidationRulesCollection {
       collection.isNotEmpty();
     else
       this.defaultCollection.isNotEmpty();
+  }
+
+  canBeEmpty() {
+    var collection = this.getCurrentCollection(this.caseLabel);
+    if (collection !== null)
+      collection.canBeEmpty();
+    else
+      this.defaultCollection.canBeEmpty();
   }
 
   withMessage(message) {

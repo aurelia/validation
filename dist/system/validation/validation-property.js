@@ -23,7 +23,7 @@ System.register(['../validation/validation-rules-collection', '../validation/pat
           this.propertyResult = propertyResult;
           this.propertyName = propertyName;
           this.validationGroup = validationGroup;
-          this.collectionOfValidationRules = new AllCollections.ValidationRulesCollection();
+          this.collectionOfValidationRules = new AllCollections.ValidationRulesCollection(config);
           this.config = config;
           this.latestValue = undefined;
 

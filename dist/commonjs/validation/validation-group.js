@@ -146,7 +146,6 @@ var ValidationGroup = (function () {
           }
           _this3.result.checkValidity();
         }, function (a, b, c, d, e) {
-          debugger;
           _this3.result.isValid = false;
           if (onValidateCallback.validationFunctionFailedCallback) {
             onValidateCallback.validationFunctionFailedCallback(a, b, c, d, e);
@@ -185,6 +184,10 @@ var ValidationGroup = (function () {
 
   ValidationGroup.prototype.isNotEmpty = function isNotEmpty() {
     return this.builder.isNotEmpty();
+  };
+
+  ValidationGroup.prototype.canBeEmpty = function canBeEmpty() {
+    return this.builder.canBeEmpty();
   };
 
   ValidationGroup.prototype.isGreaterThanOrEqualTo = function isGreaterThanOrEqualTo(minimumValue) {

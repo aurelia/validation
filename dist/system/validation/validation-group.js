@@ -150,7 +150,6 @@ System.register(['../validation/validation-group-builder', '../validation/valida
                 }
                 _this3.result.checkValidity();
               }, function (a, b, c, d, e) {
-                debugger;
                 _this3.result.isValid = false;
                 if (onValidateCallback.validationFunctionFailedCallback) {
                   onValidateCallback.validationFunctionFailedCallback(a, b, c, d, e);
@@ -189,6 +188,10 @@ System.register(['../validation/validation-group-builder', '../validation/valida
 
         ValidationGroup.prototype.isNotEmpty = function isNotEmpty() {
           return this.builder.isNotEmpty();
+        };
+
+        ValidationGroup.prototype.canBeEmpty = function canBeEmpty() {
+          return this.builder.canBeEmpty();
         };
 
         ValidationGroup.prototype.isGreaterThanOrEqualTo = function isGreaterThanOrEqualTo(minimumValue) {

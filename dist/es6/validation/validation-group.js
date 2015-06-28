@@ -146,7 +146,6 @@ export class ValidationGroup {
             this.result.checkValidity();
           },
           (a,b,c,d,e) => {
-            debugger;
             this.result.isValid = false;
             if(onValidateCallback.validationFunctionFailedCallback)
             {
@@ -199,6 +198,14 @@ export class ValidationGroup {
    */
   isNotEmpty() {
     return this.builder.isNotEmpty();
+  }
+
+  /**
+   * Adds a validation rule that allows a value to be empty/null
+   * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
+   */
+  canBeEmpty() {
+    return this.builder.canBeEmpty();
   }
 
   /**

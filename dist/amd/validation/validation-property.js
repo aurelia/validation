@@ -14,7 +14,7 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
       this.propertyResult = propertyResult;
       this.propertyName = propertyName;
       this.validationGroup = validationGroup;
-      this.collectionOfValidationRules = new _validationValidationRulesCollection.ValidationRulesCollection();
+      this.collectionOfValidationRules = new _validationValidationRulesCollection.ValidationRulesCollection(config);
       this.config = config;
       this.latestValue = undefined;
 

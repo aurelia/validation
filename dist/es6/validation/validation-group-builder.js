@@ -43,6 +43,11 @@ export class ValidationGroupBuilder {
     this.checkLast();
     return this.validationGroup;
   }
+  canBeEmpty(){
+    this.validationRuleCollections[0].canBeEmpty();
+    this.checkLast();
+    return this.validationGroup;
+  }
 
   isGreaterThan(minimumValue) {
     return this.passesRule(new AllRules.MinimumValueValidationRule(minimumValue));

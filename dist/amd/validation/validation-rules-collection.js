@@ -6,10 +6,10 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   var ValidationRulesCollection = (function () {
-    function ValidationRulesCollection() {
+    function ValidationRulesCollection(config) {
       _classCallCheck(this, ValidationRulesCollection);
 
-      this.isRequired = false;
+      this.isRequired = config.getValue('treatAllPropertiesAsMandatory');
       this.validationRules = [];
       this.validationCollections = [];
       this.isRequiredMessage = null;
@@ -102,6 +102,10 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
       this.isRequired = true;
     };
 
+    ValidationRulesCollection.prototype.canBeEmpty = function canBeEmpty() {
+      this.isRequired = false;
+    };
+
     ValidationRulesCollection.prototype.withMessage = function withMessage(message) {
       if (this.validationRules.length === 0) this.isRequiredMessage = message;else this.validationRules[this.validationRules.length - 1].withMessage(message);
     };
@@ -112,12 +116,13 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
   exports.ValidationRulesCollection = ValidationRulesCollection;
 
   var SwitchCaseValidationRulesCollection = (function () {
-    function SwitchCaseValidationRulesCollection(conditionExpression) {
+    function SwitchCaseValidationRulesCollection(conditionExpression, config) {
       _classCallCheck(this, SwitchCaseValidationRulesCollection);
 
       this.conditionExpression = conditionExpression;
+      this.config = config;
       this.innerCollections = [];
-      this.defaultCollection = new ValidationRulesCollection();
+      this.defaultCollection = new ValidationRulesCollection(this.config);
       this.caseLabel = '';
       this.defaultCaseLabel = { description: 'this is the case label for \'default\'' };
     }
@@ -143,7 +148,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
       if (createIfNotExists) {
         currentCollection = {
           caseLabel: caseLabel,
-          collection: new ValidationRulesCollection()
+          collection: new ValidationRulesCollection(this.config)
         };
         this.innerCollections.push(currentCollection);
         return currentCollection.collection;
@@ -169,6 +174,11 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     SwitchCaseValidationRulesCollection.prototype.isNotEmpty = function isNotEmpty() {
       var collection = this.getCurrentCollection(this.caseLabel);
       if (collection !== null) collection.isNotEmpty();else this.defaultCollection.isNotEmpty();
+    };
+
+    SwitchCaseValidationRulesCollection.prototype.canBeEmpty = function canBeEmpty() {
+      var collection = this.getCurrentCollection(this.caseLabel);
+      if (collection !== null) collection.canBeEmpty();else this.defaultCollection.canBeEmpty();
     };
 
     SwitchCaseValidationRulesCollection.prototype.withMessage = function withMessage(message) {

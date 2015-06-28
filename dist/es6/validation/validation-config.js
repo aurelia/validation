@@ -8,7 +8,8 @@ ValidationConfigDefaults._defaults = {
   dependencies : [],
   locale : 'en-US',
   localeResources : 'aurelia-validation/resources/',
-  viewStrategy : ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage
+  viewStrategy : ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage,
+  allPropertiesAreMandatory : false
 };
 ValidationConfigDefaults.defaults = function(){
   var defaults = {};
@@ -97,6 +98,15 @@ export class ValidationConfig {
   getViewStrategy()
   {
     return this.getValue('viewStrategy');
+  }
+
+  treatAllPropertiesAsMandatory(){
+    this.setValue('allPropertiesAreMandatory', true);
+    return this;
+  }
+  treatAllPropertiesAsOptional(){
+    this.setValue('allPropertiesAreMandatory', false);
+    return this;
   }
 
 }

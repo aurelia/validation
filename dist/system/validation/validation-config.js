@@ -23,7 +23,8 @@ System.register(['../validation/validation-locale', '../validation/validate-cust
         dependencies: [],
         locale: 'en-US',
         localeResources: 'aurelia-validation/resources/',
-        viewStrategy: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage
+        viewStrategy: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage,
+        allPropertiesAreMandatory: false
       };
       ValidationConfigDefaults.defaults = function () {
         var defaults = {};
@@ -115,6 +116,16 @@ System.register(['../validation/validation-locale', '../validation/validate-cust
 
         ValidationConfig.prototype.getViewStrategy = function getViewStrategy() {
           return this.getValue('viewStrategy');
+        };
+
+        ValidationConfig.prototype.treatAllPropertiesAsMandatory = function treatAllPropertiesAsMandatory() {
+          this.setValue('allPropertiesAreMandatory', true);
+          return this;
+        };
+
+        ValidationConfig.prototype.treatAllPropertiesAsOptional = function treatAllPropertiesAsOptional() {
+          this.setValue('allPropertiesAreMandatory', false);
+          return this;
         };
 
         return ValidationConfig;

@@ -201,6 +201,14 @@ export class ValidationGroup {
   }
 
   /**
+   * Adds a validation rule that allows a value to be empty/null
+   * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
+   */
+  canBeEmpty() {
+    return this.builder.canBeEmpty();
+  }
+
+  /**
    * Adds a validation rule that checks a value for being greater than or equal to a threshold
    * @param minimumValue the threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
