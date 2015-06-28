@@ -148,7 +148,13 @@ tl;dr: [watch these samples](http://aurelia.io/validation/#/validators)
 ####isNotEmpty()
 This is a special case, dictating that the field is 'required' and cannot be empty.
 Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
+By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional* (on the config)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration].
 >The isNotEmpty rule is always checked first before any other validation rule.  This means that without the isNotEmpty rule, the .hasMinLength(5) rule would still consider a value of '' as valid because the field is allowed to be empty.
+
+####canBeEmpty()
+Signals that a field is not 'required' and can be empty.
+Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
+By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional*  (on the config)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration].
 
 ####containsNoSpaces()
 Validates that the value entered contains no whitespaces.
@@ -797,4 +803,18 @@ Valid on:
 ``` javascript
 (config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput); }
 ```
-Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage, ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput and any class that inherits from ValidateCustomAttributeViewStrategyBase.
+Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage, ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput and any class that inherits from ValidateCustomAttributeViewStrategyBase
+
+###config.treatAllPropertiesAsMandatory()
+``` javascript
+(config) => { config.treatAllPropertiesAsMandatory(); }
+```
+By default, all properties are optional. Properties that cannot be empty, are set up using the (*isNotEmpty()*)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#isnotempty] validation rule.
+
+To change the default, call *treatAllPropertiesAsMandatory()* on the configuration. Now all properties will be considered mandatory, and you can signal that a single property can be empty by calling the (*canBeEmpty()*)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#canbeempty] validation rule.
+
+To inverse this configuration, call *treatAllPropertiesAsOptional()* on the configuration.
+
+Valid on:
+- global level
+- group level
