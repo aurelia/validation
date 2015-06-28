@@ -74,6 +74,7 @@ Watch the [live samples](http://aurelia.io/validation/). (Work-in-progress)
   - [config.computedFrom(dependencies)](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths)
   - [config.useLocale(locale)](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuselocalelocaleidentifier)
   - [config.useViewStrategy](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance)
+  - [config.treatAllPropertiesAsMandatory](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configtreatallpropertiesasmandatory)
 
 ## Dependencies
 
