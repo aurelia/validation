@@ -458,14 +458,16 @@ See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intr
 
 ####Supported locales
 - en-US (default)
+
+- bg-BG
+- de-DE
+- es-MX
 - fr-FR
 - nl-BE
 - nl-NL
-- de-DE
 - sv-SE
 - tr-TR
-- es-MX
-- bg-BG
+- zh-CN
 
 > We could use a little help here...
 
