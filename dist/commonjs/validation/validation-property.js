@@ -1,18 +1,18 @@
 'use strict';
 
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _import = require('../validation/validation-rules-collection');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-var AllCollections = _interopRequireWildcard(_import);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _PathObserver = require('../validation/path-observer');
+var _validationValidationRulesCollection = require('../validation/validation-rules-collection');
 
-var _Debouncer = require('../validation/debouncer');
+var AllCollections = _interopRequireWildcard(_validationValidationRulesCollection);
+
+var _validationPathObserver = require('../validation/path-observer');
+
+var _validationDebouncer = require('../validation/debouncer');
 
 var ValidationProperty = (function () {
   function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult, config) {
@@ -27,11 +27,11 @@ var ValidationProperty = (function () {
     this.config = config;
     this.latestValue = undefined;
 
-    this.observer = new _PathObserver.PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
+    this.observer = new _validationPathObserver.PathObserver(observerLocator, validationGroup.subject, propertyName).getObserver();
 
-    this.debouncer = new _Debouncer.Debouncer(config.getDebounceTimeout());
+    this.debouncer = new _validationDebouncer.Debouncer(config.getDebounceTimeout());
 
-    this.observer.subscribe(function () {
+    this.subscription = this.observer.subscribe(function () {
       _this.debouncer.debounce(function () {
         var newValue = _this.observer.getValue();
         if (newValue !== _this.latestValue) {
@@ -43,7 +43,7 @@ var ValidationProperty = (function () {
     this.dependencyObservers = [];
     var dependencies = this.config.getDependencies();
     for (var i = 0; i < dependencies.length; i++) {
-      var dependencyObserver = new _PathObserver.PathObserver(observerLocator, validationGroup.subject, dependencies[i]).getObserver();
+      var dependencyObserver = new _validationPathObserver.PathObserver(observerLocator, validationGroup.subject, dependencies[i]).getObserver();
       dependencyObserver.subscribe(function () {
         _this.debouncer.debounce(function () {
           _this.validateCurrentValue(true);
@@ -66,6 +66,10 @@ var ValidationProperty = (function () {
   ValidationProperty.prototype.clear = function clear() {
     this.latestValue = this.observer.getValue();
     this.propertyResult.clear();
+  };
+
+  ValidationProperty.prototype.destroy = function destroy() {
+    if (this.subscription) this.subscription();
   };
 
   ValidationProperty.prototype.validate = function validate(newValue, shouldBeDirty, forceExecution) {

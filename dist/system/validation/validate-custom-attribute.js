@@ -1,5 +1,9 @@
 System.register(['aurelia-dependency-injection', 'aurelia-templating'], function (_export) {
-  var inject, customAttribute, _classCallCheck, ValidateCustomAttribute;
+  'use strict';
+
+  var inject, customAttribute, ValidateCustomAttribute;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [function (_aureliaDependencyInjection) {
@@ -8,10 +12,6 @@ System.register(['aurelia-dependency-injection', 'aurelia-templating'], function
       customAttribute = _aureliaTemplating.customAttribute;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       ValidateCustomAttribute = (function () {
         function ValidateCustomAttribute(element) {
           _classCallCheck(this, _ValidateCustomAttribute);
@@ -21,10 +21,11 @@ System.register(['aurelia-dependency-injection', 'aurelia-templating'], function
           this.viewStrategy = null;
         }
 
-        ValidateCustomAttribute.prototype.valueChanged = function valueChanged(newValue) {
-          if (this.value === null || this.value === undefined) {
-            return;
-          }this.processedValidation = this.value;
+        var _ValidateCustomAttribute = ValidateCustomAttribute;
+
+        _ValidateCustomAttribute.prototype.valueChanged = function valueChanged(newValue) {
+          if (this.value === null || this.value === undefined) return;
+          this.processedValidation = this.value;
           if (typeof this.value === 'string') {
             return;
           } else {
@@ -32,7 +33,7 @@ System.register(['aurelia-dependency-injection', 'aurelia-templating'], function
           }
         };
 
-        ValidateCustomAttribute.prototype.subscribeChangedHandlers = function subscribeChangedHandlers(currentElement) {
+        _ValidateCustomAttribute.prototype.subscribeChangedHandlers = function subscribeChangedHandlers(currentElement) {
           var _this = this;
 
           this.viewStrategy = this.value.config.getViewStrategy();
@@ -49,15 +50,14 @@ System.register(['aurelia-dependency-injection', 'aurelia-templating'], function
           }
         };
 
-        ValidateCustomAttribute.prototype.detached = function detached() {};
+        _ValidateCustomAttribute.prototype.detached = function detached() {};
 
-        ValidateCustomAttribute.prototype.attached = function attached() {
+        _ValidateCustomAttribute.prototype.attached = function attached() {
           if (this.processedValidation === null || this.processedValidation === undefined) this.valueChanged(this.value);
         };
 
-        var _ValidateCustomAttribute = ValidateCustomAttribute;
-        ValidateCustomAttribute = customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
         ValidateCustomAttribute = inject(Element)(ValidateCustomAttribute) || ValidateCustomAttribute;
+        ValidateCustomAttribute = customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
         return ValidateCustomAttribute;
       })();
 

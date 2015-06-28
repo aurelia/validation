@@ -1,13 +1,13 @@
 System.register([], function (_export) {
-  var _classCallCheck, ValidationLocale, ValidationLocaleRepository;
+  'use strict';
+
+  var ValidationLocale, ValidationLocaleRepository;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       ValidationLocale = (function () {
         function ValidationLocale(defaults, data) {
           _classCallCheck(this, ValidationLocale);
@@ -19,15 +19,11 @@ System.register([], function (_export) {
         ValidationLocale.prototype.getValueFor = function getValueFor(identifier, category) {
           if (this.currentLocale && this.currentLocale[category]) {
             var currentLocaleSetting = this.currentLocale[category][identifier];
-            if (currentLocaleSetting !== undefined && currentLocaleSetting !== null) {
-              return currentLocaleSetting;
-            }
+            if (currentLocaleSetting !== undefined && currentLocaleSetting !== null) return currentLocaleSetting;
           }
           if (this.defaults[category]) {
             var defaultSetting = this.defaults[category][identifier];
-            if (defaultSetting !== undefined && defaultSetting !== null) {
-              return defaultSetting;
-            }
+            if (defaultSetting !== undefined && defaultSetting !== null) return defaultSetting;
           }
           throw 'validation: I18N: Could not find: ' + identifier + ' in category: ' + category;
         };
@@ -60,7 +56,7 @@ System.register([], function (_export) {
           this.instances = new Map();
           this.defaults = {
             settings: {
-              numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
+              'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
             },
             messages: {}
           };

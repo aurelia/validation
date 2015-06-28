@@ -1,7 +1,11 @@
 System.register([], function (_export) {
-  var _classCallCheck, ValidationMetadata, ValidationPropertyMetadata;
+  "use strict";
+
+  var ValidationMetadata, ValidationPropertyMetadata;
 
   _export("ensure", ensure);
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
   function ensure(setupStep) {
     return function (target, propertyName) {
@@ -16,10 +20,6 @@ System.register([], function (_export) {
   return {
     setters: [],
     execute: function () {
-      "use strict";
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
       ValidationMetadata = (function () {
         function ValidationMetadata() {
           _classCallCheck(this, ValidationMetadata);

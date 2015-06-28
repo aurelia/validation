@@ -1,5 +1,9 @@
 System.register(['../validation/validation-locale', '../validation/validate-custom-attribute-view-strategy'], function (_export) {
-  var ValidationLocale, ValidateCustomAttributeViewStrategy, _classCallCheck, ValidationConfigDefaults, ValidationConfig;
+  'use strict';
+
+  var ValidationLocale, ValidateCustomAttributeViewStrategy, ValidationConfigDefaults, ValidationConfig;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [function (_validationValidationLocale) {
@@ -8,10 +12,6 @@ System.register(['../validation/validation-locale', '../validation/validate-cust
       ValidateCustomAttributeViewStrategy = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       ValidationConfigDefaults = function ValidationConfigDefaults() {
         _classCallCheck(this, ValidationConfigDefaults);
       };
@@ -71,9 +71,7 @@ System.register(['../validation/validation-locale', '../validation/validate-cust
               };
             })();
 
-            if (typeof _ret === 'object') {
-              return _ret.v;
-            }
+            if (typeof _ret === 'object') return _ret.v;
           }
         };
 

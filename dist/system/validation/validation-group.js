@@ -1,5 +1,9 @@
 System.register(['../validation/validation-group-builder', '../validation/validation-result', '../validation/validation-locale'], function (_export) {
-  var ValidationGroupBuilder, ValidationResult, ValidationLocale, _classCallCheck, ValidationGroup;
+  'use strict';
+
+  var ValidationGroupBuilder, ValidationResult, ValidationLocale, ValidationGroup;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [function (_validationValidationGroupBuilder) {
@@ -10,10 +14,6 @@ System.register(['../validation/validation-group-builder', '../validation/valida
       ValidationLocale = _validationValidationLocale.ValidationLocale;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       ValidationGroup = (function () {
         function ValidationGroup(subject, observerLocator, config) {
           var _this = this;
@@ -38,6 +38,9 @@ System.register(['../validation/validation-group-builder', '../validation/valida
         }
 
         ValidationGroup.prototype.destroy = function destroy() {
+          for (var i = this.validationProperties.length - 1; i >= 0; i--) {
+            this.validationProperties[i].destroy();
+          }
           this.onDestroy();
         };
 

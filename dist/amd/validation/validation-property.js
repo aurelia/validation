@@ -1,9 +1,9 @@
 define(['exports', '../validation/validation-rules-collection', '../validation/path-observer', '../validation/debouncer'], function (exports, _validationValidationRulesCollection, _validationPathObserver, _validationDebouncer) {
   'use strict';
 
-  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
   exports.__esModule = true;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   var ValidationProperty = (function () {
     function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult, config) {
@@ -22,7 +22,7 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
 
       this.debouncer = new _validationDebouncer.Debouncer(config.getDebounceTimeout());
 
-      this.observer.subscribe(function () {
+      this.subscription = this.observer.subscribe(function () {
         _this.debouncer.debounce(function () {
           var newValue = _this.observer.getValue();
           if (newValue !== _this.latestValue) {
@@ -57,6 +57,10 @@ define(['exports', '../validation/validation-rules-collection', '../validation/p
     ValidationProperty.prototype.clear = function clear() {
       this.latestValue = this.observer.getValue();
       this.propertyResult.clear();
+    };
+
+    ValidationProperty.prototype.destroy = function destroy() {
+      if (this.subscription) this.subscription();
     };
 
     ValidationProperty.prototype.validate = function validate(newValue, shouldBeDirty, forceExecution) {

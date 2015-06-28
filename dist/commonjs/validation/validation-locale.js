@@ -1,8 +1,8 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var ValidationLocale = (function () {
   function ValidationLocale(defaults, data) {
@@ -15,15 +15,11 @@ var ValidationLocale = (function () {
   ValidationLocale.prototype.getValueFor = function getValueFor(identifier, category) {
     if (this.currentLocale && this.currentLocale[category]) {
       var currentLocaleSetting = this.currentLocale[category][identifier];
-      if (currentLocaleSetting !== undefined && currentLocaleSetting !== null) {
-        return currentLocaleSetting;
-      }
+      if (currentLocaleSetting !== undefined && currentLocaleSetting !== null) return currentLocaleSetting;
     }
     if (this.defaults[category]) {
       var defaultSetting = this.defaults[category][identifier];
-      if (defaultSetting !== undefined && defaultSetting !== null) {
-        return defaultSetting;
-      }
+      if (defaultSetting !== undefined && defaultSetting !== null) return defaultSetting;
     }
     throw 'validation: I18N: Could not find: ' + identifier + ' in category: ' + category;
   };
@@ -56,7 +52,7 @@ var ValidationLocaleRepository = (function () {
     this.instances = new Map();
     this.defaults = {
       settings: {
-        numericRegex: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
+        'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
       },
       messages: {}
     };

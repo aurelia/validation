@@ -1,9 +1,9 @@
 define(['exports', '../validation/validation-locale', '../validation/validate-custom-attribute-view-strategy'], function (exports, _validationValidationLocale, _validationValidateCustomAttributeViewStrategy) {
   'use strict';
 
-  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
   exports.__esModule = true;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   var ValidationConfigDefaults = function ValidationConfigDefaults() {
     _classCallCheck(this, ValidationConfigDefaults);
@@ -64,9 +64,7 @@ define(['exports', '../validation/validation-locale', '../validation/validate-cu
           };
         })();
 
-        if (typeof _ret === 'object') {
-          return _ret.v;
-        }
+        if (typeof _ret === 'object') return _ret.v;
       }
     };
 

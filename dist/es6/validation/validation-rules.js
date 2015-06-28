@@ -19,7 +19,7 @@ export class ValidationRule {
   }
 
   setResult(result, currentValue, locale) {
-    if (result === true || result === undefined || result === null || result === '' ) {
+    if (result === true || result === undefined || result === null || result === '') {
       this.errorMessage = null;
       return true;
     }
@@ -50,8 +50,7 @@ export class ValidationRule {
    * Validation rules: return a promise that fulfills and resolves to true/false
    */
   validate(currentValue, locale) {
-    if(locale === undefined)
-    {
+    if (locale === undefined) {
       locale = ValidationLocale.Repository.default;
     }
 
@@ -64,7 +63,7 @@ export class ValidationRule {
         return this.setResult(promiseResult, currentValue, locale);
       },
       (promiseFailure) => {
-        if( typeof(promiseFailure) === 'string' && promiseFailure !== '')
+        if (typeof(promiseFailure) === 'string' && promiseFailure !== '')
           return this.setResult(promiseFailure, currentValue, locale);
         else
           return this.setResult(false, currentValue, locale);
@@ -74,33 +73,118 @@ export class ValidationRule {
   }
 }
 
-export class URLValidationRule extends ValidationRule{
+export class URLValidationRule extends ValidationRule {
   //https://github.com/chriso/validator.js/blob/master/LICENSE
+
+  static isIP(str, version) {
+    var ipv4Maybe = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
+      , ipv6Block = /^[0-9A-F]{1,4}$/i;
+
+    if (!version) {
+      return this.isIP(str, 4) || this.isIP(str, 6);
+    } else if (version === 4) {
+      if (!ipv4Maybe.test(str)) {
+        return false;
+      }
+      var parts = str.split('.').sort(function (a, b) {
+        return a - b;
+      });
+      return parts[3] <= 255;
+    } else if (version === 6) {
+      var blocks = str.split(':');
+      var foundOmissionBlock = false; // marker to indicate ::
+
+      if (blocks.length > 8)
+        return false;
+
+      // initial or final ::
+      if (str === '::') {
+        return true;
+      } else if (str.substr(0, 2) === '::') {
+        blocks.shift();
+        blocks.shift();
+        foundOmissionBlock = true;
+      } else if (str.substr(str.length - 2) === '::') {
+        blocks.pop();
+        blocks.pop();
+        foundOmissionBlock = true;
+      }
+
+      for (var i = 0; i < blocks.length; ++i) {
+        // test for a :: which can not be at the string start/end
+        // since those cases have been handled above
+        if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
+          if (foundOmissionBlock)
+            return false; // multiple :: in address
+          foundOmissionBlock = true;
+        } else if (!ipv6Block.test(blocks[i])) {
+          return false;
+        }
+      }
+
+      if (foundOmissionBlock) {
+        return blocks.length >= 1;
+      } else {
+        return blocks.length === 8;
+      }
+    }
+    return false;
+  }
+
+  static isFQDN(str, options) {
+    /* Remove the optional trailing dot before checking validity */
+    if (options.allow_trailing_dot && str[str.length - 1] === '.') {
+      str = str.substring(0, str.length - 1);
+    }
+    var parts = str.split('.');
+    if (options.require_tld) {
+      var tld = parts.pop();
+      if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+        return false;
+      }
+    }
+    for (var part, i = 0; i < parts.length; i++) {
+      part = parts[i];
+      if (options.allow_underscores) {
+        if (part.indexOf('__') >= 0) {
+          return false;
+        }
+        part = part.replace(/_/g, '');
+      }
+      if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+        return false;
+      }
+      if (part[0] === '-' || part[part.length - 1] === '-' ||
+        part.indexOf('---') >= 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   constructor(threshold) {
     var default_url_options = {
-      protocols: [ 'http', 'https', 'ftp' ]
+      protocols: ['http', 'https', 'ftp']
       , require_tld: true
       , require_protocol: false
       , allow_underscores: true
       , allow_trailing_dot: false
       , allow_protocol_relative_urls: true
     };
-    if(threshold === undefined)
-    {
+    if (threshold === undefined) {
       threshold = default_url_options;
     }
 
     super(
       threshold,
-      (newValue, threshold) =>
-      {
+      (newValue, threshold) => {
         let url = newValue;
         if (!url || url.length >= 2083 || /\s/.test(url)) {
           return false;
         }
         if (url.indexOf('mailto:') === 0) {
           return false;
-        } 
+        }
         var protocol, auth, host, hostname, port,
           port_str, split;
         split = url.split('://');
@@ -111,7 +195,7 @@ export class URLValidationRule extends ValidationRule{
           }
         } else if (threshold.require_protocol) {
           return false;
-        }  else if (threshold.allow_protocol_relative_urls && url.substr(0, 2) === '//') {
+        } else if (threshold.allow_protocol_relative_urls && url.substr(0, 2) === '//') {
           split[0] = url.substr(2);
         }
         url = split.join('://');
@@ -140,7 +224,7 @@ export class URLValidationRule extends ValidationRule{
             return false;
           }
         }
-        if (!this.isIP(host) && !this.isFQDN(host, threshold) &&
+        if (!isIP(host) && !isFQDN(host, threshold) &&
           host !== 'localhost') {
           return false;
         }
@@ -155,96 +239,36 @@ export class URLValidationRule extends ValidationRule{
         return true;
       }
     );
-    this.isIP = function (str, version) {
-      var ipv4Maybe = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
-        , ipv6Block = /^[0-9A-F]{1,4}$/i;
-
-      if (!version) {
-        return this.isIP(str, 4) || this.isIP(str, 6);
-      } else if (version === 4) {
-        if (!ipv4Maybe.test(str)) {
-          return false;
-        }
-        var parts = str.split('.').sort(function (a, b) {
-          return a - b;
-        });
-        return parts[3] <= 255;
-      } else if (version === 6) {
-        var blocks = str.split(':');
-        var foundOmissionBlock = false; // marker to indicate ::
-
-        if (blocks.length > 8)
-          return false;
-
-        // initial or final ::
-        if (str === '::') {
-          return true;
-        } else if (str.substr(0, 2) === '::') {
-          blocks.shift();
-          blocks.shift();
-          foundOmissionBlock = true;
-        } else if (str.substr(str.length - 2) === '::') {
-          blocks.pop();
-          blocks.pop();
-          foundOmissionBlock = true;
-        }
-
-        for (var i = 0; i < blocks.length; ++i) {
-          // test for a :: which can not be at the string start/end
-          // since those cases have been handled above
-          if (blocks[i] === '' && i > 0 && i < blocks.length -1) {
-            if (foundOmissionBlock)
-              return false; // multiple :: in address
-            foundOmissionBlock = true;
-          } else if (!ipv6Block.test(blocks[i])) {
-            return false;
-          }
-        }
-
-        if (foundOmissionBlock) {
-          return blocks.length >= 1;
-        } else {
-          return blocks.length === 8;
-        }
-      }
-      return false;
-    };
-    this.isFQDN = function (str, options) {
-      /* Remove the optional trailing dot before checking validity */
-      if (options.allow_trailing_dot && str[str.length - 1] === '.') {
-        str = str.substring(0, str.length - 1);
-      }
-      var parts = str.split('.');
-      if (options.require_tld) {
-        var tld = parts.pop();
-        if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
-          return false;
-        }
-      }
-      for (var part, i = 0; i < parts.length; i++) {
-        part = parts[i];
-        if (options.allow_underscores) {
-          if (part.indexOf('__') >= 0) {
-            return false;
-          }
-          part = part.replace(/_/g, '');
-        }
-        if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
-          return false;
-        }
-        if (part[0] === '-' || part[part.length - 1] === '-' ||
-          part.indexOf('---') >= 0) {
-          return false;
-        }
-      }
-      return true;
-    };
   }
 
 }
 
 export class EmailValidationRule extends ValidationRule {
   //https://github.com/chriso/validator.js/blob/master/LICENSE
+  static testEmailUserUtf8Regex(user) {
+    let emailUserUtf8Regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))$/i;
+    return emailUserUtf8Regex.test(user);
+  }
+
+  static isFQDN(str) {
+    var parts = str.split('.');
+    for (var part, i = 0; i < parts.length; i++) {
+      part = parts[i];
+      if (part.indexOf('__') >= 0) {
+        return false;
+      }
+      part = part.replace(/_/g, '');
+      if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+        return false;
+      }
+      if (part[0] === '-' || part[part.length - 1] === '-' ||
+        part.indexOf('---') >= 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   constructor() {
     super(
       null,
@@ -256,31 +280,13 @@ export class EmailValidationRule extends ValidationRule {
         var domain = parts.pop();
         var user = parts.join('@');
 
-        if (!this.isFQDN(domain)) {
+        if (!isFQDN(domain)) {
           return false;
         }
-        return this.emailUserUtf8Regex.test(user);
+        return testEmailUserUtf8Regex(user);
       }
-    );  
-    this.emailUserUtf8Regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))$/i;
-    this.isFQDN = function (str) {
-      var parts = str.split('.');
-      for (var part, i = 0; i < parts.length; i++) {
-        part = parts[i];
-        if (part.indexOf('__') >= 0) {
-          return false;
-        }
-        part = part.replace(/_/g, '');
-        if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
-          return false;
-        }
-        if (part[0] === '-' || part[part.length - 1] === '-' ||
-          part.indexOf('---') >= 0) {
-          return false;
-        }
-      }
-      return true;
-    };
+    );
+
   }
 }
 
@@ -354,8 +360,8 @@ export class RegexValidationRule extends ValidationRule {
   }
 }
 
-export class ContainsOnlyValidationRule extends RegexValidationRule{
-  constructor(regex){
+export class ContainsOnlyValidationRule extends RegexValidationRule {
+  constructor(regex) {
     super(regex);
   }
 }
@@ -393,7 +399,7 @@ export class MaximumValueValidationRule extends ValidationRule {
   }
 }
 
-export class MaximumInclusiveValueValidationRule extends ValidationRule{
+export class MaximumInclusiveValueValidationRule extends ValidationRule {
   constructor(maximumValue) {
     super(
       maximumValue,
@@ -420,22 +426,20 @@ export class DigitValidationRule extends ValidationRule {
     super(
       null,
       (newValue, threshold) => {
-        return this.digitRegex.test(newValue);
+        return /^\d+$/.test(newValue);
       }
     );
-    this.digitRegex = /^\d+$/;
   }
 }
 
-export class NoSpacesValidationRule extends ValidationRule{
+export class NoSpacesValidationRule extends ValidationRule {
   constructor() {
     super(
       null,
       (newValue, threshold) => {
-        return this.regex.test(newValue);
+        return /^\S*$/.test(newValue);
       }
     );
-    this.regex =/^\S*$/;
   }
 }
 
@@ -444,10 +448,9 @@ export class AlphaNumericValidationRule extends ValidationRule {
     super(
       null,
       (newValue, threshold) => {
-        return this.alphaNumericRegex.test(newValue);
+        return /^[a-z0-9]+$/i.test(newValue);
       }
     );
-    this.alphaNumericRegex = /^[a-z0-9]+$/i;
   }
 }
 
@@ -456,23 +459,21 @@ export class AlphaValidationRule extends ValidationRule {
     super(
       null,
       (newValue, threshold) => {
-        return this.alphaRegex.test(newValue);
+        return /^[a-z]+$/i.test(newValue);
       }
     );
-    this.alphaRegex = /^[a-z]+$/i;
   }
 }
 
 
-export class AlphaOrWhitespaceValidationRule extends ValidationRule{
+export class AlphaOrWhitespaceValidationRule extends ValidationRule {
   constructor() {
     super(
       null,
       (newValue, threshold) => {
-        return this.alphaNumericRegex.test(newValue);
+        return /^[a-z\s]+$/i.test(newValue);
       }
     );
-    this.alphaNumericRegex = /^[a-z\s]+$/i;
   }
 }
 
@@ -482,10 +483,9 @@ export class AlphaNumericOrWhitespaceValidationRule extends ValidationRule {
     super(
       null,
       (newValue, threshold) => {
-        return this.alphaNumericRegex.test(newValue);
+        return /^[a-z0-9\s]+$/i.test(newValue);
       }
     );
-    this.alphaNumericRegex = /^[a-z0-9\s]+$/i;
   }
 }
 
@@ -509,9 +509,8 @@ export class MediumPasswordValidationRule extends ValidationRule {
 }
 
 
-export class StrongPasswordValidationRule extends MediumPasswordValidationRule
-{
-  constructor(){
+export class StrongPasswordValidationRule extends MediumPasswordValidationRule {
+  constructor() {
     super(4);
   }
 }
@@ -534,26 +533,26 @@ export class EqualityValidationRuleBase extends ValidationRule {
   }
 }
 
-export class EqualityValidationRule extends EqualityValidationRuleBase{
-  constructor(otherValue){
+export class EqualityValidationRule extends EqualityValidationRuleBase {
+  constructor(otherValue) {
     super(otherValue, true);
   }
 }
 
-export class EqualityWithOtherLabelValidationRule extends EqualityValidationRuleBase{
-  constructor(otherValue, otherLabel){
+export class EqualityWithOtherLabelValidationRule extends EqualityValidationRuleBase {
+  constructor(otherValue, otherLabel) {
     super(otherValue, true, otherLabel);
   }
 }
 
-export class InEqualityValidationRule extends EqualityValidationRuleBase{
-  constructor(otherValue){
+export class InEqualityValidationRule extends EqualityValidationRuleBase {
+  constructor(otherValue) {
     super(otherValue, false);
   }
 }
 
-export class InEqualityWithOtherLabelValidationRule extends EqualityValidationRuleBase{
-  constructor(otherValue, otherLabel){
+export class InEqualityWithOtherLabelValidationRule extends EqualityValidationRuleBase {
+  constructor(otherValue, otherLabel) {
     super(otherValue, false, otherLabel);
   }
 }

@@ -1,5 +1,11 @@
 System.register(['../validation/utilities', '../validation/validation-locale'], function (_export) {
-  var Utilities, ValidationLocale, _inherits, _classCallCheck, ValidationRule, URLValidationRule, EmailValidationRule, MinimumLengthValidationRule, MaximumLengthValidationRule, BetweenLengthValidationRule, CustomFunctionValidationRule, NumericValidationRule, RegexValidationRule, ContainsOnlyValidationRule, MinimumValueValidationRule, MinimumInclusiveValueValidationRule, MaximumValueValidationRule, MaximumInclusiveValueValidationRule, BetweenValueValidationRule, DigitValidationRule, NoSpacesValidationRule, AlphaNumericValidationRule, AlphaValidationRule, AlphaOrWhitespaceValidationRule, AlphaNumericOrWhitespaceValidationRule, MediumPasswordValidationRule, StrongPasswordValidationRule, EqualityValidationRuleBase, EqualityValidationRule, EqualityWithOtherLabelValidationRule, InEqualityValidationRule, InEqualityWithOtherLabelValidationRule, InCollectionValidationRule;
+  'use strict';
+
+  var Utilities, ValidationLocale, ValidationRule, URLValidationRule, EmailValidationRule, MinimumLengthValidationRule, MaximumLengthValidationRule, BetweenLengthValidationRule, CustomFunctionValidationRule, NumericValidationRule, RegexValidationRule, ContainsOnlyValidationRule, MinimumValueValidationRule, MinimumInclusiveValueValidationRule, MaximumValueValidationRule, MaximumInclusiveValueValidationRule, BetweenValueValidationRule, DigitValidationRule, NoSpacesValidationRule, AlphaNumericValidationRule, AlphaValidationRule, AlphaOrWhitespaceValidationRule, AlphaNumericOrWhitespaceValidationRule, MediumPasswordValidationRule, StrongPasswordValidationRule, EqualityValidationRuleBase, EqualityValidationRule, EqualityWithOtherLabelValidationRule, InEqualityValidationRule, InEqualityWithOtherLabelValidationRule, InCollectionValidationRule;
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [function (_validationUtilities) {
@@ -8,12 +14,6 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
       ValidationLocale = _validationValidationLocale.ValidationLocale;
     }],
     execute: function () {
-      'use strict';
-
-      _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       ValidationRule = (function () {
         function ValidationRule(threshold, onValidate, message) {
           _classCallCheck(this, ValidationRule);
@@ -81,8 +81,6 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
       URLValidationRule = (function (_ValidationRule) {
         function URLValidationRule(threshold) {
-          var _this2 = this;
-
           _classCallCheck(this, URLValidationRule);
 
           var default_url_options = {
@@ -143,7 +141,7 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
                 return false;
               }
             }
-            if (!_this2.isIP(host) && !_this2.isFQDN(host, threshold) && host !== 'localhost') {
+            if (!isIP(host) && !isFQDN(host, threshold) && host !== 'localhost') {
               return false;
             }
             if (threshold.host_whitelist && threshold.host_whitelist.indexOf(host) === -1) {
@@ -154,86 +152,88 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
             }
             return true;
           });
-          this.isIP = function (str, version) {
-            var ipv4Maybe = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/,
-                ipv6Block = /^[0-9A-F]{1,4}$/i;
-
-            if (!version) {
-              return this.isIP(str, 4) || this.isIP(str, 6);
-            } else if (version === 4) {
-              if (!ipv4Maybe.test(str)) {
-                return false;
-              }
-              var parts = str.split('.').sort(function (a, b) {
-                return a - b;
-              });
-              return parts[3] <= 255;
-            } else if (version === 6) {
-              var blocks = str.split(':');
-              var foundOmissionBlock = false;
-
-              if (blocks.length > 8) return false;
-
-              if (str === '::') {
-                return true;
-              } else if (str.substr(0, 2) === '::') {
-                blocks.shift();
-                blocks.shift();
-                foundOmissionBlock = true;
-              } else if (str.substr(str.length - 2) === '::') {
-                blocks.pop();
-                blocks.pop();
-                foundOmissionBlock = true;
-              }
-
-              for (var i = 0; i < blocks.length; ++i) {
-                if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
-                  if (foundOmissionBlock) return false;
-                  foundOmissionBlock = true;
-                } else if (!ipv6Block.test(blocks[i])) {
-                  return false;
-                }
-              }
-
-              if (foundOmissionBlock) {
-                return blocks.length >= 1;
-              } else {
-                return blocks.length === 8;
-              }
-            }
-            return false;
-          };
-          this.isFQDN = function (str, options) {
-            if (options.allow_trailing_dot && str[str.length - 1] === '.') {
-              str = str.substring(0, str.length - 1);
-            }
-            var parts = str.split('.');
-            if (options.require_tld) {
-              var tld = parts.pop();
-              if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
-                return false;
-              }
-            }
-            for (var part, i = 0; i < parts.length; i++) {
-              part = parts[i];
-              if (options.allow_underscores) {
-                if (part.indexOf('__') >= 0) {
-                  return false;
-                }
-                part = part.replace(/_/g, '');
-              }
-              if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
-                return false;
-              }
-              if (part[0] === '-' || part[part.length - 1] === '-' || part.indexOf('---') >= 0) {
-                return false;
-              }
-            }
-            return true;
-          };
         }
 
         _inherits(URLValidationRule, _ValidationRule);
+
+        URLValidationRule.isIP = function isIP(str, version) {
+          var ipv4Maybe = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/,
+              ipv6Block = /^[0-9A-F]{1,4}$/i;
+
+          if (!version) {
+            return this.isIP(str, 4) || this.isIP(str, 6);
+          } else if (version === 4) {
+            if (!ipv4Maybe.test(str)) {
+              return false;
+            }
+            var parts = str.split('.').sort(function (a, b) {
+              return a - b;
+            });
+            return parts[3] <= 255;
+          } else if (version === 6) {
+            var blocks = str.split(':');
+            var foundOmissionBlock = false;
+
+            if (blocks.length > 8) return false;
+
+            if (str === '::') {
+              return true;
+            } else if (str.substr(0, 2) === '::') {
+              blocks.shift();
+              blocks.shift();
+              foundOmissionBlock = true;
+            } else if (str.substr(str.length - 2) === '::') {
+              blocks.pop();
+              blocks.pop();
+              foundOmissionBlock = true;
+            }
+
+            for (var i = 0; i < blocks.length; ++i) {
+              if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
+                if (foundOmissionBlock) return false;
+                foundOmissionBlock = true;
+              } else if (!ipv6Block.test(blocks[i])) {
+                return false;
+              }
+            }
+
+            if (foundOmissionBlock) {
+              return blocks.length >= 1;
+            } else {
+              return blocks.length === 8;
+            }
+          }
+          return false;
+        };
+
+        URLValidationRule.isFQDN = function isFQDN(str, options) {
+          if (options.allow_trailing_dot && str[str.length - 1] === '.') {
+            str = str.substring(0, str.length - 1);
+          }
+          var parts = str.split('.');
+          if (options.require_tld) {
+            var tld = parts.pop();
+            if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+              return false;
+            }
+          }
+          for (var part, i = 0; i < parts.length; i++) {
+            part = parts[i];
+            if (options.allow_underscores) {
+              if (part.indexOf('__') >= 0) {
+                return false;
+              }
+              part = part.replace(/_/g, '');
+            }
+            if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+              return false;
+            }
+            if (part[0] === '-' || part[part.length - 1] === '-' || part.indexOf('---') >= 0) {
+              return false;
+            }
+          }
+          return true;
+        };
 
         return URLValidationRule;
       })(ValidationRule);
@@ -242,8 +242,6 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
       EmailValidationRule = (function (_ValidationRule2) {
         function EmailValidationRule() {
-          var _this3 = this;
-
           _classCallCheck(this, EmailValidationRule);
 
           _ValidationRule2.call(this, null, function (newValue, threshold) {
@@ -254,32 +252,37 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
             var domain = parts.pop();
             var user = parts.join('@');
 
-            if (!_this3.isFQDN(domain)) {
+            if (!isFQDN(domain)) {
               return false;
             }
-            return _this3.emailUserUtf8Regex.test(user);
+            return testEmailUserUtf8Regex(user);
           });
-          this.emailUserUtf8Regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))$/i;
-          this.isFQDN = function (str) {
-            var parts = str.split('.');
-            for (var part, i = 0; i < parts.length; i++) {
-              part = parts[i];
-              if (part.indexOf('__') >= 0) {
-                return false;
-              }
-              part = part.replace(/_/g, '');
-              if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
-                return false;
-              }
-              if (part[0] === '-' || part[part.length - 1] === '-' || part.indexOf('---') >= 0) {
-                return false;
-              }
-            }
-            return true;
-          };
         }
 
         _inherits(EmailValidationRule, _ValidationRule2);
+
+        EmailValidationRule.testEmailUserUtf8Regex = function testEmailUserUtf8Regex(user) {
+          var emailUserUtf8Regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))$/i;
+          return emailUserUtf8Regex.test(user);
+        };
+
+        EmailValidationRule.isFQDN = function isFQDN(str) {
+          var parts = str.split('.');
+          for (var part, i = 0; i < parts.length; i++) {
+            part = parts[i];
+            if (part.indexOf('__') >= 0) {
+              return false;
+            }
+            part = part.replace(/_/g, '');
+            if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+              return false;
+            }
+            if (part[0] === '-' || part[part.length - 1] === '-' || part.indexOf('---') >= 0) {
+              return false;
+            }
+          }
+          return true;
+        };
 
         return EmailValidationRule;
       })(ValidationRule);
@@ -478,14 +481,11 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
       DigitValidationRule = (function (_ValidationRule14) {
         function DigitValidationRule() {
-          var _this4 = this;
-
           _classCallCheck(this, DigitValidationRule);
 
           _ValidationRule14.call(this, null, function (newValue, threshold) {
-            return _this4.digitRegex.test(newValue);
+            return /^\d+$/.test(newValue);
           });
-          this.digitRegex = /^\d+$/;
         }
 
         _inherits(DigitValidationRule, _ValidationRule14);
@@ -497,14 +497,11 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
       NoSpacesValidationRule = (function (_ValidationRule15) {
         function NoSpacesValidationRule() {
-          var _this5 = this;
-
           _classCallCheck(this, NoSpacesValidationRule);
 
           _ValidationRule15.call(this, null, function (newValue, threshold) {
-            return _this5.regex.test(newValue);
+            return /^\S*$/.test(newValue);
           });
-          this.regex = /^\S*$/;
         }
 
         _inherits(NoSpacesValidationRule, _ValidationRule15);
@@ -516,14 +513,11 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
       AlphaNumericValidationRule = (function (_ValidationRule16) {
         function AlphaNumericValidationRule() {
-          var _this6 = this;
-
           _classCallCheck(this, AlphaNumericValidationRule);
 
           _ValidationRule16.call(this, null, function (newValue, threshold) {
-            return _this6.alphaNumericRegex.test(newValue);
+            return /^[a-z0-9]+$/i.test(newValue);
           });
-          this.alphaNumericRegex = /^[a-z0-9]+$/i;
         }
 
         _inherits(AlphaNumericValidationRule, _ValidationRule16);
@@ -535,14 +529,11 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
       AlphaValidationRule = (function (_ValidationRule17) {
         function AlphaValidationRule() {
-          var _this7 = this;
-
           _classCallCheck(this, AlphaValidationRule);
 
           _ValidationRule17.call(this, null, function (newValue, threshold) {
-            return _this7.alphaRegex.test(newValue);
+            return /^[a-z]+$/i.test(newValue);
           });
-          this.alphaRegex = /^[a-z]+$/i;
         }
 
         _inherits(AlphaValidationRule, _ValidationRule17);
@@ -554,14 +545,11 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
       AlphaOrWhitespaceValidationRule = (function (_ValidationRule18) {
         function AlphaOrWhitespaceValidationRule() {
-          var _this8 = this;
-
           _classCallCheck(this, AlphaOrWhitespaceValidationRule);
 
           _ValidationRule18.call(this, null, function (newValue, threshold) {
-            return _this8.alphaNumericRegex.test(newValue);
+            return /^[a-z\s]+$/i.test(newValue);
           });
-          this.alphaNumericRegex = /^[a-z\s]+$/i;
         }
 
         _inherits(AlphaOrWhitespaceValidationRule, _ValidationRule18);
@@ -573,14 +561,11 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
       AlphaNumericOrWhitespaceValidationRule = (function (_ValidationRule19) {
         function AlphaNumericOrWhitespaceValidationRule() {
-          var _this9 = this;
-
           _classCallCheck(this, AlphaNumericOrWhitespaceValidationRule);
 
           _ValidationRule19.call(this, null, function (newValue, threshold) {
-            return _this9.alphaNumericRegex.test(newValue);
+            return /^[a-z0-9\s]+$/i.test(newValue);
           });
-          this.alphaNumericRegex = /^[a-z0-9\s]+$/i;
         }
 
         _inherits(AlphaNumericOrWhitespaceValidationRule, _ValidationRule19);

@@ -146,7 +146,6 @@ export class ValidationGroup {
             this.result.checkValidity();
           },
           (a,b,c,d,e) => {
-            debugger;
             this.result.isValid = false;
             if(onValidateCallback.validationFunctionFailedCallback)
             {

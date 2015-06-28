@@ -1,5 +1,9 @@
 System.register(['../validation/utilities', '../validation/validation-locale'], function (_export) {
-  var Utilities, ValidationLocale, _classCallCheck, ValidationRulesCollection, SwitchCaseValidationRulesCollection;
+  'use strict';
+
+  var Utilities, ValidationLocale, ValidationRulesCollection, SwitchCaseValidationRulesCollection;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [function (_validationUtilities) {
@@ -8,10 +12,6 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
       ValidationLocale = _validationValidationLocale.ValidationLocale;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       ValidationRulesCollection = (function () {
         function ValidationRulesCollection() {
           _classCallCheck(this, ValidationRulesCollection);
@@ -141,14 +141,11 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
         SwitchCaseValidationRulesCollection.prototype.getCurrentCollection = function getCurrentCollection(caseLabel) {
           var createIfNotExists = arguments[1] === undefined ? false : arguments[1];
 
-          if (caseLabel === this.defaultCaseLabel) {
-            return this.defaultCollection;
-          }var currentCollection = null;
+          if (caseLabel === this.defaultCaseLabel) return this.defaultCollection;
+          var currentCollection = null;
           for (var i = 0; i < this.innerCollections.length; i++) {
             currentCollection = this.innerCollections[i];
-            if (currentCollection.caseLabel === caseLabel) {
-              return currentCollection.collection;
-            }
+            if (currentCollection.caseLabel === caseLabel) return currentCollection.collection;
           }
           if (createIfNotExists) {
             currentCollection = {
@@ -163,11 +160,7 @@ System.register(['../validation/utilities', '../validation/validation-locale'], 
 
         SwitchCaseValidationRulesCollection.prototype.validate = function validate(newValue, locale) {
           var collection = this.getCurrentCollection(this.conditionExpression(newValue));
-          if (collection !== null) {
-            return collection.validate(newValue, locale);
-          } else {
-            return this.defaultCollection.validate(newValue, locale);
-          }
+          if (collection !== null) return collection.validate(newValue, locale);else return this.defaultCollection.validate(newValue, locale);
         };
 
         SwitchCaseValidationRulesCollection.prototype.addValidationRule = function addValidationRule(validationRule) {

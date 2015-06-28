@@ -1,22 +1,22 @@
 'use strict';
 
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _import = require('../validation/validation-rules');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-var AllRules = _interopRequireWildcard(_import);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _import2 = require('../validation/validation-rules-collection');
+var _validationValidationRules = require('../validation/validation-rules');
 
-var AllCollections = _interopRequireWildcard(_import2);
+var AllRules = _interopRequireWildcard(_validationValidationRules);
 
-var _ValidationProperty = require('../validation/validation-property');
+var _validationValidationRulesCollection = require('../validation/validation-rules-collection');
 
-var _ValidationConfig = require('../validation/validation-config');
+var AllCollections = _interopRequireWildcard(_validationValidationRulesCollection);
+
+var _validationValidationProperty = require('../validation/validation-property');
+
+var _validationValidationConfig = require('../validation/validation-config');
 
 var ValidationGroupBuilder = (function () {
   function ValidationGroupBuilder(observerLocator, validationGroup) {
@@ -42,11 +42,11 @@ var ValidationGroupBuilder = (function () {
     }
     if (newValidationProperty === null) {
       var propertyResult = this.validationGroup.result.addProperty(propertyName);
-      var config = new _ValidationConfig.ValidationConfig(this.validationGroup.config);
+      var config = new _validationValidationConfig.ValidationConfig(this.validationGroup.config);
       if (configurationCallback !== undefined && typeof configurationCallback === 'function') {
         configurationCallback(config);
       }
-      newValidationProperty = new _ValidationProperty.ValidationProperty(this.observerLocator, propertyName, this.validationGroup, propertyResult, config);
+      newValidationProperty = new _validationValidationProperty.ValidationProperty(this.observerLocator, propertyName, this.validationGroup, propertyResult, config);
       this.validationGroup.validationProperties.push(newValidationProperty);
     }
     this.validationRuleCollections.unshift(newValidationProperty.collectionOfValidationRules);
@@ -84,19 +84,11 @@ var ValidationGroupBuilder = (function () {
   };
 
   ValidationGroupBuilder.prototype.isEqualTo = function isEqualTo(otherValue, otherValueLabel) {
-    if (!otherValueLabel) {
-      return this.passesRule(new AllRules.EqualityValidationRule(otherValue));
-    } else {
-      return this.passesRule(new AllRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
-    }
+    if (!otherValueLabel) return this.passesRule(new AllRules.EqualityValidationRule(otherValue));else return this.passesRule(new AllRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
   };
 
   ValidationGroupBuilder.prototype.isNotEqualTo = function isNotEqualTo(otherValue, otherValueLabel) {
-    if (!otherValueLabel) {
-      return this.passesRule(new AllRules.InEqualityValidationRule(otherValue));
-    } else {
-      return this.passesRule(new AllRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
-    }
+    if (!otherValueLabel) return this.passesRule(new AllRules.InEqualityValidationRule(otherValue));else return this.passesRule(new AllRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
   };
 
   ValidationGroupBuilder.prototype.isEmail = function isEmail() {
@@ -148,11 +140,7 @@ var ValidationGroupBuilder = (function () {
   };
 
   ValidationGroupBuilder.prototype.isStrongPassword = function isStrongPassword(minimumComplexityLevel) {
-    if (minimumComplexityLevel === 4) {
-      return this.passesRule(new AllRules.StrongPasswordValidationRule());
-    } else {
-      return this.passesRule(new AllRules.MediumPasswordValidationRule(minimumComplexityLevel));
-    }
+    if (minimumComplexityLevel === 4) return this.passesRule(new AllRules.StrongPasswordValidationRule());else return this.passesRule(new AllRules.MediumPasswordValidationRule(minimumComplexityLevel));
   };
 
   ValidationGroupBuilder.prototype.containsOnly = function containsOnly(regex) {

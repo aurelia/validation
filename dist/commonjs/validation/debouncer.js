@@ -1,10 +1,10 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _Validation = require('../validation/validation');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _validationValidation = require('../validation/validation');
 
 var Debouncer = (function () {
   function Debouncer(debounceTimeout) {

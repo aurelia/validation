@@ -1,4 +1,6 @@
 System.register(['./validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy', './validation/decorators'], function (_export) {
+  'use strict';
+
   var ValidationConfig, Validation;
 
   _export('configure', configure);
@@ -43,8 +45,6 @@ System.register(['./validation/validation-config', './validation/validation', '.
     }, function (_validationDecorators) {
       _export('ensure', _validationDecorators.ensure);
     }],
-    execute: function () {
-      'use strict';
-    }
+    execute: function () {}
   };
 });

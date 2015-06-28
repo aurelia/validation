@@ -1,24 +1,24 @@
 'use strict';
 
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
-var _defaults = function (obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; };
-
 exports.__esModule = true;
 exports.configure = configure;
 
-var _ValidationConfig = require('./validation/validation-config');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-var _Validation = require('./validation/validation');
+function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
 
-var _Utilities = require('./validation/utilities');
+var _validationValidationConfig = require('./validation/validation-config');
 
-exports.Utilities = _Utilities.Utilities;
-exports.ValidationConfig = _ValidationConfig.ValidationConfig;
+var _validationValidation = require('./validation/validation');
 
-var _ValidationLocale = require('./validation/validation-locale');
+var _validationUtilities = require('./validation/utilities');
 
-exports.ValidationLocale = _ValidationLocale.ValidationLocale;
+exports.Utilities = _validationUtilities.Utilities;
+exports.ValidationConfig = _validationValidationConfig.ValidationConfig;
+
+var _validationValidationLocale = require('./validation/validation-locale');
+
+exports.ValidationLocale = _validationValidationLocale.ValidationLocale;
 
 var _validationValidationResult = require('./validation/validation-result');
 
@@ -28,27 +28,27 @@ var _validationValidationRules = require('./validation/validation-rules');
 
 _defaults(exports, _interopRequireWildcard(_validationValidationRules));
 
-exports.Validation = _Validation.Validation;
+exports.Validation = _validationValidation.Validation;
 
-var _ValidateCustomAttribute = require('./validation/validate-custom-attribute');
+var _validationValidateCustomAttribute = require('./validation/validate-custom-attribute');
 
-exports.ValidateCustomAttribute = _ValidateCustomAttribute.ValidateCustomAttribute;
+exports.ValidateCustomAttribute = _validationValidateCustomAttribute.ValidateCustomAttribute;
 
-var _ValidateCustomAttributeViewStrategy = require('./validation/validate-custom-attribute-view-strategy');
+var _validationValidateCustomAttributeViewStrategy = require('./validation/validate-custom-attribute-view-strategy');
 
-exports.ValidateCustomAttributeViewStrategy = _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
-exports.ValidateCustomAttributeViewStrategyBase = _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategyBase;
+exports.ValidateCustomAttributeViewStrategy = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
+exports.ValidateCustomAttributeViewStrategyBase = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategyBase;
 
-var _ensure = require('./validation/decorators');
+var _validationDecorators = require('./validation/decorators');
 
-exports.ensure = _ensure.ensure;
+exports.ensure = _validationDecorators.ensure;
 
 function configure(aurelia, configCallback) {
 
   aurelia.globalizeResources('./validation/validate-custom-attribute');
   if (configCallback !== undefined && typeof configCallback === 'function') {
-    configCallback(_Validation.Validation.defaults);
+    configCallback(_validationValidation.Validation.defaults);
   }
-  aurelia.withSingleton(_ValidationConfig.ValidationConfig, _Validation.Validation.defaults);
-  return _Validation.Validation.defaults.locale();
+  aurelia.withSingleton(_validationValidationConfig.ValidationConfig, _validationValidation.Validation.defaults);
+  return _validationValidation.Validation.defaults.locale();
 }

@@ -1,14 +1,14 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _ValidationGroupBuilder = require('../validation/validation-group-builder');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _ValidationResult = require('../validation/validation-result');
+var _validationValidationGroupBuilder = require('../validation/validation-group-builder');
 
-var _ValidationLocale = require('../validation/validation-locale');
+var _validationValidationResult = require('../validation/validation-result');
+
+var _validationValidationLocale = require('../validation/validation-locale');
 
 var ValidationGroup = (function () {
   function ValidationGroup(subject, observerLocator, config) {
@@ -16,11 +16,11 @@ var ValidationGroup = (function () {
 
     _classCallCheck(this, ValidationGroup);
 
-    this.result = new _ValidationResult.ValidationResult();
+    this.result = new _validationValidationResult.ValidationResult();
     this.subject = subject;
     this.validationProperties = [];
     this.config = config;
-    this.builder = new _ValidationGroupBuilder.ValidationGroupBuilder(observerLocator, this);
+    this.builder = new _validationValidationGroupBuilder.ValidationGroupBuilder(observerLocator, this);
     this.onValidateCallbacks = [];
     this.onPropertyValidationCallbacks = [];
     this.isValidating = false;
@@ -34,6 +34,9 @@ var ValidationGroup = (function () {
   }
 
   ValidationGroup.prototype.destroy = function destroy() {
+    for (var i = this.validationProperties.length - 1; i >= 0; i--) {
+      this.validationProperties[i].destroy();
+    }
     this.onDestroy();
   };
 

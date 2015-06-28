@@ -1,9 +1,9 @@
 define(['exports', '../validation/validation-rules', '../validation/validation-rules-collection', '../validation/validation-property', '../validation/validation-config'], function (exports, _validationValidationRules, _validationValidationRulesCollection, _validationValidationProperty, _validationValidationConfig) {
   'use strict';
 
-  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
   exports.__esModule = true;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   var ValidationGroupBuilder = (function () {
     function ValidationGroupBuilder(observerLocator, validationGroup) {
@@ -71,19 +71,11 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
     };
 
     ValidationGroupBuilder.prototype.isEqualTo = function isEqualTo(otherValue, otherValueLabel) {
-      if (!otherValueLabel) {
-        return this.passesRule(new _validationValidationRules.EqualityValidationRule(otherValue));
-      } else {
-        return this.passesRule(new _validationValidationRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
-      }
+      if (!otherValueLabel) return this.passesRule(new _validationValidationRules.EqualityValidationRule(otherValue));else return this.passesRule(new _validationValidationRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
     };
 
     ValidationGroupBuilder.prototype.isNotEqualTo = function isNotEqualTo(otherValue, otherValueLabel) {
-      if (!otherValueLabel) {
-        return this.passesRule(new _validationValidationRules.InEqualityValidationRule(otherValue));
-      } else {
-        return this.passesRule(new _validationValidationRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
-      }
+      if (!otherValueLabel) return this.passesRule(new _validationValidationRules.InEqualityValidationRule(otherValue));else return this.passesRule(new _validationValidationRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
     };
 
     ValidationGroupBuilder.prototype.isEmail = function isEmail() {
@@ -135,11 +127,7 @@ define(['exports', '../validation/validation-rules', '../validation/validation-r
     };
 
     ValidationGroupBuilder.prototype.isStrongPassword = function isStrongPassword(minimumComplexityLevel) {
-      if (minimumComplexityLevel === 4) {
-        return this.passesRule(new _validationValidationRules.StrongPasswordValidationRule());
-      } else {
-        return this.passesRule(new _validationValidationRules.MediumPasswordValidationRule(minimumComplexityLevel));
-      }
+      if (minimumComplexityLevel === 4) return this.passesRule(new _validationValidationRules.StrongPasswordValidationRule());else return this.passesRule(new _validationValidationRules.MediumPasswordValidationRule(minimumComplexityLevel));
     };
 
     ValidationGroupBuilder.prototype.containsOnly = function containsOnly(regex) {

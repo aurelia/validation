@@ -1,13 +1,13 @@
 System.register([], function (_export) {
-  var _classCallCheck, Utilities;
+  'use strict';
+
+  var Utilities;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       Utilities = (function () {
         function Utilities() {
           _classCallCheck(this, Utilities);

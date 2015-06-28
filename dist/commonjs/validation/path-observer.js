@@ -1,10 +1,10 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _ObserverLocator = require('aurelia-binding');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _aureliaBinding = require('aurelia-binding');
 
 var PathObserver = (function () {
   function PathObserver(observerLocator, subject, path) {
@@ -106,17 +106,30 @@ var PathObserver = (function () {
       expectedSubject = currentObserver.getValue();
     }
 
-    if (this.observers.length !== this.path.length) {
-      return undefined;
-    }
+    if (this.observers.length !== this.path.length) return undefined;
     var value = this.observers[this.observers.length - 1].getValue();
     return value;
   };
 
   PathObserver.prototype.subscribe = function subscribe(callback) {
+    var _this2 = this;
+
     this.callbacks.unshift(callback);
     if (this.observers.length === this.path.length) {
-      return this.observers[this.observers.length - 1].subscribe(callback);
+      this.subscription = this.observers[this.observers.length - 1].subscribe(callback);
+      return function () {
+        return _this2.unsubscribe();
+      };
+    }
+  };
+
+  PathObserver.prototype.unsubscribe = function unsubscribe() {
+    if (this.subscription) this.subscription();
+    for (var i = this.observers.length - 1; i >= 0; i--) {
+      var observer = this.observers.pop();
+      if (observer && observer.subscription) {
+        observer.subscription();
+      }
     }
   };
 

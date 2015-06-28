@@ -1,5 +1,9 @@
 System.register(['../validation/validation-rules-collection', '../validation/path-observer', '../validation/debouncer'], function (_export) {
-  var AllCollections, PathObserver, Debouncer, _classCallCheck, ValidationProperty;
+  'use strict';
+
+  var AllCollections, PathObserver, Debouncer, ValidationProperty;
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [function (_validationValidationRulesCollection) {
@@ -10,10 +14,6 @@ System.register(['../validation/validation-rules-collection', '../validation/pat
       Debouncer = _validationDebouncer.Debouncer;
     }],
     execute: function () {
-      'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
       ValidationProperty = (function () {
         function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult, config) {
           var _this = this;
@@ -31,7 +31,7 @@ System.register(['../validation/validation-rules-collection', '../validation/pat
 
           this.debouncer = new Debouncer(config.getDebounceTimeout());
 
-          this.observer.subscribe(function () {
+          this.subscription = this.observer.subscribe(function () {
             _this.debouncer.debounce(function () {
               var newValue = _this.observer.getValue();
               if (newValue !== _this.latestValue) {
@@ -66,6 +66,10 @@ System.register(['../validation/validation-rules-collection', '../validation/pat
         ValidationProperty.prototype.clear = function clear() {
           this.latestValue = this.observer.getValue();
           this.propertyResult.clear();
+        };
+
+        ValidationProperty.prototype.destroy = function destroy() {
+          if (this.subscription) this.subscription();
         };
 
         ValidationProperty.prototype.validate = function validate(newValue, shouldBeDirty, forceExecution) {

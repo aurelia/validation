@@ -1,12 +1,12 @@
 'use strict';
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
-
 exports.__esModule = true;
 
-var _ValidationLocale = require('../validation/validation-locale');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _ValidateCustomAttributeViewStrategy = require('../validation/validate-custom-attribute-view-strategy');
+var _validationValidationLocale = require('../validation/validation-locale');
+
+var _validationValidateCustomAttributeViewStrategy = require('../validation/validate-custom-attribute-view-strategy');
 
 var ValidationConfigDefaults = function ValidationConfigDefaults() {
   _classCallCheck(this, ValidationConfigDefaults);
@@ -19,7 +19,7 @@ ValidationConfigDefaults._defaults = {
   dependencies: [],
   locale: 'en-US',
   localeResources: 'aurelia-validation/resources/',
-  viewStrategy: _ValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage
+  viewStrategy: _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage
 };
 ValidationConfigDefaults.defaults = function () {
   var defaults = {};
@@ -67,9 +67,7 @@ var ValidationConfig = (function () {
         };
       })();
 
-      if (typeof _ret === 'object') {
-        return _ret.v;
-      }
+      if (typeof _ret === 'object') return _ret.v;
     }
   };
 
@@ -104,7 +102,7 @@ var ValidationConfig = (function () {
   };
 
   ValidationConfig.prototype.locale = function locale() {
-    return _ValidationLocale.ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
+    return _validationValidationLocale.ValidationLocale.Repository.load(this.getValue('locale'), this.getValue('localeResources'));
   };
 
   ValidationConfig.prototype.useViewStrategy = function useViewStrategy(viewStrategy) {
