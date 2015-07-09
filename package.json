@@ -25,9 +25,9 @@
       "lib": "dist/amd"
     },
     "dependencies": {
-      "aurelia-binding": "github:aurelia/binding@^0.7.3",
-      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.8.1",
-      "aurelia-templating": "github:aurelia/templating@^0.12.1"
+      "aurelia-binding": "github:aurelia/binding@^0.8.0",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.9.0",
+      "aurelia-templating": "github:aurelia/templating@^0.13.0"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.1.13",
