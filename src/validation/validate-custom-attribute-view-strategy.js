@@ -97,10 +97,18 @@ export class TWBootstrapViewStrategy extends ValidateCustomAttributeViewStrategy
         element.parentNode.appendChild(helpBlock);
       }
     }
-    if (validationProperty)
+    if (validationProperty) {
       helpBlock.textContent = validationProperty.message;
-    else
+
+      if(validationProperty.message)
+        helpBlock.classList.remove('aurelia-hide');
+      else
+        helpBlock.classList.add('aurelia-hide');
+    }
+    else {
       helpBlock.textContent = '';
+      helpBlock.classList.add('aurelia-hide');
+    }
   }
 
 

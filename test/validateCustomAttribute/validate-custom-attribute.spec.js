@@ -153,6 +153,7 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(firstNameMessage.classList.contains('help-block')).toBe(true);
       expect(firstNameMessage.textContent).toBe('is required');
+      expect(firstNameMessage.classList.contains('aurelia-hide')).toBe(false);
 
 
       //default: adds <p> after element
@@ -161,6 +162,8 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(lastNameMessage.classList.contains('help-block')).toBe(true);
       expect(lastNameMessage.textContent).toBe('');
+      expect(lastNameMessage.classList.contains('aurelia-hide')).toBe(true);
+
       return Promise.resolve(true);
     }, true);
 
@@ -207,6 +210,7 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(firstNameMessage.classList.contains('help-block')).toBe(true);
       expect(firstNameMessage.textContent).toBe('is required');
+      expect(firstNameMessage.classList.contains('aurelia-hide')).toBe(false);
 
 
       //default: adds <p> after element
@@ -215,6 +219,8 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(lastNameMessage.classList.contains('help-block')).toBe(true);
       expect(lastNameMessage.textContent).toBe('');
+      expect(lastNameMessage.classList.contains('aurelia-hide')).toBe(true);
+
       return Promise.resolve(true);
     }, true);
 
@@ -254,6 +260,8 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(addressMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(addressMessage.classList.contains('help-block')).toBe(true);
       expect(addressMessage.textContent).toBe('');
+      expect(addressMessage.classList.contains('aurelia-hide')).toBe(true);
+
       return Promise.resolve(true);
     }, true);
 
@@ -294,6 +302,7 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(firstNameMessage.classList.contains('help-block')).toBe(true);
       expect(firstNameMessage.textContent).toBe('');
+      expect(firstNameMessage.classList.contains('aurelia-hide')).toBe(true);
 
 
       //default: adds <p> after element
@@ -302,6 +311,8 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(lastNameMessage.classList.contains('help-block')).toBe(true);
       expect(lastNameMessage.textContent).toBe('');
+      expect(lastNameMessage.classList.contains('aurelia-hide')).toBe(true);
+
       done();
     }, 0);
   });
@@ -346,6 +357,7 @@ describe('Tests on ValidateCustomAttribute', () => {
         expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
         expect(firstNameMessage.classList.contains('help-block')).toBe(true);
         expect(firstNameMessage.textContent).toBe('is required');
+        expect(firstNameMessage.classList.contains('aurelia-hide')).toBe(false);
 
 
         //default: adds <p> after element
@@ -354,6 +366,8 @@ describe('Tests on ValidateCustomAttribute', () => {
         expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
         expect(lastNameMessage.classList.contains('help-block')).toBe(true);
         expect(lastNameMessage.textContent).toBe('');
+        expect(lastNameMessage.classList.contains('aurelia-hide')).toBe(true);
+
         return Promise.resolve(true);
       }, true);
 
@@ -401,6 +415,7 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(streetMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(streetMessage.classList.contains('help-block')).toBe(true);
       expect(streetMessage.textContent).toBe('is required');
+      expect(streetMessage.classList.contains('aurelia-hide')).toBe(false);
 
 
       //default: adds <p> after element
@@ -409,6 +424,8 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(numberMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(numberMessage.classList.contains('help-block')).toBe(true);
       expect(numberMessage.textContent).toBe('');
+      expect(numberMessage.classList.contains('aurelia-hide')).toBe(true);
+
       return Promise.resolve(true);
     }, true);
 
@@ -453,6 +470,7 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(firstNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(firstNameMessage.classList.contains('help-block')).toBe(true);
       expect(firstNameMessage.textContent).toBe('is required');
+      expect(firstNameMessage.classList.contains('aurelia-hide')).toBe(false);
 
 
       //default: adds <p> after element
@@ -461,6 +479,7 @@ describe('Tests on ValidateCustomAttribute', () => {
       expect(lastNameMessage.classList.contains('aurelia-validation-message')).toBe(true);
       expect(lastNameMessage.classList.contains('help-block')).toBe(true);
       expect(lastNameMessage.textContent).toBe('');
+      expect(lastNameMessage.classList.contains('aurelia-hide')).toBe(true);
 
       return Promise.resolve(true);
     }, true);
@@ -468,4 +487,3 @@ describe('Tests on ValidateCustomAttribute', () => {
     expectations.validate();
   });
 });
-
