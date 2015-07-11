@@ -19,7 +19,7 @@ this will add the plugin into your `jspm_packages` folder as well as an mapping-
 If you're feeling experimental or cannot wait for the next release, you could also install the latest version by executing:
 ```
 jspm install aurelia-validation=github:aurelia/validation@master
-```c
+```
 
 
 #### Migrate from aurelia-app to aurelia-app="main" 
