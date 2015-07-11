@@ -366,7 +366,7 @@ Especially when nesting statements...
 
 #onValidate(validationCallback, failureCallback)
 Using the .onValidate(), you can register a callback that is called when the entire subject is validated.  Your function should return an object (or a promise that resolves to an object) that has properties matching each validation property you want to modify, for example:
-```javacript
+```javascript
 validation = validation.on(this) 
   .ensure('firstName').isNotEmpty()
   .onValidate( () => {
@@ -759,7 +759,7 @@ The configuration on the property level will delegate missing config to it's par
 import {ValidationConfig} from 'aurelia-validation';
 import {inject} from 'aurelia-framework';
 
-//@inject(ValidationConfig) 
+@inject(ValidationConfig) 
 export class MyVM{
   constructor(config)
   {
