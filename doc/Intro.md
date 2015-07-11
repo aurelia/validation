@@ -66,7 +66,7 @@ After importing the validation plugin in our model we'll do three things:
 - add validation messages to the view to provide hints to the end-user
 
 The original model looks like this:
-``` javacript
+``` javascript
 export class Welcome{
   constructor(){
     this.heading = 'Welcome to the Aurelia Navigation App!';
@@ -84,7 +84,7 @@ export class Welcome{
 }
 ```
 We start with importing the validation class
-``` javacript
+``` javascript
 import {Validation} from 'aurelia-validation';
 export class Welcome{
   static inject() { return [Validation]; }
