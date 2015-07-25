@@ -460,6 +460,7 @@ See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intr
 - en-US (default)
 
 - bg-BG
+- da-DK
 - de-DE
 - es-MX
 - fr-FR
