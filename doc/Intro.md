@@ -68,17 +68,17 @@ After importing the validation plugin in our model we'll do three things:
 The original model looks like this:
 ``` javascript
 export class Welcome{
-  constructor(){
+  constructor() {
     this.heading = 'Welcome to the Aurelia Navigation App!';
     this.firstName = 'John';
     this.lastName = 'Doe';
   }
 
-  get fullName(){
+  get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  welcome(){
+  welcome() {
     alert(`Welcome, ${this.fullName}!`);
   }
 }
@@ -88,17 +88,17 @@ We start with importing the validation class
 import {Validation} from 'aurelia-validation';
 export class Welcome{
   static inject() { return [Validation]; }
-  constructor(validation){
+  constructor(validation) {
     this.heading = 'Welcome to the Aurelia Navigation App!';
     this.firstName = 'John';
     this.lastName = 'Doe';
   }
 
-  get fullName(){
+  get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  welcome(){
+  welcome() {
     alert(`Welcome, ${this.fullName}!`);
   }
 }
@@ -107,7 +107,7 @@ export class Welcome{
 
 Great, we're all set, now let's add our first validation:
 ``` javascript
-  constructor(validation){
+  constructor(validation) {
     this.heading = 'Welcome to the Aurelia Navigation App!';
     this.firstName = 'John';
     this.lastName = 'Doe'; 
@@ -126,7 +126,7 @@ Great, we're all set, now let's add our first validation:
 We now have a working validation, but nothing changes behaviorally. If the validation fails, there's no way to inform the end-user of his/her mistakes.
 First, let's make sure that the 'welcome' function can only be executed if the validation is valid:
 ``` javascript
-  welcome(){
+  welcome() {
     this.validation.validate() //the validate will fulfil when validation is valid, and reject if not
       .then( () => {
         alert(`Welcome, ${this.fullName}! `);
@@ -148,13 +148,13 @@ tl;dr: [watch these samples](http://aurelia.io/validation/#/validators)
 ####isNotEmpty()
 This is a special case, dictating that the field is 'required' and cannot be empty.
 Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
-By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional* (on the config)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration].
+By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional* [on the config](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration).
 >The isNotEmpty rule is always checked first before any other validation rule.  This means that without the isNotEmpty rule, the .hasMinLength(5) rule would still consider a value of '' as valid because the field is allowed to be empty.
 
 ####canBeEmpty()
 Signals that a field is not 'required' and can be empty.
 Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
-By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional*  (on the config)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration].
+By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional*  [on the config](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration).
 
 ####containsNoSpaces()
 Validates that the value entered contains no whitespaces.
@@ -397,7 +397,7 @@ import {inject} from 'aurelia-framework';
 
 @inject(Validation)
 export class Person {
-  @ensure(function(it){ it.isNotEmpty().hasLengthBetween(3,10) })
+  @ensure(function(it) { it.isNotEmpty().hasLengthBetween(3,10) })
   firstName = 'John';
 
   constructor(validation) {
@@ -565,20 +565,19 @@ The validate custom attribute uses a strategy based onTwitter Bootstrap by defau
 - for each input element, it will try to find the labels for that element and append a message with the TW BS help-block class. The content of this element is kept in sync with the validation message (or left empty for valid properties)
 - this added message element will have a aurelia-valiation-message class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label and the label is colored without adding a TW bootstrap "control-label" class, you can add these style to styles/styles.css:
 ```css
-	p.aurelia-validation-message{
-	  display:  inline;
-	  margin-left : 5px;
-	} 
-  p.aurelia-validation-message:empty{
-    display:none;
-  }
-	.has-success label {
-	  color: #3c763d;
-	}
-	.has-warning label {
-	  color: #8a6d3b;
-	}
-
+p.aurelia-validation-message {
+  display: inline;
+  margin-left: 5px;
+} 
+p.aurelia-validation-message:empty {
+  display: none;
+}
+.has-success label {
+  color: #3c763d;
+}
+.has-warning label {
+  color: #8a6d3b;
+}
 ```
 
 To change the default visualisation, see ['config.useViewStrategy'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance).
@@ -725,7 +724,7 @@ In addition, each allows you to register a callback that is notified when the pr
 
 If you need to clear or reset the validationResult, calling *.clear()* on the validation itself will cause the entire validationResult to be reset to valid and non-dirty.
 ``` javascript
-reset(){
+reset() {
   this.firstName = "John";
   this.lastName = "Doe";
   this.validation.clear();
@@ -760,12 +759,12 @@ The configuration on the property level will delegate missing config to it's par
 import {ValidationConfig} from 'aurelia-validation';
 import {inject} from 'aurelia-framework';
 
-@inject(ValidationConfig) 
+>@inject(ValidationConfig) 
 export class MyVM{
   constructor(config)
   {
     
-  }
+>  }
 }
 ```
 
@@ -809,15 +808,18 @@ Valid on:
 ``` javascript
 (config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput); }
 ```
-Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage, ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput and any class that inherits from ValidateCustomAttributeViewStrategyBase
+Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are:
+- ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage,
+- ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput
+- and any class that inherits from ValidateCustomAttributeViewStrategyBase
 
 ###config.treatAllPropertiesAsMandatory()
 ``` javascript
 (config) => { config.treatAllPropertiesAsMandatory(); }
 ```
-By default, all properties are optional. Properties that cannot be empty, are set up using the (*isNotEmpty()*)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#isnotempty] validation rule.
+By default, all properties are optional. Properties that cannot be empty, are set up using the [*isNotEmpty()*](https://github.com/aurelia/validation/blob/master/doc/Intro.md#isnotempty) validation rule.
 
-To change the default, call *treatAllPropertiesAsMandatory()* on the configuration. Now all properties will be considered mandatory, and you can signal that a single property can be empty by calling the (*canBeEmpty()*)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#canbeempty] validation rule.
+To change the default, call *treatAllPropertiesAsMandatory()* on the configuration. Now all properties will be considered mandatory, and you can signal that a single property can be empty by calling the [*canBeEmpty()*](https://github.com/aurelia/validation/blob/master/doc/Intro.md#canbeempty) validation rule.
 
 To inverse this configuration, call *treatAllPropertiesAsOptional()* on the configuration.
 
