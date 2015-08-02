@@ -2,12 +2,12 @@ import {Utilities} from '../validation/utilities';
 import {ValidationLocale} from '../validation/validation-locale';
 
 export class ValidationRule {
-  constructor(threshold, onValidate, message) {
+  constructor(threshold, onValidate, message, ruleName) {
     this.onValidate = onValidate;
     this.threshold = threshold;
     this.message = message;
     this.errorMessage = null;
-    this.ruleName = this.constructor.name;
+    this.ruleName = ruleName;
   }
 
   withMessage(message) {
@@ -237,7 +237,9 @@ export class URLValidationRule extends ValidationRule {
           return false;
         }
         return true;
-      }
+      },
+      null,
+      'URLValidationRule'
     );
   }
 
@@ -284,7 +286,9 @@ export class EmailValidationRule extends ValidationRule {
           return false;
         }
         return EmailValidationRule.testEmailUserUtf8Regex(user);
-      }
+      },
+      null,
+      'EmailValidationRule'
     );
 
   }
@@ -296,7 +300,9 @@ export class MinimumLengthValidationRule extends ValidationRule {
       minimumLength,
       (newValue, minimumLength) => {
         return newValue.length !== undefined && newValue.length >= minimumLength;
-      }
+      },
+      null,
+      'MinimumLengthValidationRule'
     );
   }
 }
@@ -307,7 +313,9 @@ export class MaximumLengthValidationRule extends ValidationRule {
       maximumLength,
       (newValue, maximumLength) => {
         return newValue.length !== undefined && newValue.length <= maximumLength;
-      }
+      },
+      null,
+      'MaximumLengthValidationRule'
     );
   }
 }
@@ -320,7 +328,9 @@ export class BetweenLengthValidationRule extends ValidationRule {
         return newValue.length !== undefined
           && newValue.length >= threshold.minimumLength
           && newValue.length <= threshold.maximumLength;
-      }
+      },
+      null,
+      'BetweenLengthValidationRule'
     );
   }
 }
@@ -329,7 +339,9 @@ export class CustomFunctionValidationRule extends ValidationRule {
   constructor(customFunction, threshold) {
     super(
       threshold,
-      customFunction
+      customFunction,
+      null,
+      'CustomFunctionValidationRule'
     )
   }
 }
@@ -344,25 +356,29 @@ export class NumericValidationRule extends ValidationRule {
         return !Number.isNaN(parseFloat(newValue))
           && Number.isFinite(floatValue)
           && numericRegex.test(newValue);
-      }
+      },
+      null,
+      'NumericValidationRule'
     );
   }
 }
 
 export class RegexValidationRule extends ValidationRule {
-  constructor(regex) {
+  constructor(regex, ruleName) {
     super(
       regex,
       (newValue, regex) => {
         return regex.test(newValue);
-      }
+      },
+      null,
+      ruleName || 'RegexValidationRule'
     );
   }
 }
 
 export class ContainsOnlyValidationRule extends RegexValidationRule {
   constructor(regex) {
-    super(regex);
+    super(regex, 'ContainsOnlyValidationRule');
   }
 }
 
@@ -372,7 +388,9 @@ export class MinimumValueValidationRule extends ValidationRule {
       minimumValue,
       (newValue, minimumValue) => {
         return Utilities.getValue(minimumValue) < newValue;
-      }
+      },
+      null,
+      'MinimumValueValidationRule'
     );
   }
 }
@@ -383,7 +401,9 @@ export class MinimumInclusiveValueValidationRule extends ValidationRule {
       minimumValue,
       (newValue, minimumValue) => {
         return Utilities.getValue(minimumValue) <= newValue;
-      }
+      },
+      null,
+      'MinimumInclusiveValueValidationRule'
     );
   }
 }
@@ -394,7 +414,9 @@ export class MaximumValueValidationRule extends ValidationRule {
       maximumValue,
       (newValue, maximumValue) => {
         return newValue < Utilities.getValue(maximumValue);
-      }
+      },
+      null,
+      'MaximumValueValidationRule'
     );
   }
 }
@@ -405,7 +427,9 @@ export class MaximumInclusiveValueValidationRule extends ValidationRule {
       maximumValue,
       (newValue, maximumValue) => {
         return newValue <= Utilities.getValue(maximumValue);
-      }
+      },
+      null,
+      'MaximumInclusiveValueValidationRule'
     );
   }
 }
@@ -416,7 +440,9 @@ export class BetweenValueValidationRule extends ValidationRule {
       {minimumValue: minimumValue, maximumValue: maximumValue},
       (newValue, threshold) => {
         return Utilities.getValue(threshold.minimumValue) <= newValue && newValue <= Utilities.getValue(threshold.maximumValue);
-      }
+      },
+      null,
+      'BetweenValueValidationRule'
     );
   }
 }
@@ -427,7 +453,9 @@ export class DigitValidationRule extends ValidationRule {
       null,
       (newValue, threshold) => {
         return /^\d+$/.test(newValue);
-      }
+      },
+      null,
+      'DigitValidationRule'
     );
   }
 }
@@ -438,7 +466,9 @@ export class NoSpacesValidationRule extends ValidationRule {
       null,
       (newValue, threshold) => {
         return /^\S*$/.test(newValue);
-      }
+      },
+      null,
+      'NoSpacesValidationRule'
     );
   }
 }
@@ -449,7 +479,9 @@ export class AlphaNumericValidationRule extends ValidationRule {
       null,
       (newValue, threshold) => {
         return /^[a-z0-9]+$/i.test(newValue);
-      }
+      },
+      null,
+      'AlphaNumericValidationRule'
     );
   }
 }
@@ -460,7 +492,9 @@ export class AlphaValidationRule extends ValidationRule {
       null,
       (newValue, threshold) => {
         return /^[a-z]+$/i.test(newValue);
-      }
+      },
+      null,
+      'AlphaValidationRule'
     );
   }
 }
@@ -472,7 +506,9 @@ export class AlphaOrWhitespaceValidationRule extends ValidationRule {
       null,
       (newValue, threshold) => {
         return /^[a-z\s]+$/i.test(newValue);
-      }
+      },
+      null,
+      'AlphaOrWhitespaceValidationRule'
     );
   }
 }
@@ -484,13 +520,15 @@ export class AlphaNumericOrWhitespaceValidationRule extends ValidationRule {
       null,
       (newValue, threshold) => {
         return /^[a-z0-9\s]+$/i.test(newValue);
-      }
+      },
+      null,
+      'AlphaNumericOrWhitespaceValidationRule'
     );
   }
 }
 
 export class MediumPasswordValidationRule extends ValidationRule {
-  constructor(minimumComplexityLevel) {
+  constructor(minimumComplexityLevel, ruleName) {
     super(
       (minimumComplexityLevel) ? minimumComplexityLevel : 3,
       (newValue, threshold) => {
@@ -503,7 +541,9 @@ export class MediumPasswordValidationRule extends ValidationRule {
         strength += /[0-9]+/.test(newValue) ? 1 : 0;
         strength += /[\W]+/.test(newValue) ? 1 : 0;
         return strength >= threshold;
-      }
+      },
+      null,
+      ruleName || 'MediumPasswordValidationRule'
     );
   }
 }
@@ -511,12 +551,12 @@ export class MediumPasswordValidationRule extends ValidationRule {
 
 export class StrongPasswordValidationRule extends MediumPasswordValidationRule {
   constructor() {
-    super(4);
+    super(4, 'StrongPasswordValidationRule');
   }
 }
 
 export class EqualityValidationRuleBase extends ValidationRule {
-  constructor(otherValue, equality, otherValueLabel) {
+  constructor(otherValue, equality, otherValueLabel, ruleName) {
     super(
       {
         otherValue: otherValue,
@@ -528,32 +568,34 @@ export class EqualityValidationRuleBase extends ValidationRule {
         if (newValue instanceof Date && otherValue instanceof Date)
           return threshold.equality === (newValue.getTime() === otherValue.getTime());
         return threshold.equality === (newValue === otherValue);
-      }
+      },
+      null,
+      ruleName || 'EqualityValidationRuleBase'
     );
   }
 }
 
 export class EqualityValidationRule extends EqualityValidationRuleBase {
   constructor(otherValue) {
-    super(otherValue, true);
+    super(otherValue, true, null, 'EqualityValidationRule');
   }
 }
 
 export class EqualityWithOtherLabelValidationRule extends EqualityValidationRuleBase {
   constructor(otherValue, otherLabel) {
-    super(otherValue, true, otherLabel);
+    super(otherValue, true, otherLabel, 'EqualityWithOtherLabelValidationRule');
   }
 }
 
 export class InEqualityValidationRule extends EqualityValidationRuleBase {
   constructor(otherValue) {
-    super(otherValue, false);
+    super(otherValue, false, null, 'InEqualityValidationRule');
   }
 }
 
 export class InEqualityWithOtherLabelValidationRule extends EqualityValidationRuleBase {
   constructor(otherValue, otherLabel) {
-    super(otherValue, false, otherLabel);
+    super(otherValue, false, otherLabel, 'InEqualityWithOtherLabelValidationRule');
   }
 }
 
@@ -569,7 +611,9 @@ export class InCollectionValidationRule extends ValidationRule {
             return true;
         }
         return false;
-      }
+      },
+      null,
+      'InCollectionValidationRule'
     );
   }
 }
