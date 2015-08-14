@@ -1,7 +1,8 @@
+import {Metadata} from 'aurelia-metadata';
 import {ValidationGroupBuilder} from '../validation/validation-group-builder';
 import {ValidationResult} from '../validation/validation-result';
 import {ValidationLocale} from '../validation/validation-locale';
-
+import {ValidationMetadata} from '../validation/decorators';
 
 /**
  * Encapsulates validation rules and their current validation state for a given subject
@@ -28,13 +29,10 @@ export class ValidationGroup {
       this.validate(false, true) ;});
 
 
-
-
-    if(this.subject.__proto__._validationMetadata)
-    {
-      this.subject.__proto__._validationMetadata.setup(this);
+    var validationMetadata = Metadata.getOwn(ValidationMetadata.metadataKey, this.subject.constructor);
+    if (validationMetadata) {
+      validationMetadata.setup(this);
     }
-
   }
 
   destroy(){
