@@ -1,3 +1,5 @@
+import {Metadata} from 'aurelia-metadata';
+
 class ValidationMetadata
 {
   constructor(){
@@ -39,10 +41,8 @@ class ValidationPropertyMetadata{
 
 export function ensure(setupStep){
   return function(target, propertyName){
-    if(target._validationMetadata === undefined){
-      target._validationMetadata = new ValidationMetadata();
-    }
-    var property = target._validationMetadata.getOrCreateProperty(propertyName);
+    var validationMetadata = Metadata.getOrCreateOwn('aurelia:validation', ValidationMetadata, target);
+    var property = validationMetadata.getOrCreateProperty(propertyName);
     property.addSetupStep(setupStep);
   }
 }
