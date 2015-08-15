@@ -4,4 +4,4 @@ import {ValidationConfigDefaults} from '../src/validation/validation-config'
 
 ValidationLocale.Repository.default =
   ValidationLocale.Repository.addLocale('en-US', data);
-ValidationConfigDefaults._defaults.localeResources =  './src/resources/';
+ValidationConfigDefaults._defaults.localeResources =  'src/resources/';
