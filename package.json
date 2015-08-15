@@ -83,5 +83,8 @@
         }
       ]
     }
+  },
+  "dependencies": {
+    "karma-jspm": "^2.0.1-beta.2"
   }
 }
