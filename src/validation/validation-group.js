@@ -29,7 +29,7 @@ export class ValidationGroup {
       this.validate(false, true) ;});
 
 
-    var validationMetadata = Metadata.getOwn(ValidationMetadata.metadataKey, this.subject.constructor);
+    var validationMetadata = Metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
     if (validationMetadata) {
       validationMetadata.setup(this);
     }
