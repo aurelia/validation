@@ -11,14 +11,14 @@ var _validationUtilities = require('../validation/utilities');
 var _validationValidationLocale = require('../validation/validation-locale');
 
 var ValidationRule = (function () {
-  function ValidationRule(threshold, onValidate, message) {
+  function ValidationRule(threshold, onValidate, message, ruleName) {
     _classCallCheck(this, ValidationRule);
 
     this.onValidate = onValidate;
     this.threshold = threshold;
     this.message = message;
     this.errorMessage = null;
-    this.ruleName = this.constructor.name;
+    this.ruleName = ruleName;
   }
 
   ValidationRule.prototype.withMessage = function withMessage(message) {
@@ -147,7 +147,7 @@ var URLValidationRule = (function (_ValidationRule) {
         return false;
       }
       return true;
-    });
+    }, null, 'URLValidationRule');
   }
 
   _inherits(URLValidationRule, _ValidationRule);
@@ -252,7 +252,7 @@ var EmailValidationRule = (function (_ValidationRule2) {
         return false;
       }
       return EmailValidationRule.testEmailUserUtf8Regex(user);
-    });
+    }, null, 'EmailValidationRule');
   }
 
   _inherits(EmailValidationRule, _ValidationRule2);
@@ -291,7 +291,7 @@ var MinimumLengthValidationRule = (function (_ValidationRule3) {
 
     _ValidationRule3.call(this, minimumLength, function (newValue, minimumLength) {
       return newValue.length !== undefined && newValue.length >= minimumLength;
-    });
+    }, null, 'MinimumLengthValidationRule');
   }
 
   _inherits(MinimumLengthValidationRule, _ValidationRule3);
@@ -307,7 +307,7 @@ var MaximumLengthValidationRule = (function (_ValidationRule4) {
 
     _ValidationRule4.call(this, maximumLength, function (newValue, maximumLength) {
       return newValue.length !== undefined && newValue.length <= maximumLength;
-    });
+    }, null, 'MaximumLengthValidationRule');
   }
 
   _inherits(MaximumLengthValidationRule, _ValidationRule4);
@@ -323,7 +323,7 @@ var BetweenLengthValidationRule = (function (_ValidationRule5) {
 
     _ValidationRule5.call(this, { minimumLength: minimumLength, maximumLength: maximumLength }, function (newValue, threshold) {
       return newValue.length !== undefined && newValue.length >= threshold.minimumLength && newValue.length <= threshold.maximumLength;
-    });
+    }, null, 'BetweenLengthValidationRule');
   }
 
   _inherits(BetweenLengthValidationRule, _ValidationRule5);
@@ -337,7 +337,7 @@ var CustomFunctionValidationRule = (function (_ValidationRule6) {
   function CustomFunctionValidationRule(customFunction, threshold) {
     _classCallCheck(this, CustomFunctionValidationRule);
 
-    _ValidationRule6.call(this, threshold, customFunction);
+    _ValidationRule6.call(this, threshold, customFunction, null, 'CustomFunctionValidationRule');
   }
 
   _inherits(CustomFunctionValidationRule, _ValidationRule6);
@@ -355,7 +355,7 @@ var NumericValidationRule = (function (_ValidationRule7) {
       var numericRegex = locale.setting('numericRegex');
       var floatValue = parseFloat(newValue);
       return !Number.isNaN(parseFloat(newValue)) && Number.isFinite(floatValue) && numericRegex.test(newValue);
-    });
+    }, null, 'NumericValidationRule');
   }
 
   _inherits(NumericValidationRule, _ValidationRule7);
@@ -366,12 +366,12 @@ var NumericValidationRule = (function (_ValidationRule7) {
 exports.NumericValidationRule = NumericValidationRule;
 
 var RegexValidationRule = (function (_ValidationRule8) {
-  function RegexValidationRule(regex) {
+  function RegexValidationRule(regex, ruleName) {
     _classCallCheck(this, RegexValidationRule);
 
     _ValidationRule8.call(this, regex, function (newValue, regex) {
       return regex.test(newValue);
-    });
+    }, null, ruleName || 'RegexValidationRule');
   }
 
   _inherits(RegexValidationRule, _ValidationRule8);
@@ -385,7 +385,7 @@ var ContainsOnlyValidationRule = (function (_RegexValidationRule) {
   function ContainsOnlyValidationRule(regex) {
     _classCallCheck(this, ContainsOnlyValidationRule);
 
-    _RegexValidationRule.call(this, regex);
+    _RegexValidationRule.call(this, regex, 'ContainsOnlyValidationRule');
   }
 
   _inherits(ContainsOnlyValidationRule, _RegexValidationRule);
@@ -401,7 +401,7 @@ var MinimumValueValidationRule = (function (_ValidationRule9) {
 
     _ValidationRule9.call(this, minimumValue, function (newValue, minimumValue) {
       return _validationUtilities.Utilities.getValue(minimumValue) < newValue;
-    });
+    }, null, 'MinimumValueValidationRule');
   }
 
   _inherits(MinimumValueValidationRule, _ValidationRule9);
@@ -417,7 +417,7 @@ var MinimumInclusiveValueValidationRule = (function (_ValidationRule10) {
 
     _ValidationRule10.call(this, minimumValue, function (newValue, minimumValue) {
       return _validationUtilities.Utilities.getValue(minimumValue) <= newValue;
-    });
+    }, null, 'MinimumInclusiveValueValidationRule');
   }
 
   _inherits(MinimumInclusiveValueValidationRule, _ValidationRule10);
@@ -433,7 +433,7 @@ var MaximumValueValidationRule = (function (_ValidationRule11) {
 
     _ValidationRule11.call(this, maximumValue, function (newValue, maximumValue) {
       return newValue < _validationUtilities.Utilities.getValue(maximumValue);
-    });
+    }, null, 'MaximumValueValidationRule');
   }
 
   _inherits(MaximumValueValidationRule, _ValidationRule11);
@@ -449,7 +449,7 @@ var MaximumInclusiveValueValidationRule = (function (_ValidationRule12) {
 
     _ValidationRule12.call(this, maximumValue, function (newValue, maximumValue) {
       return newValue <= _validationUtilities.Utilities.getValue(maximumValue);
-    });
+    }, null, 'MaximumInclusiveValueValidationRule');
   }
 
   _inherits(MaximumInclusiveValueValidationRule, _ValidationRule12);
@@ -465,7 +465,7 @@ var BetweenValueValidationRule = (function (_ValidationRule13) {
 
     _ValidationRule13.call(this, { minimumValue: minimumValue, maximumValue: maximumValue }, function (newValue, threshold) {
       return _validationUtilities.Utilities.getValue(threshold.minimumValue) <= newValue && newValue <= _validationUtilities.Utilities.getValue(threshold.maximumValue);
-    });
+    }, null, 'BetweenValueValidationRule');
   }
 
   _inherits(BetweenValueValidationRule, _ValidationRule13);
@@ -481,7 +481,7 @@ var DigitValidationRule = (function (_ValidationRule14) {
 
     _ValidationRule14.call(this, null, function (newValue, threshold) {
       return /^\d+$/.test(newValue);
-    });
+    }, null, 'DigitValidationRule');
   }
 
   _inherits(DigitValidationRule, _ValidationRule14);
@@ -497,7 +497,7 @@ var NoSpacesValidationRule = (function (_ValidationRule15) {
 
     _ValidationRule15.call(this, null, function (newValue, threshold) {
       return /^\S*$/.test(newValue);
-    });
+    }, null, 'NoSpacesValidationRule');
   }
 
   _inherits(NoSpacesValidationRule, _ValidationRule15);
@@ -513,7 +513,7 @@ var AlphaNumericValidationRule = (function (_ValidationRule16) {
 
     _ValidationRule16.call(this, null, function (newValue, threshold) {
       return /^[a-z0-9]+$/i.test(newValue);
-    });
+    }, null, 'AlphaNumericValidationRule');
   }
 
   _inherits(AlphaNumericValidationRule, _ValidationRule16);
@@ -529,7 +529,7 @@ var AlphaValidationRule = (function (_ValidationRule17) {
 
     _ValidationRule17.call(this, null, function (newValue, threshold) {
       return /^[a-z]+$/i.test(newValue);
-    });
+    }, null, 'AlphaValidationRule');
   }
 
   _inherits(AlphaValidationRule, _ValidationRule17);
@@ -545,7 +545,7 @@ var AlphaOrWhitespaceValidationRule = (function (_ValidationRule18) {
 
     _ValidationRule18.call(this, null, function (newValue, threshold) {
       return /^[a-z\s]+$/i.test(newValue);
-    });
+    }, null, 'AlphaOrWhitespaceValidationRule');
   }
 
   _inherits(AlphaOrWhitespaceValidationRule, _ValidationRule18);
@@ -561,7 +561,7 @@ var AlphaNumericOrWhitespaceValidationRule = (function (_ValidationRule19) {
 
     _ValidationRule19.call(this, null, function (newValue, threshold) {
       return /^[a-z0-9\s]+$/i.test(newValue);
-    });
+    }, null, 'AlphaNumericOrWhitespaceValidationRule');
   }
 
   _inherits(AlphaNumericOrWhitespaceValidationRule, _ValidationRule19);
@@ -572,7 +572,7 @@ var AlphaNumericOrWhitespaceValidationRule = (function (_ValidationRule19) {
 exports.AlphaNumericOrWhitespaceValidationRule = AlphaNumericOrWhitespaceValidationRule;
 
 var MediumPasswordValidationRule = (function (_ValidationRule20) {
-  function MediumPasswordValidationRule(minimumComplexityLevel) {
+  function MediumPasswordValidationRule(minimumComplexityLevel, ruleName) {
     _classCallCheck(this, MediumPasswordValidationRule);
 
     _ValidationRule20.call(this, minimumComplexityLevel ? minimumComplexityLevel : 3, function (newValue, threshold) {
@@ -584,7 +584,7 @@ var MediumPasswordValidationRule = (function (_ValidationRule20) {
       strength += /[0-9]+/.test(newValue) ? 1 : 0;
       strength += /[\W]+/.test(newValue) ? 1 : 0;
       return strength >= threshold;
-    });
+    }, null, ruleName || 'MediumPasswordValidationRule');
   }
 
   _inherits(MediumPasswordValidationRule, _ValidationRule20);
@@ -598,7 +598,7 @@ var StrongPasswordValidationRule = (function (_MediumPasswordValidationRule) {
   function StrongPasswordValidationRule() {
     _classCallCheck(this, StrongPasswordValidationRule);
 
-    _MediumPasswordValidationRule.call(this, 4);
+    _MediumPasswordValidationRule.call(this, 4, 'StrongPasswordValidationRule');
   }
 
   _inherits(StrongPasswordValidationRule, _MediumPasswordValidationRule);
@@ -609,7 +609,7 @@ var StrongPasswordValidationRule = (function (_MediumPasswordValidationRule) {
 exports.StrongPasswordValidationRule = StrongPasswordValidationRule;
 
 var EqualityValidationRuleBase = (function (_ValidationRule21) {
-  function EqualityValidationRuleBase(otherValue, equality, otherValueLabel) {
+  function EqualityValidationRuleBase(otherValue, equality, otherValueLabel, ruleName) {
     _classCallCheck(this, EqualityValidationRuleBase);
 
     _ValidationRule21.call(this, {
@@ -620,7 +620,7 @@ var EqualityValidationRuleBase = (function (_ValidationRule21) {
       var otherValue = _validationUtilities.Utilities.getValue(threshold.otherValue);
       if (newValue instanceof Date && otherValue instanceof Date) return threshold.equality === (newValue.getTime() === otherValue.getTime());
       return threshold.equality === (newValue === otherValue);
-    });
+    }, null, ruleName || 'EqualityValidationRuleBase');
   }
 
   _inherits(EqualityValidationRuleBase, _ValidationRule21);
@@ -634,7 +634,7 @@ var EqualityValidationRule = (function (_EqualityValidationRuleBase) {
   function EqualityValidationRule(otherValue) {
     _classCallCheck(this, EqualityValidationRule);
 
-    _EqualityValidationRuleBase.call(this, otherValue, true);
+    _EqualityValidationRuleBase.call(this, otherValue, true, null, 'EqualityValidationRule');
   }
 
   _inherits(EqualityValidationRule, _EqualityValidationRuleBase);
@@ -648,7 +648,7 @@ var EqualityWithOtherLabelValidationRule = (function (_EqualityValidationRuleBas
   function EqualityWithOtherLabelValidationRule(otherValue, otherLabel) {
     _classCallCheck(this, EqualityWithOtherLabelValidationRule);
 
-    _EqualityValidationRuleBase2.call(this, otherValue, true, otherLabel);
+    _EqualityValidationRuleBase2.call(this, otherValue, true, otherLabel, 'EqualityWithOtherLabelValidationRule');
   }
 
   _inherits(EqualityWithOtherLabelValidationRule, _EqualityValidationRuleBase2);
@@ -662,7 +662,7 @@ var InEqualityValidationRule = (function (_EqualityValidationRuleBase3) {
   function InEqualityValidationRule(otherValue) {
     _classCallCheck(this, InEqualityValidationRule);
 
-    _EqualityValidationRuleBase3.call(this, otherValue, false);
+    _EqualityValidationRuleBase3.call(this, otherValue, false, null, 'InEqualityValidationRule');
   }
 
   _inherits(InEqualityValidationRule, _EqualityValidationRuleBase3);
@@ -676,7 +676,7 @@ var InEqualityWithOtherLabelValidationRule = (function (_EqualityValidationRuleB
   function InEqualityWithOtherLabelValidationRule(otherValue, otherLabel) {
     _classCallCheck(this, InEqualityWithOtherLabelValidationRule);
 
-    _EqualityValidationRuleBase4.call(this, otherValue, false, otherLabel);
+    _EqualityValidationRuleBase4.call(this, otherValue, false, otherLabel, 'InEqualityWithOtherLabelValidationRule');
   }
 
   _inherits(InEqualityWithOtherLabelValidationRule, _EqualityValidationRuleBase4);
@@ -696,7 +696,7 @@ var InCollectionValidationRule = (function (_ValidationRule22) {
         if (newValue === collection[i]) return true;
       }
       return false;
-    });
+    }, null, 'InCollectionValidationRule');
   }
 
   _inherits(InCollectionValidationRule, _ValidationRule22);

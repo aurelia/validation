@@ -8,14 +8,14 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   var ValidationRule = (function () {
-    function ValidationRule(threshold, onValidate, message) {
+    function ValidationRule(threshold, onValidate, message, ruleName) {
       _classCallCheck(this, ValidationRule);
 
       this.onValidate = onValidate;
       this.threshold = threshold;
       this.message = message;
       this.errorMessage = null;
-      this.ruleName = this.constructor.name;
+      this.ruleName = ruleName;
     }
 
     ValidationRule.prototype.withMessage = function withMessage(message) {
@@ -144,7 +144,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
           return false;
         }
         return true;
-      });
+      }, null, 'URLValidationRule');
     }
 
     _inherits(URLValidationRule, _ValidationRule);
@@ -249,7 +249,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
           return false;
         }
         return EmailValidationRule.testEmailUserUtf8Regex(user);
-      });
+      }, null, 'EmailValidationRule');
     }
 
     _inherits(EmailValidationRule, _ValidationRule2);
@@ -288,7 +288,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule3.call(this, minimumLength, function (newValue, minimumLength) {
         return newValue.length !== undefined && newValue.length >= minimumLength;
-      });
+      }, null, 'MinimumLengthValidationRule');
     }
 
     _inherits(MinimumLengthValidationRule, _ValidationRule3);
@@ -304,7 +304,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule4.call(this, maximumLength, function (newValue, maximumLength) {
         return newValue.length !== undefined && newValue.length <= maximumLength;
-      });
+      }, null, 'MaximumLengthValidationRule');
     }
 
     _inherits(MaximumLengthValidationRule, _ValidationRule4);
@@ -320,7 +320,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule5.call(this, { minimumLength: minimumLength, maximumLength: maximumLength }, function (newValue, threshold) {
         return newValue.length !== undefined && newValue.length >= threshold.minimumLength && newValue.length <= threshold.maximumLength;
-      });
+      }, null, 'BetweenLengthValidationRule');
     }
 
     _inherits(BetweenLengthValidationRule, _ValidationRule5);
@@ -334,7 +334,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     function CustomFunctionValidationRule(customFunction, threshold) {
       _classCallCheck(this, CustomFunctionValidationRule);
 
-      _ValidationRule6.call(this, threshold, customFunction);
+      _ValidationRule6.call(this, threshold, customFunction, null, 'CustomFunctionValidationRule');
     }
 
     _inherits(CustomFunctionValidationRule, _ValidationRule6);
@@ -352,7 +352,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
         var numericRegex = locale.setting('numericRegex');
         var floatValue = parseFloat(newValue);
         return !Number.isNaN(parseFloat(newValue)) && Number.isFinite(floatValue) && numericRegex.test(newValue);
-      });
+      }, null, 'NumericValidationRule');
     }
 
     _inherits(NumericValidationRule, _ValidationRule7);
@@ -363,12 +363,12 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
   exports.NumericValidationRule = NumericValidationRule;
 
   var RegexValidationRule = (function (_ValidationRule8) {
-    function RegexValidationRule(regex) {
+    function RegexValidationRule(regex, ruleName) {
       _classCallCheck(this, RegexValidationRule);
 
       _ValidationRule8.call(this, regex, function (newValue, regex) {
         return regex.test(newValue);
-      });
+      }, null, ruleName || 'RegexValidationRule');
     }
 
     _inherits(RegexValidationRule, _ValidationRule8);
@@ -382,7 +382,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     function ContainsOnlyValidationRule(regex) {
       _classCallCheck(this, ContainsOnlyValidationRule);
 
-      _RegexValidationRule.call(this, regex);
+      _RegexValidationRule.call(this, regex, 'ContainsOnlyValidationRule');
     }
 
     _inherits(ContainsOnlyValidationRule, _RegexValidationRule);
@@ -398,7 +398,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule9.call(this, minimumValue, function (newValue, minimumValue) {
         return _validationUtilities.Utilities.getValue(minimumValue) < newValue;
-      });
+      }, null, 'MinimumValueValidationRule');
     }
 
     _inherits(MinimumValueValidationRule, _ValidationRule9);
@@ -414,7 +414,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule10.call(this, minimumValue, function (newValue, minimumValue) {
         return _validationUtilities.Utilities.getValue(minimumValue) <= newValue;
-      });
+      }, null, 'MinimumInclusiveValueValidationRule');
     }
 
     _inherits(MinimumInclusiveValueValidationRule, _ValidationRule10);
@@ -430,7 +430,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule11.call(this, maximumValue, function (newValue, maximumValue) {
         return newValue < _validationUtilities.Utilities.getValue(maximumValue);
-      });
+      }, null, 'MaximumValueValidationRule');
     }
 
     _inherits(MaximumValueValidationRule, _ValidationRule11);
@@ -446,7 +446,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule12.call(this, maximumValue, function (newValue, maximumValue) {
         return newValue <= _validationUtilities.Utilities.getValue(maximumValue);
-      });
+      }, null, 'MaximumInclusiveValueValidationRule');
     }
 
     _inherits(MaximumInclusiveValueValidationRule, _ValidationRule12);
@@ -462,7 +462,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule13.call(this, { minimumValue: minimumValue, maximumValue: maximumValue }, function (newValue, threshold) {
         return _validationUtilities.Utilities.getValue(threshold.minimumValue) <= newValue && newValue <= _validationUtilities.Utilities.getValue(threshold.maximumValue);
-      });
+      }, null, 'BetweenValueValidationRule');
     }
 
     _inherits(BetweenValueValidationRule, _ValidationRule13);
@@ -478,7 +478,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule14.call(this, null, function (newValue, threshold) {
         return /^\d+$/.test(newValue);
-      });
+      }, null, 'DigitValidationRule');
     }
 
     _inherits(DigitValidationRule, _ValidationRule14);
@@ -494,7 +494,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule15.call(this, null, function (newValue, threshold) {
         return /^\S*$/.test(newValue);
-      });
+      }, null, 'NoSpacesValidationRule');
     }
 
     _inherits(NoSpacesValidationRule, _ValidationRule15);
@@ -510,7 +510,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule16.call(this, null, function (newValue, threshold) {
         return /^[a-z0-9]+$/i.test(newValue);
-      });
+      }, null, 'AlphaNumericValidationRule');
     }
 
     _inherits(AlphaNumericValidationRule, _ValidationRule16);
@@ -526,7 +526,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule17.call(this, null, function (newValue, threshold) {
         return /^[a-z]+$/i.test(newValue);
-      });
+      }, null, 'AlphaValidationRule');
     }
 
     _inherits(AlphaValidationRule, _ValidationRule17);
@@ -542,7 +542,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule18.call(this, null, function (newValue, threshold) {
         return /^[a-z\s]+$/i.test(newValue);
-      });
+      }, null, 'AlphaOrWhitespaceValidationRule');
     }
 
     _inherits(AlphaOrWhitespaceValidationRule, _ValidationRule18);
@@ -558,7 +558,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
 
       _ValidationRule19.call(this, null, function (newValue, threshold) {
         return /^[a-z0-9\s]+$/i.test(newValue);
-      });
+      }, null, 'AlphaNumericOrWhitespaceValidationRule');
     }
 
     _inherits(AlphaNumericOrWhitespaceValidationRule, _ValidationRule19);
@@ -569,7 +569,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
   exports.AlphaNumericOrWhitespaceValidationRule = AlphaNumericOrWhitespaceValidationRule;
 
   var MediumPasswordValidationRule = (function (_ValidationRule20) {
-    function MediumPasswordValidationRule(minimumComplexityLevel) {
+    function MediumPasswordValidationRule(minimumComplexityLevel, ruleName) {
       _classCallCheck(this, MediumPasswordValidationRule);
 
       _ValidationRule20.call(this, minimumComplexityLevel ? minimumComplexityLevel : 3, function (newValue, threshold) {
@@ -581,7 +581,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
         strength += /[0-9]+/.test(newValue) ? 1 : 0;
         strength += /[\W]+/.test(newValue) ? 1 : 0;
         return strength >= threshold;
-      });
+      }, null, ruleName || 'MediumPasswordValidationRule');
     }
 
     _inherits(MediumPasswordValidationRule, _ValidationRule20);
@@ -595,7 +595,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     function StrongPasswordValidationRule() {
       _classCallCheck(this, StrongPasswordValidationRule);
 
-      _MediumPasswordValidationRule.call(this, 4);
+      _MediumPasswordValidationRule.call(this, 4, 'StrongPasswordValidationRule');
     }
 
     _inherits(StrongPasswordValidationRule, _MediumPasswordValidationRule);
@@ -606,7 +606,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
   exports.StrongPasswordValidationRule = StrongPasswordValidationRule;
 
   var EqualityValidationRuleBase = (function (_ValidationRule21) {
-    function EqualityValidationRuleBase(otherValue, equality, otherValueLabel) {
+    function EqualityValidationRuleBase(otherValue, equality, otherValueLabel, ruleName) {
       _classCallCheck(this, EqualityValidationRuleBase);
 
       _ValidationRule21.call(this, {
@@ -617,7 +617,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
         var otherValue = _validationUtilities.Utilities.getValue(threshold.otherValue);
         if (newValue instanceof Date && otherValue instanceof Date) return threshold.equality === (newValue.getTime() === otherValue.getTime());
         return threshold.equality === (newValue === otherValue);
-      });
+      }, null, ruleName || 'EqualityValidationRuleBase');
     }
 
     _inherits(EqualityValidationRuleBase, _ValidationRule21);
@@ -631,7 +631,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     function EqualityValidationRule(otherValue) {
       _classCallCheck(this, EqualityValidationRule);
 
-      _EqualityValidationRuleBase.call(this, otherValue, true);
+      _EqualityValidationRuleBase.call(this, otherValue, true, null, 'EqualityValidationRule');
     }
 
     _inherits(EqualityValidationRule, _EqualityValidationRuleBase);
@@ -645,7 +645,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     function EqualityWithOtherLabelValidationRule(otherValue, otherLabel) {
       _classCallCheck(this, EqualityWithOtherLabelValidationRule);
 
-      _EqualityValidationRuleBase2.call(this, otherValue, true, otherLabel);
+      _EqualityValidationRuleBase2.call(this, otherValue, true, otherLabel, 'EqualityWithOtherLabelValidationRule');
     }
 
     _inherits(EqualityWithOtherLabelValidationRule, _EqualityValidationRuleBase2);
@@ -659,7 +659,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     function InEqualityValidationRule(otherValue) {
       _classCallCheck(this, InEqualityValidationRule);
 
-      _EqualityValidationRuleBase3.call(this, otherValue, false);
+      _EqualityValidationRuleBase3.call(this, otherValue, false, null, 'InEqualityValidationRule');
     }
 
     _inherits(InEqualityValidationRule, _EqualityValidationRuleBase3);
@@ -673,7 +673,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
     function InEqualityWithOtherLabelValidationRule(otherValue, otherLabel) {
       _classCallCheck(this, InEqualityWithOtherLabelValidationRule);
 
-      _EqualityValidationRuleBase4.call(this, otherValue, false, otherLabel);
+      _EqualityValidationRuleBase4.call(this, otherValue, false, otherLabel, 'InEqualityWithOtherLabelValidationRule');
     }
 
     _inherits(InEqualityWithOtherLabelValidationRule, _EqualityValidationRuleBase4);
@@ -693,7 +693,7 @@ define(['exports', '../validation/utilities', '../validation/validation-locale']
           if (newValue === collection[i]) return true;
         }
         return false;
-      });
+      }, null, 'InCollectionValidationRule');
     }
 
     _inherits(InCollectionValidationRule, _ValidationRule22);

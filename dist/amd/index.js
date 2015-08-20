@@ -24,11 +24,11 @@ define(['exports', './validation/validation-config', './validation/validation', 
 
   function configure(aurelia, configCallback) {
 
-    aurelia.globalizeResources('./validation/validate-custom-attribute');
+    aurelia.globalResources('./validation/validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(_validationValidation.Validation.defaults);
     }
-    aurelia.withSingleton(_validationValidationConfig.ValidationConfig, _validationValidation.Validation.defaults);
+    aurelia.singleton(_validationValidationConfig.ValidationConfig, _validationValidation.Validation.defaults);
     return _validationValidation.Validation.defaults.locale();
   }
 });
