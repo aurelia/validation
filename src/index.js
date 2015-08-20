@@ -15,11 +15,11 @@ import {Validation} from './validation/validation';
 
 export function configure(aurelia, configCallback) {
 
-  aurelia.globalizeResources('./validation/validate-custom-attribute');
+  aurelia.globalResources('./validation/validate-custom-attribute');
   if(configCallback !== undefined && typeof(configCallback) === 'function')
   {
     configCallback(Validation.defaults);
   }
-  aurelia.withSingleton(ValidationConfig, Validation.defaults);
+  aurelia.singleton(ValidationConfig, Validation.defaults);
   return Validation.defaults.locale();
 }
