@@ -466,6 +466,8 @@ See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intr
 - fr-FR
 - nl-BE
 - nl-NL
+- nb-NO
+- nn-NO
 - sv-SE
 - tr-TR
 - zh-CN
