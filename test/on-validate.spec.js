@@ -1,4 +1,4 @@
-import {Validation} from '../src/validation/validation';
+import {Validation} from '../src/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
 

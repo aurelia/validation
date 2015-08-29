@@ -1,5 +1,5 @@
-import {ValidationRule} from '../src/validation/validation-rules';
-import {ValidationRulesCollection} from '../src/validation/validation-rules-collection';
+import {ValidationRule} from '../src/validation-rules';
+import {ValidationRulesCollection} from '../src/validation-rules-collection';
 
 export class TestValidationRule extends ValidationRule {
   constructor(shouldFail) {

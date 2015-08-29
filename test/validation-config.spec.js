@@ -1,5 +1,5 @@
-import {ValidationConfig} from '../src/validation/validation-config';
-import {ValidateCustomAttributeViewStrategy} from '../src/validation/validate-custom-attribute-view-strategy';
+import {ValidationConfig} from '../src/validation-config';
+import {ValidateCustomAttributeViewStrategy} from '../src/validate-custom-attribute-view-strategy';
 
 describe('ValidationConfig', () => {
   it('should have default values', () => {

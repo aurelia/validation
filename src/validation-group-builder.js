@@ -1,6 +1,6 @@
-import {SwitchCaseValidationRulesCollection} from '../validation/validation-rules-collection';
-import {ValidationProperty} from '../validation/validation-property';
-import {ValidationConfig} from '../validation/validation-config';
+import {SwitchCaseValidationRulesCollection} from './validation-rules-collection';
+import {ValidationProperty} from './validation-property';
+import {ValidationConfig} from './validation-config';
 import {
   MinimumValueValidationRule,
   MinimumInclusiveValueValidationRule,
@@ -29,7 +29,7 @@ import {
   ContainsOnlyValidationRule,
   RegexValidationRule,
   CustomFunctionValidationRule
-} from '../validation/validation-rules';
+} from './validation-rules';
 
 export class ValidationGroupBuilder {
   constructor(observerLocator, validationGroup) {
