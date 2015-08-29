@@ -1,8 +1,8 @@
-import {Validation} from '../src/validation/validation';
+import {Validation} from '../src/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
-import {ValidationConfig} from '../src/validation/validation-config';
-import {ensure} from '../src/validation/decorators';
+import {ValidationConfig} from '../src/validation-config';
+import {ensure} from '../src/decorators';
 
 class TestSubject {
 

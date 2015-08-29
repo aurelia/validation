@@ -1,6 +1,6 @@
-import {ValidationRulesCollection} from '../validation/validation-rules-collection';
-import {PathObserver} from '../validation/path-observer';
-import {Debouncer} from '../validation/debouncer';
+import {ValidationRulesCollection} from './validation-rules-collection';
+import {PathObserver} from './path-observer';
+import {Debouncer} from './debouncer';
 
 export class ValidationProperty {
   constructor(observerLocator, propertyName, validationGroup, propertyResult, config) {
