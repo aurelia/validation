@@ -1,6 +1,4 @@
 import {ObserverLocator} from 'aurelia-binding';
-import * as AllRules from './validation-rules';
-import * as AllCollections from './validation-rules-collection'
 import {ValidationGroup} from './validation-group';
 import {inject} from 'aurelia-dependency-injection';
 import {ValidationConfig} from './validation-config';

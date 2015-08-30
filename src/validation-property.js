@@ -1,4 +1,4 @@
-import * as AllCollections from './validation-rules-collection';
+import {ValidationRulesCollection} from './validation-rules-collection';
 import {PathObserver} from './path-observer';
 import {Debouncer} from './debouncer';
 
@@ -7,7 +7,7 @@ export class ValidationProperty {
     this.propertyResult = propertyResult;
     this.propertyName = propertyName;
     this.validationGroup = validationGroup;
-    this.collectionOfValidationRules = new AllCollections.ValidationRulesCollection(config);
+    this.collectionOfValidationRules = new ValidationRulesCollection(config);
     this.config = config;
     this.latestValue = undefined;
 
