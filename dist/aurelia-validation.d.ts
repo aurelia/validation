@@ -3,17 +3,6 @@ declare module 'aurelia-validation' {
   import { ObserverLocator }  from 'aurelia-binding';
   import { inject }  from 'aurelia-dependency-injection';
   import { customAttribute }  from 'aurelia-templating';
-  export { Utilities } from 'aurelia-validation/validation/utilities';
-  export { ValidationConfig } from 'aurelia-validation/validation/validation-config';
-  export { ValidationLocale } from 'aurelia-validation/validation/validation-locale';
-  export * from 'aurelia-validation/validation/validation-result';
-  export * from 'aurelia-validation/validation/validation-rules';
-  export { Validation } from 'aurelia-validation/validation/validation';
-  export { ValidateCustomAttribute } from 'aurelia-validation/validation/validate-custom-attribute';
-  export { ValidateCustomAttributeViewStrategy } from 'aurelia-validation/validation/validate-custom-attribute-view-strategy';
-  export { ValidateCustomAttributeViewStrategyBase } from 'aurelia-validation/validation/validate-custom-attribute-view-strategy';
-  export { ensure } from 'aurelia-validation/validation/decorators';
-  export function configure(aurelia: any, configCallback: any): any;
   export class Debouncer {
     constructor(debounceTimeout: any);
     debounce(func: any): any;
@@ -30,6 +19,7 @@ declare module 'aurelia-validation' {
     setup(validation: any): any;
   }
   export function ensure(setupStep: any): any;
+  export function configure(aurelia: any, configCallback: any): any;
   export class PathObserver {
     constructor(observerLocator: any, subject: any, path: any);
     
@@ -579,5 +569,4 @@ declare module 'aurelia-validation' {
     on(subject: any, configCallback: any): any;
     onBreezeEntity(breezeEntity: any, configCallback: any): any;
   }
-  export let data: any;
 }

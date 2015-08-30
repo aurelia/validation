@@ -1,44 +1,16 @@
-define(['exports', 'aurelia-metadata', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-templating', './validation/utilities', './validation/validation-config', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validation', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy', './validation/decorators'], function (exports, _aureliaMetadata, _aureliaBinding, _aureliaDependencyInjection, _aureliaTemplating, _validationUtilities, _validationValidationConfig, _validationValidationLocale, _validationValidationResult, _validationValidationRules, _validationValidation, _validationValidateCustomAttribute, _validationValidateCustomAttributeViewStrategy, _validationDecorators) {
+define(['exports', 'aurelia-metadata', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-templating'], function (exports, _aureliaMetadata, _aureliaBinding, _aureliaDependencyInjection, _aureliaTemplating) {
   'use strict';
 
   exports.__esModule = true;
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  exports.configure = configure;
   exports.ensure = ensure;
-
-  function _interopExportWildcard(obj, defaults) { var newObj = defaults({}, obj); delete newObj['default']; return newObj; }
-
-  function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+  exports.configure = configure;
 
   function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-  exports.Utilities = _validationUtilities.Utilities;
-  exports.ValidationConfig = _validationValidationConfig.ValidationConfig;
-  exports.ValidationLocale = _validationValidationLocale.ValidationLocale;
-
-  _defaults(exports, _interopExportWildcard(_validationValidationResult, _defaults));
-
-  _defaults(exports, _interopExportWildcard(_validationValidationRules, _defaults));
-
-  exports.Validation = _validationValidation.Validation;
-  exports.ValidateCustomAttribute = _validationValidateCustomAttribute.ValidateCustomAttribute;
-  exports.ValidateCustomAttributeViewStrategy = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy;
-  exports.ValidateCustomAttributeViewStrategyBase = _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategyBase;
-  exports.ensure = _validationDecorators.ensure;
-
-  function configure(aurelia, configCallback) {
-
-    aurelia.globalResources('./validation/validate-custom-attribute');
-    if (configCallback !== undefined && typeof configCallback === 'function') {
-      configCallback(Validation.defaults);
-    }
-    aurelia.singleton(ValidationConfig, Validation.defaults);
-    return Validation.defaults.locale();
-  }
 
   var Debouncer = (function () {
     function Debouncer(debounceTimeout) {
@@ -130,6 +102,16 @@ define(['exports', 'aurelia-metadata', 'aurelia-binding', 'aurelia-dependency-in
       var property = validationMetadata.getOrCreateProperty(propertyName);
       property.addSetupStep(setupStep);
     };
+  }
+
+  function configure(aurelia, configCallback) {
+
+    aurelia.globalResources('./validate-custom-attribute');
+    if (configCallback !== undefined && typeof configCallback === 'function') {
+      configCallback(Validation.defaults);
+    }
+    aurelia.singleton(ValidationConfig, Validation.defaults);
+    return Validation.defaults.locale();
   }
 
   var PathObserver = (function () {
@@ -2375,96 +2357,4 @@ define(['exports', 'aurelia-metadata', 'aurelia-binding', 'aurelia-dependency-in
   exports.Validation = Validation;
 
   Validation.defaults = new ValidationConfig();
-
-  var data = {
-    settings: {
-      'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
-    },
-    messages: {
-      'isRequired': 'is required',
-      'onValidateCallback': 'not a valid value',
-      'AlphaNumericOrWhitespaceValidationRule': function AlphaNumericOrWhitespaceValidationRule(newValue, threshold) {
-        return 'can contain only alphanumerical characters or spaces';
-      },
-      'AlphaNumericValidationRule': function AlphaNumericValidationRule(newValue, threshold) {
-        return 'can contain only alphanumerical characters';
-      },
-      'AlphaValidationRule': function AlphaValidationRule(newValue, threshold) {
-        return 'can contain only letters';
-      },
-      'AlphaOrWhitespaceValidationRule': function AlphaOrWhitespaceValidationRule(newValue, threshold) {
-        return 'can contain only letters or spaces';
-      },
-      'BetweenLengthValidationRule': function BetweenLengthValidationRule(newValue, threshold) {
-        return 'needs to be between ' + Utilities.getValue(threshold.minimumLength) + ' and ' + Utilities.getValue(threshold.maximumLength) + ' characters long';
-      },
-      'BetweenValueValidationRule': function BetweenValueValidationRule(newValue, threshold) {
-        return 'needs to be between ' + Utilities.getValue(threshold.minimumValue) + ' and ' + Utilities.getValue(threshold.maximumValue);
-      },
-      'CustomFunctionValidationRule': function CustomFunctionValidationRule(newValue, threshold) {
-        return 'not a valid value';
-      },
-      'DigitValidationRule': function DigitValidationRule(newValue, threshold) {
-        return 'can contain only digits';
-      },
-      'EmailValidationRule': function EmailValidationRule(newValue, threshold) {
-        return 'is not a valid email address';
-      },
-      'EqualityValidationRule': function EqualityValidationRule(newValue, threshold) {
-        return 'should be ' + Utilities.getValue(threshold.otherValue);
-      },
-      'InEqualityValidationRule': function InEqualityValidationRule(newValue, threshold) {
-        return 'cannot be ' + Utilities.getValue(threshold.otherValue);
-      },
-      'EqualityWithOtherLabelValidationRule': function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-        return 'does not match ' + Utilities.getValue(threshold.otherValueLabel);
-      },
-      'InEqualityWithOtherLabelValidationRule': function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-        return 'cannot match ' + Utilities.getValue(threshold.otherValueLabel);
-      },
-      'InCollectionValidationRule': function InCollectionValidationRule(newValue, threshold) {
-        return 'not a valid value';
-      },
-      'MinimumInclusiveValueValidationRule': function MinimumInclusiveValueValidationRule(newValue, threshold) {
-        return 'needs to be ' + Utilities.getValue(threshold) + ' or more';
-      },
-      'MinimumLengthValidationRule': function MinimumLengthValidationRule(newValue, threshold) {
-        return 'needs to be at least ' + Utilities.getValue(threshold) + ' characters long';
-      },
-      'MinimumValueValidationRule': function MinimumValueValidationRule(newValue, threshold) {
-        return 'needs to be more than ' + Utilities.getValue(threshold);
-      },
-      'MaximumInclusiveValueValidationRule': function MaximumInclusiveValueValidationRule(newValue, threshold) {
-        return 'needs to be ' + Utilities.getValue(threshold) + ' or less';
-      },
-      'MaximumLengthValidationRule': function MaximumLengthValidationRule(newValue, threshold) {
-        return 'cannot be longer then ' + Utilities.getValue(threshold) + ' characters';
-      },
-      'MaximumValueValidationRule': function MaximumValueValidationRule(newValue, threshold) {
-        return 'needs to be less than ' + Utilities.getValue(threshold);
-      },
-      'NumericValidationRule': function NumericValidationRule(newValue, threshold) {
-        return 'needs to be a number';
-      },
-      'NoSpacesValidationRule': function NoSpacesValidationRule(newValue, threshold) {
-        return 'cannot contain spaces';
-      },
-      'RegexValidationRule': function RegexValidationRule(newValue, threshold) {
-        return 'not a valid value';
-      },
-      'ContainsOnlyValidationRule': function ContainsOnlyValidationRule(newValue, threshold) {
-        return 'not a valid value';
-      },
-      'StrongPasswordValidationRule': function StrongPasswordValidationRule(newValue, threshold) {
-        return 'should contain a combination of lowercase letters, uppercase letters, digits and special characters';
-      },
-      'MediumPasswordValidationRule': function MediumPasswordValidationRule(newValue, threshold) {
-        return 'should contain at least ' + Utilities.getValue(threshold) + ' of the following groups: lowercase letters, uppercase letters, digits or special characters';
-      },
-      'URLValidationRule': function URLValidationRule(newValue, threshold) {
-        return 'is not a valid URL';
-      }
-    }
-  };
-  exports.data = data;
 });
