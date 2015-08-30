@@ -1,5 +1,5 @@
 import {ObserverLocator} from 'aurelia-binding';
-import {PathObserver} from '../src/validation/path-observer';
+import {PathObserver} from '../src/path-observer';
 
 
 describe('PathObserver tests', () => {
