@@ -1,9 +1,9 @@
 import {ObserverLocator} from 'aurelia-binding';
-import * as AllRules from '../validation/validation-rules';
-import * as AllCollections from '../validation/validation-rules-collection'
-import {ValidationGroup} from '../validation/validation-group';
+import * as AllRules from './validation-rules';
+import * as AllCollections from './validation-rules-collection'
+import {ValidationGroup} from './validation-group';
 import {inject} from 'aurelia-dependency-injection';
-import {ValidationConfig} from '../validation/validation-config';
+import {ValidationConfig} from './validation-config';
 
 /**
  * A lightweight validation plugin

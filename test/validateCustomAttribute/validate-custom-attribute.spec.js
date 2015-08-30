@@ -1,6 +1,6 @@
-import {Validation} from '../../src/validation/validation';
-import {ValidateCustomAttribute} from '../../src/validation/validate-custom-attribute';
-import {ValidateCustomAttributeViewStrategy} from '../../src/validation/validate-custom-attribute-view-strategy';
+import {Validation} from '../../src/validation';
+import {ValidateCustomAttribute} from '../../src/validate-custom-attribute';
+import {ValidateCustomAttributeViewStrategy} from '../../src/validate-custom-attribute-view-strategy';
 import {Expectations} from '../expectations';
 import {ObserverLocator} from 'aurelia-binding';
 
