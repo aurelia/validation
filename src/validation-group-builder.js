@@ -1,7 +1,35 @@
-import * as AllRules from '../validation/validation-rules';
-import * as AllCollections from '../validation/validation-rules-collection'
-import {ValidationProperty} from '../validation/validation-property';
-import {ValidationConfig} from '../validation/validation-config';
+import {SwitchCaseValidationRulesCollection} from './validation-rules-collection';
+import {ValidationProperty} from './validation-property';
+import {ValidationConfig} from './validation-config';
+import {
+  MinimumValueValidationRule,
+  MinimumInclusiveValueValidationRule,
+  BetweenValueValidationRule,
+  InCollectionValidationRule,
+  MaximumValueValidationRule,
+  MaximumInclusiveValueValidationRule,
+  EqualityValidationRule,
+  EqualityWithOtherLabelValidationRule,
+  InEqualityValidationRule,
+  InEqualityWithOtherLabelValidationRule,
+  EmailValidationRule,
+  URLValidationRule,
+  MinimumLengthValidationRule,
+  MaximumLengthValidationRule,
+  BetweenLengthValidationRule,
+  NumericValidationRule,
+  NoSpacesValidationRule,
+  DigitValidationRule,
+  AlphaValidationRule,
+  AlphaOrWhitespaceValidationRule,
+  AlphaNumericValidationRule,
+  AlphaNumericOrWhitespaceValidationRule,
+  StrongPasswordValidationRule,
+  MediumPasswordValidationRule,
+  ContainsOnlyValidationRule,
+  RegexValidationRule,
+  CustomFunctionValidationRule
+} from './validation-rules';
 
 export class ValidationGroupBuilder {
   constructor(observerLocator, validationGroup) {
@@ -50,108 +78,108 @@ export class ValidationGroupBuilder {
   }
 
   isGreaterThan(minimumValue) {
-    return this.passesRule(new AllRules.MinimumValueValidationRule(minimumValue));
+    return this.passesRule(new MinimumValueValidationRule(minimumValue));
   }
   isGreaterThanOrEqualTo(minimumValue) {
-    return this.passesRule(new AllRules.MinimumInclusiveValueValidationRule(minimumValue));
+    return this.passesRule(new MinimumInclusiveValueValidationRule(minimumValue));
   }
 
   isBetween(minimumValue, maximumValue) {
-    return this.passesRule(new AllRules.BetweenValueValidationRule(minimumValue, maximumValue));
+    return this.passesRule(new BetweenValueValidationRule(minimumValue, maximumValue));
   }
 
   isIn(collection) {
-    return this.passesRule(new AllRules.InCollectionValidationRule(collection));
+    return this.passesRule(new InCollectionValidationRule(collection));
   }
 
   isLessThan(maximumValue) {
-    return this.passesRule(new AllRules.MaximumValueValidationRule(maximumValue));
+    return this.passesRule(new MaximumValueValidationRule(maximumValue));
   }
 
   isLessThanOrEqualTo(maximumValue) {
-    return this.passesRule(new AllRules.MaximumInclusiveValueValidationRule(maximumValue));
+    return this.passesRule(new MaximumInclusiveValueValidationRule(maximumValue));
   }
 
   isEqualTo(otherValue, otherValueLabel) {
     if(!otherValueLabel)
-      return this.passesRule(new AllRules.EqualityValidationRule(otherValue));
+      return this.passesRule(new EqualityValidationRule(otherValue));
     else
-      return this.passesRule(new AllRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel))
+      return this.passesRule(new EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel))
   }
 
   isNotEqualTo(otherValue, otherValueLabel) {
     if(!otherValueLabel)
-      return this.passesRule(new AllRules.InEqualityValidationRule(otherValue));
+      return this.passesRule(new InEqualityValidationRule(otherValue));
     else
-      return this.passesRule(new AllRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel))
+      return this.passesRule(new InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel))
   }
 
   isEmail() {
-    return this.passesRule(new AllRules.EmailValidationRule());
+    return this.passesRule(new EmailValidationRule());
   }
 
   isURL(){
-    return this.passesRule(new AllRules.URLValidationRule());
+    return this.passesRule(new URLValidationRule());
   }
 
   hasMinLength(minimumValue) {
-    return this.passesRule(new AllRules.MinimumLengthValidationRule(minimumValue));
+    return this.passesRule(new MinimumLengthValidationRule(minimumValue));
   }
 
   hasMaxLength(maximumValue) {
-    return this.passesRule(new AllRules.MaximumLengthValidationRule(maximumValue));
+    return this.passesRule(new MaximumLengthValidationRule(maximumValue));
   }
 
   hasLengthBetween(minimumValue, maximumValue) {
-    return this.passesRule(new AllRules.BetweenLengthValidationRule(minimumValue, maximumValue));
+    return this.passesRule(new BetweenLengthValidationRule(minimumValue, maximumValue));
   }
 
   isNumber() {
-    return this.passesRule(new AllRules.NumericValidationRule());
+    return this.passesRule(new NumericValidationRule());
   }
 
   containsNoSpaces(){
-    return this.passesRule(new AllRules.NoSpacesValidationRule());
+    return this.passesRule(new NoSpacesValidationRule());
   }
 
   containsOnlyDigits() {
-    return this.passesRule(new AllRules.DigitValidationRule());
+    return this.passesRule(new DigitValidationRule());
   }
 
   containsOnlyAlpha(){
-    return this.passesRule(new AllRules.AlphaValidationRule());
+    return this.passesRule(new AlphaValidationRule());
   }
 
   containsOnlyAlphaOrWhitespace(){
-    return this.passesRule(new AllRules.AlphaOrWhitespaceValidationRule());
+    return this.passesRule(new AlphaOrWhitespaceValidationRule());
   }
 
   containsOnlyAlphanumerics(){
-    return this.passesRule(new AllRules.AlphaNumericValidationRule());
+    return this.passesRule(new AlphaNumericValidationRule());
   }
 
   containsOnlyAlphanumericsOrWhitespace() {
-    return this.passesRule(new AllRules.AlphaNumericOrWhitespaceValidationRule());
+    return this.passesRule(new AlphaNumericOrWhitespaceValidationRule());
   }
 
   isStrongPassword(minimumComplexityLevel) {
     if(minimumComplexityLevel === 4)
-      return this.passesRule(new AllRules.StrongPasswordValidationRule());
+      return this.passesRule(new StrongPasswordValidationRule());
     else
-      return this.passesRule(new AllRules.MediumPasswordValidationRule(minimumComplexityLevel));
+      return this.passesRule(new MediumPasswordValidationRule(minimumComplexityLevel));
   }
 
   containsOnly(regex)
   {
-    return this.passesRule(new AllRules.ContainsOnlyValidationRule(regex));
+    return this.passesRule(new ContainsOnlyValidationRule(regex));
   }
 
   matches(regex) {
-    return this.passesRule(new AllRules.RegexValidationRule(regex));
+    return this.passesRule(new RegexValidationRule(regex));
   }
 
   passes(customFunction, threshold) {
-    return this.passesRule(new AllRules.CustomFunctionValidationRule(customFunction, threshold));
+    return this.passesRule(new CustomFunctionValidationRule(customFunction, threshold));
   }
 
   passesRule(validationRule) {
@@ -174,7 +202,7 @@ export class ValidationGroupBuilder {
 
   if(conditionExpression) {
     //IF is treated as a 'switch' with case 'true' and 'default'
-    var conditionalCollection = new AllCollections.SwitchCaseValidationRulesCollection(conditionExpression);
+    var conditionalCollection = new SwitchCaseValidationRulesCollection(conditionExpression);
     conditionalCollection.case(true);
     this.validationRuleCollections[0].addValidationRuleCollection(conditionalCollection);
     this.validationRuleCollections.unshift(conditionalCollection);
@@ -205,7 +233,7 @@ export class ValidationGroupBuilder {
         return observer.getValue();
       };
     }
-    var conditionalCollection = new AllCollections.SwitchCaseValidationRulesCollection(condition);
+    var conditionalCollection = new SwitchCaseValidationRulesCollection(condition);
     this.validationRuleCollections[0].addValidationRuleCollection(conditionalCollection);
     this.validationRuleCollections.unshift(conditionalCollection);
     return this.validationGroup;

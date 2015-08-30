@@ -1,5 +1,5 @@
-import {ValidationLocale} from '../validation/validation-locale';
-import {ValidateCustomAttributeViewStrategy} from '../validation/validate-custom-attribute-view-strategy';
+import {ValidationLocale} from './validation-locale';
+import {ValidateCustomAttributeViewStrategy} from './validate-custom-attribute-view-strategy';
 
 export class ValidationConfigDefaults{
 }

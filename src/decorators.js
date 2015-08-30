@@ -3,7 +3,7 @@ import {Metadata} from 'aurelia-metadata';
 export class ValidationMetadata
 {
   static metadataKey = 'aurelia:validation';
-  
+
   constructor(){
     this.properties = [];
   }

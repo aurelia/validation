@@ -1,4 +1,4 @@
-import {Utilities} from '../validation/utilities';
+import {Utilities} from '../utilities';
 
 export let data = {
     settings: {

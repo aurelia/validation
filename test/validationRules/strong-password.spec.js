@@ -1,5 +1,5 @@
-import {StrongPasswordValidationRule} from '../../src/validation/validation-rules';
-import {MediumPasswordValidationRule} from '../../src/validation/validation-rules';
+import {StrongPasswordValidationRule} from '../../src/validation-rules';
+import {MediumPasswordValidationRule} from '../../src/validation-rules';
 import {Expectations} from '../expectations';
 
 //No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'isNotEmpty()'
