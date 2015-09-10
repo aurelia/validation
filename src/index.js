@@ -14,10 +14,8 @@ import {ValidationConfig} from './validation/validation-config';
 import {Validation} from './validation/validation';
 
 export function configure(aurelia, configCallback) {
-
   aurelia.globalResources('./validation/validate-custom-attribute');
-  if(configCallback !== undefined && typeof(configCallback) === 'function')
-  {
+  if (configCallback !== undefined && typeof(configCallback) === 'function') {
     configCallback(Validation.defaults);
   }
   aurelia.singleton(ValidationConfig, Validation.defaults);

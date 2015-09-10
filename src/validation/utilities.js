@@ -1,9 +1,6 @@
 export class Utilities {
-  constructor(){}
-
-  static getValue(val){
-    if(val !== undefined && typeof(val) === 'function')
-    {
+  static getValue(val) {
+    if (val !== undefined && typeof(val) === 'function') {
       return val();
     }
     return val;
@@ -15,21 +12,19 @@ export class Utilities {
     if (val === null) {
       return true;
     }
-    if (val === "") {
+    if (val === '') {
       return true;
     }
     if (typeof (val) === 'string') {
       if (String.prototype.trim) {
         val = val.trim();
-      }
-      else {
+      } else {
         val = val.replace(/^\s+|\s+$/g, '');
       }
     }
-
     if (val.length !== undefined) {
-      return 0 === val.length;
+      return val.length === 0;
     }
     return false;
   }
-};
+}

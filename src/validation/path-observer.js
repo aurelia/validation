@@ -1,87 +1,76 @@
-import {ObserverLocator} from 'aurelia-binding';
-
 export class PathObserver {
-
   constructor(observerLocator, subject, path) {
     this.observerLocator = observerLocator;
     this.path = path.split('.');
     this.subject = subject;
     this.observers = [];
     this.callbacks = [];
-    if (this.path.length > 1)
+    if (this.path.length > 1) {
       this.observeParts();
-
+    }
     //TODO: this should be replaced with reuse of the Binding system
-
   }
-
   observeParts(propertyName) {
+    let currentSubject = this.subject;
+    let observersAreComplete;
     //remove old chain until an observer returns non-null
     if (propertyName !== undefined && propertyName !== null) {
       for (let i = this.observers.length - 1; i >= 0; i--) {
         let currentObserver = this.observers[i];
+        let observer;
         if (currentObserver.propertyName === propertyName) {
           break;
         }
-        var observer = this.observers.pop();
+        observer = this.observers.pop();
         if (observer && observer.subscription) {
           //cleanup
           observer.subscription();
         }
       }
     }
-
-    let currentSubject = this.subject;
     //add new observers
-    var observersAreComplete = this.observers.length === this.path.length;
+    observersAreComplete = this.observers.length === this.path.length;
     for (let i = 0; i < this.path.length; i++) {
       let observer = this.observers[i];
+      let currentPath = this.path[i];
+      let subscription;
+      let currentValue;
       if (!observer) {
-
-        let currentPath = this.path[i];
         observer = this.observerLocator.getObserver(currentSubject, currentPath);
         this.observers.push(observer);
-        let subscription = observer.subscribe((newValue, oldValue) => {
+        subscription = observer.subscribe((newValue, oldValue) => {
           this.observeParts(observer.propertyName);
         });
         observer.subscription = subscription;
       }
-
-
-      let currentValue = observer.getValue();
+      currentValue = observer.getValue();
       if (currentValue === undefined || currentValue === null) {
         break;
-      }
-      else {
+      } else {
         currentSubject = currentValue;
       }
     }
-
     //if the last observer is the real one
     if (!observersAreComplete && this.observers.length === this.path.length) {
-      var actualObserver = this.observers[this.observers.length - 1];
+      let actualObserver = this.observers[this.observers.length - 1];
       for (let i = 0; i < this.callbacks.length; i++) {
         //TODO proper cleanup of callbacks!
         actualObserver.subscribe(this.callbacks[i]);
       }
     }
   }
-
   observePart(part) {
     if (part !== this.path[this.path.length - 1]) {
       this.observeParts();
     }
   }
-
   getObserver() {
-    if (this.path.length == 1) {
-      var resolve = this.subject[this.path[0]]; //binding issue with @bindable properties, see: https://github.com/aurelia/binding/issues/89
+    if (this.path.length === 1) {
+      this.subject[this.path[0]]; //binding issue with @bindable properties, see: https://github.com/aurelia/binding/issues/89
       return this.observerLocator.getObserver(this.subject, this.path[0]);
     }
     return this;
   }
-
-
   getValue() {
     //Verify that all observers are current.
     let expectedSubject = this.subject;
@@ -95,9 +84,8 @@ export class PathObserver {
           break;
         }
       }
-      if (currentObserver.obj !== expectedSubject)
       //Happens if you set a value somewhere along the binding path and immediately call getValue (on the very last observer)
-      {
+      if (currentObserver.obj !== expectedSubject) {
         this.observeParts(this.path[i - 1]);
         break;
       }
@@ -105,9 +93,10 @@ export class PathObserver {
     }
 
 
-    if (this.observers.length !== this.path.length)
+    if (this.observers.length !== this.path.length) {
       return undefined; //Something along the binding path returned null/undefined
-    var value = this.observers[this.observers.length - 1].getValue();
+    }
+    let value = this.observers[this.observers.length - 1].getValue();
     return value;
   }
 
@@ -121,9 +110,11 @@ export class PathObserver {
 
   unsubscribe() {
     this.callbacks = [];
-    if(this.subscription) this.subscription();
+    if (this.subscription) {
+      this.subscription();
+    }
     for (let i = this.observers.length - 1; i >= 0; i--) {
-      var observer = this.observers.pop();
+      let observer = this.observers.pop();
       if (observer && observer.subscription) {
         observer.subscription();
       }

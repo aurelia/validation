@@ -3,14 +3,12 @@ export class ValidationResult {
     this.isValid = true;
     this.properties = {};
   }
-
   addProperty(name) {
     if (!this.properties[name]) {
       this.properties[name] = new ValidationResultProperty(this);
     }
     return this.properties[name];
   }
-
   checkValidity() {
     for (let propertyName in this.properties) {
       if (!this.properties[propertyName].isValid) {
@@ -31,8 +29,7 @@ export class ValidationResultProperty {
     this.onValidateCallbacks = [];
     this.clear();
   }
-
-  clear(){
+  clear() {
     this.isValid = true;
     this.isDirty = false;
     this.message = '';
@@ -40,33 +37,30 @@ export class ValidationResultProperty {
     this.latestValue = null;
     this.notifyObserversOfChange();
   }
-
   onValidate(onValidateCallback) {
     this.onValidateCallbacks.push(onValidateCallback);
   }
-
-  notifyObserversOfChange(){
-    for (var i = 0; i < this.onValidateCallbacks.length; i++) {
-      var callback = this.onValidateCallbacks[i];
+  notifyObserversOfChange() {
+    for (let i = 0; i < this.onValidateCallbacks.length; i++) {
+      let callback = this.onValidateCallbacks[i];
       callback(this);
     }
   }
-
   setValidity(validationResponse, shouldBeDirty) {
-    var notifyObservers = (!this.isDirty && shouldBeDirty)
+    let notifyObservers = (!this.isDirty && shouldBeDirty)
       || (this.isValid !== validationResponse.isValid)
       || (this.message !== validationResponse.message);
 
-
-    if (shouldBeDirty)
+    if (shouldBeDirty) {
       this.isDirty = true;
+    }
     this.message = validationResponse.message;
     this.failingRule = validationResponse.failingRule;
     this.isValid = validationResponse.isValid; //Set isValid last in case someone has observed 'isValid'
     this.latestValue = validationResponse.latestValue;
-    if (this.isValid !== this.group.isValid)
+    if (this.isValid !== this.group.isValid) {
       this.group.checkValidity();
-
+    }
     if (notifyObservers) {
       this.notifyObserversOfChange();
     }

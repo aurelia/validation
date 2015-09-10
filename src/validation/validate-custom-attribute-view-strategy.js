@@ -1,19 +1,21 @@
-export class ValidateCustomAttributeViewStrategyBase{
-  constructor(){
+export class ValidateCustomAttributeViewStrategyBase {
+  constructor() {
     this.bindingPathAttributes = ['validate', 'value.bind', 'value.two-way'];
   }
 
-  getValidationProperty(validation, element){
-    var atts = element.attributes;
+  getValidationProperty(validation, element) {
+    let atts = element.attributes;
     for (let i = 0; i < this.bindingPathAttributes.length; i++) {
       let attributeName = this.bindingPathAttributes[i];
+      let bindingPath;
+      let validationProperty;
       if (atts[attributeName]) {
-        var bindingPath = atts[attributeName].value.trim();
-        if (bindingPath.indexOf('|') != -1)
+        bindingPath = atts[attributeName].value.trim();
+        if (bindingPath.indexOf('|') !== -1) {
           bindingPath = bindingPath.split('|')[0].trim();
-        var validationProperty = validation.result.properties[bindingPath];
-
-        if (attributeName == 'validate' && (validationProperty === null || validationProperty === undefined)) {
+        }
+        validationProperty = validation.result.properties[bindingPath];
+        if (attributeName === 'validate' && (validationProperty === null || validationProperty === undefined)) {
           //Dev explicitly stated to show validation on a field, but there's no rules for this field
           //Hence, we add an empty validationProperty for that field, without any rules
           //This way, when 'checkAll()' is called, the input element 'turns green'
@@ -25,18 +27,16 @@ export class ValidateCustomAttributeViewStrategyBase{
     }
     return null;
   }
-
-  prepareElement(validationProperty, element){
+  prepareElement(validationProperty, element) {
     throw Error('View strategy must implement prepareElement(validationProperty, element)');
   }
-  updateElement(validationProperty, element){
+  updateElement(validationProperty, element) {
     throw Error('View strategy must implement updateElement(validationProperty, element)');
   }
 }
 
 export class TWBootstrapViewStrategy extends ValidateCustomAttributeViewStrategyBase {
-  constructor(appendMessageToInput, appendMessageToLabel,helpBlockClass)
-  {
+  constructor(appendMessageToInput, appendMessageToLabel, helpBlockClass) {
     super();
     this.appendMessageToInput = appendMessageToInput;
     this.appendMessageToLabel = appendMessageToLabel;
@@ -52,72 +52,65 @@ export class TWBootstrapViewStrategy extends ValidateCustomAttributeViewStrategy
     return this.searchFormGroup(currentElement.parentNode, 1 + currentDepth);
   }
   findLabels(formGroup, inputId) {
-    var labels = [];
+    let labels = [];
     this.findLabelsRecursively(formGroup, inputId, labels, 0);
     return labels;
   }
-
   findLabelsRecursively(currentElement, inputId, currentLabels, currentDepth) {
     if (currentDepth === 5) {
       return;
     }
-    if (currentElement.nodeName === "LABEL" &&
-      ((currentElement.attributes['for'] && currentElement.attributes['for'].value === inputId) ||
-      (!currentElement.attributes['for']))
+    if (currentElement.nodeName === 'LABEL' &&
+      ((currentElement.attributes.for && currentElement.attributes.for.value === inputId) ||
+      (!currentElement.attributes.for))
     ) {
       currentLabels.push(currentElement);
     }
-
-
-    for (let i = 0; i < currentElement.children.length; i++)
+    for (let i = 0; i < currentElement.children.length; i++) {
       this.findLabelsRecursively(currentElement.children[i], inputId, currentLabels, 1 + currentDepth);
+    }
   }
 
 
   appendMessageToElement(element, validationProperty) {
-    var helpBlock = element.nextSibling;
+    let helpBlock = element.nextSibling;
     if (helpBlock) {
       if (!helpBlock.classList) {
         helpBlock = null;
-      }
-      else if (!helpBlock.classList.contains(this.helpBlockClass)) {
+      } else if (!helpBlock.classList.contains(this.helpBlockClass)) {
         helpBlock = null;
       }
     }
-
     if (!helpBlock) {
-      helpBlock = document.createElement("p");
+      helpBlock = document.createElement('p');
       helpBlock.classList.add('help-block');
       helpBlock.classList.add(this.helpBlockClass);
-
       if (element.nextSibling) {
         element.parentNode.insertBefore(helpBlock, element.nextSibling);
-      }
-      else {
+      } else {
         element.parentNode.appendChild(helpBlock);
       }
     }
-    if (validationProperty)
+    if (validationProperty) {
       helpBlock.textContent = validationProperty.message;
-    else
+    } else {
       helpBlock.textContent = '';
+    }
   }
 
 
   appendUIVisuals(validationProperty, currentElement) {
-    var formGroup = this.searchFormGroup(currentElement, 0);
+    let formGroup = this.searchFormGroup(currentElement, 0);
     if (formGroup) {
       if (validationProperty && validationProperty.isDirty) {
         if (validationProperty.isValid) {
           formGroup.classList.remove('has-warning');
           formGroup.classList.add('has-success');
-        }
-        else {
+        } else {
           formGroup.classList.remove('has-success');
           formGroup.classList.add('has-warning');
         }
-      }
-      else {
+      } else {
         formGroup.classList.remove('has-warning');
         formGroup.classList.remove('has-success');
       }
@@ -125,18 +118,18 @@ export class TWBootstrapViewStrategy extends ValidateCustomAttributeViewStrategy
         this.appendMessageToElement(currentElement, validationProperty);
       }
       if (this.appendMessageToLabel) {
-        var labels = this.findLabels(formGroup, currentElement.id);
-        for (var ii = 0; ii < labels.length; ii++) {
-          var label = labels[ii];
+        let labels = this.findLabels(formGroup, currentElement.id);
+        for (let ii = 0; ii < labels.length; ii++) {
+          let label = labels[ii];
           this.appendMessageToElement(label, validationProperty);
         }
       }
     }
   }
-  prepareElement(validationProperty, element){
+  prepareElement(validationProperty, element) {
     this.appendUIVisuals(null, element);
   }
-  updateElement(validationProperty, element){
+  updateElement(validationProperty, element) {
     this.appendUIVisuals(validationProperty, element);
   }
 }

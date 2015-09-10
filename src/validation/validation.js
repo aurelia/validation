@@ -1,6 +1,4 @@
 import {ObserverLocator} from 'aurelia-binding';
-import * as AllRules from '../validation/validation-rules';
-import * as AllCollections from '../validation/validation-rules-collection'
 import {ValidationGroup} from '../validation/validation-group';
 import {inject} from 'aurelia-dependency-injection';
 import {ValidationConfig} from '../validation/validation-config';
@@ -28,16 +26,14 @@ export class Validation {
    * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
    */
   on(subject, configCallback) {
-    var conf = new ValidationConfig(this.config);
-    if(configCallback !== null && configCallback !== undefined && typeof(configCallback) === 'function')
-    {
+    let conf = new ValidationConfig(this.config);
+    if (configCallback !== null && configCallback !== undefined && typeof(configCallback) === 'function') {
       configCallback(conf);
     }
     return new ValidationGroup(subject, this.observerLocator, conf);
   }
-
-  onBreezeEntity(breezeEntity, configCallback){
-    var validation = this.on(breezeEntity, configCallback);
+  onBreezeEntity(breezeEntity, configCallback) {
+    let validation = this.on(breezeEntity, configCallback);
     validation.onBreezeEntity();
     return validation;
   }

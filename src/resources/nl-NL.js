@@ -6,17 +6,17 @@ export let data = {
   },
   messages: {
     'isRequired': 'is verplicht',
-    'onValidateCallback' : 'geen geldige waarde',
+    'onValidateCallback': 'geen geldige waarde',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
       return `kan enkel alfanumerieke tekens of spaties bevatten`;
     },
     'AlphaNumericValidationRule': (newValue, threshold) => {
       return `kan enkel alfanumerieke tekens bevatten`;
     },
-    'AlphaValidationRule' : (newValue, threshold) => {
+    'AlphaValidationRule': (newValue, threshold) => {
       return `kan enkel letters bevatten`;
     },
-    'AlphaOrWhitespaceValidationRule' : (newValue, threshold) => {
+    'AlphaOrWhitespaceValidationRule': (newValue, threshold) => {
       return `kan enkel letters of spaties bevatten`;
     },
     'BetweenLengthValidationRule': (newValue, threshold) => {
@@ -29,7 +29,7 @@ export let data = {
       return `mag enkel cijfers bevatten`;
     },
     'CustomFunctionValidationRule': (newValue, threshold) => {
-      return `geen geldige waarde`
+      return `geen geldige waarde`;
     },
     'EmailValidationRule': (newValue, threshold) => {
       return `is geen geldig email adres`;
@@ -37,19 +37,19 @@ export let data = {
     'EqualityValidationRule': (newValue, threshold) => {
       return `moet ${Utilities.getValue(threshold.otherValue)} zijn`;
     },
-    'InEqualityValidationRule' : (newValue, threshold) => {
+    'InEqualityValidationRule': (newValue, threshold) => {
       return `mag niet ${Utilities.getValue(threshold.otherValue)} zijn`;
     },
     'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `moet overeen komen met ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
-    'InEqualityWithOtherLabelValidationRule' : (newValue, threshold) => {
+    'InEqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `mag niet overeen komen met ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
       return `is geen geldige waarde`;
     },
-    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+    'MinimumInclusiveValueValidationRule': (newValue, threshold) => {
       return `moet op zijn minst ${Utilities.getValue(threshold)} zijn`;
     },
     'MinimumLengthValidationRule': (newValue, threshold) => {
@@ -58,7 +58,7 @@ export let data = {
     'MinimumValueValidationRule': (newValue, threshold) => {
       return `moet meer dan ${Utilities.getValue(threshold)} zijn`;
     },
-    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+    'MaximumInclusiveValueValidationRule': (newValue, threshold) => {
       return `moet op zijn meest ${Utilities.getValue(threshold)} zijn`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
@@ -70,7 +70,7 @@ export let data = {
     'NumericValidationRule': (newValue, threshold) => {
       return `moet een getal zijn`;
     },
-    'NoSpacesValidationRule' : (newValue, threshold) => {
+    'NoSpacesValidationRule': (newValue, threshold) => {
       return `mag geen spaties bevatten`;
     },
     'RegexValidationRule': (newValue, threshold) => {
@@ -82,11 +82,11 @@ export let data = {
     'StrongPasswordValidationRule': (newValue, threshold) => {
       return `moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn`;
     },
-    'MediumPasswordValidationRule' : (newValue, threshold) => {
+    'MediumPasswordValidationRule': (newValue, threshold) => {
       return `moet op zijn minst ${Utilities.getValue(threshold)} van de volgende groepen bevatten: letters, hoofdletters, cijfers of speciale tekens`;
     },
-    'URLValidationRule' : (newValue, threshold) =>{
-      return `is geen geldige URL`
+    'URLValidationRule': (newValue, threshold) => {
+      return `is geen geldige URL`;
     }
   }
 };
