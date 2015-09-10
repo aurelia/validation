@@ -21,7 +21,7 @@ class TestSubject {
 }
 
 describe('I18N tests: messages', () => {
-  it('should use a default message (en-US) without loading a locale', (done) => {
+  xit('should use a default message (en-US) without loading a locale', (done) => {
     var expectations = new Expectations(expect, done);
 
     var subject = TestSubject.createInstance(null);
@@ -34,7 +34,7 @@ describe('I18N tests: messages', () => {
     }, false);
     expectations.validate();
   });
-  it('should result in properly translated default error message for nl-BE', (done) => {
+  xit('should result in properly translated default error message for nl-BE', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('nl-BE'); });
     expectations.assert(() => {
@@ -47,7 +47,7 @@ describe('I18N tests: messages', () => {
     }, false);
     expectations.validate();
   });
-  it('should result in properly translated default error message for nl-NL', (done) => {
+  xit('should result in properly translated default error message for nl-NL', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('nl-NL'); });
       expectations.assert(() => {
@@ -60,7 +60,7 @@ describe('I18N tests: messages', () => {
       expectations.validate();
   });
 
-  it('can change locale on the fly', (done) => {
+  xit('can change locale on the fly', (done) => {
     var expectations = new Expectations(expect, done);
     var config = new ValidationConfig();
     var subject = new TestSubject(new Validation(new ObserverLocator(), config));
@@ -76,7 +76,7 @@ describe('I18N tests: messages', () => {
     }, 10);
   });
 
-  it('should result in properly translated default error message for de-DE', (done) => {
+  xit('should result in properly translated default error message for de-DE', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('de-DE'); });
     expectations.assert(() => {
@@ -89,7 +89,7 @@ describe('I18N tests: messages', () => {
     expectations.validate();
   });
 
-  it('should result in properly translated default error message for fr-FR', (done) => {
+  xit('should result in properly translated default error message for fr-FR', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('fr-FR'); });
     expectations.assert(() => {
@@ -103,7 +103,7 @@ describe('I18N tests: messages', () => {
   });
 
 
-  it('should result in properly translated default error message for es-MX', (done) => {
+  xit('should result in properly translated default error message for es-MX', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('es-MX'); });
     expectations.assert(() => {
@@ -116,7 +116,7 @@ describe('I18N tests: messages', () => {
     expectations.validate();
   });
 
-  it('should result in properly translated default error message for en-US', (done) => {
+  xit('should result in properly translated default error message for en-US', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('en-US'); });
     expectations.assert(() => {
@@ -129,7 +129,7 @@ describe('I18N tests: messages', () => {
     expectations.validate();
   });
 
-  it('should result in properly translated default error message for bg-BG', (done) => {
+  xit('should result in properly translated default error message for bg-BG', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('bg-BG'); });
     expectations.assert(() => {
@@ -144,7 +144,7 @@ describe('I18N tests: messages', () => {
 });
 
 describe('I18N tests: number', () => {
-  it('should use a default number format (en-US) without loading a locale', (done) => {
+  xit('should use a default number format (en-US) without loading a locale', (done) => {
     var expectations = new Expectations(expect, done);
     expectations.assert(() => {
       subject.firstName = 'John';
@@ -164,7 +164,7 @@ describe('I18N tests: number', () => {
 
     expectations.validate();
    });
-  it('should result in properly translated error message', (done) => {
+  xit('should result in properly translated error message', (done) => {
     var expectations = new Expectations(expect, done);
     var subject = TestSubject.createInstance((c) => { c.useLocale('nl-BE'); });
     expectations.assert(() => {
