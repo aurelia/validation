@@ -97,10 +97,14 @@ export class TWBootstrapViewStrategy extends ValidateCustomAttributeViewStrategy
         element.parentNode.appendChild(helpBlock);
       }
     }
-    if (validationProperty)
+    if (validationProperty) {
       helpBlock.textContent = validationProperty.message;
-    else
+      helpBlock.style.display = validationProperty.message ? 'block' : 'none';
+    }
+    else {
       helpBlock.textContent = '';
+      helpBlock.style.display = 'none';
+    }
   }
 
 
