@@ -1,9 +1,9 @@
-define(['exports', '../validation/validation'], function (exports, _validationValidation) {
-  'use strict';
+define(["exports"], function (exports) {
+  "use strict";
 
   exports.__esModule = true;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
   var Debouncer = (function () {
     function Debouncer(debounceTimeout) {

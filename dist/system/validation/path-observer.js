@@ -128,6 +128,7 @@ System.register(['aurelia-binding'], function (_export) {
         };
 
         PathObserver.prototype.unsubscribe = function unsubscribe() {
+          this.callbacks = [];
           if (this.subscription) this.subscription();
           for (var i = this.observers.length - 1; i >= 0; i--) {
             var observer = this.observers.pop();

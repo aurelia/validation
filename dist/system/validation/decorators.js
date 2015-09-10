@@ -1,24 +1,26 @@
-System.register([], function (_export) {
-  "use strict";
+System.register(['aurelia-metadata'], function (_export) {
+  'use strict';
 
-  var ValidationMetadata, ValidationPropertyMetadata;
+  var Metadata, ValidationMetadata, ValidationPropertyMetadata;
 
-  _export("ensure", ensure);
+  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  _export('ensure', ensure);
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   function ensure(setupStep) {
     return function (target, propertyName) {
-      if (target._validationMetadata === undefined) {
-        target._validationMetadata = new ValidationMetadata();
-      }
-      var property = target._validationMetadata.getOrCreateProperty(propertyName);
+      var validationMetadata = Metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
+      var property = validationMetadata.getOrCreateProperty(propertyName);
       property.addSetupStep(setupStep);
     };
   }
 
   return {
-    setters: [],
+    setters: [function (_aureliaMetadata) {
+      Metadata = _aureliaMetadata.Metadata;
+    }],
     execute: function () {
       ValidationMetadata = (function () {
         function ValidationMetadata() {
@@ -44,8 +46,16 @@ System.register([], function (_export) {
           });
         };
 
+        _createClass(ValidationMetadata, null, [{
+          key: 'metadataKey',
+          value: 'aurelia:validation',
+          enumerable: true
+        }]);
+
         return ValidationMetadata;
       })();
+
+      _export('ValidationMetadata', ValidationMetadata);
 
       ValidationPropertyMetadata = (function () {
         function ValidationPropertyMetadata(propertyName) {
