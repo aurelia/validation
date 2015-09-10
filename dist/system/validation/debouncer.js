@@ -1,14 +1,12 @@
-System.register(['../validation/validation'], function (_export) {
-  'use strict';
+System.register([], function (_export) {
+  "use strict";
 
-  var Validation, Debouncer;
+  var Debouncer;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
   return {
-    setters: [function (_validationValidation) {
-      Validation = _validationValidation.Validation;
-    }],
+    setters: [],
     execute: function () {
       Debouncer = (function () {
         function Debouncer(debounceTimeout) {
@@ -35,7 +33,7 @@ System.register(['../validation/validation'], function (_export) {
         return Debouncer;
       })();
 
-      _export('Debouncer', Debouncer);
+      _export("Debouncer", Debouncer);
     }
   };
 });

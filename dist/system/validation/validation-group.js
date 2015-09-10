@@ -1,17 +1,21 @@
-System.register(['../validation/validation-group-builder', '../validation/validation-result', '../validation/validation-locale'], function (_export) {
+System.register(['aurelia-metadata', '../validation/validation-group-builder', '../validation/validation-result', '../validation/validation-locale', '../validation/decorators'], function (_export) {
   'use strict';
 
-  var ValidationGroupBuilder, ValidationResult, ValidationLocale, ValidationGroup;
+  var Metadata, ValidationGroupBuilder, ValidationResult, ValidationLocale, ValidationMetadata, ValidationGroup;
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
-    setters: [function (_validationValidationGroupBuilder) {
+    setters: [function (_aureliaMetadata) {
+      Metadata = _aureliaMetadata.Metadata;
+    }, function (_validationValidationGroupBuilder) {
       ValidationGroupBuilder = _validationValidationGroupBuilder.ValidationGroupBuilder;
     }, function (_validationValidationResult) {
       ValidationResult = _validationValidationResult.ValidationResult;
     }, function (_validationValidationLocale) {
       ValidationLocale = _validationValidationLocale.ValidationLocale;
+    }, function (_validationDecorators) {
+      ValidationMetadata = _validationDecorators.ValidationMetadata;
     }],
     execute: function () {
       ValidationGroup = (function () {
@@ -32,8 +36,9 @@ System.register(['../validation/validation-group-builder', '../validation/valida
             _this.validate(false, true);
           });
 
-          if (this.subject.__proto__._validationMetadata) {
-            this.subject.__proto__._validationMetadata.setup(this);
+          var validationMetadata = Metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
+          if (validationMetadata) {
+            validationMetadata.setup(this);
           }
         }
 

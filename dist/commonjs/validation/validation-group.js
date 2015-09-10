@@ -4,11 +4,15 @@ exports.__esModule = true;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
+var _aureliaMetadata = require('aurelia-metadata');
+
 var _validationValidationGroupBuilder = require('../validation/validation-group-builder');
 
 var _validationValidationResult = require('../validation/validation-result');
 
 var _validationValidationLocale = require('../validation/validation-locale');
+
+var _validationDecorators = require('../validation/decorators');
 
 var ValidationGroup = (function () {
   function ValidationGroup(subject, observerLocator, config) {
@@ -28,8 +32,9 @@ var ValidationGroup = (function () {
       _this.validate(false, true);
     });
 
-    if (this.subject.__proto__._validationMetadata) {
-      this.subject.__proto__._validationMetadata.setup(this);
+    var validationMetadata = _aureliaMetadata.Metadata.getOwn(_validationDecorators.ValidationMetadata.metadataKey, this.subject);
+    if (validationMetadata) {
+      validationMetadata.setup(this);
     }
   }
 

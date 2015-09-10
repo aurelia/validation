@@ -1,3 +1,12 @@
+## 0.3.0 (2015-09-10)
+
+
+#### Bug Fixes
+
+* **path-observer:** clean up of callbacks when unsubscribing from a path observer ([47d196ce](https://github.com/aurelia/validation/commit/47d196ce10ac1c5b2756a143f1750b5cdf94a1e0))
+* **tests:** update dependencies to ensure tests run again ([1ae5cf8f](https://github.com/aurelia/validation/commit/1ae5cf8f64931a0d71814d6cae80f917847774f8))
+
+
 ### 0.2.8 (2015-08-20)
 
 

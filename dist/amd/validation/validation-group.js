@@ -1,4 +1,4 @@
-define(['exports', '../validation/validation-group-builder', '../validation/validation-result', '../validation/validation-locale'], function (exports, _validationValidationGroupBuilder, _validationValidationResult, _validationValidationLocale) {
+define(['exports', 'aurelia-metadata', '../validation/validation-group-builder', '../validation/validation-result', '../validation/validation-locale', '../validation/decorators'], function (exports, _aureliaMetadata, _validationValidationGroupBuilder, _validationValidationResult, _validationValidationLocale, _validationDecorators) {
   'use strict';
 
   exports.__esModule = true;
@@ -23,8 +23,9 @@ define(['exports', '../validation/validation-group-builder', '../validation/vali
         _this.validate(false, true);
       });
 
-      if (this.subject.__proto__._validationMetadata) {
-        this.subject.__proto__._validationMetadata.setup(this);
+      var validationMetadata = _aureliaMetadata.Metadata.getOwn(_validationDecorators.ValidationMetadata.metadataKey, this.subject);
+      if (validationMetadata) {
+        validationMetadata.setup(this);
       }
     }
 
