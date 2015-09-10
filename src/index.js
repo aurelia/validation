@@ -4,6 +4,7 @@ export {ValidationLocale} from './validation/validation-locale';
 export * from './validation/validation-result';
 export * from './validation/validation-rules';
 export {Validation} from './validation/validation';
+export {ValidationGroup} from './validation/validation-group';
 export {ValidateCustomAttribute} from './validation/validate-custom-attribute';
 export {ValidateCustomAttributeViewStrategy} from './validation/validate-custom-attribute-view-strategy';
 export {ValidateCustomAttributeViewStrategyBase} from './validation/validate-custom-attribute-view-strategy';
