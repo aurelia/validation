@@ -1,5 +1,5 @@
 import * as AllRules from '../validation/validation-rules';
-import * as AllCollections from '../validation/validation-rules-collection'
+import * as AllCollections from '../validation/validation-rules-collection';
 import {ValidationProperty} from '../validation/validation-property';
 import {ValidationConfig} from '../validation/validation-config';
 
@@ -9,29 +9,26 @@ export class ValidationGroupBuilder {
     this.validationRuleCollections = []; //Flattened out queue of the nested collections
     this.validationGroup = validationGroup;
   }
-
   ensure(propertyName, configurationCallback) {
-    var newValidationProperty = null;
+    let newValidationProperty = null;
     this.validationRuleCollections = [];
 
     for (let i = 0; i < this.validationGroup.validationProperties.length; i++) {
       if (this.validationGroup.validationProperties[i].propertyName === propertyName) {
         newValidationProperty = this.validationGroup.validationProperties[i];
-        if(configurationCallback !== undefined && typeof(configurationCallback) === 'function')
-        {
+        if (configurationCallback !== undefined && typeof(configurationCallback) === 'function') {
           throw Error('When creating validation rules on binding path ' + propertyName + ' a configuration callback function was provided, but validation rules have previously already been instantiated for this binding path');
         }
         break;
       }
     }
     if (newValidationProperty === null) {
-      var propertyResult = this.validationGroup.result.addProperty(propertyName);
-      var config = new ValidationConfig(this.validationGroup.config);
-      if(configurationCallback !== undefined && typeof(configurationCallback) === 'function')
-      {
+      let propertyResult = this.validationGroup.result.addProperty(propertyName);
+      let config = new ValidationConfig(this.validationGroup.config);
+      if (configurationCallback !== undefined && typeof(configurationCallback) === 'function') {
         configurationCallback(config);
       }
-      newValidationProperty = new ValidationProperty(this.observerLocator, propertyName, this.validationGroup, propertyResult, config );
+      newValidationProperty = new ValidationProperty(this.observerLocator, propertyName, this.validationGroup, propertyResult, config);
       this.validationGroup.validationProperties.push(newValidationProperty);
     }
     this.validationRuleCollections.unshift(newValidationProperty.collectionOfValidationRules);
@@ -43,7 +40,8 @@ export class ValidationGroupBuilder {
     this.checkLast();
     return this.validationGroup;
   }
-  canBeEmpty(){
+
+  canBeEmpty() {
     this.validationRuleCollections[0].canBeEmpty();
     this.checkLast();
     return this.validationGroup;
@@ -73,24 +71,24 @@ export class ValidationGroupBuilder {
   }
 
   isEqualTo(otherValue, otherValueLabel) {
-    if(!otherValueLabel)
+    if (!otherValueLabel) {
       return this.passesRule(new AllRules.EqualityValidationRule(otherValue));
-    else
-      return this.passesRule(new AllRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel))
+    }
+    return this.passesRule(new AllRules.EqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
   }
 
   isNotEqualTo(otherValue, otherValueLabel) {
-    if(!otherValueLabel)
+    if (!otherValueLabel) {
       return this.passesRule(new AllRules.InEqualityValidationRule(otherValue));
-    else
-      return this.passesRule(new AllRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel))
+    }
+    return this.passesRule(new AllRules.InEqualityWithOtherLabelValidationRule(otherValue, otherValueLabel));
   }
 
   isEmail() {
     return this.passesRule(new AllRules.EmailValidationRule());
   }
 
-  isURL(){
+  isURL() {
     return this.passesRule(new AllRules.URLValidationRule());
   }
 
@@ -110,7 +108,7 @@ export class ValidationGroupBuilder {
     return this.passesRule(new AllRules.NumericValidationRule());
   }
 
-  containsNoSpaces(){
+  containsNoSpaces() {
     return this.passesRule(new AllRules.NoSpacesValidationRule());
   }
 
@@ -118,15 +116,15 @@ export class ValidationGroupBuilder {
     return this.passesRule(new AllRules.DigitValidationRule());
   }
 
-  containsOnlyAlpha(){
+  containsOnlyAlpha() {
     return this.passesRule(new AllRules.AlphaValidationRule());
   }
 
-  containsOnlyAlphaOrWhitespace(){
+  containsOnlyAlphaOrWhitespace() {
     return this.passesRule(new AllRules.AlphaOrWhitespaceValidationRule());
   }
 
-  containsOnlyAlphanumerics(){
+  containsOnlyAlphanumerics() {
     return this.passesRule(new AllRules.AlphaNumericValidationRule());
   }
 
@@ -135,14 +133,13 @@ export class ValidationGroupBuilder {
   }
 
   isStrongPassword(minimumComplexityLevel) {
-    if(minimumComplexityLevel === 4)
+    if (minimumComplexityLevel === 4) {
       return this.passesRule(new AllRules.StrongPasswordValidationRule());
-    else
-      return this.passesRule(new AllRules.MediumPasswordValidationRule(minimumComplexityLevel));
+    }
+    return this.passesRule(new AllRules.MediumPasswordValidationRule(minimumComplexityLevel));
   }
 
-  containsOnly(regex)
-  {
+  containsOnly(regex) {
     return this.passesRule(new AllRules.ContainsOnlyValidationRule(regex));
   }
 
@@ -155,14 +152,13 @@ export class ValidationGroupBuilder {
   }
 
   passesRule(validationRule) {
-
     this.validationRuleCollections[0].addValidationRule(validationRule);
     this.checkLast();
     return this.validationGroup;
   }
 
   checkLast() {
-    var validationProperty = this.validationGroup.validationProperties[this.validationGroup.validationProperties.length - 1];
+    let validationProperty = this.validationGroup.validationProperties[this.validationGroup.validationProperties.length - 1];
     validationProperty.validateCurrentValue(false);
   }
 
@@ -174,7 +170,7 @@ export class ValidationGroupBuilder {
 
   if(conditionExpression) {
     //IF is treated as a 'switch' with case 'true' and 'default'
-    var conditionalCollection = new AllCollections.SwitchCaseValidationRulesCollection(conditionExpression);
+    let conditionalCollection = new AllCollections.SwitchCaseValidationRulesCollection(conditionExpression);
     conditionalCollection.case(true);
     this.validationRuleCollections[0].addValidationRuleCollection(conditionalCollection);
     this.validationRuleCollections.unshift(conditionalCollection);
@@ -182,52 +178,56 @@ export class ValidationGroupBuilder {
   }
 
   else() {
-    if (!this.validationRuleCollections[0].default)
-      throw 'Invalid statement: \'else\'';
-    //this.validationRuleCollections[0].case(false);
+    if (!this.validationRuleCollections[0].default) {
+      throw Error('Invalid statement: \'else\'');
+    }
     this.validationRuleCollections[0].default();//slightly less object creation then 'case false'
     return this.validationGroup;
   }
 
   endIf() {
-    if (!this.validationRuleCollections[0].default)
-      throw 'Invalid statement: \'endIf\'';
+    if (!this.validationRuleCollections[0].default) {
+      throw Error('Invalid statement: \'endIf\'');
+    }
     this.validationRuleCollections.shift(); //go up one level in the nested collections
     this.checkLast();
     return this.validationGroup;
   }
 
   switch(conditionExpression) {
-    var condition = conditionExpression;
+    let condition = conditionExpression;
     if (condition === undefined) {
       let observer = this.validationGroup.validationProperties[this.validationGroup.validationProperties.length - 1].observer;
       condition = () => {
         return observer.getValue();
       };
     }
-    var conditionalCollection = new AllCollections.SwitchCaseValidationRulesCollection(condition);
+    let conditionalCollection = new AllCollections.SwitchCaseValidationRulesCollection(condition);
     this.validationRuleCollections[0].addValidationRuleCollection(conditionalCollection);
     this.validationRuleCollections.unshift(conditionalCollection);
     return this.validationGroup;
   }
 
   case(caseLabel) {
-    if (!this.validationRuleCollections[0].default)
-      throw 'Invalid statement: \'case\'';
+    if (!this.validationRuleCollections[0].default) {
+      throw Error('Invalid statement: \'case\'');
+    }
     this.validationRuleCollections[0].case(caseLabel);
     return this.validationGroup;
   }
 
   default() {
-    if (!this.validationRuleCollections[0].default)
-      throw 'Invalid statement: \'case\'';
+    if (!this.validationRuleCollections[0].default) {
+      throw Error('Invalid statement: \'case\'');
+    }
     this.validationRuleCollections[0].default();
     return this.validationGroup;
   }
 
   endSwitch() {
-    if (!this.validationRuleCollections[0].default)
-      throw 'Invalid statement: \'endIf\'';
+    if (!this.validationRuleCollections[0].default) {
+      throw Error('Invalid statement: \'endIf\'');
+    }
     this.validationRuleCollections.shift(); //go up one level in the nested collections
     this.checkLast();
     return this.validationGroup;

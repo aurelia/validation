@@ -69,7 +69,6 @@ export class ValidationProperty {
             return validationResponse.isValid;
           })
           .catch((err) => {
-            console.log('Unexpected behavior: a validation-rules-collection should always fulfil', err);
             throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
           });
       },

@@ -23,27 +23,22 @@ export class ValidationRule {
       this.errorMessage = null;
       return true;
     }
-    else {
-      if (typeof(result) === 'string') {
-        this.errorMessage = result;
-      }
-      else {
-        if (this.message) {
-          if (typeof(this.message) === 'function') {
-            this.errorMessage = this.message(currentValue, this.threshold);
-          }
-          else if (typeof(this.message) === 'string') {
-            this.errorMessage = this.message;
-          }
-          else
-            throw 'Unable to handle the error message:' + this.message;
+    if (typeof(result) === 'string') {
+      this.errorMessage = result;
+    } else {
+      if (this.message) {
+        if (typeof(this.message) === 'function') {
+          this.errorMessage = this.message(currentValue, this.threshold);
+        } else if (typeof(this.message) === 'string') {
+          this.errorMessage = this.message;
+        } else {
+          throw Error('Unable to handle the error message:' + this.message);
         }
-        else {
-          this.errorMessage = locale.translate(this.ruleName, currentValue, this.threshold);
-        }
+      } else {
+        this.errorMessage = locale.translate(this.ruleName, currentValue, this.threshold);
       }
-      return false;
     }
+    return false;
   }
 
   /**
@@ -53,20 +48,19 @@ export class ValidationRule {
     if (locale === undefined) {
       locale = ValidationLocale.Repository.default;
     }
-
     currentValue = Utilities.getValue(currentValue);
-    var result = this.onValidate(currentValue, this.threshold, locale);
-    var promise = Promise.resolve(result);
+    let result = this.onValidate(currentValue, this.threshold, locale);
+    let promise = Promise.resolve(result);
 
-    var nextPromise = promise.then(
+    let nextPromise = promise.then(
       (promiseResult) => {
         return this.setResult(promiseResult, currentValue, locale);
       },
       (promiseFailure) => {
-        if (typeof(promiseFailure) === 'string' && promiseFailure !== '')
+        if (typeof(promiseFailure) === 'string' && promiseFailure !== '') {
           return this.setResult(promiseFailure, currentValue, locale);
-        else
-          return this.setResult(false, currentValue, locale);
+        }
+        return this.setResult(false, currentValue, locale);
       }
     );
     return nextPromise;
@@ -75,28 +69,25 @@ export class ValidationRule {
 
 export class URLValidationRule extends ValidationRule {
   //https://github.com/chriso/validator.js/blob/master/LICENSE
-
   static isIP(str, version) {
-    var ipv4Maybe = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
-      , ipv6Block = /^[0-9A-F]{1,4}$/i;
-
+    let ipv4Maybe = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
+    let ipv6Block = /^[0-9A-F]{1,4}$/i;
     if (!version) {
       return this.isIP(str, 4) || this.isIP(str, 6);
     } else if (version === 4) {
       if (!ipv4Maybe.test(str)) {
         return false;
       }
-      var parts = str.split('.').sort(function (a, b) {
+      let parts = str.split('.').sort((a, b) => {
         return a - b;
       });
       return parts[3] <= 255;
     } else if (version === 6) {
-      var blocks = str.split(':');
-      var foundOmissionBlock = false; // marker to indicate ::
-
-      if (blocks.length > 8)
+      let blocks = str.split(':');
+      let foundOmissionBlock = false; // marker to indicate ::
+      if (blocks.length > 8) {
         return false;
-
+      }
       // initial or final ::
       if (str === '::') {
         return true;
@@ -109,24 +100,22 @@ export class URLValidationRule extends ValidationRule {
         blocks.pop();
         foundOmissionBlock = true;
       }
-
-      for (var i = 0; i < blocks.length; ++i) {
+      for (let i = 0; i < blocks.length; ++i) {
         // test for a :: which can not be at the string start/end
         // since those cases have been handled above
         if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
-          if (foundOmissionBlock)
+          if (foundOmissionBlock) {
             return false; // multiple :: in address
+          }
           foundOmissionBlock = true;
         } else if (!ipv6Block.test(blocks[i])) {
           return false;
         }
       }
-
       if (foundOmissionBlock) {
         return blocks.length >= 1;
-      } else {
-        return blocks.length === 8;
       }
+      return blocks.length === 8;
     }
     return false;
   }
@@ -136,14 +125,14 @@ export class URLValidationRule extends ValidationRule {
     if (options.allow_trailing_dot && str[str.length - 1] === '.') {
       str = str.substring(0, str.length - 1);
     }
-    var parts = str.split('.');
+    let parts = str.split('.');
     if (options.require_tld) {
-      var tld = parts.pop();
+      let tld = parts.pop();
       if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
         return false;
       }
     }
-    for (var part, i = 0; i < parts.length; i++) {
+    for (let part, i = 0; i < parts.length; i++) {
       part = parts[i];
       if (options.allow_underscores) {
         if (part.indexOf('__') >= 0) {
@@ -162,31 +151,37 @@ export class URLValidationRule extends ValidationRule {
     return true;
   }
 
-  constructor(threshold) {
-    var default_url_options = {
-      protocols: ['http', 'https', 'ftp']
-      , require_tld: true
-      , require_protocol: false
-      , allow_underscores: true
-      , allow_trailing_dot: false
-      , allow_protocol_relative_urls: true
+  // threshold here renamed to startingThreshold because linter was mad,
+  //  probably not the best name
+  constructor(startingThreshold) {
+    let defaultUrlOptions = {
+      protocols: ['http', 'https', 'ftp'],
+      require_tld: true,
+      require_protocol: false,
+      allow_underscores: true,
+      allow_trailing_dot: false,
+      allow_protocol_relative_urls: true
     };
-    if (threshold === undefined) {
-      threshold = default_url_options;
+    if (startingThreshold === undefined) {
+      startingThreshold = defaultUrlOptions;
     }
-
     super(
-      threshold,
+      startingThreshold,
       (newValue, threshold) => {
         let url = newValue;
+        let protocol;
+        let auth;
+        let host;
+        let hostname;
+        let port;
+        let portStr;
+        let split;
         if (!url || url.length >= 2083 || /\s/.test(url)) {
           return false;
         }
         if (url.indexOf('mailto:') === 0) {
           return false;
         }
-        var protocol, auth, host, hostname, port,
-          port_str, split;
         split = url.split('://');
         if (split.length > 1) {
           protocol = split.shift();
@@ -201,10 +196,8 @@ export class URLValidationRule extends ValidationRule {
         url = split.join('://');
         split = url.split('#');
         url = split.shift();
-
         split = url.split('?');
         url = split.shift();
-
         split = url.split('/');
         url = split.shift();
         split = url.split('@');
@@ -218,9 +211,9 @@ export class URLValidationRule extends ValidationRule {
         split = hostname.split(':');
         host = split.shift();
         if (split.length) {
-          port_str = split.join(':');
-          port = parseInt(port_str, 10);
-          if (!/^[0-9]+$/.test(port_str) || port <= 0 || port > 65535) {
+          portStr = split.join(':');
+          port = parseInt(portStr, 10);
+          if (!/^[0-9]+$/.test(portStr) || port <= 0 || port > 65535) {
             return false;
           }
         }
@@ -251,10 +244,9 @@ export class EmailValidationRule extends ValidationRule {
     let emailUserUtf8Regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))$/i;
     return emailUserUtf8Regex.test(user);
   }
-
   static isFQDN(str) {
-    var parts = str.split('.');
-    for (var part, i = 0; i < parts.length; i++) {
+    let parts = str.split('.');
+    for (let part, i = 0; i < parts.length; i++) {
       part = parts[i];
       if (part.indexOf('__') >= 0) {
         return false;
@@ -278,9 +270,9 @@ export class EmailValidationRule extends ValidationRule {
         if (/\s/.test(newValue)) {
           return false;
         }
-        var parts = newValue.split('@');
-        var domain = parts.pop();
-        var user = parts.join('@');
+        let parts = newValue.split('@');
+        let domain = parts.pop();
+        let user = parts.join('@');
 
         if (!EmailValidationRule.isFQDN(domain)) {
           return false;
@@ -290,7 +282,6 @@ export class EmailValidationRule extends ValidationRule {
       null,
       'EmailValidationRule'
     );
-
   }
 }
 
@@ -298,8 +289,8 @@ export class MinimumLengthValidationRule extends ValidationRule {
   constructor(minimumLength) {
     super(
       minimumLength,
-      (newValue, minimumLength) => {
-        return newValue.length !== undefined && newValue.length >= minimumLength;
+      (newValue, minLength) => {
+        return newValue.length !== undefined && newValue.length >= minLength;
       },
       null,
       'MinimumLengthValidationRule'
@@ -311,8 +302,8 @@ export class MaximumLengthValidationRule extends ValidationRule {
   constructor(maximumLength) {
     super(
       maximumLength,
-      (newValue, maximumLength) => {
-        return newValue.length !== undefined && newValue.length <= maximumLength;
+      (newValue, maxLength) => {
+        return newValue.length !== undefined && newValue.length <= maxLength;
       },
       null,
       'MaximumLengthValidationRule'
@@ -342,7 +333,7 @@ export class CustomFunctionValidationRule extends ValidationRule {
       customFunction,
       null,
       'CustomFunctionValidationRule'
-    )
+    );
   }
 }
 
@@ -351,8 +342,8 @@ export class NumericValidationRule extends ValidationRule {
     super(
       null,
       (newValue, threshold, locale) => {
-        var numericRegex = locale.setting('numericRegex');
-        var floatValue = parseFloat(newValue);
+        let numericRegex = locale.setting('numericRegex');
+        let floatValue = parseFloat(newValue);
         return !Number.isNaN(parseFloat(newValue))
           && Number.isFinite(floatValue)
           && numericRegex.test(newValue);
@@ -364,9 +355,9 @@ export class NumericValidationRule extends ValidationRule {
 }
 
 export class RegexValidationRule extends ValidationRule {
-  constructor(regex, ruleName) {
+  constructor(startingRegex, ruleName) {
     super(
-      regex,
+      startingRegex,
       (newValue, regex) => {
         return regex.test(newValue);
       },
@@ -386,8 +377,8 @@ export class MinimumValueValidationRule extends ValidationRule {
   constructor(minimumValue) {
     super(
       minimumValue,
-      (newValue, minimumValue) => {
-        return Utilities.getValue(minimumValue) < newValue;
+      (newValue, minValue) => {
+        return Utilities.getValue(minValue) < newValue;
       },
       null,
       'MinimumValueValidationRule'
@@ -399,8 +390,8 @@ export class MinimumInclusiveValueValidationRule extends ValidationRule {
   constructor(minimumValue) {
     super(
       minimumValue,
-      (newValue, minimumValue) => {
-        return Utilities.getValue(minimumValue) <= newValue;
+      (newValue, minValue) => {
+        return Utilities.getValue(minValue) <= newValue;
       },
       null,
       'MinimumInclusiveValueValidationRule'
@@ -412,8 +403,8 @@ export class MaximumValueValidationRule extends ValidationRule {
   constructor(maximumValue) {
     super(
       maximumValue,
-      (newValue, maximumValue) => {
-        return newValue < Utilities.getValue(maximumValue);
+      (newValue, maxValue) => {
+        return newValue < Utilities.getValue(maxValue);
       },
       null,
       'MaximumValueValidationRule'
@@ -425,8 +416,8 @@ export class MaximumInclusiveValueValidationRule extends ValidationRule {
   constructor(maximumValue) {
     super(
       maximumValue,
-      (newValue, maximumValue) => {
-        return newValue <= Utilities.getValue(maximumValue);
+      (newValue, maxValue) => {
+        return newValue <= Utilities.getValue(maxValue);
       },
       null,
       'MaximumInclusiveValueValidationRule'
@@ -532,10 +523,10 @@ export class MediumPasswordValidationRule extends ValidationRule {
     super(
       (minimumComplexityLevel) ? minimumComplexityLevel : 3,
       (newValue, threshold) => {
-        if (typeof (newValue) !== 'string')
+        if (typeof (newValue) !== 'string') {
           return false;
-        var strength = 0;
-
+        }
+        let strength = 0;
         strength += /[A-Z]+/.test(newValue) ? 1 : 0;
         strength += /[a-z]+/.test(newValue) ? 1 : 0;
         strength += /[0-9]+/.test(newValue) ? 1 : 0;
@@ -556,17 +547,18 @@ export class StrongPasswordValidationRule extends MediumPasswordValidationRule {
 }
 
 export class EqualityValidationRuleBase extends ValidationRule {
-  constructor(otherValue, equality, otherValueLabel, ruleName) {
+  constructor(startingOtherValue, equality, otherValueLabel, ruleName) {
     super(
       {
-        otherValue: otherValue,
+        otherValue: startingOtherValue,
         equality: equality,
         otherValueLabel: otherValueLabel
       },
       (newValue, threshold) => {
-        var otherValue = Utilities.getValue(threshold.otherValue);
-        if (newValue instanceof Date && otherValue instanceof Date)
+        let otherValue = Utilities.getValue(threshold.otherValue);
+        if (newValue instanceof Date && otherValue instanceof Date) {
           return threshold.equality === (newValue.getTime() === otherValue.getTime());
+        }
         return threshold.equality === (newValue === otherValue);
       },
       null,
@@ -601,14 +593,15 @@ export class InEqualityWithOtherLabelValidationRule extends EqualityValidationRu
 
 
 export class InCollectionValidationRule extends ValidationRule {
-  constructor(collection) {
+  constructor(startingCollection) {
     super(
-      collection,
+      startingCollection,
       (newValue, threshold) => {
-        var collection = Utilities.getValue(threshold);
+        let collection = Utilities.getValue(threshold);
         for (let i = 0; i < collection.length; i++) {
-          if (newValue === collection[i])
+          if (newValue === collection[i]) {
             return true;
+          }
         }
         return false;
       },
