@@ -1,7 +1,7 @@
 import {Metadata} from 'aurelia-metadata';
-import {ValidationGroupBuilder} from '../validation/validation-group-builder';
-import {ValidationResult} from '../validation/validation-result';
-import {ValidationMetadata} from '../validation/decorators';
+import {ValidationGroupBuilder} from './validation-group-builder';
+import {ValidationResult} from './validation-result';
+import {ValidationMetadata} from './decorators';
 
 /**
  * Encapsulates validation rules and their current validation state for a given subject
