@@ -42,6 +42,7 @@
   "devDependencies": {
     "aurelia-tools": "^0.1.12",
     "babel-eslint": "^4.1.1",
+    "browser-sync": "^1.8.1",
     "conventional-changelog": "0.0.11",
     "del": "^1.1.0",
     "gulp": "^3.8.10",
