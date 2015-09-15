@@ -35,7 +35,7 @@ export class ValidationGroup {
   }
 
   destroy() {
-    this.validationProperties[i].forEach(prop => {
+    this.validationProperties.forEach(prop => {
       prop.destroy();
     });
     this.onDestroy();
