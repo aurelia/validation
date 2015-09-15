@@ -1,7 +1,7 @@
-import {EqualityValidationRule} from '../../src/validation/validation-rules';
-import {EqualityWithOtherLabelValidationRule} from '../../src/validation/validation-rules';
-import {InEqualityValidationRule} from '../../src/validation/validation-rules';
-import {InEqualityWithOtherLabelValidationRule } from '../../src/validation/validation-rules';
+import {EqualityValidationRule} from '../../src/validation-rules';
+import {EqualityWithOtherLabelValidationRule} from '../../src/validation-rules';
+import {InEqualityValidationRule} from '../../src/validation-rules';
+import {InEqualityWithOtherLabelValidationRule } from '../../src/validation-rules';
 
 import {Expectations} from '../expectations';
 
