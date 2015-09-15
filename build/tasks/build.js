@@ -17,8 +17,11 @@ var jsName = paths.packageName + '.js';
 gulp.task('build-index', function(){
   var importsToAdd = [];
 
-  return gulp.src([paths.root + '*.js', '!' + paths.root + 'index.js'])
-    .pipe(tools.sortFiles())
+  return gulp.src([
+    paths.root + '*.js',
+    paths.root + '**/*.js',
+   '!' + paths.root + 'index.js',
+   '!' + paths.root + 'resources/*.js'])
     .pipe(through2.obj(function(file, enc, callback) {
       file.contents = new Buffer(tools.extractImports(file.contents.toString("utf8"), importsToAdd));
       this.push(file);
