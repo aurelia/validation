@@ -1,7 +1,7 @@
 import {ObserverLocator} from 'aurelia-binding';
-import {ValidationGroup} from '../validation/validation-group';
+import {ValidationGroup} from './validation-group';
 import {inject} from 'aurelia-dependency-injection';
-import {ValidationConfig} from '../validation/validation-config';
+import {ValidationConfig} from './validation-config';
 
 /**
  * A lightweight validation plugin
