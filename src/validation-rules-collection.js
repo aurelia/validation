@@ -1,5 +1,5 @@
-import {Utilities} from '../validation/utilities';
-import {ValidationLocale} from '../validation/validation-locale';
+import {Utilities} from './utilities';
+import {ValidationLocale} from './validation-locale';
 
 export class ValidationRulesCollection {
   constructor(config) {

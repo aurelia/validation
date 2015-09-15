@@ -1,4 +1,4 @@
-import {ValidationLocale} from '../src/validation/validation-locale';
+import {ValidationLocale} from '../src/validation-locale';
 
 export class Expectations {
   constructor(expect, done) {

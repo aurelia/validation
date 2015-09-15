@@ -1,4 +1,4 @@
-import {Utilities} from '../validation/utilities';
+﻿import {Utilities} from '../utilities';
 
 export let data = {
   settings: {
@@ -62,7 +62,7 @@ export let data = {
       return `needs to be ${Utilities.getValue(threshold)} or less`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
-      return `cannot be longer then ${Utilities.getValue(threshold)} characters`;
+      return `cannot be longer than ${Utilities.getValue(threshold)} characters`;
     },
     'MaximumValueValidationRule': (newValue, threshold) => {
       return `needs to be less than ${Utilities.getValue(threshold)}`;

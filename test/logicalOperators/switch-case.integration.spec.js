@@ -1,5 +1,5 @@
 import {ObserverLocator} from 'aurelia-binding';
-import {Validation} from '../../src/validation/validation';
+import {Validation} from '../../src/validation';
 import {Expectations} from '../expectations';
 
 
