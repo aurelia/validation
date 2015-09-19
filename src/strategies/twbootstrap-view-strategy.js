@@ -111,3 +111,4 @@ TWBootstrapViewStrategy.AppendToInput =
   new TWBootstrapViewStrategyBase(true, false, 'aurelia-validation-message');
 TWBootstrapViewStrategy.AppendToMessage =
   new TWBootstrapViewStrategyBase(false, true, 'aurelia-validation-message');
+

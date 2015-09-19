@@ -1,4 +1,4 @@
-﻿﻿import {Utilities} from '../utilities';
+﻿import {Utilities} from '../utilities';
 
 export let data = {
   settings: {
