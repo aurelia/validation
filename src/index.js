@@ -6,10 +6,9 @@ export * from './validation-rules';
 export {Validation} from './validation';
 export {ValidationGroup} from './validation-group';
 export {ValidateCustomAttribute} from './validate-custom-attribute';
-export {ValidateCustomAttributeViewStrategy} from './validate-custom-attribute-view-strategy';
-export {ValidateCustomAttributeViewStrategyBase} from './validate-custom-attribute-view-strategy';
+export {ValidationViewStrategy} from './validation-view-strategy';
+export {TWBootstrapViewStrategy} from './strategies/twbootstrap-view-strategy';
 export {ensure} from './decorators';
-
 
 import {ValidationConfig} from './validation-config';
 import {Validation} from './validation';
