@@ -2,7 +2,7 @@
 
 exports.__esModule = true;
 
-var _validationUtilities = require('../validation/utilities');
+var _utilities = require('../utilities');
 
 var data = {
   settings: {
@@ -24,10 +24,10 @@ var data = {
       return 'kan kun indeholde bogstaver og mellemrum';
     },
     'BetweenLengthValidationRule': function BetweenLengthValidationRule(newValue, threshold) {
-      return 'skal være imellem ' + _validationUtilities.Utilities.getValue(threshold.minimumLength) + ' og ' + _validationUtilities.Utilities.getValue(threshold.maximumLength) + ' tegn lang';
+      return 'skal være imellem ' + _utilities.Utilities.getValue(threshold.minimumLength) + ' og ' + _utilities.Utilities.getValue(threshold.maximumLength) + ' tegn lang';
     },
     'BetweenValueValidationRule': function BetweenValueValidationRule(newValue, threshold) {
-      return 'skal være imellem ' + _validationUtilities.Utilities.getValue(threshold.minimumValue) + ' og ' + _validationUtilities.Utilities.getValue(threshold.maximumValue);
+      return 'skal være imellem ' + _utilities.Utilities.getValue(threshold.minimumValue) + ' og ' + _utilities.Utilities.getValue(threshold.maximumValue);
     },
     'CustomFunctionValidationRule': function CustomFunctionValidationRule(newValue, threshold) {
       return 'ikke en gyldig værdi';
@@ -39,37 +39,37 @@ var data = {
       return 'ikke gyldig e-mailadresse';
     },
     'EqualityValidationRule': function EqualityValidationRule(newValue, threshold) {
-      return 'burde være ' + _validationUtilities.Utilities.getValue(threshold.otherValue);
+      return 'burde være ' + _utilities.Utilities.getValue(threshold.otherValue);
     },
     'InEqualityValidationRule': function InEqualityValidationRule(newValue, threshold) {
-      return 'kan ikke være ' + _validationUtilities.Utilities.getValue(threshold.otherValue);
+      return 'kan ikke være ' + _utilities.Utilities.getValue(threshold.otherValue);
     },
     'EqualityWithOtherLabelValidationRule': function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-      return 'er ikke ens ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+      return 'er ikke ens ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
     },
     'InEqualityWithOtherLabelValidationRule': function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-      return 'kan ikke være ens ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+      return 'kan ikke være ens ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
     },
     'InCollectionValidationRule': function InCollectionValidationRule(newValue, threshold) {
       return 'ikke en gyldig værdi';
     },
     'MinimumInclusiveValueValidationRule': function MinimumInclusiveValueValidationRule(newValue, threshold) {
-      return 'skal være ' + _validationUtilities.Utilities.getValue(threshold) + ' eller højere';
+      return 'skal være ' + _utilities.Utilities.getValue(threshold) + ' eller højere';
     },
     'MinimumLengthValidationRule': function MinimumLengthValidationRule(newValue, threshold) {
-      return 'skal være mindst ' + _validationUtilities.Utilities.getValue(threshold) + ' tegn lang';
+      return 'skal være mindst ' + _utilities.Utilities.getValue(threshold) + ' tegn lang';
     },
     'MinimumValueValidationRule': function MinimumValueValidationRule(newValue, threshold) {
-      return 'skal være større end ' + _validationUtilities.Utilities.getValue(threshold);
+      return 'skal være større end ' + _utilities.Utilities.getValue(threshold);
     },
     'MaximumInclusiveValueValidationRule': function MaximumInclusiveValueValidationRule(newValue, threshold) {
-      return 'skal være ' + _validationUtilities.Utilities.getValue(threshold) + ' eller mindre';
+      return 'skal være ' + _utilities.Utilities.getValue(threshold) + ' eller mindre';
     },
     'MaximumLengthValidationRule': function MaximumLengthValidationRule(newValue, threshold) {
-      return 'kan ikke være længere end ' + _validationUtilities.Utilities.getValue(threshold) + ' tegn';
+      return 'kan ikke være længere end ' + _utilities.Utilities.getValue(threshold) + ' tegn';
     },
     'MaximumValueValidationRule': function MaximumValueValidationRule(newValue, threshold) {
-      return 'skal være mindre end ' + _validationUtilities.Utilities.getValue(threshold);
+      return 'skal være mindre end ' + _utilities.Utilities.getValue(threshold);
     },
     'NumericValidationRule': function NumericValidationRule(newValue, threshold) {
       return 'skal være en talværdi';
@@ -87,7 +87,7 @@ var data = {
       return 'skal være en kombination af små bogstaver, store bogstaver, tal og specialtegn';
     },
     'MediumPasswordValidationRule': function MediumPasswordValidationRule(newValue, threshold) {
-      return 'skal indeholde mindst ' + _validationUtilities.Utilities.getValue(threshold) + ' af de følgende grupper: små bogstaver, store bogstaver, tal og specialtegn';
+      return 'skal indeholde mindst ' + _utilities.Utilities.getValue(threshold) + ' af de følgende grupper: små bogstaver, store bogstaver, tal og specialtegn';
     },
     'URLValidationRule': function URLValidationRule(newValue, threshold) {
       return 'ikke en gyldig URL';

@@ -1,3 +1,21 @@
+### 0.3.1 (2015-09-19)
+
+#### Breaking Changes
+
+* **ValidateCustomAttributeViewStrategy:** has been renamed ValidationViewStrategy
+
+#### Bug Fixes
+
+* **validation-group:** exports ValidationGroup ([196e768e](https://github.com/aurelia/validation/commit/196e768e9f20532bdeff2e72db1e7c5fead0c0ec), closes [#117](https://github.com/aurelia/validation/issues/117))
+
+
+#### Features
+
+* **doc-generation:** generate api.json ([115eb3c5](https://github.com/aurelia/validation/commit/115eb3c59b9d0bb54890c681884988f192b4702a))
+* **dts-generation:** support subdirectories ([9cf4c48e](https://github.com/aurelia/validation/commit/9cf4c48eefd35081fa2dee21f9db331e431be6fd))
+* **typescript:** export typescript definitions ([c23b49df](https://github.com/aurelia/validation/commit/c23b49dfada8c7e8dd62abda77a1cb529e18efb7))
+
+
 ## 0.3.0 (2015-09-10)
 
 

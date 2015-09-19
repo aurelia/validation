@@ -1,4 +1,4 @@
-define(['exports', '../validation/utilities'], function (exports, _validationUtilities) {
+define(['exports', '../utilities'], function (exports, _utilities) {
   'use strict';
 
   exports.__esModule = true;
@@ -22,10 +22,10 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'can contain only letters or spaces';
       },
       'BetweenLengthValidationRule': function BetweenLengthValidationRule(newValue, threshold) {
-        return 'needs to be between ' + _validationUtilities.Utilities.getValue(threshold.minimumLength) + ' and ' + _validationUtilities.Utilities.getValue(threshold.maximumLength) + ' characters long';
+        return 'needs to be between ' + _utilities.Utilities.getValue(threshold.minimumLength) + ' and ' + _utilities.Utilities.getValue(threshold.maximumLength) + ' characters long';
       },
       'BetweenValueValidationRule': function BetweenValueValidationRule(newValue, threshold) {
-        return 'needs to be between ' + _validationUtilities.Utilities.getValue(threshold.minimumValue) + ' and ' + _validationUtilities.Utilities.getValue(threshold.maximumValue);
+        return 'needs to be between ' + _utilities.Utilities.getValue(threshold.minimumValue) + ' and ' + _utilities.Utilities.getValue(threshold.maximumValue);
       },
       'CustomFunctionValidationRule': function CustomFunctionValidationRule(newValue, threshold) {
         return 'not a valid value';
@@ -37,37 +37,37 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'is not a valid email address';
       },
       'EqualityValidationRule': function EqualityValidationRule(newValue, threshold) {
-        return 'should be ' + _validationUtilities.Utilities.getValue(threshold.otherValue);
+        return 'should be ' + _utilities.Utilities.getValue(threshold.otherValue);
       },
       'InEqualityValidationRule': function InEqualityValidationRule(newValue, threshold) {
-        return 'cannot be ' + _validationUtilities.Utilities.getValue(threshold.otherValue);
+        return 'cannot be ' + _utilities.Utilities.getValue(threshold.otherValue);
       },
       'EqualityWithOtherLabelValidationRule': function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-        return 'does not match ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+        return 'does not match ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
       },
       'InEqualityWithOtherLabelValidationRule': function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-        return 'cannot match ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+        return 'cannot match ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
       },
       'InCollectionValidationRule': function InCollectionValidationRule(newValue, threshold) {
         return 'not a valid value';
       },
       'MinimumInclusiveValueValidationRule': function MinimumInclusiveValueValidationRule(newValue, threshold) {
-        return 'needs to be ' + _validationUtilities.Utilities.getValue(threshold) + ' or more';
+        return 'needs to be ' + _utilities.Utilities.getValue(threshold) + ' or more';
       },
       'MinimumLengthValidationRule': function MinimumLengthValidationRule(newValue, threshold) {
-        return 'needs to be at least ' + _validationUtilities.Utilities.getValue(threshold) + ' characters long';
+        return 'needs to be at least ' + _utilities.Utilities.getValue(threshold) + ' characters long';
       },
       'MinimumValueValidationRule': function MinimumValueValidationRule(newValue, threshold) {
-        return 'needs to be more than ' + _validationUtilities.Utilities.getValue(threshold);
+        return 'needs to be more than ' + _utilities.Utilities.getValue(threshold);
       },
       'MaximumInclusiveValueValidationRule': function MaximumInclusiveValueValidationRule(newValue, threshold) {
-        return 'needs to be ' + _validationUtilities.Utilities.getValue(threshold) + ' or less';
+        return 'needs to be ' + _utilities.Utilities.getValue(threshold) + ' or less';
       },
       'MaximumLengthValidationRule': function MaximumLengthValidationRule(newValue, threshold) {
-        return 'cannot be longer then ' + _validationUtilities.Utilities.getValue(threshold) + ' characters';
+        return 'cannot be longer than ' + _utilities.Utilities.getValue(threshold) + ' characters';
       },
       'MaximumValueValidationRule': function MaximumValueValidationRule(newValue, threshold) {
-        return 'needs to be less than ' + _validationUtilities.Utilities.getValue(threshold);
+        return 'needs to be less than ' + _utilities.Utilities.getValue(threshold);
       },
       'NumericValidationRule': function NumericValidationRule(newValue, threshold) {
         return 'needs to be a number';
@@ -85,7 +85,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'should contain a combination of lowercase letters, uppercase letters, digits and special characters';
       },
       'MediumPasswordValidationRule': function MediumPasswordValidationRule(newValue, threshold) {
-        return 'should contain at least ' + _validationUtilities.Utilities.getValue(threshold) + ' of the following groups: lowercase letters, uppercase letters, digits or special characters';
+        return 'should contain at least ' + _utilities.Utilities.getValue(threshold) + ' of the following groups: lowercase letters, uppercase letters, digits or special characters';
       },
       'URLValidationRule': function URLValidationRule(newValue, threshold) {
         return 'is not a valid URL';

@@ -1,10 +1,10 @@
-System.register(['../validation/utilities'], function (_export) {
+System.register(['../utilities'], function (_export) {
   'use strict';
 
   var Utilities, data;
   return {
-    setters: [function (_validationUtilities) {
-      Utilities = _validationUtilities.Utilities;
+    setters: [function (_utilities) {
+      Utilities = _utilities.Utilities;
     }],
     execute: function () {
       data = {
@@ -69,7 +69,7 @@ System.register(['../validation/utilities'], function (_export) {
             return 'needs to be ' + Utilities.getValue(threshold) + ' or less';
           },
           'MaximumLengthValidationRule': function MaximumLengthValidationRule(newValue, threshold) {
-            return 'cannot be longer then ' + Utilities.getValue(threshold) + ' characters';
+            return 'cannot be longer than ' + Utilities.getValue(threshold) + ' characters';
           },
           'MaximumValueValidationRule': function MaximumValueValidationRule(newValue, threshold) {
             return 'needs to be less than ' + Utilities.getValue(threshold);

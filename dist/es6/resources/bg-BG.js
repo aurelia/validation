@@ -1,4 +1,4 @@
-import {Utilities} from '../validation/utilities';
+import {Utilities} from '../utilities';
 
 export let data = {
   settings: {
@@ -6,17 +6,17 @@ export let data = {
   },
   messages: {
     'isRequired': 'е задължително',
-    'onValidateCallback' : 'невалидна стойност',
+    'onValidateCallback': 'невалидна стойност',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
       return `трябва да съдържа само букви, цифри и интервали`;
     },
     'AlphaNumericValidationRule': (newValue, threshold) => {
       return `трябва да съдържа само букви и цифри`;
     },
-    'AlphaValidationRule' : (newValue, threshold) => {
+    'AlphaValidationRule': (newValue, threshold) => {
       return `трябва да съдържа само букви`;
     },
-    'AlphaOrWhitespaceValidationRule' : (newValue, threshold) => {
+    'AlphaOrWhitespaceValidationRule': (newValue, threshold) => {
       return `трябва да съдържа само букви или интервали`;
     },
     'BetweenLengthValidationRule': (newValue, threshold) => {
@@ -26,7 +26,7 @@ export let data = {
       return `стойността трябва да бъде между ${Utilities.getValue(threshold.minimumValue)} и ${Utilities.getValue(threshold.maximumValue)}`;
     },
     'CustomFunctionValidationRule': (newValue, threshold) => {
-      return `невалидна стойност`
+      return `невалидна стойност`;
     },
     'DigitValidationRule': (newValue, threshold) => {
       return `трябва да съдържа само цифри`;
@@ -37,19 +37,19 @@ export let data = {
     'EqualityValidationRule': (newValue, threshold) => {
       return `стойността трябва да бъде ${Utilities.getValue(threshold.otherValue)}`;
     },
-    'InEqualityValidationRule' : (newValue, threshold) => {
-        return `стойността не може да бъде ${Utilities.getValue(threshold.otherValue)}`;
+    'InEqualityValidationRule': (newValue, threshold) => {
+      return `стойността не може да бъде ${Utilities.getValue(threshold.otherValue)}`;
     },
     'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `стойността не съвпада с ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
-    'InEqualityWithOtherLabelValidationRule' : (newValue, threshold) => {
+    'InEqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `стойността не може да съвпада с ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
       return `невалидна стойност`;
     },
-    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+    'MinimumInclusiveValueValidationRule': (newValue, threshold) => {
       return `стойността трябва да бъде ${Utilities.getValue(threshold)} или повече`;
     },
     'MinimumLengthValidationRule': (newValue, threshold) => {
@@ -58,7 +58,7 @@ export let data = {
     'MinimumValueValidationRule': (newValue, threshold) => {
       return `стойността трябва да бъде повече от ${Utilities.getValue(threshold)}`;
     },
-    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+    'MaximumInclusiveValueValidationRule': (newValue, threshold) => {
       return `стойността трябва да бъде ${Utilities.getValue(threshold)} или по-малко`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
@@ -79,7 +79,7 @@ export let data = {
     'StrongPasswordValidationRule': (newValue, threshold) => {
       return `трябва да съдържа комбинация от малки и големи букви, цифри и специални знаци`;
     },
-    'MediumPasswordValidationRule' : (newValue, threshold) => {
+    'MediumPasswordValidationRule': (newValue, threshold) => {
       return `трябва да съдържа поне  ${Utilities.getValue(threshold)} от следните групи: малки и големи букви, цифри и специални знаци`;
     }
   }

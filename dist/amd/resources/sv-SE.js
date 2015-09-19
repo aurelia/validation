@@ -1,4 +1,4 @@
-define(['exports', '../validation/utilities'], function (exports, _validationUtilities) {
+define(['exports', '../utilities'], function (exports, _utilities) {
   'use strict';
 
   exports.__esModule = true;
@@ -22,10 +22,10 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'kan enbart innehålla bokstäver';
       },
       'BetweenLengthValidationRule': function BetweenLengthValidationRule(newValue, threshold) {
-        return 'måste vara mellan ' + _validationUtilities.Utilities.getValue(threshold.minimumLength) + ' och ' + _validationUtilities.Utilities.getValue(threshold.maximumLength) + ' tecken långt';
+        return 'måste vara mellan ' + _utilities.Utilities.getValue(threshold.minimumLength) + ' och ' + _utilities.Utilities.getValue(threshold.maximumLength) + ' tecken långt';
       },
       'BetweenValueValidationRule': function BetweenValueValidationRule(newValue, threshold) {
-        return 'måste vara mellan ' + _validationUtilities.Utilities.getValue(threshold.minimumValue) + ' och ' + _validationUtilities.Utilities.getValue(threshold.maximumValue);
+        return 'måste vara mellan ' + _utilities.Utilities.getValue(threshold.minimumValue) + ' och ' + _utilities.Utilities.getValue(threshold.maximumValue);
       },
       'CustomFunctionValidationRule': function CustomFunctionValidationRule(newValue, threshold) {
         return 'är inte ett giltigt värde';
@@ -37,37 +37,37 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'är inte en giltig e-postadress';
       },
       'EqualityValidationRule': function EqualityValidationRule(newValue, threshold) {
-        return 'ska vara ' + _validationUtilities.Utilities.getValue(threshold.otherValue);
+        return 'ska vara ' + _utilities.Utilities.getValue(threshold.otherValue);
       },
       'InEqualityValidationRule': function InEqualityValidationRule(newValue, threshold) {
-        return 'kan inte vara ' + _validationUtilities.Utilities.getValue(threshold.otherValue);
+        return 'kan inte vara ' + _utilities.Utilities.getValue(threshold.otherValue);
       },
       'EqualityWithOtherLabelValidationRule': function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-        return 'matchar inte ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+        return 'matchar inte ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
       },
       'InEqualityWithOtherLabelValidationRule': function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-        return 'får inte matcha ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+        return 'får inte matcha ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
       },
       'InCollectionValidationRule': function InCollectionValidationRule(newValue, threshold) {
         return 'är inget giltigt värde';
       },
       'MinimumInclusiveValueValidationRule': function MinimumInclusiveValueValidationRule(newValue, threshold) {
-        return 'måste vara ' + _validationUtilities.Utilities.getValue(threshold) + ' eller mer';
+        return 'måste vara ' + _utilities.Utilities.getValue(threshold) + ' eller mer';
       },
       'MinimumLengthValidationRule': function MinimumLengthValidationRule(newValue, threshold) {
-        return 'behöver vara minst ' + _validationUtilities.Utilities.getValue(threshold) + ' tecken långt';
+        return 'behöver vara minst ' + _utilities.Utilities.getValue(threshold) + ' tecken långt';
       },
       'MinimumValueValidationRule': function MinimumValueValidationRule(newValue, threshold) {
-        return 'måste vara mer än ' + _validationUtilities.Utilities.getValue(threshold);
+        return 'måste vara mer än ' + _utilities.Utilities.getValue(threshold);
       },
       'MaximumInclusiveValueValidationRule': function MaximumInclusiveValueValidationRule(newValue, threshold) {
-        return 'måste vara ' + _validationUtilities.Utilities.getValue(threshold) + ' eller mindre';
+        return 'måste vara ' + _utilities.Utilities.getValue(threshold) + ' eller mindre';
       },
       'MaximumLengthValidationRule': function MaximumLengthValidationRule(newValue, threshold) {
-        return 'kan inte vara längre än ' + _validationUtilities.Utilities.getValue(threshold) + ' tecken';
+        return 'kan inte vara längre än ' + _utilities.Utilities.getValue(threshold) + ' tecken';
       },
       'MaximumValueValidationRule': function MaximumValueValidationRule(newValue, threshold) {
-        return 'måste vara mindre än ' + _validationUtilities.Utilities.getValue(threshold);
+        return 'måste vara mindre än ' + _utilities.Utilities.getValue(threshold);
       },
       'NumericValidationRule': function NumericValidationRule(newValue, threshold) {
         return 'måste vara ett nummer';
@@ -85,7 +85,7 @@ define(['exports', '../validation/utilities'], function (exports, _validationUti
         return 'ska innehålla en kombination av gemener, versaler, siffror och specialtecken';
       },
       'MediumPasswordValidationRule': function MediumPasswordValidationRule(newValue, threshold) {
-        return 'ska innehålla minst ' + _validationUtilities.Utilities.getValue(threshold) + ' av följande grupperingar: gemener, versaler, siffror eller specialtecken';
+        return 'ska innehålla minst ' + _utilities.Utilities.getValue(threshold) + ' av följande grupperingar: gemener, versaler, siffror eller specialtecken';
       },
       'URLValidationRule': function URLValidationRule(newValue, threshold) {
         return 'är inte en giltig webbadress';

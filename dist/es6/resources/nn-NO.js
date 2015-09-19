@@ -1,4 +1,4 @@
-import {Utilities} from '../validation/utilities';
+import {Utilities} from '../utilities';
 
 export let data = {
   settings: {
@@ -6,17 +6,17 @@ export let data = {
   },
   messages: {
     'isRequired': 'er påkrevd',
-    'onValidateCallback' : 'ikkje gyldig verdi',
+    'onValidateCallback': 'ikkje gyldig verdi',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
       return `kan berre innehalde alfanumeriske teikn eller mellomrom`;
     },
     'AlphaNumericValidationRule': (newValue, threshold) => {
       return `kan berre innehalde alfanumeriske teikn`;
     },
-    'AlphaValidationRule' : (newValue, threshold) => {
+    'AlphaValidationRule': (newValue, threshold) => {
       return `kan berre innehalde bokstavar`;
     },
-    'AlphaOrWhitespaceValidationRule' : (newValue, threshold) => {
+    'AlphaOrWhitespaceValidationRule': (newValue, threshold) => {
       return `kan berre innehalde bokstavar og mellomrom`;
     },
     'BetweenLengthValidationRule': (newValue, threshold) => {
@@ -26,7 +26,7 @@ export let data = {
       return `skal vere mellom ${Utilities.getValue(threshold.minimumValue)} og ${Utilities.getValue(threshold.maximumValue)}`;
     },
     'CustomFunctionValidationRule': (newValue, threshold) => {
-      return `ikkje ein gyldig verdi`
+      return `ikkje ein gyldig verdi`;
     },
     'DigitValidationRule': (newValue, threshold) => {
       return `kan berre innehalde tal`;
@@ -37,19 +37,19 @@ export let data = {
     'EqualityValidationRule': (newValue, threshold) => {
       return `burde vere ${Utilities.getValue(threshold.otherValue)}`;
     },
-    'InEqualityValidationRule' : (newValue, threshold) => {
-        return `kan ikkje vere ${Utilities.getValue(threshold.otherValue)}`;
+    'InEqualityValidationRule': (newValue, threshold) => {
+      return `kan ikkje vere ${Utilities.getValue(threshold.otherValue)}`;
     },
     'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `er ikkje like ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
-    'InEqualityWithOtherLabelValidationRule' : (newValue, threshold) => {
+    'InEqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `kan ikkje vere like ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
       return `ikkje ein gyldig verdi`;
     },
-    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+    'MinimumInclusiveValueValidationRule': (newValue, threshold) => {
       return `skal vere ${Utilities.getValue(threshold)} eller høgare`;
     },
     'MinimumLengthValidationRule': (newValue, threshold) => {
@@ -58,7 +58,7 @@ export let data = {
     'MinimumValueValidationRule': (newValue, threshold) => {
       return `skal vere større enn ${Utilities.getValue(threshold)}`;
     },
-    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+    'MaximumInclusiveValueValidationRule': (newValue, threshold) => {
       return `skal vere ${Utilities.getValue(threshold)} eller mindre`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
@@ -70,7 +70,7 @@ export let data = {
     'NumericValidationRule': (newValue, threshold) => {
       return `skal vere ein talverdi`;
     },
-    'NoSpacesValidationRule' : (newValue, threshold) => {
+    'NoSpacesValidationRule': (newValue, threshold) => {
       return `kan ikkje innehalde mellomrom`;
     },
     'RegexValidationRule': (newValue, threshold) => {
@@ -82,11 +82,11 @@ export let data = {
     'StrongPasswordValidationRule': (newValue, threshold) => {
       return `skal vere ein kombinasjon av små bokstavar, store bokstavar, tall og spesialteikn`;
     },
-    'MediumPasswordValidationRule' : (newValue, threshold) => {
+    'MediumPasswordValidationRule': (newValue, threshold) => {
       return `skal innehalde minst ${Utilities.getValue(threshold)} av dei følgjande gruppene: små bokstavar, store bokstavar, tal og spesialteikn`;
     },
-    'URLValidationRule' : (newValue, threshold) =>{
-      return `ikkje ein gyldig URL`
+    'URLValidationRule': (newValue, threshold) => {
+      return `ikkje ein gyldig URL`;
     }
   }
 };

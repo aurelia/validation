@@ -1,10 +1,10 @@
-System.register(['../validation/utilities'], function (_export) {
+System.register(['../utilities'], function (_export) {
   'use strict';
 
   var Utilities, data;
   return {
-    setters: [function (_validationUtilities) {
-      Utilities = _validationUtilities.Utilities;
+    setters: [function (_utilities) {
+      Utilities = _utilities.Utilities;
     }],
     execute: function () {
       data = {
