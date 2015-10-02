@@ -808,12 +808,18 @@ Valid on:
 
 ###config.useViewStrategy(viewStrategyInstance)
 ``` javascript
-(config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput); }
+(config) => { config.useViewStrategy(TWBootstrapViewStrategy.AppendToInput); }
 ```
 Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are:
-- ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage,
-- ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput
-- and any class that inherits from ValidateCustomAttributeViewStrategyBase
+- TWBootstrapViewStrategy.AppendToMessage,
+- TWBootstrapViewStrategy.AppendToInput
+- and any class that inherits from TWBootstrapViewStrategyBase
+
+**Note: To use one of the above strategies you have to import TWBootstrapStrategy with** 
+
+```javascript
+import {TWBootstrapViewStrategy} from 'aurelia-validation';
+```
 
 ###config.treatAllPropertiesAsMandatory()
 ``` javascript
