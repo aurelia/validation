@@ -59,11 +59,29 @@ export class ValidationProperty {
    */
   validate(newValue, shouldBeDirty, forceExecution) {
     if ((!this.propertyResult.isDirty && shouldBeDirty) || this.latestValue !== newValue || forceExecution) {
-      this.latestValue = newValue;
+      this.latestValue = Array.isArray(newValue) ? newValue.slice(0) : newValue;
       return this.config.locale().then((locale) => {
         return this.collectionOfValidationRules.validate(newValue, locale)
           .then((validationResponse) => {
-            if (this.latestValue === validationResponse.latestValue) {
+            let equal = (function equal(var1, var2) {
+              if (typeof var1 === 'object' && var2) {
+                if (Object.keys(var1).length == Object.keys(var2).length) {
+                  for (let i in var1) {
+                    if (var1.hasOwnProperty(i)) {
+                      return equal(var1[i], var2[i]);
+                    }
+                  }
+                  return true; // the object/array must be empty
+                }
+                else {
+                  return false;
+                }
+              }
+              else {
+                return var1 == var2;
+              }
+            })(this.latestValue, validationResponse.latestValue);
+            if (equal) {
               this.propertyResult.setValidity(validationResponse, shouldBeDirty);
             }
             return validationResponse.isValid;
