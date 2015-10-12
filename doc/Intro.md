@@ -22,7 +22,7 @@ jspm install aurelia-validation=github:aurelia/validation@master
 ```
 
 
-#### Migrate from aurelia-app to aurelia-app="main" 
+#### Migrate from aurelia-app to aurelia-app="main"
 You'll need to register the plugin when your aurelia app is bootstrapping. If you have an aurelia app because you cloned a sample, there's a good chance that the app is bootstrapping based on default conventions. In that case, open your **index.html** file and look at the *body* tag.
 ``` html
 <body aurelia-app>
@@ -38,7 +38,7 @@ export function configure(aurelia) {
     .standardConfiguration()
     .developmentLogging();
 
-  aurelia.start().then(a => a.setRoot('app', document.body)); 
+  aurelia.start().then(a => a.setRoot('app', document.body));
 }
 
 ```
@@ -53,13 +53,13 @@ export function configure(aurelia) {
     .developmentLogging()
     .plugin('aurelia-validation'); //Add this line to load the plugin
 
-  aurelia.start().then(a => a.setRoot('app', document.body)); 
+  aurelia.start().then(a => a.setRoot('app', document.body));
 }
 ```
 
 # Getting started
 
-Let's set up the **welcome.js** model from the [skeleton-navigation](http://github.com/aurelia/skeleton-navigation) with some validation. 
+Let's set up the **welcome.js** model from the [skeleton-navigation](http://github.com/aurelia/skeleton-navigation) with some validation.
 After importing the validation plugin in our model we'll do three things:
 - add a simple validation so that both firstName and lastname are required and have to have a length isBetweenOrEqualTo 3 and 10 characters.
 - prevent the 'welcome' function from executing if the model isn't valid
@@ -68,17 +68,17 @@ After importing the validation plugin in our model we'll do three things:
 The original model looks like this:
 ``` javascript
 export class Welcome{
-  constructor(){
+  constructor() {
     this.heading = 'Welcome to the Aurelia Navigation App!';
     this.firstName = 'John';
     this.lastName = 'Doe';
   }
 
-  get fullName(){
+  get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  welcome(){
+  welcome() {
     alert(`Welcome, ${this.fullName}!`);
   }
 }
@@ -88,36 +88,36 @@ We start with importing the validation class
 import {Validation} from 'aurelia-validation';
 export class Welcome{
   static inject() { return [Validation]; }
-  constructor(validation){
+  constructor(validation) {
     this.heading = 'Welcome to the Aurelia Navigation App!';
     this.firstName = 'John';
     this.lastName = 'Doe';
   }
 
-  get fullName(){
+  get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  welcome(){
+  welcome() {
     alert(`Welcome, ${this.fullName}!`);
   }
 }
 ```
- 
+
 
 Great, we're all set, now let's add our first validation:
 ``` javascript
-  constructor(validation){
+  constructor(validation) {
     this.heading = 'Welcome to the Aurelia Navigation App!';
     this.firstName = 'John';
-    this.lastName = 'Doe'; 
-    
+    this.lastName = 'Doe';
+
     this.validation = validation.on(this)
-        .ensure('firstName') 
+        .ensure('firstName')
               .isNotEmpty()
               .hasMinLength(3)
               .hasMaxLength(10)
-        .ensure('lastName') 
+        .ensure('lastName')
               .isNotEmpty()
               .hasMinLength(3)
               .hasMaxLength(10) ;
@@ -126,7 +126,7 @@ Great, we're all set, now let's add our first validation:
 We now have a working validation, but nothing changes behaviorally. If the validation fails, there's no way to inform the end-user of his/her mistakes.
 First, let's make sure that the 'welcome' function can only be executed if the validation is valid:
 ``` javascript
-  welcome(){
+  welcome() {
     this.validation.validate() //the validate will fulfil when validation is valid, and reject if not
       .then( () => {
         alert(`Welcome, ${this.fullName}! `);
@@ -134,8 +134,8 @@ First, let's make sure that the 'welcome' function can only be executed if the v
   }
 ```
 Secondly, let's provide some visual hints to the users. Open your **welcome.html** file and add the validate custom attribute:
-``` html 
-    <form role="form" submit.delegate="welcome()" validate.bind="validation" > 
+``` html
+    <form role="form" submit.delegate="welcome()" validate.bind="validation" >
 ```
 
 *Gulp watch* to see the validation in action ([or watch this sample](http://aurelia.io/validation/#/)).
@@ -148,13 +148,13 @@ tl;dr: [watch these samples](http://aurelia.io/validation/#/validators)
 ####isNotEmpty()
 This is a special case, dictating that the field is 'required' and cannot be empty.
 Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
-By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional* (on the config)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration].
+By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional* [on the config](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration).
 >The isNotEmpty rule is always checked first before any other validation rule.  This means that without the isNotEmpty rule, the .hasMinLength(5) rule would still consider a value of '' as valid because the field is allowed to be empty.
 
 ####canBeEmpty()
 Signals that a field is not 'required' and can be empty.
 Empty means null, undefined, '', or if it has a length property (arrays and strings) that the length is 0.
-By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional*  (on the config)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration].
+By default, all properties are optional. To change this, call *treatAllPropertiesAsMandatory()* or *treatAllPropertiesAreOptional*  [on the config](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuration).
 
 ####containsNoSpaces()
 Validates that the value entered contains no whitespaces.
@@ -185,7 +185,7 @@ Synonymn for *containsOnlyAlpha()*
 Synonymn for *containsOnlyAlphaOrWhitespace()*
 
 ####hasLengthBetween(minimumValue, maximumValue)
-Validates that the value entered is greater than or equal to the provided *minimumValue* and less than or equal to the provided *maximumValue*. 
+Validates that the value entered is greater than or equal to the provided *minimumValue* and less than or equal to the provided *maximumValue*.
 
 ####hasMinLength(minimumLength)e
 Validates that the value entered has a length greater than or equal to the provided *minimumLength*.
@@ -234,7 +234,7 @@ Validates that the value entered is a strong password. A strong password contain
 Optionally takes a *minumumComplexityLevel* of 2, 3 or 4 (default) to allow weak, medium or strong passwords only.
 This matches the number of groups (lowercase/uppercase/digits/special characters) that need to be present.
 >Note: optimal user experience when preceded with .hasLengthBetween(8,16)
- 
+
 ####isNotEqualTo(otherValue, otherValueLabel)
 Validates that the value entered is not stritly equal to the *otherValue*.
 Optionally takes an *otherValueLabel*, which will be used in the error message.
@@ -243,7 +243,7 @@ Arguments can be values or functions that return a value. See 'config.computedFr
 ####isURL()
 Validates that the value entered is a valid URL.
 Supports web addresses, 'localhost', IP4 and IP6 addresses. Supports query parameters. Supports no protocol, ftp, http or https.
- 
+
 ####matches(regex)
 Validates that the value entered is valid according to the provided *regex* (RegExp).
 
@@ -254,8 +254,8 @@ Your *customFunction* is a function that takes two arguments: *newValue* (the va
 - a non-empty string or a promise that resolves to a non-empty string: for invalid. Your non-empty string will be used as the validation message.
 - false, any other object or a promise that resolves to the forementioned values: for invalid.
 - a promise that rejects to a non-empty string: for invalid. Your non-empty string will be used as the validation message.
-- a promise that rejects to anything else: for invalid. 
- 
+- a promise that rejects to anything else: for invalid.
+
 >See ['config.computedFrom'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configcomputedfromarrayofbindingpaths).
 
 >Note: there is a default message for failing *passes()* rules which states 'invalid value'. For UX purposes, it's suggested to have your custom function return a message, return a promise that resolves or rejects to a message, or  follow the call to *passes()* by a call to *withMessage()*
@@ -367,7 +367,7 @@ Especially when nesting statements...
 #onValidate(validationCallback, failureCallback)
 Using the .onValidate(), you can register a callback that is called when the entire subject is validated.  Your function should return an object (or a promise that resolves to an object) that has properties matching each validation property you want to modify, for example:
 ```javascript
-validation = validation.on(this) 
+validation = validation.on(this)
   .ensure('firstName').isNotEmpty()
   .onValidate( () => {
     return {
@@ -387,7 +387,7 @@ You can optionally pass a failureCallback which will be executed if your validat
 #Alternative validation setup
 ##The @ensure decorator
 TL:DR; [Here's an example](http://aurelia.io/validation/#/).
-Having a fluent API allows you to keep your code that sets up the validation logic tightly together. However, some people prefer to keep each aspect of their validation close to the property on which it reflects.  You can do this by adding a decorator called @ensure on each property that requires validation.  
+Having a fluent API allows you to keep your code that sets up the validation logic tightly together. However, some people prefer to keep each aspect of their validation close to the property on which it reflects.  You can do this by adding a decorator called @ensure on each property that requires validation.
 The @ensure decorator takes a callback function that will be called when validation is actually set up.
 For example:
 ``` javascript
@@ -397,7 +397,7 @@ import {inject} from 'aurelia-framework';
 
 @inject(Validation)
 export class Person {
-  @ensure(function(it){ it.isNotEmpty().hasLengthBetween(3,10) })
+  @ensure(function(it) { it.isNotEmpty().hasLengthBetween(3,10) })
   firstName = 'John';
 
   constructor(validation) {
@@ -451,7 +451,7 @@ Additionally, you can use 'aurelia-validation' 's beautiful API to add additiona
 ####Changing locale
 Changing the locale is done on a 'global' level by calling *config.useLocale(localeIdentifier)*.
 
-See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance). 
+See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance).
 
 >Note: error messages already resolved are will be automatically updated when the locale changes.
 
@@ -466,6 +466,8 @@ See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intr
 - fr-FR
 - nl-BE
 - nl-NL
+- nb-NO
+- nn-NO
 - sv-SE
 - tr-TR
 - zh-CN
@@ -478,7 +480,7 @@ See ['Configuration'](https://github.com/aurelia/validation/blob/master/doc/Intr
 If you need a complex validation rule, you can extract that into a seperate class that inherits from **ValidationRule** and pass it to the *passes(validationRule)* function.
 For example:
 ``` javascript
-import {ValidationRule} from './plugins/validation/'; 
+import {ValidationRule} from './plugins/validation/';
 export class MyValidationRule extends ValidationRule{
 	constructor (isValid) {
 		super(
@@ -506,7 +508,7 @@ In addition to calling *passes(myCustomValidationRule)*, you can add custom vali
 
 ``` javascript
 import {Router} from 'aurelia-router';
-import {ValidationGroup} from './plugins/validation/'; 
+import {ValidationGroup} from './plugins/validation/';
 
 export class App {
   static inject() { return [Router]; }
@@ -537,11 +539,11 @@ export class App {
 Then, when you're setting up validation, you can use your new method:
 ``` javascript
     this.validation = validation.on(this)
-        .ensure('firstName') 
+        .ensure('firstName')
               .isNotEmpty()
               .hasMinLength(3)
               .hasMaxLength(10)
-        .ensure('lastName') 
+        .ensure('lastName')
               .isNotEmpty()
               .hasMinLength(3)
               .hasMaxLength(10)
@@ -553,32 +555,31 @@ Then, when you're setting up validation, you can use your new method:
 #Visualization (ValidateCustomAttribute)
 ##Basic usage
 To show validation messages, add the validate custom attribute to any DOM element (the form element is most common) and bind it to your validation instance.
-``` html 
-    <form role="form" submit.delegate="welcome()" validate.bind="validation" > 
+``` html
+    <form role="form" submit.delegate="welcome()" validate.bind="validation" >
 ```
 
 The validateCustomAttribute will loop through all nested child elements and try to determine which controls are data-bound to which properties, and if there are validation rules for those properties, it will show visual clues.
 
 ##Visual clues and customization
 The validate custom attribute uses a strategy based onTwitter Bootstrap by default (see 'configuration') to provide visual clues about valid/invalid properties.
-- for each input element, it will try to find the parent form-group element and add the appropriate TW BS has-error or has-success classes
+- for each input element, it will try to find the parent form-group element and add the appropriate TW BS has-warning or has-success classes
 - for each input element, it will try to find the labels for that element and append a message with the TW BS help-block class. The content of this element is kept in sync with the validation message (or left empty for valid properties)
 - this added message element will have a aurelia-valiation-message class. This allows you to apply specific styling. For example, to make sure that validation messages are shown next to the corresponding label and the label is colored without adding a TW bootstrap "control-label" class, you can add these style to styles/styles.css:
 ```css
-	p.aurelia-validation-message{
-	  display:  inline;
-	  margin-left : 5px;
-	} 
-  p.aurelia-validation-message:empty{
-    display:none;
-  }
-	.has-success label {
-	  color: #3c763d;
-	}
-	.has-warning label {
-	  color: #8a6d3b;
-	}
-
+p.aurelia-validation-message {
+  display: inline;
+  margin-left: 5px;
+}
+p.aurelia-validation-message:empty {
+  display: none;
+}
+.has-success label {
+  color: #3c763d;
+}
+.has-warning label {
+  color: #8a6d3b;
+}
 ```
 
 To change the default visualisation, see ['config.useViewStrategy'](https://github.com/aurelia/validation/blob/master/doc/Intro.md#configuseviewstrategyviewstrategyinstance).
@@ -592,9 +593,9 @@ this.validation = validation.on(this).ensure('firstName').isNotEmpty();
 ```html
 <form role="form" class="form-horizontal" validate.bind="validation">
   <div class="form-group">
-    <label class="col-sm-2 control-label">First Name</label> 
-    <input type="text" placeholder="first name" class="form-control" value.bind="firstName"> 
-  </div> 
+    <label class="col-sm-2 control-label">First Name</label>
+    <input type="text" placeholder="first name" class="form-control" value.bind="firstName">
+  </div>
 </form>
 ```
 In this case, the validate custom attribute will recognize the *value.bind="firstName"* attribute and match it against the validation rule you set up with *ensure('firstName')*.
@@ -609,9 +610,9 @@ this.contact.validation = validation.on(this.contact).ensure('firstName').isNotE
 ```html
 <form role="form" class="form-horizontal" validate.bind="contact.validation">
   <div class="form-group">
-    <label class="col-sm-2 control-label">First Name</label> 
-    <input type="text" placeholder="first name" class="form-control" value.bind="contact.firstName" validate="firstName"> 
-  </div> 
+    <label class="col-sm-2 control-label">First Name</label>
+    <input type="text" placeholder="first name" class="form-control" value.bind="contact.firstName" validate="firstName">
+  </div>
 </form>
 ```
 Pay attention to the two validate custom attributes in this example's HTML:
@@ -620,7 +621,7 @@ Pay attention to the two validate custom attributes in this example's HTML:
 
 ##Preventing form submission
 tl;dr: [watch these samples](http://aurelia.io/validation/#/form-submission)
-You could disable your submit function by binding it to the *validation.result.isValid* property: 
+You could disable your submit function by binding it to the *validation.result.isValid* property:
 ``` html
 <button type=submit" disabled.bind="!validation.result.isValid" >
 ```
@@ -639,7 +640,7 @@ You will have the following user experience:
 - when the user changes the value, validation messages & visual clues will be shown for each field he/she has edited
 - when the user hit submit, all input elements on the form will show validation messages & visual clues
 - if all validation rules have passed, the form submission code will actually run. If not, the user will clearly see what properties are valid, which are invalid, and why
-    
+
 If you expect the validation to take a while (AJAX call) you can still disable your submit button while validation is taking place:
 ``` html
 <button type=submit" disabled.bind="validation.isValidating" >
@@ -725,7 +726,7 @@ In addition, each allows you to register a callback that is notified when the pr
 
 If you need to clear or reset the validationResult, calling *.clear()* on the validation itself will cause the entire validationResult to be reset to valid and non-dirty.
 ``` javascript
-reset(){
+reset() {
   this.firstName = "John";
   this.lastName = "Doe";
   this.validation.clear();
@@ -740,9 +741,9 @@ export function configure(aurelia) {
   aurelia.use
     .standardConfiguration()
     .developmentLogging()
-    .plugin('aurelia-validation', (config) => { config.useLocale('nl-NL') }); 
+    .plugin('aurelia-validation', (config) => { config.useLocale('nl-NL') });
 
-  aurelia.start().then(a => a.setRoot('app', document.body)); 
+  aurelia.start().then(a => a.setRoot('app', document.body));
 }
 ```
 
@@ -760,17 +761,17 @@ The configuration on the property level will delegate missing config to it's par
 import {ValidationConfig} from 'aurelia-validation';
 import {inject} from 'aurelia-framework';
 
-@inject(ValidationConfig) 
+>@inject(ValidationConfig)
 export class MyVM{
   constructor(config)
   {
-    
-  }
+
+>  }
 }
 ```
 
 ##Possible configuration
->Note: all these can be chained: 
+>Note: all these can be chained:
 ``` javascript
 (config) => { config.useLocale('tr-TR').useDebounceTimeout(150) }
 ```
@@ -779,8 +780,8 @@ export class MyVM{
 ``` javascript
 (config) => {config.useDebounceTimemout(150) }
 ```
-Sets the debounce timeout, in ms.  Default is 0. 
-Whenever the value changes, the validation plugin will wait the assigned debounce timeout and will only evaluate if there are no subsequent changes within the allowed timeout. 
+Sets the debounce timeout, in ms.  Default is 0.
+Whenever the value changes, the validation plugin will wait the assigned debounce timeout and will only evaluate if there are no subsequent changes within the allowed timeout.
 This is especially useful when using asyncrhoneous validation, to avoid doing validation calls while the user is typing.
 Valid on:
 - global level
@@ -795,7 +796,7 @@ Valid on:
 Signals that validation on one property should be re-evaluated when a dependent property changes. There is no default.
 Valid on:
 - property level
- 
+
 ###config.useLocale(localeIdentifier)
 ``` javascript
 (config) => {config.useLocale('fr-FR') }
@@ -804,20 +805,23 @@ Uses the specified locale. Default is ('en-US').
 Valid on:
 - global level
 - group level
- 
+
 ###config.useViewStrategy(viewStrategyInstance)
 ``` javascript
 (config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput); }
 ```
-Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are: ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage, ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput and any class that inherits from ValidateCustomAttributeViewStrategyBase
+Uses the specified view strategy. This view strategy is consumed by the ValidateCustomAttribute. Possible values are:
+- ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage,
+- ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput
+- and any class that inherits from ValidateCustomAttributeViewStrategyBase
 
 ###config.treatAllPropertiesAsMandatory()
 ``` javascript
 (config) => { config.treatAllPropertiesAsMandatory(); }
 ```
-By default, all properties are optional. Properties that cannot be empty, are set up using the (*isNotEmpty()*)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#isnotempty] validation rule.
+By default, all properties are optional. Properties that cannot be empty, are set up using the [*isNotEmpty()*](https://github.com/aurelia/validation/blob/master/doc/Intro.md#isnotempty) validation rule.
 
-To change the default, call *treatAllPropertiesAsMandatory()* on the configuration. Now all properties will be considered mandatory, and you can signal that a single property can be empty by calling the (*canBeEmpty()*)[https://github.com/aurelia/validation/blob/master/doc/Intro.md#canbeempty] validation rule.
+To change the default, call *treatAllPropertiesAsMandatory()* on the configuration. Now all properties will be considered mandatory, and you can signal that a single property can be empty by calling the [*canBeEmpty()*](https://github.com/aurelia/validation/blob/master/doc/Intro.md#canbeempty) validation rule.
 
 To inverse this configuration, call *treatAllPropertiesAsOptional()* on the configuration.
 

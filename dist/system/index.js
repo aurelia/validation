@@ -1,4 +1,4 @@
-System.register(['./validation/validation-config', './validation/validation', './validation/utilities', './validation/validation-locale', './validation/validation-result', './validation/validation-rules', './validation/validate-custom-attribute', './validation/validate-custom-attribute-view-strategy', './validation/decorators'], function (_export) {
+System.register(['./validation-config', './validation', './utilities', './validation-locale', './validation-result', './validation-rules', './validation-group', './validate-custom-attribute', './validation-view-strategy', './strategies/twbootstrap-view-strategy', './decorators'], function (_export) {
   'use strict';
 
   var ValidationConfig, Validation;
@@ -6,44 +6,45 @@ System.register(['./validation/validation-config', './validation/validation', '.
   _export('configure', configure);
 
   function configure(aurelia, configCallback) {
-
-    aurelia.globalizeResources('./validation/validate-custom-attribute');
+    aurelia.globalResources('./validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(Validation.defaults);
     }
-    aurelia.withSingleton(ValidationConfig, Validation.defaults);
+    aurelia.singleton(ValidationConfig, Validation.defaults);
     return Validation.defaults.locale();
   }
 
   return {
-    setters: [function (_validationValidationConfig) {
-      ValidationConfig = _validationValidationConfig.ValidationConfig;
+    setters: [function (_validationConfig) {
+      ValidationConfig = _validationConfig.ValidationConfig;
 
-      _export('ValidationConfig', _validationValidationConfig.ValidationConfig);
-    }, function (_validationValidation) {
-      Validation = _validationValidation.Validation;
+      _export('ValidationConfig', _validationConfig.ValidationConfig);
+    }, function (_validation) {
+      Validation = _validation.Validation;
 
-      _export('Validation', _validationValidation.Validation);
-    }, function (_validationUtilities) {
-      _export('Utilities', _validationUtilities.Utilities);
-    }, function (_validationValidationLocale) {
-      _export('ValidationLocale', _validationValidationLocale.ValidationLocale);
-    }, function (_validationValidationResult) {
-      for (var _key in _validationValidationResult) {
-        _export(_key, _validationValidationResult[_key]);
+      _export('Validation', _validation.Validation);
+    }, function (_utilities) {
+      _export('Utilities', _utilities.Utilities);
+    }, function (_validationLocale) {
+      _export('ValidationLocale', _validationLocale.ValidationLocale);
+    }, function (_validationResult) {
+      for (var _key in _validationResult) {
+        _export(_key, _validationResult[_key]);
       }
-    }, function (_validationValidationRules) {
-      for (var _key2 in _validationValidationRules) {
-        _export(_key2, _validationValidationRules[_key2]);
+    }, function (_validationRules) {
+      for (var _key2 in _validationRules) {
+        _export(_key2, _validationRules[_key2]);
       }
-    }, function (_validationValidateCustomAttribute) {
-      _export('ValidateCustomAttribute', _validationValidateCustomAttribute.ValidateCustomAttribute);
-    }, function (_validationValidateCustomAttributeViewStrategy) {
-      _export('ValidateCustomAttributeViewStrategy', _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategy);
-
-      _export('ValidateCustomAttributeViewStrategyBase', _validationValidateCustomAttributeViewStrategy.ValidateCustomAttributeViewStrategyBase);
-    }, function (_validationDecorators) {
-      _export('ensure', _validationDecorators.ensure);
+    }, function (_validationGroup) {
+      _export('ValidationGroup', _validationGroup.ValidationGroup);
+    }, function (_validateCustomAttribute) {
+      _export('ValidateCustomAttribute', _validateCustomAttribute.ValidateCustomAttribute);
+    }, function (_validationViewStrategy) {
+      _export('ValidationViewStrategy', _validationViewStrategy.ValidationViewStrategy);
+    }, function (_strategiesTwbootstrapViewStrategy) {
+      _export('TWBootstrapViewStrategy', _strategiesTwbootstrapViewStrategy.TWBootstrapViewStrategy);
+    }, function (_decorators) {
+      _export('ensure', _decorators.ensure);
     }],
     execute: function () {}
   };

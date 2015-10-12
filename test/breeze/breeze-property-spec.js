@@ -1,7 +1,7 @@
-import {Validation} from '../../src/validation/validation';
+import {Validation} from '../../src/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from '../expectations';
-import {ValidationConfig} from '../../src/validation/validation-config';
+import {ValidationConfig} from '../../src/validation-config';
 import {EntityAspectMock} from '../breeze/entity-aspect-mock';
 
 describe('validation on breeze: properties', ()=>{

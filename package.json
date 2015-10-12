@@ -1,6 +1,6 @@
 {
   "name": "aurelia-validation",
-  "version": "0.2.7",
+  "version": "0.3.1",
   "description": "A validation plugin for Aurelia.",
   "keywords": [
     "aurelia",
@@ -25,37 +25,48 @@
       "lib": "dist/amd"
     },
     "dependencies": {
-      "aurelia-binding": "github:aurelia/binding@^0.8.0",
-      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.9.0",
-      "aurelia-templating": "github:aurelia/templating@^0.13.0"
+      "aurelia-binding": "github:aurelia/binding@^0.9.1",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.10.1",
+      "aurelia-logging": "github:aurelia/logging@^0.7.0",
+      "aurelia-metadata": "github:aurelia/metadata@^0.8.0",
+      "aurelia-templating": "github:aurelia/templating@^0.15.3"
     },
     "devDependencies": {
-      "babel": "npm:babel-core@^5.1.13",
-      "babel-runtime": "npm:babel-runtime@^5.1.13",
-      "core-js": "npm:core-js@^0.9.5",
-      "traceur": "github:jmcriffey/bower-traceur@0.0.88",
-      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.88"
+      "babel": "npm:babel-core@^5.8.22",
+      "babel-runtime": "npm:babel-runtime@^5.8.20",
+      "core-js": "npm:core-js@^1.1.0",
+      "traceur": "github:jmcriffey/bower-traceur@0.0.91",
+      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.91"
     }
   },
   "devDependencies": {
-    "aurelia-tools": "^0.1.3",
+    "aurelia-tools": "^0.1.12",
+    "babel-dts-generator": "^0.2.11",
+    "babel-eslint": "^4.1.1",
+    "browser-sync": "^2.9.3",
     "conventional-changelog": "0.0.11",
     "del": "^1.1.0",
     "gulp": "^3.8.10",
     "gulp-babel": "^5.1.0",
-    "gulp-bump": "^0.1.11",
-    "gulp-jshint": "^1.9.0",
+    "gulp-bump": "^0.3.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-insert": "^0.5.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-typedoc": "^1.2.1",
+    "gulp-typedoc-extractor": "0.0.8",
     "gulp-yuidoc": "^0.1.2",
     "jasmine-core": "^2.1.3",
-    "jshint-stylish": "^1.0.0",
     "karma": "^0.12.28",
-    "karma-babel-preprocessor": "^5.0.1",
+    "karma-babel-preprocessor": "^5.2.1",
     "karma-chrome-launcher": "^0.1.7",
     "karma-jasmine": "^0.3.5",
-    "karma-jspm": "^1.1.5",
+    "karma-jspm": "^2.0.1",
     "object.assign": "^1.0.3",
     "require-dir": "^0.1.0",
     "run-sequence": "^1.0.2",
+    "through2": "^2.0.0",
+    "vinyl": "^0.5.3",
     "vinyl-paths": "^1.0.0",
     "yargs": "^2.1.1"
   },

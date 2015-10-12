@@ -2,7 +2,7 @@
 
 exports.__esModule = true;
 
-var _validationUtilities = require('../validation/utilities');
+var _utilities = require('../utilities');
 
 var data = {
   settings: {
@@ -24,10 +24,10 @@ var data = {
       return 'kan enkel letters of spaties bevatten';
     },
     'BetweenLengthValidationRule': function BetweenLengthValidationRule(newValue, threshold) {
-      return 'moet tussen ' + _validationUtilities.Utilities.getValue(threshold.minimumLength) + ' en ' + _validationUtilities.Utilities.getValue(threshold.maximumLength) + ' tekens lang zijn';
+      return 'moet tussen ' + _utilities.Utilities.getValue(threshold.minimumLength) + ' en ' + _utilities.Utilities.getValue(threshold.maximumLength) + ' tekens lang zijn';
     },
     'BetweenValueValidationRule': function BetweenValueValidationRule(newValue, threshold) {
-      return 'moet tussen ' + _validationUtilities.Utilities.getValue(threshold.minimumValue) + ' en ' + _validationUtilities.Utilities.getValue(threshold.maximumValue) + ' zijn';
+      return 'moet tussen ' + _utilities.Utilities.getValue(threshold.minimumValue) + ' en ' + _utilities.Utilities.getValue(threshold.maximumValue) + ' zijn';
     },
     'DigitValidationRule': function DigitValidationRule(newValue, threshold) {
       return 'mag enkel cijfers bevatten';
@@ -39,37 +39,37 @@ var data = {
       return 'is geen geldig email adres';
     },
     'EqualityValidationRule': function EqualityValidationRule(newValue, threshold) {
-      return 'moet ' + _validationUtilities.Utilities.getValue(threshold.otherValue) + ' zijn';
+      return 'moet ' + _utilities.Utilities.getValue(threshold.otherValue) + ' zijn';
     },
     'InEqualityValidationRule': function InEqualityValidationRule(newValue, threshold) {
-      return 'mag niet ' + _validationUtilities.Utilities.getValue(threshold.otherValue) + ' zijn';
+      return 'mag niet ' + _utilities.Utilities.getValue(threshold.otherValue) + ' zijn';
     },
     'EqualityWithOtherLabelValidationRule': function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-      return 'moet overeen komen met ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+      return 'moet overeen komen met ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
     },
     'InEqualityWithOtherLabelValidationRule': function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-      return 'mag niet overeen komen met ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+      return 'mag niet overeen komen met ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
     },
     'InCollectionValidationRule': function InCollectionValidationRule(newValue, threshold) {
       return 'is geen geldige waarde';
     },
     'MinimumInclusiveValueValidationRule': function MinimumInclusiveValueValidationRule(newValue, threshold) {
-      return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
+      return 'moet op zijn minst ' + _utilities.Utilities.getValue(threshold) + ' zijn';
     },
     'MinimumLengthValidationRule': function MinimumLengthValidationRule(newValue, threshold) {
-      return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' tekens lang zijn';
+      return 'moet op zijn minst ' + _utilities.Utilities.getValue(threshold) + ' tekens lang zijn';
     },
     'MinimumValueValidationRule': function MinimumValueValidationRule(newValue, threshold) {
-      return 'moet meer dan ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
+      return 'moet meer dan ' + _utilities.Utilities.getValue(threshold) + ' zijn';
     },
     'MaximumInclusiveValueValidationRule': function MaximumInclusiveValueValidationRule(newValue, threshold) {
-      return 'moet op zijn meest ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
+      return 'moet op zijn meest ' + _utilities.Utilities.getValue(threshold) + ' zijn';
     },
     'MaximumLengthValidationRule': function MaximumLengthValidationRule(newValue, threshold) {
-      return 'moet minder dan ' + _validationUtilities.Utilities.getValue(threshold) + ' tekens lang zijn';
+      return 'moet minder dan ' + _utilities.Utilities.getValue(threshold) + ' tekens lang zijn';
     },
     'MaximumValueValidationRule': function MaximumValueValidationRule(newValue, threshold) {
-      return 'moet minder dan ' + _validationUtilities.Utilities.getValue(threshold) + ' zijn';
+      return 'moet minder dan ' + _utilities.Utilities.getValue(threshold) + ' zijn';
     },
     'NumericValidationRule': function NumericValidationRule(newValue, threshold) {
       return 'moet een getal zijn';
@@ -87,7 +87,7 @@ var data = {
       return 'moet een combinatie van letters, hoofdletters, cijfers en speciale tekens zijn';
     },
     'MediumPasswordValidationRule': function MediumPasswordValidationRule(newValue, threshold) {
-      return 'moet op zijn minst ' + _validationUtilities.Utilities.getValue(threshold) + ' van de volgende groepen bevatten: letters, hoofdletters, cijfers of speciale tekens';
+      return 'moet op zijn minst ' + _utilities.Utilities.getValue(threshold) + ' van de volgende groepen bevatten: letters, hoofdletters, cijfers of speciale tekens';
     },
     'URLValidationRule': function URLValidationRule(newValue, threshold) {
       return 'is geen geldige URL';

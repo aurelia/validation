@@ -1,25 +1,23 @@
-export {Utilities} from './validation/utilities';
-export {ValidationConfig} from './validation/validation-config';
-export {ValidationLocale} from './validation/validation-locale';
-export * from './validation/validation-result';
-export * from './validation/validation-rules';
-export {Validation} from './validation/validation';
-export {ValidateCustomAttribute} from './validation/validate-custom-attribute';
-export {ValidateCustomAttributeViewStrategy} from './validation/validate-custom-attribute-view-strategy';
-export {ValidateCustomAttributeViewStrategyBase} from './validation/validate-custom-attribute-view-strategy';
-export {ensure} from './validation/decorators';
+export {Utilities} from './utilities';
+export {ValidationConfig} from './validation-config';
+export {ValidationLocale} from './validation-locale';
+export * from './validation-result';
+export * from './validation-rules';
+export {Validation} from './validation';
+export {ValidationGroup} from './validation-group';
+export {ValidateCustomAttribute} from './validate-custom-attribute';
+export {ValidationViewStrategy} from './validation-view-strategy';
+export {TWBootstrapViewStrategy} from './strategies/twbootstrap-view-strategy';
+export {ensure} from './decorators';
 
-
-import {ValidationConfig} from './validation/validation-config';
-import {Validation} from './validation/validation';
+import {ValidationConfig} from './validation-config';
+import {Validation} from './validation';
 
 export function configure(aurelia, configCallback) {
-
-  aurelia.globalizeResources('./validation/validate-custom-attribute');
-  if(configCallback !== undefined && typeof(configCallback) === 'function')
-  {
+  aurelia.globalResources('./validate-custom-attribute');
+  if (configCallback !== undefined && typeof(configCallback) === 'function') {
     configCallback(Validation.defaults);
   }
-  aurelia.withSingleton(ValidationConfig, Validation.defaults);
+  aurelia.singleton(ValidationConfig, Validation.defaults);
   return Validation.defaults.locale();
 }

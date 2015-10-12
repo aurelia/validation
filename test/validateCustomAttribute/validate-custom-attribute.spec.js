@@ -1,9 +1,8 @@
-import {Validation} from '../../src/validation/validation';
-import {ValidateCustomAttribute} from '../../src/validation/validate-custom-attribute';
-import {ValidateCustomAttributeViewStrategy} from '../../src/validation/validate-custom-attribute-view-strategy';
+import {Validation} from '../../src/validation';
+import {ValidateCustomAttribute} from '../../src/validate-custom-attribute';
+import {TWBootstrapViewStrategy} from '../../src/strategies/twbootstrap-view-strategy';
 import {Expectations} from '../expectations';
 import {ObserverLocator} from 'aurelia-binding';
-
 
 class TestSubject {
   constructor(validation, callback) {
@@ -118,7 +117,9 @@ describe('Tests on ValidateCustomAttribute', () => {
 
   it('should be working with a different view strategy', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance( (config) => {config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToInput)});
+    var subject = TestSubject.createInstance( (config) => {
+      config.useViewStrategy(TWBootstrapViewStrategy.AppendToInput);
+    });
     var testHTML = TestDOM.createElement(`<form role="form" submit.delegate="welcome()" >
             <div class="form-group" id="formGroupFirstName">
             <label for="fn" id="labelFirstName" >First Name</label>

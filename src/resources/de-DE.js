@@ -1,4 +1,4 @@
-import {Utilities} from '../validation/utilities';
+﻿import {Utilities} from '../utilities';
 
 export let data = {
   settings: {
@@ -6,7 +6,7 @@ export let data = {
   },
   messages: {
     'isRequired': 'wird benötigt',
-    'onValidateCallback' : 'ist kein gültiger Wert',
+    'onValidateCallback': 'ist kein gültiger Wert',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
       return `darf nur alphanumerische Zeichen oder Leerzeichen beinhalten`;
     },
@@ -20,7 +20,7 @@ export let data = {
       return `muss zwischen ${Utilities.getValue(threshold.minimumValue)} und ${Utilities.getValue(threshold.maximumValue)} sein`;
     },
     'CustomFunctionValidationRule': (newValue, threshold) => {
-      return `ist kein gültiger Wert`
+      return `ist kein gültiger Wert`;
     },
     'DigitValidationRule': (newValue, threshold) => {
       return `darf nur Zahlen beinhalten`;
@@ -29,15 +29,15 @@ export let data = {
       return `ist keine gültige Email-Adresse`;
     },
     'EqualityValidationRule': (newValue, threshold) => {
-        return `sollte ${Utilities.getValue(threshold.otherValue)} sein`;
+      return `sollte ${Utilities.getValue(threshold.otherValue)} sein`;
     },
-    'InEqualityValidationRule' : (newValue, threshold) => {
-        return `sollte nicht ${Utilities.getValue(threshold.otherValue)} sein`;
+    'InEqualityValidationRule': (newValue, threshold) => {
+      return `sollte nicht ${Utilities.getValue(threshold.otherValue)} sein`;
     },
     'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `darf nicht mit ${Utilities.getValue(threshold.otherValueLabel)} übereinstimmen`;
     },
-    'InEqualityWithOtherLabelValidationRule' : (newValue, threshold) => {
+    'InEqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `cannot not match ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
@@ -58,7 +58,7 @@ export let data = {
     'NumericValidationRule': (newValue, threshold) => {
       return `muss eine Nummer sein`;
     },
-    'NoSpacesValidationRule' : (newValue, threshold) => {
+    'NoSpacesValidationRule': (newValue, threshold) => {
       return `darf keine Leerzeichen enthalten`;
     },
     'RegexValidationRule': (newValue, threshold) => {
@@ -68,12 +68,12 @@ export let data = {
       return `ist kein gültiger Wert`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {
-        return `sollte eine Kombination aus Groß- und Kleinbuchstaben, sowie Zahlen und Sonderzeichen enthalten`;
+      return `sollte eine Kombination aus Groß- und Kleinbuchstaben, sowie Zahlen und Sonderzeichen enthalten`;
     },
-    'MediumPasswordValidationRule' : (newValue, threshold) => {
-        return `sollte zumindest ${Utilities.getValue(threshold)} der folgenden Gruppen enthalten: Kleinbuchstaben, Großbuchstaben, Zahlen oder Sonderzeichen`;
+    'MediumPasswordValidationRule': (newValue, threshold) => {
+      return `sollte zumindest ${Utilities.getValue(threshold)} der folgenden Gruppen enthalten: Kleinbuchstaben, Großbuchstaben, Zahlen oder Sonderzeichen`;
     },
-    'URLValidationRule' : (newValue, threshold) =>{
+    'URLValidationRule': (newValue, threshold) => {
       return `ist keine gültige URL`;
     }
   }

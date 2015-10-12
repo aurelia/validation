@@ -1,4 +1,4 @@
-import {Utilities} from '../validation/utilities';
+import {Utilities} from '../utilities';
 
 export let data = {
   settings: {
@@ -6,17 +6,17 @@ export let data = {
   },
   messages: {
     'isRequired': 'är obligatoriskt',
-    'onValidateCallback' : 'är inte ett giltigt värde',
+    'onValidateCallback': 'är inte ett giltigt värde',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
       return `kan enbart innehålla alfanumeriska tecken eller mellanslag`;
     },
     'AlphaNumericValidationRule': (newValue, threshold) => {
       return `kan enbart innehålla alfanumeriska tecken`;
     },
-    'AlphaValidationRule' : (newValue, threshold) => {
+    'AlphaValidationRule': (newValue, threshold) => {
       return `kan enbart innehålla bokstäver eller mellanslag`;
     },
-    'AlphaOrWhitespaceValidationRule' : (newValue, threshold) => {
+    'AlphaOrWhitespaceValidationRule': (newValue, threshold) => {
       return `kan enbart innehålla bokstäver`;
     },
     'BetweenLengthValidationRule': (newValue, threshold) => {
@@ -26,7 +26,7 @@ export let data = {
       return `måste vara mellan ${Utilities.getValue(threshold.minimumValue)} och ${Utilities.getValue(threshold.maximumValue)}`;
     },
     'CustomFunctionValidationRule': (newValue, threshold) => {
-      return `är inte ett giltigt värde`
+      return `är inte ett giltigt värde`;
     },
     'DigitValidationRule': (newValue, threshold) => {
       return `kan bara innehålla siffror`;
@@ -35,21 +35,21 @@ export let data = {
       return `är inte en giltig e-postadress`;
     },
     'EqualityValidationRule': (newValue, threshold) => {
-        return `ska vara ${Utilities.getValue(threshold.otherValue)}`;
+      return `ska vara ${Utilities.getValue(threshold.otherValue)}`;
     },
-    'InEqualityValidationRule' : (newValue, threshold) => {
-        return `kan inte vara ${Utilities.getValue(threshold.otherValue)}`;
+    'InEqualityValidationRule': (newValue, threshold) => {
+      return `kan inte vara ${Utilities.getValue(threshold.otherValue)}`;
     },
     'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `matchar inte ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
-    'InEqualityWithOtherLabelValidationRule' : (newValue, threshold) => {
+    'InEqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `får inte matcha ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
     'InCollectionValidationRule': (newValue, threshold) => {
       return `är inget giltigt värde`;
     },
-    'MinimumInclusiveValueValidationRule' : (newValue, threshold) => {
+    'MinimumInclusiveValueValidationRule': (newValue, threshold) => {
       return `måste vara ${Utilities.getValue(threshold)} eller mer`;
     },
     'MinimumLengthValidationRule': (newValue, threshold) => {
@@ -58,7 +58,7 @@ export let data = {
     'MinimumValueValidationRule': (newValue, threshold) => {
       return `måste vara mer än ${Utilities.getValue(threshold)}`;
     },
-    'MaximumInclusiveValueValidationRule' : (newValue, threshold) => {
+    'MaximumInclusiveValueValidationRule': (newValue, threshold) => {
       return `måste vara ${Utilities.getValue(threshold)} eller mindre`;
     },
     'MaximumLengthValidationRule': (newValue, threshold) => {
@@ -70,7 +70,7 @@ export let data = {
     'NumericValidationRule': (newValue, threshold) => {
       return `måste vara ett nummer`;
     },
-    'NoSpacesValidationRule' : (newValue, threshold) => {
+    'NoSpacesValidationRule': (newValue, threshold) => {
       return `kan inte innehålla mellanslag`;
     },
     'RegexValidationRule': (newValue, threshold) => {
@@ -80,13 +80,13 @@ export let data = {
       return `är inte ett giltigt värde`;
     },
     'StrongPasswordValidationRule': (newValue, threshold) => {
-        return `ska innehålla en kombination av gemener, versaler, siffror och specialtecken`;
+      return `ska innehålla en kombination av gemener, versaler, siffror och specialtecken`;
     },
-    'MediumPasswordValidationRule' : (newValue, threshold) => {
+    'MediumPasswordValidationRule': (newValue, threshold) => {
       return `ska innehålla minst ${Utilities.getValue(threshold)} av följande grupperingar: gemener, versaler, siffror eller specialtecken`;
     },
-    'URLValidationRule' : (newValue, threshold) =>{
-      return `är inte en giltig webbadress`
+    'URLValidationRule': (newValue, threshold) => {
+      return `är inte en giltig webbadress`;
     }
   }
 };

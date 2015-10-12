@@ -1,4 +1,4 @@
-import {MinimumLengthValidationRule} from '../../src/validation/validation-rules';
+import {MinimumLengthValidationRule} from '../../src/validation-rules';
 import {Expectations} from '../expectations';
 
 //No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'isNotEmpty()'
@@ -11,6 +11,16 @@ describe('Tests on MinimumLengthValidationRule', () => {
     expectations.expectAsync(rule.validate('ab')).toBe(false);
     expectations.expectAsync(rule.validate('abc')).toBe(true);
     expectations.expectAsync(rule.validate('abcd')).toBe(true);
+    expectations.validate();
+  });
+
+  it('should be working with simple numbers', (done) => {
+    var expectations = new Expectations(expect, done);
+    var rule = new MinimumLengthValidationRule(3);
+    expectations.expectAsync(rule.validate(1)).toBe(false);
+    expectations.expectAsync(rule.validate(12)).toBe(false);
+    expectations.expectAsync(rule.validate(123)).toBe(true);
+    expectations.expectAsync(rule.validate(1234)).toBe(true);
     expectations.validate();
   });
 

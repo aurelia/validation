@@ -2,7 +2,7 @@
 
 exports.__esModule = true;
 
-var _validationUtilities = require('../validation/utilities');
+var _utilities = require('../utilities');
 
 var data = {
   settings: {
@@ -24,10 +24,10 @@ var data = {
       return 'трябва да съдържа само букви или интервали';
     },
     'BetweenLengthValidationRule': function BetweenLengthValidationRule(newValue, threshold) {
-      return 'броят на символите трябва да бъде между ' + _validationUtilities.Utilities.getValue(threshold.minimumLength) + ' и ' + _validationUtilities.Utilities.getValue(threshold.maximumLength);
+      return 'броят на символите трябва да бъде между ' + _utilities.Utilities.getValue(threshold.minimumLength) + ' и ' + _utilities.Utilities.getValue(threshold.maximumLength);
     },
     'BetweenValueValidationRule': function BetweenValueValidationRule(newValue, threshold) {
-      return 'стойността трябва да бъде между ' + _validationUtilities.Utilities.getValue(threshold.minimumValue) + ' и ' + _validationUtilities.Utilities.getValue(threshold.maximumValue);
+      return 'стойността трябва да бъде между ' + _utilities.Utilities.getValue(threshold.minimumValue) + ' и ' + _utilities.Utilities.getValue(threshold.maximumValue);
     },
     'CustomFunctionValidationRule': function CustomFunctionValidationRule(newValue, threshold) {
       return 'невалидна стойност';
@@ -39,37 +39,37 @@ var data = {
       return 'невалидна електронна поща';
     },
     'EqualityValidationRule': function EqualityValidationRule(newValue, threshold) {
-      return 'стойността трябва да бъде ' + _validationUtilities.Utilities.getValue(threshold.otherValue);
+      return 'стойността трябва да бъде ' + _utilities.Utilities.getValue(threshold.otherValue);
     },
     'InEqualityValidationRule': function InEqualityValidationRule(newValue, threshold) {
-      return 'стойността не може да бъде ' + _validationUtilities.Utilities.getValue(threshold.otherValue);
+      return 'стойността не може да бъде ' + _utilities.Utilities.getValue(threshold.otherValue);
     },
     'EqualityWithOtherLabelValidationRule': function EqualityWithOtherLabelValidationRule(newValue, threshold) {
-      return 'стойността не съвпада с ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+      return 'стойността не съвпада с ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
     },
     'InEqualityWithOtherLabelValidationRule': function InEqualityWithOtherLabelValidationRule(newValue, threshold) {
-      return 'стойността не може да съвпада с ' + _validationUtilities.Utilities.getValue(threshold.otherValueLabel);
+      return 'стойността не може да съвпада с ' + _utilities.Utilities.getValue(threshold.otherValueLabel);
     },
     'InCollectionValidationRule': function InCollectionValidationRule(newValue, threshold) {
       return 'невалидна стойност';
     },
     'MinimumInclusiveValueValidationRule': function MinimumInclusiveValueValidationRule(newValue, threshold) {
-      return 'стойността трябва да бъде ' + _validationUtilities.Utilities.getValue(threshold) + ' или повече';
+      return 'стойността трябва да бъде ' + _utilities.Utilities.getValue(threshold) + ' или повече';
     },
     'MinimumLengthValidationRule': function MinimumLengthValidationRule(newValue, threshold) {
-      return 'броят на символите трябва да бъде поне ' + _validationUtilities.Utilities.getValue(threshold);
+      return 'броят на символите трябва да бъде поне ' + _utilities.Utilities.getValue(threshold);
     },
     'MinimumValueValidationRule': function MinimumValueValidationRule(newValue, threshold) {
-      return 'стойността трябва да бъде повече от ' + _validationUtilities.Utilities.getValue(threshold);
+      return 'стойността трябва да бъде повече от ' + _utilities.Utilities.getValue(threshold);
     },
     'MaximumInclusiveValueValidationRule': function MaximumInclusiveValueValidationRule(newValue, threshold) {
-      return 'стойността трябва да бъде ' + _validationUtilities.Utilities.getValue(threshold) + ' или по-малко';
+      return 'стойността трябва да бъде ' + _utilities.Utilities.getValue(threshold) + ' или по-малко';
     },
     'MaximumLengthValidationRule': function MaximumLengthValidationRule(newValue, threshold) {
-      return 'броят на символите не може да бъде повече от ' + _validationUtilities.Utilities.getValue(threshold);
+      return 'броят на символите не може да бъде повече от ' + _utilities.Utilities.getValue(threshold);
     },
     'MaximumValueValidationRule': function MaximumValueValidationRule(newValue, threshold) {
-      return 'стойността трябва да бъде по-малко от ' + _validationUtilities.Utilities.getValue(threshold);
+      return 'стойността трябва да бъде по-малко от ' + _utilities.Utilities.getValue(threshold);
     },
     'NumericValidationRule': function NumericValidationRule(newValue, threshold) {
       return 'стойността на полето трябва да бъде число';
@@ -84,7 +84,7 @@ var data = {
       return 'трябва да съдържа комбинация от малки и големи букви, цифри и специални знаци';
     },
     'MediumPasswordValidationRule': function MediumPasswordValidationRule(newValue, threshold) {
-      return 'трябва да съдържа поне  ' + _validationUtilities.Utilities.getValue(threshold) + ' от следните групи: малки и големи букви, цифри и специални знаци';
+      return 'трябва да съдържа поне  ' + _utilities.Utilities.getValue(threshold) + ' от следните групи: малки и големи букви, цифри и специални знаци';
     }
   }
 };

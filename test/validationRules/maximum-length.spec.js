@@ -1,4 +1,4 @@
-import {MaximumLengthValidationRule} from '../../src/validation/validation-rules';
+import {MaximumLengthValidationRule} from '../../src/validation-rules';
 import {Expectations} from '../expectations';
 
 //No need to test empty values, they are filtered out by the "ValidationProperty" depending if they are 'isNotEmpty()'
@@ -11,6 +11,16 @@ describe('Tests on MaximumLengthValidationRule', () => {
     expectations.expectAsync(rule.validate('ab')).toBe(true);
     expectations.expectAsync(rule.validate('abc')).toBe(false);
     expectations.expectAsync(rule.validate('abcd')).toBe(false);
+    expectations.validate();
+  });
+
+  it('should be working with simple numbers', (done) => {
+    var expectations = new Expectations(expect, done);
+    var rule = new MaximumLengthValidationRule(2);
+    expectations.expectAsync(rule.validate(1)).toBe(true);
+    expectations.expectAsync(rule.validate(12)).toBe(true);
+    expectations.expectAsync(rule.validate(123)).toBe(false);
+    expectations.expectAsync(rule.validate(1234)).toBe(false);
     expectations.validate();
   });
 

@@ -1,0 +1,31 @@
+<template>
+  <style>
+    .validation-errors {
+      background-color: lightgrey;
+    }
+    .validation-errors li.invalid {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+  <h1>Validation</h1>
+  <div class="row validation-errors" show.bind="hasValidated">
+    <ul>
+      <li class="invalid" repeat.for="message of validationMessages">
+        ${message}
+      </li>
+      <li if.bind="validationMessages.length === 0">
+        <em>No validation errors!</em>
+      </li>
+    </ul>
+  </div>
+  <label>
+    <strong>First Name</strong>
+    <input value.bind="firstName"/>
+  </label>
+  <label>
+    <strong>Last Name</strong>
+    <input value.bind="lastName"/>
+  </label>
+  <button click.trigger="validate()">Validate</button>
+</template>
