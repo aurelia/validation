@@ -1,4 +1,5 @@
 import {Validation} from '../src/validation';
+import {ValidationConfig} from '../src/validation-config';
 import {ObserverLocator} from 'aurelia-binding';
 import {TaskQueue} from 'aurelia-task-queue';
 
@@ -6,7 +7,7 @@ class TestSubject {
   constructor() {
     this.a = 3;
     this.b = 10;
-    let validation = new Validation(new ObserverLocator(new TaskQueue(), { debounceTimeout: 0 }));
+    let validation = new Validation(new ObserverLocator(new TaskQueue()), new ValidationConfig().useDebounceTimeout(0));
     this.validation = validation.on(this)
                                 .ensure('b', (config) => { config.computedFrom('a') })
                                 .isLessThan(() => this.a);
@@ -26,7 +27,7 @@ describe('Computed properties', () => {
     let bProperty = subject.validation.validationProperties[0];
             
     // Be careful here: new TestSubject() sets up the validation, which triggers the first validation,
-    // which is an async process. So a first delay is requried to not count that first validation.
+    // which is an async process. So a first delay is required to not count that first validation.
     setTimeout(() => {
       // Note: we can't spy on bProperty.validate, as this is where the "if" shortcuting validation is.
       spyOn(bProperty.collectionOfValidationRules, 'validate').and.callThrough();
