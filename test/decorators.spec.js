@@ -3,6 +3,7 @@ import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
 import {ValidationConfig} from '../src/validation-config';
 import {ensure} from '../src/decorators';
+import {TaskQueue} from 'aurelia-task-queue';
 
 class TestSubject {
 
@@ -10,7 +11,7 @@ class TestSubject {
   firstName = '';
 
   constructor() {
-    this.validation = new Validation(new ObserverLocator()).on(this);
+    this.validation = new Validation(new ObserverLocator(new TaskQueue())).on(this);
   }
 }
 

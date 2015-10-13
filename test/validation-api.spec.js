@@ -2,6 +2,7 @@ import {Validation} from '../src/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
 import {ValidationConfig} from '../src/validation-config';
+import {TaskQueue} from 'aurelia-task-queue';
 
 class APITest {
   constructor(propertyValue, validation, validationConfigCallback) {
@@ -19,7 +20,7 @@ class APITest {
   }
 
   static Assert(expectations, callback, value, validity, validationConfigCallback) {
-    var subject = new APITest(value, new Validation(new ObserverLocator()), validationConfigCallback);
+    var subject = new APITest(value, new Validation(new ObserverLocator(new TaskQueue())), validationConfigCallback);
     expect(callback(subject.validation)).toBe(subject.validation); //without this, the fluent API would break
     expectations.assert(subject.validation.validate(), validity); //simple check if it also works
     expectations.assert(() => { //and a check if valid has message '', invalid has an actual message
@@ -496,7 +497,7 @@ describe('Some simple tests on .result', ()=> {
     var expectations = new Expectations(expect, done);
 
     let subject = {password: 'Abc*12345'};
-    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
+    subject.validation = new Validation(new ObserverLocator(new TaskQueue()), new ValidationConfig()).on(subject)
       .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword();
 
     expectations.assert(subject.validation.validate(), true);
@@ -518,7 +519,7 @@ describe('Some simple tests on .result', ()=> {
     var expectations = new Expectations(expect, done);
 
     let subject = {password: 'abc'};
-    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
+    subject.validation = new Validation(new ObserverLocator(new TaskQueue()), new ValidationConfig()).on(subject)
       .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword();
 
     expectations.assert(subject.validation.validate(), false);
@@ -541,7 +542,7 @@ describe('Some simple tests on .result', ()=> {
     var expectations = new Expectations(expect, done);
 
     let subject = {password: 'abc'};
-    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
+    subject.validation = new Validation(new ObserverLocator(new TaskQueue()), new ValidationConfig()).on(subject)
       .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword();
 
     expectations.assert(subject.validation.validate(), false);
@@ -584,13 +585,11 @@ describe('Some simple tests on .result', ()=> {
 describe('Some simple configuration API tests', ()=> {
   it('on computedFrom with a single dependencies', (done) => {
     let subject = {password: 'Abc*12345', confirmPassword: 'Abc*12345'};
-    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
-      .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword()
-      .ensure('confirmPassword', (c) => {
-        c.computedFrom('password')
-      }).isNotEmpty().isEqualTo(() => {
-        return subject.password
-      });
+    subject.validation = new Validation(new ObserverLocator(new TaskQueue()), new ValidationConfig()).on(subject)
+      .ensure('password')
+        .isNotEmpty().hasMinLength(8).isStrongPassword()
+      .ensure('confirmPassword', c => c.computedFrom('password'))
+        .isNotEmpty().isEqualTo(() => subject.password);
 
     setTimeout(()=> {
       expect(subject.validation.result.properties.password.isValid).toBe(true);
@@ -601,18 +600,16 @@ describe('Some simple configuration API tests', ()=> {
         expect(subject.validation.result.properties.password.isValid).toBe(true);
         expect(subject.validation.result.properties.confirmPassword.isValid).toBe(false);
         done();
-      }, 10);
+      }, 50);
     });
   });
   it('on computedFrom with an array of string dependencies', (done) => {
     let subject = {password: 'Abc*12345', confirmPassword: 'Abc*12345'};
-    subject.validation = new Validation(new ObserverLocator(), new ValidationConfig()).on(subject)
-      .ensure('password').isNotEmpty().hasMinLength(8).isStrongPassword()
-      .ensure('confirmPassword', (c) => {
-        c.computedFrom(['someProperty', 'password'])
-      }).isNotEmpty().isEqualTo(() => {
-        return subject.password
-      });
+    subject.validation = new Validation(new ObserverLocator(new TaskQueue()), new ValidationConfig()).on(subject)
+      .ensure('password')
+        .isNotEmpty().hasMinLength(8).isStrongPassword()
+      .ensure('confirmPassword', c => c.computedFrom(['someProperty', 'password']))
+        .isNotEmpty().isEqualTo(() => subject.password);
 
     setTimeout(()=> {
       expect(subject.validation.result.properties.password.isValid).toBe(true);
@@ -623,7 +620,7 @@ describe('Some simple configuration API tests', ()=> {
         expect(subject.validation.result.properties.password.isValid).toBe(true);
         expect(subject.validation.result.properties.confirmPassword.isValid).toBe(false);
         done();
-      }, 10);
+      }, 50);
     });
   });
 });

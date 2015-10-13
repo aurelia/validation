@@ -2,6 +2,7 @@ import {Validation} from '../src/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
 import {ValidationConfig} from '../src/validation-config';
+import {TaskQueue} from 'aurelia-task-queue';
 
 class TestSubject {
   constructor(validation, firstName) {
@@ -10,7 +11,7 @@ class TestSubject {
   }
 
   static createInstance(firstName, config) {
-    var subject = new TestSubject(new Validation(new ObserverLocator(), config), firstName);
+    var subject = new TestSubject(new Validation(new ObserverLocator(new TaskQueue()), config), firstName);
     subject.validation
       .ensure('firstName')
       .isNotEmpty();
@@ -96,7 +97,7 @@ describe('Basic validation tests', () => {
     var expectations = new Expectations(expect, done);
     var subject = {firstName: 'John'};
 
-    subject.validation = new Validation(new ObserverLocator()).on(subject)
+    subject.validation = new Validation(new ObserverLocator(new TaskQueue())).on(subject)
       .ensure('firstName').isNotEmpty().hasLengthBetween(5, 10);
 
     setTimeout(() => {
@@ -120,7 +121,7 @@ describe('Basic validation tests', () => {
   it('should update the validation automatically when the property changes with nested properties', (done) => {
     var subject = {company: {name: 'Bob the builder construction, Inc.'}};
 
-    subject.validation = new Validation(new ObserverLocator()).on(subject)
+    subject.validation = new Validation(new ObserverLocator(new TaskQueue())).on(subject)
       .ensure('company.name')
       .isNotEmpty().hasLengthBetween(5, 10);
     setTimeout(() => { //Settimeout to allow initial validation
@@ -170,14 +171,14 @@ describe('Basic validation tests', () => {
           setTimeout(() => { //property did not change in last x ms, property should be validated
             expect(subject.validation.result.isValid).toBe(true);
             done();
-          }, 21);
-        }, 40);
-      }, 40);
+          }, 50);
+        }, 30);
+      }, 30);
     }, 0);
   });
 
   it('should not update if the value continuously changes and a debounce time is set on the property', (done) => {
-    var subject = new TestSubject(new Validation(new ObserverLocator(), new ValidationConfig()), null);
+    var subject = new TestSubject(new Validation(new ObserverLocator(new TaskQueue()), new ValidationConfig()), null);
     subject.validation.ensure('firstName', (config) => {config.useDebounceTimeout(50)}).isNotEmpty().hasLengthBetween(5, 10);
 
     setTimeout(() => { //Do setTimout 0 to allow initial validation
@@ -193,9 +194,9 @@ describe('Basic validation tests', () => {
           setTimeout(() => { //property did not change in last x ms, property should be validated
             expect(subject.validation.result.isValid).toBe(true);
             done();
-          }, 21);
-        }, 40);
-      }, 40);
+          }, 50);
+        }, 30);
+      }, 30);
     }, 0);
   });
 
@@ -210,7 +211,7 @@ describe('Basic validation tests', () => {
         return subject.validation.validate();
       }, true);
       expectations.validate();
-    }, 0);
+    }, 30);
   });
 
 
@@ -230,7 +231,7 @@ describe('Basic validation tests', () => {
       }, false);
 
       expectations.validate();
-    }, 0);
+    }, 30);
   });
 
 
@@ -319,23 +320,23 @@ describe('Basic validation tests', () => {
   });
 
   it('should only set the result based on the latest value', (done) => {
-    var subject = new TestSubject(new Validation(new ObserverLocator()), '');
+    var subject = new TestSubject(new Validation(new ObserverLocator(new TaskQueue())), '');
     subject.validation.ensure('firstName').passes( () => { return new Promise((fulfil) => {
       setTimeout(()=>{
         fulfil(false);
-      }, 10);
+      }, 30);
     })});
     subject.firstName = 'Bob';
-    //Trigger validation on 'Bob', it will fail in 10 ms.
+    //Trigger validation on 'Bob', it will fail after 30ms.
     subject.validation.validate().then( ()=> {}, ()=> {});
     setTimeout( () => {
       subject.firstName = ''; //Meanwhile, set firstName to ''. This is a valid value
       setTimeout(()=> {
-        //Check that the result from the delayed validation on 'Bob' does not overwrite the reesult of ''.
+        //Check that the result from the delayed validation on 'Bob' does not overwrite the result of ''.
         expect(subject.validation.result.properties.firstName.isValid).toBe(true);
         expect(subject.validation.result.properties.firstName.message).toBe('');
         done();
-      }, 10);
-    }, 5);
+      }, 40);
+    }, 0);
   });
 });
