@@ -1,4 +1,5 @@
 import {ValidationViewStrategy} from '../validation-view-strategy';
+import * as TheLogManager from 'aurelia-logging';
 
 export class TWBootstrapViewStrategyBase extends ValidationViewStrategy {
   constructor(appendMessageToInput, appendMessageToLabel, helpBlockClass) {
@@ -6,10 +7,11 @@ export class TWBootstrapViewStrategyBase extends ValidationViewStrategy {
     this.appendMessageToInput = appendMessageToInput;
     this.appendMessageToLabel = appendMessageToLabel;
     this.helpBlockClass = helpBlockClass;
+    this.logger = TheLogManager.getLogger('validation');
   }
 
   searchFormGroup(currentElement, currentDepth) {
-    if (currentDepth === 5) {
+    if (currentDepth === 5 || !currentElement) {
       return null;
     }
 
@@ -68,6 +70,7 @@ export class TWBootstrapViewStrategyBase extends ValidationViewStrategy {
   appendUIVisuals(validationProperty, currentElement) {
     let formGroup = this.searchFormGroup(currentElement, 0);
     if (formGroup === null) {
+      this.logger.warn("Didn't find formGroup - can't show validation message for element:", currentElement);
       return;
     }
 
