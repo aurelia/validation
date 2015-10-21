@@ -1,7 +1,7 @@
 System.register(['aurelia-metadata'], function (_export) {
   'use strict';
 
-  var Metadata, ValidationMetadata, ValidationPropertyMetadata;
+  var metadata, ValidationMetadata, ValidationPropertyMetadata;
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -11,7 +11,7 @@ System.register(['aurelia-metadata'], function (_export) {
 
   function ensure(setupStep) {
     return function (target, propertyName) {
-      var validationMetadata = Metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
+      var validationMetadata = metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
       var property = validationMetadata.getOrCreateProperty(propertyName);
       property.addSetupStep(setupStep);
     };
@@ -19,7 +19,7 @@ System.register(['aurelia-metadata'], function (_export) {
 
   return {
     setters: [function (_aureliaMetadata) {
-      Metadata = _aureliaMetadata.Metadata;
+      metadata = _aureliaMetadata.metadata;
     }],
     execute: function () {
       ValidationMetadata = (function () {

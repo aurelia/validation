@@ -1,3 +1,12 @@
+## 0.4.0 (2015-10-13)
+
+
+#### Bug Fixes
+
+* **update:** update to latest release names ([f8a87298](https://github.com/aurelia/validation/commit/f8a87298ec3889541212ba7c56d7697caa1ac5f7), closes [#156](https://github.com/aurelia/validation/issues/156))
+* **validation-rules:** convert numbers to strings where their length is validated ([38a50bd0](https://github.com/aurelia/validation/commit/38a50bd06a884dac43ec8439e27eb1f8541990a4), closes [#136](https://github.com/aurelia/validation/issues/136))
+
+
 ### 0.3.1 (2015-09-19)
 
 #### Breaking Changes

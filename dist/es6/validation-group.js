@@ -1,4 +1,4 @@
-import {Metadata} from 'aurelia-metadata';
+import {metadata} from 'aurelia-metadata';
 import {ValidationGroupBuilder} from './validation-group-builder';
 import {ValidationResult} from './validation-result';
 import {ValidationMetadata} from './decorators';
@@ -28,7 +28,7 @@ export class ValidationGroup {
     this.onDestroy = config.onLocaleChanged(() => {
       this.validate(false, true);
     });
-    validationMetadata = Metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
+    validationMetadata = metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
     if (validationMetadata) {
       validationMetadata.setup(this);
     }

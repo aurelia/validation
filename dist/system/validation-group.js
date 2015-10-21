@@ -1,13 +1,13 @@
 System.register(['aurelia-metadata', './validation-group-builder', './validation-result', './decorators'], function (_export) {
   'use strict';
 
-  var Metadata, ValidationGroupBuilder, ValidationResult, ValidationMetadata, ValidationGroup;
+  var metadata, ValidationGroupBuilder, ValidationResult, ValidationMetadata, ValidationGroup;
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
     setters: [function (_aureliaMetadata) {
-      Metadata = _aureliaMetadata.Metadata;
+      metadata = _aureliaMetadata.metadata;
     }, function (_validationGroupBuilder) {
       ValidationGroupBuilder = _validationGroupBuilder.ValidationGroupBuilder;
     }, function (_validationResult) {
@@ -34,7 +34,7 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
           this.onDestroy = config.onLocaleChanged(function () {
             _this.validate(false, true);
           });
-          validationMetadata = Metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
+          validationMetadata = metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
           if (validationMetadata) {
             validationMetadata.setup(this);
           }
