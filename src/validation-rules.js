@@ -44,7 +44,7 @@ export class ValidationRule {
   /**
    * Validation rules: return a promise that fulfills and resolves to true/false
    */
-  validate(currentValue, locale) {
+  validate(currentValue, locale): Promise<any> {
     if (locale === undefined) {
       locale = ValidationLocale.Repository.default;
     }

@@ -34,7 +34,7 @@ export class ValidationGroup {
     }
   }
 
-  destroy() {
+  destroy(): void {
     this.validationProperties.forEach(prop => {
       prop.destroy();
     });
@@ -42,7 +42,7 @@ export class ValidationGroup {
     // TODO: what else needs to be done for proper cleanup?
   }
 
-  clear() {
+  clear(): void {
     this.validationProperties.forEach((prop) => {
       prop.clear();
     });
@@ -92,7 +92,7 @@ export class ValidationGroup {
    * Causes complete re-evaluation: gets the latest value, marks the property as 'dirty' (unless false is passed), runs validation rules asynchronously and updates this.result
    * @returns {Promise} A promise that fulfils when valid, rejects when invalid.
    */
-  validate(forceDirty = true, forceExecution = true) {
+  validate(forceDirty: boolean = true, forceExecution: boolean = true): Promise<ValidationResult> {
     this.isValidating = true;
     let promise = Promise.resolve(true);
     // FIXME: Need to refactor this to not use promises and loop over them
@@ -165,12 +165,12 @@ export class ValidationGroup {
     return promise;
   }
 
-  onValidate(validationFunction, validationFunctionFailedCallback) {
+  onValidate(validationFunction: () => any, validationFunctionFailedCallback?: (a: any, b: any, c: any, d: any, e: any) => any): ValidationGroup {
     this.onValidateCallbacks.push({validationFunction, validationFunctionFailedCallback});
     return this;
   }
 
-  onPropertyValidate(validationFunction) {
+  onPropertyValidate(validationFunction): ValidationGroup {
     this.onPropertyValidationCallbacks.push(validationFunction);
     return this;
   }
@@ -181,7 +181,7 @@ export class ValidationGroup {
    * @param configCallback a configuration callback
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  ensure(bindingPath, configCallback) {
+  ensure(bindingPath: string, configCallback?: (config: ValidationConfig) => void): ValidationGroup {
     this.builder.ensure(bindingPath, configCallback);
     this.onPropertyValidationCallbacks.forEach((callback) => {
       callback(bindingPath);
@@ -193,7 +193,7 @@ export class ValidationGroup {
    * Adds a validation rule that checks a value for being 'isNotEmpty', 'required'
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isNotEmpty() {
+  isNotEmpty(): ValidationGroup {
     return this.builder.isNotEmpty();
   }
 
@@ -201,7 +201,7 @@ export class ValidationGroup {
    * Adds a validation rule that allows a value to be empty/null
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  canBeEmpty() {
+  canBeEmpty(): ValidationGroup {
     return this.builder.canBeEmpty();
   }
 
@@ -210,7 +210,7 @@ export class ValidationGroup {
    * @param minimumValue the threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isGreaterThanOrEqualTo(minimumValue) {
+  isGreaterThanOrEqualTo(minimumValue): ValidationGroup {
     return this.builder.isGreaterThanOrEqualTo(minimumValue);
   }
 
@@ -219,7 +219,7 @@ export class ValidationGroup {
    * @param minimumValue the threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isGreaterThan(minimumValue) {
+  isGreaterThan(minimumValue): ValidationGroup {
     return this.builder.isGreaterThan(minimumValue);
   }
 
@@ -229,7 +229,7 @@ export class ValidationGroup {
    * @param maximumValue The isLessThanOrEqualTo threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isBetween(minimumValue, maximumValue) {
+  isBetween(minimumValue, maximumValue): ValidationGroup {
     return this.builder.isBetween(minimumValue, maximumValue);
   }
 
@@ -238,7 +238,7 @@ export class ValidationGroup {
    * @param maximumValue The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isLessThanOrEqualTo(maximumValue) {
+  isLessThanOrEqualTo(maximumValue): ValidationGroup {
     return this.builder.isLessThanOrEqualTo(maximumValue);
   }
 
@@ -247,7 +247,7 @@ export class ValidationGroup {
    * @param maximumValue The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isLessThan(maximumValue) {
+  isLessThan(maximumValue): ValidationGroup {
     return this.builder.isLessThan(maximumValue);
   }
 
@@ -257,7 +257,7 @@ export class ValidationGroup {
    * @param otherValueLabel Optional: a label to use in the validation message
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isEqualTo(otherValue, otherValueLabel) {
+  isEqualTo(otherValue, otherValueLabel): ValidationGroup {
     return this.builder.isEqualTo(otherValue, otherValueLabel);
   }
 
@@ -267,7 +267,7 @@ export class ValidationGroup {
    * @param otherValueLabel Optional: a label to use in the validation message
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isNotEqualTo(otherValue, otherValueLabel) {
+  isNotEqualTo(otherValue, otherValueLabel): ValidationGroup {
     return this.builder.isNotEqualTo(otherValue, otherValueLabel);
   }
 
@@ -275,7 +275,7 @@ export class ValidationGroup {
    * Adds a validation rule that checks a value for being a valid isEmail address
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isEmail() {
+  isEmail(): ValidationGroup {
     return this.builder.isEmail();
   }
 
@@ -283,7 +283,7 @@ export class ValidationGroup {
    * Adds a validation rule that checks a value for being a valid URL
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isURL() {
+  isURL(): ValidationGroup {
     return this.builder.isURL();
   }
 
@@ -292,7 +292,7 @@ export class ValidationGroup {
    * @param collection The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isIn(collection) {
+  isIn(collection): ValidationGroup {
     return this.builder.isIn(collection);
   }
 
@@ -301,7 +301,7 @@ export class ValidationGroup {
    * @param minimumValue The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  hasMinLength(minimumValue) {
+  hasMinLength(minimumValue: number): ValidationGroup {
     return this.builder.hasMinLength(minimumValue);
   }
 
@@ -310,7 +310,7 @@ export class ValidationGroup {
    * @param maximumValue The threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  hasMaxLength(maximumValue) {
+  hasMaxLength(maximumValue: number): ValidationGroup {
     return this.builder.hasMaxLength(maximumValue);
   }
 
@@ -320,7 +320,7 @@ export class ValidationGroup {
    * @param maximumValue The max threshold
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  hasLengthBetween(minimumValue, maximumValue) {
+  hasLengthBetween(minimumValue: number, maximumValue: number): ValidationGroup {
     return this.builder.hasLengthBetween(minimumValue, maximumValue);
   }
 
@@ -328,7 +328,7 @@ export class ValidationGroup {
    * Adds a validation rule that checks a value for being numeric, this includes formatted numbers like '-3,600.25'
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isNumber() {
+  isNumber(): ValidationGroup {
     return this.builder.isNumber();
   }
 
@@ -336,7 +336,7 @@ export class ValidationGroup {
    * Adds a validation rule that checks a value for containing not a single whitespace
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  containsNoSpaces() {
+  containsNoSpaces(): ValidationGroup {
     return this.builder.containsNoSpaces();
   }
 
@@ -344,27 +344,27 @@ export class ValidationGroup {
    * Adds a validation rule that checks a value for being strictly numeric, this excludes formatted numbers like '-3,600.25'
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  containsOnlyDigits() {
+  containsOnlyDigits(): ValidationGroup {
     return this.builder.containsOnlyDigits();
   }
 
-  containsOnly(regex) {
+  containsOnly(regex): ValidationGroup {
     return this.builder.containsOnly(regex);
   }
 
-  containsOnlyAlpha() {
+  containsOnlyAlpha(): ValidationGroup {
     return this.builder.containsOnlyAlpha();
   }
 
-  containsOnlyAlphaOrWhitespace() {
+  containsOnlyAlphaOrWhitespace(): ValidationGroup {
     return this.builder.containsOnlyAlphaOrWhitespace();
   }
 
-  containsOnlyLetters() {
+  containsOnlyLetters(): ValidationGroup {
     return this.builder.containsOnlyAlpha();
   }
 
-  containsOnlyLettersOrWhitespace() {
+  containsOnlyLettersOrWhitespace(): ValidationGroup {
     return this.builder.containsOnlyAlphaOrWhitespace();
   }
 
@@ -372,7 +372,7 @@ export class ValidationGroup {
    * Adds a validation rule that checks a value for only containing alphanumerical characters
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  containsOnlyAlphanumerics() {
+  containsOnlyAlphanumerics(): ValidationGroup {
     return this.builder.containsOnlyAlphanumerics();
   }
 
@@ -380,7 +380,7 @@ export class ValidationGroup {
    * Adds a validation rule that checks a value for only containing alphanumerical characters or whitespace
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  containsOnlyAlphanumericsOrWhitespace() {
+  containsOnlyAlphanumericsOrWhitespace(): ValidationGroup {
     return this.builder.containsOnlyAlphanumericsOrWhitespace();
   }
 
@@ -389,7 +389,7 @@ export class ValidationGroup {
    * @param minimumComplexityLevel {Number} Optionally, specifiy the number of groups to match. Default is 4.
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  isStrongPassword(minimumComplexityLevel) {
+  isStrongPassword(minimumComplexityLevel: number): ValidationGroup {
     return this.builder.isStrongPassword(minimumComplexityLevel);
   }
 
@@ -398,7 +398,7 @@ export class ValidationGroup {
    * @param regex the regex to match
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  matches(regex) {
+  matches(regex): ValidationGroup {
     return this.builder.matches(regex);
   }
 
@@ -408,16 +408,16 @@ export class ValidationGroup {
    * @param threshold {Object} An optional threshold that will be passed to the customFunction
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  passes(customFunction, threshold) {
+  passes(customFunction: Function, threshold: any): ValidationGroup {
     return this.builder.passes(customFunction, threshold);
   }
 
   /**
    * Adds the {ValidationRule}
-   * @param validationRule {ValudationRule} The rule that needs to pass
+   * @param validationRule {ValidationRule} The rule that needs to pass
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  passesRule(validationRule) {
+  passesRule(validationRule: ValidationRule): ValidationGroup {
     return this.builder.passesRule(validationRule);
   }
 
@@ -427,7 +427,7 @@ export class ValidationGroup {
    * @param threshold {Object} an optional treshold object that is passed to the conditionExpression
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  if(conditionExpression, threshold) {
+  if(conditionExpression: Function, threshold: any): ValidationGroup {
     return this.builder.if(conditionExpression, threshold);
   }
 
@@ -436,7 +436,7 @@ export class ValidationGroup {
    * See: if (conditionExpression, threshold)
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  else() {
+  else(): ValidationGroup {
     return this.builder.else();
   }
 
@@ -445,7 +445,7 @@ export class ValidationGroup {
    * See: if (conditionExpression, threshold)
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  endIf() {
+  endIf(): ValidationGroup {
     return this.builder.endIf();
   }
 
@@ -454,7 +454,7 @@ export class ValidationGroup {
    * @param conditionExpression {Function} a function that returns a case label to execute. This is optional, when omitted the case label will be matched using the underlying property's value
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  switch(conditionExpression) {
+  switch(conditionExpression: Function): ValidationGroup {
     return this.builder.switch(conditionExpression);
   }
 
@@ -464,7 +464,7 @@ export class ValidationGroup {
    * @param caseLabel {Object} the case label
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  case(caseLabel) {
+  case(caseLabel: any): ValidationGroup {
     return this.builder.case(caseLabel);
   }
 
@@ -473,7 +473,7 @@ export class ValidationGroup {
    * See: switch(conditionExpression)
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  default() {
+  default(): ValidationGroup {
     return this.builder.default();
   }
 
@@ -482,7 +482,7 @@ export class ValidationGroup {
    * See: switch(conditionExpression)
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  endSwitch() {
+  endSwitch(): ValidationGroup {
     return this.builder.endSwitch();
   }
 
@@ -491,7 +491,7 @@ export class ValidationGroup {
    * @param message either a static string or a function that takes two arguments: newValue (the value that has been evaluated) and threshold.
    * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
    */
-  withMessage(message) {
+  withMessage(message: string | (newValue: any, threshold: any) => any) {
     return this.builder.withMessage(message);
   }
 }
