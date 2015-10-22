@@ -7,7 +7,7 @@ export {Validation} from './validation';
 export {ValidationGroup} from './validation-group';
 export {ValidateCustomAttribute} from './validate-custom-attribute';
 export {ValidationViewStrategy} from './validation-view-strategy';
-export {TWBootstrapViewStrategy} from './strategies/twbootstrap-view-strategy';
+export {TWBootstrapViewStrategy, TWBootstrapViewStrategyBase} from './strategies/twbootstrap-view-strategy';
 export {ensure} from './decorators';
 
 import {ValidationConfig} from './validation-config';
