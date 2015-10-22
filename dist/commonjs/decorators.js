@@ -69,7 +69,7 @@ var ValidationPropertyMetadata = (function () {
 
 function ensure(setupStep) {
   return function (target, propertyName) {
-    var validationMetadata = _aureliaMetadata.Metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
+    var validationMetadata = _aureliaMetadata.metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
     var property = validationMetadata.getOrCreateProperty(propertyName);
     property.addSetupStep(setupStep);
   };

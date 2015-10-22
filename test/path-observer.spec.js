@@ -1,7 +1,6 @@
 import {ObserverLocator} from 'aurelia-binding';
 import {PathObserver} from '../src/path-observer';
 
-
 describe('PathObserver tests', () => {
   it('should be able to track a path (2 parts)', (done) => {
     var subject = {

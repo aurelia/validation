@@ -14,6 +14,16 @@ describe('Tests on MaximumLengthValidationRule', () => {
     expectations.validate();
   });
 
+  it('should be working with simple numbers', (done) => {
+    var expectations = new Expectations(expect, done);
+    var rule = new MaximumLengthValidationRule(2);
+    expectations.expectAsync(rule.validate(1)).toBe(true);
+    expectations.expectAsync(rule.validate(12)).toBe(true);
+    expectations.expectAsync(rule.validate(123)).toBe(false);
+    expectations.expectAsync(rule.validate(1234)).toBe(false);
+    expectations.validate();
+  });
+
   it('should not trim strings before evaluating', (done) => {
     var expectations = new Expectations(expect, done);
     var rule = new MaximumLengthValidationRule(2);

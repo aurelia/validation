@@ -2,10 +2,10 @@
   "jspm": {
     "directories": {},
     "dependencies": {
-      "aurelia-binding": "github:aurelia/binding@^0.9.1",
-      "aurelia-bootstrapper": "github:aurelia/bootstrapper@^0.17.0",
-      "aurelia-metadata": "github:aurelia/metadata@^0.8.0",
-      "aurelia-templating": "github:aurelia/templating@^0.15.3",
+      "aurelia-binding": "github:aurelia/binding@^0.10.0",
+      "aurelia-bootstrapper": "github:aurelia/bootstrapper@^0.18.0",
+      "aurelia-metadata": "github:aurelia/metadata@^0.9.0",
+      "aurelia-templating": "github:aurelia/templating@^0.16.0",
       "font-awesome": "npm:font-awesome@^4.4.0",
       "twbs/bootstrap": "github:twbs/bootstrap@3.3.5"
     },
