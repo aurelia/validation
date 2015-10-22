@@ -1,5 +1,5 @@
 declare module 'aurelia-validation' {
-  import { Metadata }  from 'aurelia-metadata';
+  import { metadata }  from 'aurelia-metadata';
   import { inject }  from 'aurelia-dependency-injection';
   import { customAttribute }  from 'aurelia-templating';
   import { ObserverLocator }  from 'aurelia-binding';

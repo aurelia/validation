@@ -295,6 +295,7 @@ var MinimumLengthValidationRule = (function (_ValidationRule3) {
     _classCallCheck(this, MinimumLengthValidationRule);
 
     _ValidationRule3.call(this, minimumLength, function (newValue, minLength) {
+      newValue = typeof newValue === 'number' ? newValue.toString() : newValue;
       return newValue.length !== undefined && newValue.length >= minLength;
     }, null, 'MinimumLengthValidationRule');
   }
@@ -311,6 +312,7 @@ var MaximumLengthValidationRule = (function (_ValidationRule4) {
     _classCallCheck(this, MaximumLengthValidationRule);
 
     _ValidationRule4.call(this, maximumLength, function (newValue, maxLength) {
+      newValue = typeof newValue === 'number' ? newValue.toString() : newValue;
       return newValue.length !== undefined && newValue.length <= maxLength;
     }, null, 'MaximumLengthValidationRule');
   }
@@ -327,6 +329,7 @@ var BetweenLengthValidationRule = (function (_ValidationRule5) {
     _classCallCheck(this, BetweenLengthValidationRule);
 
     _ValidationRule5.call(this, { minimumLength: minimumLength, maximumLength: maximumLength }, function (newValue, threshold) {
+      newValue = typeof newValue === 'number' ? newValue.toString() : newValue;
       return newValue.length !== undefined && newValue.length >= threshold.minimumLength && newValue.length <= threshold.maximumLength;
     }, null, 'BetweenLengthValidationRule');
   }

@@ -290,6 +290,7 @@ export class MinimumLengthValidationRule extends ValidationRule {
     super(
       minimumLength,
       (newValue, minLength) => {
+        newValue = typeof newValue === 'number' ? newValue.toString() : newValue;
         return newValue.length !== undefined && newValue.length >= minLength;
       },
       null,
@@ -303,6 +304,7 @@ export class MaximumLengthValidationRule extends ValidationRule {
     super(
       maximumLength,
       (newValue, maxLength) => {
+        newValue = typeof newValue === 'number' ? newValue.toString() : newValue;
         return newValue.length !== undefined && newValue.length <= maxLength;
       },
       null,
@@ -316,6 +318,7 @@ export class BetweenLengthValidationRule extends ValidationRule {
     super(
       {minimumLength: minimumLength, maximumLength: maximumLength},
       (newValue, threshold) => {
+        newValue = typeof newValue === 'number' ? newValue.toString() : newValue;
         return newValue.length !== undefined
           && newValue.length >= threshold.minimumLength
           && newValue.length <= threshold.maximumLength;
