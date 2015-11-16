@@ -51,7 +51,7 @@ System.register(['./validation-rules-collection', './path-observer', './debounce
 
         ValidationProperty.prototype.addValidationRule = function addValidationRule(validationRule) {
           if (validationRule.validate === undefined) {
-            throw new Error('That\'s not a valid validationRule');
+            throw new Error("That's not a valid validationRule");
           }
           this.collectionOfValidationRules.addValidationRule(validationRule);
           this.validateCurrentValue(false);

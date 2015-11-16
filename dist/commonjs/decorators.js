@@ -11,6 +11,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var _aureliaMetadata = require('aurelia-metadata');
 
 var ValidationMetadata = (function () {
+  _createClass(ValidationMetadata, null, [{
+    key: 'metadataKey',
+    value: 'aurelia:validation',
+    enumerable: true
+  }]);
+
   function ValidationMetadata() {
     _classCallCheck(this, ValidationMetadata);
 
@@ -33,12 +39,6 @@ var ValidationMetadata = (function () {
       property.setup(validation);
     });
   };
-
-  _createClass(ValidationMetadata, null, [{
-    key: 'metadataKey',
-    value: 'aurelia:validation',
-    enumerable: true
-  }]);
 
   return ValidationMetadata;
 })();

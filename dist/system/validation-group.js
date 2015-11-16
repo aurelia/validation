@@ -97,8 +97,8 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
         ValidationGroup.prototype.validate = function validate() {
           var _this3 = this;
 
-          var forceDirty = arguments[0] === undefined ? true : arguments[0];
-          var forceExecution = arguments[1] === undefined ? true : arguments[1];
+          var forceDirty = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+          var forceExecution = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
           this.isValidating = true;
           var promise = Promise.resolve(true);

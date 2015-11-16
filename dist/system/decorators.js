@@ -23,6 +23,12 @@ System.register(['aurelia-metadata'], function (_export) {
     }],
     execute: function () {
       ValidationMetadata = (function () {
+        _createClass(ValidationMetadata, null, [{
+          key: 'metadataKey',
+          value: 'aurelia:validation',
+          enumerable: true
+        }]);
+
         function ValidationMetadata() {
           _classCallCheck(this, ValidationMetadata);
 
@@ -45,12 +51,6 @@ System.register(['aurelia-metadata'], function (_export) {
             property.setup(validation);
           });
         };
-
-        _createClass(ValidationMetadata, null, [{
-          key: 'metadataKey',
-          value: 'aurelia:validation',
-          enumerable: true
-        }]);
 
         return ValidationMetadata;
       })();

@@ -17,9 +17,7 @@ var ValidateCustomAttribute = (function () {
     this.viewStrategy = null;
   }
 
-  var _ValidateCustomAttribute = ValidateCustomAttribute;
-
-  _ValidateCustomAttribute.prototype.valueChanged = function valueChanged(newValue) {
+  ValidateCustomAttribute.prototype.valueChanged = function valueChanged(newValue) {
     if (this.value === null || this.value === undefined) {
       return;
     }
@@ -30,7 +28,7 @@ var ValidateCustomAttribute = (function () {
     return;
   };
 
-  _ValidateCustomAttribute.prototype.subscribeChangedHandlers = function subscribeChangedHandlers(currentElement) {
+  ValidateCustomAttribute.prototype.subscribeChangedHandlers = function subscribeChangedHandlers(currentElement) {
     var _this = this;
 
     var viewStrategy = this.value.config.getViewStrategy();
@@ -48,12 +46,13 @@ var ValidateCustomAttribute = (function () {
     }
   };
 
-  _ValidateCustomAttribute.prototype.attached = function attached() {
+  ValidateCustomAttribute.prototype.attached = function attached() {
     if (this.processedValidation === null || this.processedValidation === undefined) {
       this.valueChanged(this.value);
     }
   };
 
+  var _ValidateCustomAttribute = ValidateCustomAttribute;
   ValidateCustomAttribute = _aureliaDependencyInjection.inject(Element)(ValidateCustomAttribute) || ValidateCustomAttribute;
   ValidateCustomAttribute = _aureliaTemplating.customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
   return ValidateCustomAttribute;

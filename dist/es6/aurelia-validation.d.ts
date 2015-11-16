@@ -21,6 +21,8 @@ declare module 'aurelia-validation' {
   export function ensure(setupStep: any): any;
   export class PathObserver {
     constructor(observerLocator: any, subject: any, path: any);
+    
+    // TODO: this should be replaced with reuse of the Binding system
     observeParts(propertyName: any): any;
     observePart(part: any): any;
     getObserver(): any;
@@ -35,6 +37,8 @@ declare module 'aurelia-validation' {
   export class ValidateCustomAttribute {
     constructor(element: any);
     valueChanged(newValue: any): any;
+    
+    // this is just to tell the real validation instance (higher in the DOM) the exact property-path to bind to
     subscribeChangedHandlers(currentElement: any): any;
     attached(): any;
   }
@@ -44,6 +48,8 @@ declare module 'aurelia-validation' {
     constructor(innerConfig: any);
     getValue(identifier: any): any;
     setValue(identifier: any, value: any): any;
+    
+    // fluent API
     onLocaleChanged(callback: any): any;
     getDebounceTimeout(): any;
     useDebounceTimeout(value: any): any;
@@ -112,6 +118,8 @@ declare module 'aurelia-validation' {
        */
     constructor(subject: any, observerLocator: any, config: any);
     destroy(): any;
+    
+    //  TODO: what else needs to be done for proper cleanup?
     clear(): any;
     onBreezeEntity(): any;
     
@@ -376,6 +384,7 @@ declare module 'aurelia-validation' {
     clear(): any;
     destroy(): any;
     
+    //  TODO: what else needs to be done for proper cleanup?
     /**
        * returns a promise that fulfils and resolves to true/false
        */
@@ -410,6 +419,8 @@ declare module 'aurelia-validation' {
   export class SwitchCaseValidationRulesCollection {
     constructor(conditionExpression: any, config: any);
     case(caseLabel: any): any;
+    
+    // force creation
     default(): any;
     getCurrentCollection(caseLabel: any, createIfNotExists?: any): any;
     validate(newValue: any, locale: any): any;
@@ -531,6 +542,12 @@ declare module 'aurelia-validation' {
     prepareElement(validationProperty: any, element: any): any;
     updateElement(validationProperty: any, element: any): any;
   }
+  
+  /**
+   * A lightweight validation plugin
+   * @class Validation
+   * @constructor
+   */
   export class Validation {
     
     /**

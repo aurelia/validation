@@ -20,9 +20,7 @@ var Validation = (function () {
     this.config = validationConfig ? validationConfig : Validation.defaults;
   }
 
-  var _Validation = Validation;
-
-  _Validation.prototype.on = function on(subject, configCallback) {
+  Validation.prototype.on = function on(subject, configCallback) {
     var conf = new _validationConfig.ValidationConfig(this.config);
     if (configCallback !== null && configCallback !== undefined && typeof configCallback === 'function') {
       configCallback(conf);
@@ -30,12 +28,13 @@ var Validation = (function () {
     return new _validationGroup.ValidationGroup(subject, this.observerLocator, conf);
   };
 
-  _Validation.prototype.onBreezeEntity = function onBreezeEntity(breezeEntity, configCallback) {
+  Validation.prototype.onBreezeEntity = function onBreezeEntity(breezeEntity, configCallback) {
     var validation = this.on(breezeEntity, configCallback);
     validation.onBreezeEntity();
     return validation;
   };
 
+  var _Validation = Validation;
   Validation = _aureliaDependencyInjection.inject(_aureliaBinding.ObserverLocator)(Validation) || Validation;
   return Validation;
 })();

@@ -9782,6 +9782,19 @@
       "flags": {
         "isExported": true
       },
+      "comment": {
+        "shortText": "A lightweight validation plugin",
+        "tags": [
+          {
+            "tag": "class",
+            "text": "Validation"
+          },
+          {
+            "tag": "constructor",
+            "text": "\n"
+          }
+        ]
+      },
       "children": [
         {
           "id": 1027,

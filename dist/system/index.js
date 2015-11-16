@@ -29,11 +29,11 @@ System.register(['./validation-config', './validation', './utilities', './valida
       _export('ValidationLocale', _validationLocale.ValidationLocale);
     }, function (_validationResult) {
       for (var _key in _validationResult) {
-        _export(_key, _validationResult[_key]);
+        if (_key !== 'default') _export(_key, _validationResult[_key]);
       }
     }, function (_validationRules) {
       for (var _key2 in _validationRules) {
-        _export(_key2, _validationRules[_key2]);
+        if (_key2 !== 'default') _export(_key2, _validationRules[_key2]);
       }
     }, function (_validationGroup) {
       _export('ValidationGroup', _validationGroup.ValidationGroup);

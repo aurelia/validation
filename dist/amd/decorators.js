@@ -10,6 +10,12 @@ define(['exports', 'aurelia-metadata'], function (exports, _aureliaMetadata) {
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   var ValidationMetadata = (function () {
+    _createClass(ValidationMetadata, null, [{
+      key: 'metadataKey',
+      value: 'aurelia:validation',
+      enumerable: true
+    }]);
+
     function ValidationMetadata() {
       _classCallCheck(this, ValidationMetadata);
 
@@ -32,12 +38,6 @@ define(['exports', 'aurelia-metadata'], function (exports, _aureliaMetadata) {
         property.setup(validation);
       });
     };
-
-    _createClass(ValidationMetadata, null, [{
-      key: 'metadataKey',
-      value: 'aurelia:validation',
-      enumerable: true
-    }]);
 
     return ValidationMetadata;
   })();
