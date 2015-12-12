@@ -41,7 +41,7 @@ export let data = {
       return `não pode ser ${Utilities.getValue(threshold.otherValue)}`;
     },
     'EqualityWithOtherLabelValidationRule': (newValue, threshold) => {
-      return `deve ser combinar com ${Utilities.getValue(threshold.otherValueLabel)}`;
+      return `deve combinar com ${Utilities.getValue(threshold.otherValueLabel)}`;
     },
     'InEqualityWithOtherLabelValidationRule': (newValue, threshold) => {
       return `não pode combinar com ${Utilities.getValue(threshold.otherValueLabel)}`;
