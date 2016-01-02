@@ -27,7 +27,7 @@ export class TWBootstrapViewStrategyBase extends ValidationViewStrategy {
   }
 
   findLabelsRecursively(currentElement, inputId, currentLabels, currentDepth) {
-    if (currentDepth === 5 || currentLabels.length == 1) {
+    if (currentDepth === 5 || currentLabels.length >= 1) {
       return;
     }
     if (currentElement.nodeName === 'LABEL' &&
