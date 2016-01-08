@@ -83,7 +83,6 @@ export let data = {
       return `musí obsahovať kombináciu malých a veľkých písmen, číslic a špeciálnych znakov`;
     },
     'MediumPasswordValidationRule': (newValue, threshold) => {
-      return `should contain at least ${Utilities.getValue(threshold)} of the following groups: lowercase letters, uppercase letters, digits or special characters`;
       return `musí obsahovať aspoň ${Utilities.getValue(threshold)} znakov z malých a veľkých písmen, číslic a špeciálnych znakov`;
     },
     'URLValidationRule': (newValue, threshold) => {
