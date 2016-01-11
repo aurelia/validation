@@ -9,6 +9,12 @@ export class ValidationResult {
     }
     return this.properties[name];
   }
+
+  addPropertyValidationCallback(callback) {
+    for (var propertyName in this.properties)
+      this.properties[propertyName].onValidate(callback);
+  }
+
   checkValidity() {
     for (let propertyName in this.properties) {
       if (!this.properties[propertyName].isValid) {
