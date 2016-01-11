@@ -184,7 +184,7 @@ export class ValidationGroup {
    */
   onResultPropertyChanged(callback) {
     this.result.addPropertyValidationCallback(callback);
-	return this;
+    return this;
   }
 
   /**
