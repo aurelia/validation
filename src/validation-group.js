@@ -175,6 +175,10 @@ export class ValidationGroup {
     return this;
   }
 
+  onResultPropertyChanged(callback) {
+    this.result.addPropertyValidationCallback(callback);
+  }
+
   /**
    * Adds a validation property for the specified path
    * @param {String} bindingPath the path of the property/field, for example 'firstName' or 'address.muncipality.zipCode'
