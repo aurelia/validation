@@ -5,7 +5,7 @@ export let data = {
     'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
   },
   messages: {
-    'isRequired': 'je povinné',
+    'isRequired': 'povinné',
     'onValidateCallback': 'nie je platná hodnota',
     'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
       return `môže obsahovať iba alfanumerické znaky alebo medzery`;
