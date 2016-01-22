@@ -260,6 +260,11 @@ export class EmailValidationRule extends ValidationRule {
         return false;
       }
     }
+
+    let domainPart =  str.substring(str.indexOf('@') + 1);
+    if(domainPart.indexOf('.') === -1)
+      return false;
+
     return true;
   }
 
