@@ -3,6 +3,7 @@ import {ValidateCustomAttribute} from '../../src/validate-custom-attribute';
 import {TWBootstrapViewStrategy} from '../../src/strategies/twbootstrap-view-strategy';
 import {Expectations} from '../expectations';
 import {ObserverLocator} from 'aurelia-binding';
+import {TaskQueue} from 'aurelia-task-queue';
 
 class TestSubject {
   constructor(validation, callback) {
@@ -19,7 +20,7 @@ class TestSubject {
   }
 
   static createInstance(callback) {
-    return new TestSubject(new Validation(new ObserverLocator()), callback);
+    return new TestSubject(new Validation(new ObserverLocator(new TaskQueue())), callback);
   }
 }
 
@@ -49,7 +50,7 @@ class NestedTestSubject {
   }
 
   static createInstance(callback) {
-    return new NestedTestSubject(new Validation(new ObserverLocator()), callback);
+    return new NestedTestSubject(new Validation(new ObserverLocator(new TaskQueue())), callback);
   }
 
 }
@@ -469,4 +470,3 @@ describe('Tests on ValidateCustomAttribute', () => {
     expectations.validate();
   });
 });
-

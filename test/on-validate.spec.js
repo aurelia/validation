@@ -1,6 +1,7 @@
 import {Validation} from '../src/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
+import {TaskQueue} from 'aurelia-task-queue';
 
 class TestSubject {
   constructor(validation, firstName) {
@@ -11,7 +12,7 @@ class TestSubject {
   }
 
   static createInstance(firstName) {
-    var subject = new TestSubject(new Validation(new ObserverLocator()), firstName);
+    var subject = new TestSubject(new Validation(new ObserverLocator(new TaskQueue())), firstName);
     return subject;
   }
 }

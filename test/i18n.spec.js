@@ -2,6 +2,8 @@ import {ObserverLocator} from 'aurelia-binding';
 import {Validation} from '../src/validation';
 import {Expectations} from './expectations';
 import {ValidationConfig} from '../src/validation-config';
+import {TaskQueue} from 'aurelia-task-queue';
+import {TWBootstrapViewStrategy} from '../src/strategies/twbootstrap-view-strategy';
 
 class TestSubject {
   constructor(validation, callback) {
@@ -16,7 +18,7 @@ class TestSubject {
   }
 
   static createInstance(callback) {
-    return new TestSubject(new Validation(new ObserverLocator()), callback);
+    return new TestSubject(new Validation(new ObserverLocator(new TaskQueue())), callback);
   }
 }
 
@@ -24,7 +26,8 @@ describe('I18N tests: messages', () => {
   it('should use a default message (en-US) without loading a locale', (done) => {
     var expectations = new Expectations(expect, done);
 
-    var subject = TestSubject.createInstance(null);
+    var subject = TestSubject.createInstance();
+
     expectations.assert(() => {
       return subject.validation.validate();
     }, false);
@@ -36,7 +39,11 @@ describe('I18N tests: messages', () => {
   });
   it('should result in properly translated default error message for nl-BE', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance((c) => { c.useLocale('nl-BE'); });
+    debugger;
+    var subject = TestSubject.createInstance((c) => {
+      c.useLocale('nl-BE');
+      c.setValue('localeResources', 'src/resources/');
+    });
     expectations.assert(() => {
       return subject.validation.validate();
     }, false);
@@ -49,7 +56,10 @@ describe('I18N tests: messages', () => {
   });
   it('should result in properly translated default error message for nl-NL', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance((c) => { c.useLocale('nl-NL'); });
+    var subject = TestSubject.createInstance((c) => {
+      c.useLocale('nl-NL');
+      c.setValue('localeResources', 'src/resources/');
+    });
       expectations.assert(() => {
         return subject.validation.validate();
       }, false);
@@ -78,7 +88,10 @@ describe('I18N tests: messages', () => {
 
   it('should result in properly translated default error message for de-DE', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance((c) => { c.useLocale('de-DE'); });
+    var subject = TestSubject.createInstance((c) => {
+      c.useLocale('de-DE');
+      c.setValue('localeResources', 'src/resources/');
+    });
     expectations.assert(() => {
       return subject.validation.validate();
     }, false);
@@ -91,7 +104,10 @@ describe('I18N tests: messages', () => {
 
   it('should result in properly translated default error message for fr-FR', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance((c) => { c.useLocale('fr-FR'); });
+    var subject = TestSubject.createInstance((c) => {
+      c.useLocale('fr-FR');
+      c.setValue('localeResources', 'src/resources/');
+    });
     expectations.assert(() => {
       return subject.validation.validate();
     }, false);
@@ -105,7 +121,10 @@ describe('I18N tests: messages', () => {
 
   it('should result in properly translated default error message for es-MX', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance((c) => { c.useLocale('es-MX'); });
+    var subject = TestSubject.createInstance((c) => {
+      c.useLocale('es-MX');
+      c.setValue('localeResources', 'src/resources/');
+    });
     expectations.assert(() => {
       return subject.validation.validate();
     }, false);
@@ -118,7 +137,10 @@ describe('I18N tests: messages', () => {
 
   it('should result in properly translated default error message for en-US', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance((c) => { c.useLocale('en-US'); });
+    var subject = TestSubject.createInstance((c) => {
+      c.useLocale('en-US');
+      c.setValue('localeResources', 'src/resources/');
+    });
     expectations.assert(() => {
       return subject.validation.validate();
     }, false);
@@ -131,7 +153,10 @@ describe('I18N tests: messages', () => {
 
   it('should result in properly translated default error message for bg-BG', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance((c) => { c.useLocale('bg-BG'); });
+    var subject = TestSubject.createInstance((c) => {
+      c.useLocale('bg-BG');
+      c.setValue('localeResources', 'src/resources/');
+    });
     expectations.assert(() => {
       return subject.validation.validate();
     }, false);
@@ -166,7 +191,10 @@ describe('I18N tests: number', () => {
    });
   it('should result in properly translated error message', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance((c) => { c.useLocale('nl-BE'); });
+    var subject = TestSubject.createInstance((c) => {
+      c.useLocale('nl-BE');
+      c.setValue('localeResources', 'src/resources/');
+    });
     expectations.assert(() => {
       subject.firstName = 'John';
       subject.wealth = '3000000,00';

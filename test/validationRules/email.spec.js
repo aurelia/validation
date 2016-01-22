@@ -58,4 +58,11 @@ describe('Tests on EmailValidationRule', () => {
     expectations.validate();
   });
 
+  it('should not be working with addresses missing top domain', (done) => {
+    var expectations = new Expectations(expect, done);
+    var rule = new EmailValidationRule();
+    expectations.expectAsync(rule.validate('van.der.haegen.j@gmail')).toBe(false);
+    expectations.validate();
+  });
+
 });

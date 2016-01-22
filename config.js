@@ -18,6 +18,7 @@ System.config({
     "aurelia-logging": "npm:aurelia-logging@1.0.0-beta.1",
     "aurelia-metadata": "npm:aurelia-metadata@1.0.0-beta.1",
     "aurelia-pal-browser": "npm:aurelia-pal-browser@1.0.0-beta.1",
+    "aurelia-task-queue": "npm:aurelia-task-queue@1.0.0-beta.1",
     "aurelia-templating": "npm:aurelia-templating@1.0.0-beta.1",
     "babel": "npm:babel-core@5.8.22",
     "babel-runtime": "npm:babel-runtime@5.8.20",
