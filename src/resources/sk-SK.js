@@ -86,7 +86,7 @@ export let data = {
       return `musí obsahovať aspoň ${Utilities.getValue(threshold)} znakov z malých a veľkých písmen, číslic a špeciálnych znakov`;
     },
     'URLValidationRule': (newValue, threshold) => {
-      return `nie je platná adresa URL`;
+      return `nie je platná adresa (URL)`;
     }
   }
 };
