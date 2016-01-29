@@ -2,6 +2,7 @@ export class ValidationResult {
   constructor() {
     this.isValid = true;
     this.properties = {};
+    this.onValidate = null;
   }
   addProperty(name) {
     if (!this.properties[name]) {
@@ -11,6 +12,7 @@ export class ValidationResult {
   }
 
   addPropertyValidationCallback(callback) {
+    this.onValidate = callback;
     for (var propertyName in this.properties)
       this.properties[propertyName].onValidate(callback);
   }
@@ -33,6 +35,8 @@ export class ValidationResultProperty {
   constructor(group) {
     this.group = group;
     this.onValidateCallbacks = [];
+    if( group.onValidate )
+        this.onValidate(group.onValidate);
     this.clear();
   }
   clear() {
