@@ -3,6 +3,7 @@ import {ValidateCustomAttribute} from '../../src/validate-custom-attribute';
 import {TWBootstrapViewStrategy} from '../../src/strategies/twbootstrap-view-strategy';
 import {Expectations} from '../expectations';
 import {ObserverLocator} from 'aurelia-binding';
+import {Container} from 'aurelia-dependency-injection';
 
 class TestSubject {
   constructor(validation, callback) {
@@ -19,7 +20,10 @@ class TestSubject {
   }
 
   static createInstance(callback) {
-    return new TestSubject(new Validation(new ObserverLocator()), callback);
+    let container = new Container();
+    let observerLocator = container.get(ObserverLocator);
+
+    return new TestSubject(new Validation(observerLocator), callback);
   }
 }
 
@@ -49,7 +53,10 @@ class NestedTestSubject {
   }
 
   static createInstance(callback) {
-    return new NestedTestSubject(new Validation(new ObserverLocator()), callback);
+    let container = new Container();
+    let observerLocator = container.get(ObserverLocator);
+
+    return new NestedTestSubject(new Validation(observerLocator), callback);
   }
 
 }

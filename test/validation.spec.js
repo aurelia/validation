@@ -2,6 +2,7 @@ import {Validation} from '../src/validation';
 import {ObserverLocator} from 'aurelia-binding';
 import {Expectations} from './expectations';
 import {ValidationConfig} from '../src/validation-config';
+import {Container} from 'aurelia-dependency-injection';
 
 class TestSubject {
   constructor(validation, firstName) {
@@ -9,8 +10,8 @@ class TestSubject {
     this.validation = validation.on(this);
   }
 
-  static createInstance(firstName, config) {
-    var subject = new TestSubject(new Validation(new ObserverLocator(), config), firstName);
+  static createInstance(observerLocator, firstName, config) {
+    var subject = new TestSubject(new Validation(observerLocator, config), firstName);
     subject.validation
       .ensure('firstName')
       .isNotEmpty();
@@ -19,8 +20,16 @@ class TestSubject {
 }
 
 describe('Basic validation tests', () => {
+  let container;
+  let observerLocator;
+
+  beforeEach(() => {
+    container = new Container();
+    observerLocator = container.get(ObserverLocator);
+  });
+
   it('should fail if a notempty property is null', (done) => {
-    var subject = TestSubject.createInstance(null);
+    var subject = TestSubject.createInstance(observerLocator, null);
     setTimeout(()=> {
       expect(subject.validation.result.isValid).toBe(false);
       done();
@@ -29,7 +38,7 @@ describe('Basic validation tests', () => {
 
 
   it('should fail if a notempty property is an empty string', (done) => {
-    var subject = TestSubject.createInstance('');
+    var subject = TestSubject.createInstance(observerLocator, '');
     setTimeout(()=> {
       expect(subject.validation.result.isValid).toBe(false);
       done();
@@ -38,7 +47,7 @@ describe('Basic validation tests', () => {
 
 
   it('should fail if a notempty property contains only whitespace', (done) => {
-    var subject = TestSubject.createInstance('            ');
+    var subject = TestSubject.createInstance(observerLocator, '            ');
     setTimeout(()=> {
       expect(subject.validation.result.isValid).toBe(false);
       done();
@@ -47,7 +56,7 @@ describe('Basic validation tests', () => {
 
 
   it('should not fail if a notempty property is a random string', (done) => {
-    var subject = TestSubject.createInstance('a random string');
+    var subject = TestSubject.createInstance(observerLocator, 'a random string');
     setTimeout(()=> {
       expect(subject.validation.result.isValid).toBe(true);
       done();
@@ -56,7 +65,7 @@ describe('Basic validation tests', () => {
 
 
   it('should fail if an array is empty', (done) => {
-    var subject = TestSubject.createInstance([]);
+    var subject = TestSubject.createInstance(observerLocator, []);
     setTimeout(()=> {
       expect(subject.validation.result.isValid).toBe(false);
       done();
@@ -65,7 +74,7 @@ describe('Basic validation tests', () => {
 
 
   it('should not fail on an array with elements', (done) => {
-    var subject = TestSubject.createInstance(['some element']);
+    var subject = TestSubject.createInstance(observerLocator, ['some element']);
     setTimeout(()=> {
       expect(subject.validation.result.isValid).toBe(true);
       done();
@@ -74,7 +83,7 @@ describe('Basic validation tests', () => {
 
 
   it('should not fail on an array with empty element', (done) => {
-    var subject = TestSubject.createInstance(['']);
+    var subject = TestSubject.createInstance(observerLocator, ['']);
     setTimeout(()=> {
       expect(subject.validation.result.isValid).toBe(true);
       done();
@@ -83,7 +92,7 @@ describe('Basic validation tests', () => {
 
 
   it('should not fail if value is a function', (done) => {
-    var subject = TestSubject.createInstance(() => {
+    var subject = TestSubject.createInstance(observerLocator, () => {
       return 'Demo';
     });
     setTimeout(()=> {
@@ -96,7 +105,7 @@ describe('Basic validation tests', () => {
     var expectations = new Expectations(expect, done);
     var subject = {firstName: 'John'};
 
-    subject.validation = new Validation(new ObserverLocator()).on(subject)
+    subject.validation = new Validation(observerLocator).on(subject)
       .ensure('firstName').isNotEmpty().hasLengthBetween(5, 10);
 
     setTimeout(() => {
@@ -120,7 +129,7 @@ describe('Basic validation tests', () => {
   it('should update the validation automatically when the property changes with nested properties', (done) => {
     var subject = {company: {name: 'Bob the builder construction, Inc.'}};
 
-    subject.validation = new Validation(new ObserverLocator()).on(subject)
+    subject.validation = new Validation(observerLocator).on(subject)
       .ensure('company.name')
       .isNotEmpty().hasLengthBetween(5, 10);
     setTimeout(() => { //Settimeout to allow initial validation
@@ -138,7 +147,7 @@ describe('Basic validation tests', () => {
 
   it('should update the validation automatically when the property changes', (done) => {
 
-    var subject = TestSubject.createInstance(null);
+    var subject = TestSubject.createInstance(observerLocator, null);
 
     setTimeout(() => {
       expect(subject.validation.result.isValid).toBe(false);
@@ -154,7 +163,7 @@ describe('Basic validation tests', () => {
 
 
   it('should not update if the value continuously changes and a debounce time is set on the validation', (done) => {
-    var subject = TestSubject.createInstance(null, new ValidationConfig().useDebounceTimeout(50));
+    var subject = TestSubject.createInstance(observerLocator, null, new ValidationConfig().useDebounceTimeout(50));
     subject.validation.ensure('firstName').isNotEmpty().hasLengthBetween(5, 10);
 
     setTimeout(() => { //Do setTimout 0 to allow initial validation
@@ -177,7 +186,7 @@ describe('Basic validation tests', () => {
   });
 
   it('should not update if the value continuously changes and a debounce time is set on the property', (done) => {
-    var subject = new TestSubject(new Validation(new ObserverLocator(), new ValidationConfig()), null);
+    var subject = new TestSubject(new Validation(observerLocator, new ValidationConfig()), null);
     subject.validation.ensure('firstName', (config) => {config.useDebounceTimeout(50)}).isNotEmpty().hasLengthBetween(5, 10);
 
     setTimeout(() => { //Do setTimout 0 to allow initial validation
@@ -202,7 +211,7 @@ describe('Basic validation tests', () => {
 
   it('should update the validation when validate() is called', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance(null);
+    var subject = TestSubject.createInstance(observerLocator, null);
     setTimeout(() => {
       expect(subject.validation.result.isValid).toBe(false);
       expectations.assert(() => {
@@ -216,7 +225,7 @@ describe('Basic validation tests', () => {
 
   it('should update if an array gains elements', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance([]);
+    var subject = TestSubject.createInstance(observerLocator, []);
     setTimeout(()=> {
       expect(subject.validation.result.isValid).toBe(false);
       expectations.assert(() => {
@@ -236,7 +245,7 @@ describe('Basic validation tests', () => {
 
   it('should update if an array is overwritten', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance(['a', 'b', 'c']);
+    var subject = TestSubject.createInstance(observerLocator, ['a', 'b', 'c']);
     expect(subject.validation.result.isValid).toBe(true);
     expectations.assert(() => {
       subject.firstName = [];
@@ -247,7 +256,7 @@ describe('Basic validation tests', () => {
 
   it('should use a custom message if one is provided', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance("Bob");
+    var subject = TestSubject.createInstance(observerLocator, "Bob");
     subject.validation.ensure('firstName').hasMinLength(10).withMessage("Not valid!");
 
     expectations.assert(() => {
@@ -263,7 +272,7 @@ describe('Basic validation tests', () => {
   });
   it('should use a custom message function if one is provided', (done) => {
     var expectations = new Expectations(expect, done);
-    var subject = TestSubject.createInstance("Bob");
+    var subject = TestSubject.createInstance(observerLocator, "Bob");
     subject.validation.ensure('firstName').hasMinLength(10).withMessage((newValue, threshold) => {
       return newValue + " is not valid!";
     });
@@ -282,7 +291,7 @@ describe('Basic validation tests', () => {
 
 
   it('should complete when validation is valid', (done) => {
-    var subject = TestSubject.createInstance("Bob");
+    var subject = TestSubject.createInstance(observerLocator, "Bob");
 
     subject.validation.validate().then(() => {
       expect('validate() should complete').toBe('validate() should complete');
@@ -293,7 +302,7 @@ describe('Basic validation tests', () => {
     });
   });
   it('should reject when validation is invalid', (done) => {
-    var subject = TestSubject.createInstance('');
+    var subject = TestSubject.createInstance(observerLocator, '');
 
     subject.validation.validate().then(() => {
       expect('validate() should reject').toBe('validate() completed');
@@ -306,7 +315,7 @@ describe('Basic validation tests', () => {
 
 
   it('should set isValidating when validating', (done) => {
-    var subject = TestSubject.createInstance('Bob');
+    var subject = TestSubject.createInstance(observerLocator, 'Bob');
 
     expect(subject.validation.isValidating).toBe(false);
     var validation =     subject.validation.validate();
@@ -319,7 +328,7 @@ describe('Basic validation tests', () => {
   });
 
   it('should only set the result based on the latest value', (done) => {
-    var subject = new TestSubject(new Validation(new ObserverLocator()), '');
+    var subject = new TestSubject(new Validation(observerLocator), '');
     subject.validation.ensure('firstName').passes( () => { return new Promise((fulfil) => {
       setTimeout(()=>{
         fulfil(false);

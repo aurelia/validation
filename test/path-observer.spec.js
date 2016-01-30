@@ -1,7 +1,16 @@
 import {ObserverLocator} from 'aurelia-binding';
 import {PathObserver} from '../src/path-observer';
+import {Container} from 'aurelia-dependency-injection';
 
 describe('PathObserver tests', () => {
+  let container;
+  let observerLocator;
+
+  beforeEach(() => {
+    container = new Container();
+    observerLocator = container.get(ObserverLocator);
+  });
+
   it('should be able to track a path (2 parts)', (done) => {
     var subject = {
       company: {
@@ -10,7 +19,6 @@ describe('PathObserver tests', () => {
         }
       }
     };
-    var observerLocator = new ObserverLocator();
     var pathObserver = new PathObserver(observerLocator, subject, 'company.responsible.email');
     expect(pathObserver.getValue()).toBe('bob@thebuilder.com');
 
@@ -46,7 +54,6 @@ describe('PathObserver tests', () => {
         }
       }
     };
-    var observerLocator = new ObserverLocator();
     var pathObserver = new PathObserver(observerLocator, subject, 'company.responsible.email');
     expect(pathObserver.getValue()).toBe('bob@thebuilder.com');
 

@@ -1,6 +1,7 @@
 import {ObserverLocator} from 'aurelia-binding';
 import {Validation} from '../src/validation';
 import {Expectations} from './expectations';
+import {Container} from 'aurelia-dependency-injection';
 
 class TestSubject {
   constructor(validation) {
@@ -18,7 +19,10 @@ class TestSubject {
   }
 
   static createInstance() {
-    return new TestSubject(new Validation(new ObserverLocator()));
+    let container = new Container();
+    let observerLocator = container.get(ObserverLocator);
+
+    return new TestSubject(new Validation(observerLocator));
   }
 }
 
