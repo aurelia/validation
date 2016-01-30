@@ -1,3 +1,11 @@
+### 0.6.1 (2016-01-30)
+
+
+#### Features
+
+* **all:** update jspm meta; core-js; aurelia deps ([c109bdc6](https://github.com/aurelia/validation/commit/c109bdc6170f200b0e7034d726077da08159ba3a))
+
+
 ## 0.6.0 (2015-11-16)
 
 
