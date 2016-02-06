@@ -187,7 +187,7 @@ Synonymn for *containsOnlyAlphaOrWhitespace()*
 ####hasLengthBetween(minimumValue, maximumValue)
 Validates that the value entered is greater than or equal to the provided *minimumValue* and less than or equal to the provided *maximumValue*.
 
-####hasMinLength(minimumLength)e
+####hasMinLength(minimumLength)
 Validates that the value entered has a length greater than or equal to the provided *minimumLength*.
 
 ####hasMaxLength(maximumLength)
