@@ -25,7 +25,7 @@ export class Validation {
    * @param subject The subject to validate
    * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
    */
-  on(subject, configCallback) {
+  on(subject, configCallback?: (validationConfig: ValidationConfig) => void): ValidationGroup {
     let conf = new ValidationConfig(this.config);
     if (configCallback !== null && configCallback !== undefined && typeof(configCallback) === 'function') {
       configCallback(conf);
