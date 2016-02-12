@@ -175,7 +175,7 @@ export class ValidationGroupBuilder {
     return this.passesRule(new RegexValidationRule(regex));
   }
 
-  passes(customFunction, threshold) {
+  passes(customFunction: (newValue: any, threshold: any) => boolean, threshold: any) {
     return this.passesRule(new CustomFunctionValidationRule(customFunction, threshold));
   }
 
@@ -190,13 +190,13 @@ export class ValidationGroupBuilder {
     validationProperty.validateCurrentValue(false);
   }
 
-  withMessage(message) {
+  withMessage(message: string | (newValue: any, threshold: any) => any) {
     this.validationRuleCollections[0].withMessage(message);
     this.checkLast();
     return this.validationGroup;
   }
 
-  if(conditionExpression) {
+  if(conditionExpression: () => boolean) {
     //IF is treated as a 'switch' with case 'true' and 'default'
     let conditionalCollection = new SwitchCaseValidationRulesCollection(conditionExpression);
     conditionalCollection.case(true);
@@ -222,7 +222,7 @@ export class ValidationGroupBuilder {
     return this.validationGroup;
   }
 
-  switch(conditionExpression) {
+  switch(conditionExpression: () => any) {
     let condition = conditionExpression;
     if (condition === undefined) {
       let observer = this.validationGroup.validationProperties[this.validationGroup.validationProperties.length - 1].observer;
