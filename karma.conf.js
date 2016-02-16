@@ -10,22 +10,36 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jspm', 'jasmine'],
+    frameworks: ['systemjs', 'jasmine'],
 
-    jspm: {
-      // Edit this to your needs
-      loadFiles: ['src/**/*.js', 'test/unit/**/*.js']
+    systemjs: {
+      configFile: 'config.js',
+      config: {
+        paths: {
+          // "*": null,
+          "src/*": "src/*",
+          'babel': 'node_modules/gulp-babel/node_modules/babel-core/browser.js',
+          "systemjs": "jspm_packages/system.js",
+          'system-polyfills': 'jspm_packages/system-polyfills.js',
+          // 'es6-module-loader': 'node_modules/es6-module-loader/dist/es6-module-loader.js'
+        },
+        transpiler: 'babel'
+      },
+      serveFiles: [
+        'src/**/*.js',
+        'jspm_packages/**/*.js'
+      ]
     },
 
-
     // list of files / patterns to load in the browser
-    files: [],
-
+    files: [
+      'test/unit/*.spec.js',
+      'test/fixtures/*.js'
+    ],
 
     // list of files to exclude
     exclude: [
     ],
-
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
