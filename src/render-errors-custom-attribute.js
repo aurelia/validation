@@ -13,7 +13,7 @@ class FakeRenderer {
   }
 }
 
-export class ValidateCustomAttribute {
+export class RenderErrorsCustomAttribute {
   renderer = new FakeRenderer();
   element;
   static inject = [DOM.Element];
@@ -21,7 +21,9 @@ export class ValidateCustomAttribute {
     this.element = element;
   }
 
-  bind(target, other) {
+  bind(target, other, something) {
+    console.log(other);
+    console.log(something);
     let reporter = ValidationEngine.getValidationReporter(this.value);
 
     this.subscription = reporter.subscribe(errors => {
