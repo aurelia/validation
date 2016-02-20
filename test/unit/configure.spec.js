@@ -15,6 +15,7 @@ describe('the Aurelia configuration', () => {
   });
 
   it('should register a global resource', () => {
+    let mockedConfiguration = [];
     expect(mockedConfiguration).not.toEqual(undefined);
   });
 
