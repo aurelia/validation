@@ -1,6 +1,6 @@
 export class ValidationError {
-  constructor() {
-    // message
-    // propName
-  }
+  message = '';
+  object;
+  propertyName = '';
+  value;
 }

@@ -7,9 +7,9 @@ Scenarios to cover
 TODOS
 
 0. Add Jeremy as contributor to all repos
-1. Create the validation-error class - Patrick
-3. Create the Validator interface - Patrick
-4. Create reporter interface - Patrick, but done
+1. Create the validation-error class - Done
+3. Create the Validator interface - Done 
+4. Create reporter interface - Done
 5. Move current reporter to validatejs repo - Patrick
 6. Create validation observer for validatejs - Jeremy
 7. Get the BootstrapFormGroupRenderer on templating-validation - Jeremy, might be later
