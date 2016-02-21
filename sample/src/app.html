@@ -3,13 +3,16 @@
     .has-errors { border: 1px solid red; }
   </style>
   <form>
+    <summary>
+      <errors repeat.for="error of reporter.errors"></errors>
+    </summary>
     <label class="form-group">
       <strong>First Name</strong>
-      <input class="form-control" value.bind="model.firstName" validate="model.firstName" />
+      <input class="form-control" value.bind="model.firstName & bootstrapFormGroupRenderer:reporter" />
     </label>
     <label class="form-group">
       <strong>Last Name</strong>
-      <input class="form-control" value.bind="model.lastName" validate="model.lastName" />
+      <input class="form-control" value.bind="model.lastName" />
     </label>
     <label class="form-group">
       <strong>Last Updated</strong>

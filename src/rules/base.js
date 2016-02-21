@@ -9,6 +9,7 @@ export function base(targetOrConfig, key, descriptor, rule) {
     let config = metadata.getOrCreateOwn(validationMetadataKey, ValidationConfig, target);
     config.addRule(key2, new rule(targetOrConfig));
 
+    // TODO: REMOVE
     let innerPropertyName = `_${key2}`;
 
     if (descriptor2.initializer) {
@@ -29,6 +30,7 @@ export function base(targetOrConfig, key, descriptor, rule) {
     };
 
     descriptor2.get.dependencies = [innerPropertyName];
+    // Down to here
   }
 
   if(key) {
