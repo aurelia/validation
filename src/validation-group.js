@@ -28,7 +28,7 @@ export class ValidationGroup {
     this.onDestroy = config.onLocaleChanged(() => {
       this.validate(false, true);
     });
-    validationMetadata = metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
+    validationMetadata = metadata.getOwn(ValidationMetadata.metadataKey, Object.getPrototypeOf(this.subject));
     if (validationMetadata) {
       validationMetadata.setup(this);
     }
