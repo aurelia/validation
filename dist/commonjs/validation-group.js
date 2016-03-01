@@ -30,7 +30,7 @@ var ValidationGroup = (function () {
     this.onDestroy = config.onLocaleChanged(function () {
       _this.validate(false, true);
     });
-    validationMetadata = _aureliaMetadata.metadata.getOwn(_decorators.ValidationMetadata.metadataKey, this.subject);
+    validationMetadata = _aureliaMetadata.metadata.getOwn(_decorators.ValidationMetadata.metadataKey, Object.getPrototypeOf(this.subject));
     if (validationMetadata) {
       validationMetadata.setup(this);
     }

@@ -29,7 +29,7 @@ export class ValidationResultProperty {
     this.onValidateCallbacks = [];
     this.clear();
   }
-  clear() {
+  clear(): void {
     this.isValid = true;
     this.isDirty = false;
     this.message = '';
@@ -37,16 +37,16 @@ export class ValidationResultProperty {
     this.latestValue = null;
     this.notifyObserversOfChange();
   }
-  onValidate(onValidateCallback) {
+  onValidate(onValidateCallback): void {
     this.onValidateCallbacks.push(onValidateCallback);
   }
-  notifyObserversOfChange() {
+  notifyObserversOfChange(): void {
     for (let i = 0; i < this.onValidateCallbacks.length; i++) {
       let callback = this.onValidateCallbacks[i];
       callback(this);
     }
   }
-  setValidity(validationResponse, shouldBeDirty) {
+  setValidity(validationResponse, shouldBeDirty: boolean): void {
     let notifyObservers = (!this.isDirty && shouldBeDirty)
       || (this.isValid !== validationResponse.isValid)
       || (this.message !== validationResponse.message);
