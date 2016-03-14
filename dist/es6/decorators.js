@@ -35,7 +35,7 @@ class ValidationPropertyMetadata {
   }
 }
 
-export function ensure(setupStep) {
+export function ensure(setupStep: (it: ValidationGroup) => void) {
   return function(target, propertyName) {
     let validationMetadata = metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
     let property = validationMetadata.getOrCreateProperty(propertyName);

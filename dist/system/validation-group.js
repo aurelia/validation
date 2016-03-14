@@ -34,7 +34,7 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
           this.onDestroy = config.onLocaleChanged(function () {
             _this.validate(false, true);
           });
-          validationMetadata = metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
+          validationMetadata = metadata.getOwn(ValidationMetadata.metadataKey, Object.getPrototypeOf(this.subject));
           if (validationMetadata) {
             validationMetadata.setup(this);
           }

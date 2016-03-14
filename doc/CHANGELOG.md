@@ -1,3 +1,13 @@
+### 0.6.3 (2016-03-01)
+
+
+#### Features
+
+* **I18N:**
+  * update pt-BR ([f0dd26d4](https://github.com/aurelia/validation/commit/f0dd26d4545ce378bd297d69b03c60e1be2157d7))
+  * add pt-BR ([f684272e](https://github.com/aurelia/validation/commit/f684272ef9fa32a1e2a8970426526d3c01e4ef67))
+
+
 ### 0.6.2 (2016-02-08)
 
 
