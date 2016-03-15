@@ -71,6 +71,7 @@ System.register([], function (_export) {
         ValidationLocaleRepository.prototype.load = function load(localeIdentifier, basePath) {
           var _this = this;
 
+          var that = this;
           if (!basePath) {
             basePath = 'aurelia-validation/resources/';
           }
@@ -79,10 +80,17 @@ System.register([], function (_export) {
               var locale = _this.instances.get(localeIdentifier);
               resolve(locale);
             } else {
-              System['import'](basePath + localeIdentifier).then(function (resource) {
-                var locale = _this.addLocale(localeIdentifier, resource.data);
-                resolve(locale);
-              });
+              if (window.require) {
+                require([basePath + localeIdentifier], function (resource) {
+                  var locale = that.addLocale(localeIdentifier, resource.data);
+                  resolve(locale);
+                });
+              } else {
+                System['import'](basePath + localeIdentifier).then(function (resource) {
+                  var locale = that.addLocale(localeIdentifier, resource.data);
+                  resolve(locale);
+                });
+              }
             }
           });
         };
