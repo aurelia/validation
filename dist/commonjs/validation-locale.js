@@ -67,6 +67,7 @@ var ValidationLocaleRepository = (function () {
   ValidationLocaleRepository.prototype.load = function load(localeIdentifier, basePath) {
     var _this = this;
 
+    var that = this;
     if (!basePath) {
       basePath = 'aurelia-validation/resources/';
     }
@@ -75,7 +76,6 @@ var ValidationLocaleRepository = (function () {
         var locale = _this.instances.get(localeIdentifier);
         resolve(locale);
       } else {
-        var that = _this;
         if (window.require) {
           require([basePath + localeIdentifier], function (resource) {
             var locale = that.addLocale(localeIdentifier, resource.data);
