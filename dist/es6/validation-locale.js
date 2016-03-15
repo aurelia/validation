@@ -55,10 +55,18 @@ class ValidationLocaleRepository  {
         let locale = this.instances.get(localeIdentifier);
         resolve(locale);
       } else {
-        System.import(basePath + localeIdentifier).then((resource) => {
-          let locale = this.addLocale(localeIdentifier, resource.data);
-          resolve(locale);
-        });
+        var that = this;
+        if (window.require) {
+          require([basePath + localeIdentifier], function (resource) {
+            var locale = that.addLocale(localeIdentifier, resource.data);
+            resolve(locale);
+          });
+        } else {
+          System['import'](basePath + localeIdentifier).then(function (resource) {
+            var locale = that.addLocale(localeIdentifier, resource.data);
+            resolve(locale);
+          });
+        }
       }
     });
   }
