@@ -39,7 +39,7 @@ var TWBootstrapViewStrategyBase = (function (_ValidationViewStrategy) {
   };
 
   TWBootstrapViewStrategyBase.prototype.findLabelsRecursively = function findLabelsRecursively(currentElement, inputId, currentLabels, currentDepth) {
-    if (currentDepth === 5) {
+    if (currentDepth === 5 || currentLabels.length >= 1) {
       return;
     }
     if (currentElement.nodeName === 'LABEL' && (currentElement.attributes['for'] && currentElement.attributes['for'].value === inputId || !currentElement.attributes['for'])) {
