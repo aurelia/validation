@@ -1,3 +1,4 @@
+import 'aurelia-polyfills';
 import {ValidationLocale} from '../src/validation-locale';
 import {data} from '../src/resources/en-US';
 import {ValidationConfigDefaults} from '../src/validation-config'
