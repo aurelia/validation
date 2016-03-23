@@ -41,7 +41,13 @@ gulp.task('build-index', function(){
     .pipe(insert.transform(function(contents) {
       return tools.createImportBlock(importsToAdd) + contents;
     }))
-    .pipe(to5(assign({}, compilerOptions.commonjs())));
+    .pipe(gulp.dest(paths.output));
+});
+
+gulp.task('build-es2015-temp', function () {
+    return gulp.src(paths.output + jsName)
+      .pipe(to5(assign({}, compilerOptions.commonjs())))
+      .pipe(gulp.dest(paths.output + 'temp'));
 });
 
 gulp.task('build-es2015', function () {
@@ -69,8 +75,7 @@ gulp.task('build-system', function () {
 });
 
 gulp.task('build-dts', function(){
-  var tdsPath = paths.output + paths.packageName + '/' + paths.packageName + '.d.ts';
-  return gulp.src(tdsPath)
+  return gulp.src(paths.output + paths.packageName + '.d.ts')
       .pipe(rename(paths.packageName + '.d.ts'))
       .pipe(gulp.dest(paths.output + 'es2015'))
       .pipe(gulp.dest(paths.output + 'commonjs'))
@@ -78,19 +83,12 @@ gulp.task('build-dts', function(){
       .pipe(gulp.dest(paths.output + 'system'));
 });
 
-gulp.task('remove-dts-folder', function() {
-    var tdsFolder = paths.output + paths.packageName;
-    return gulp.src([tdsFolder])
-      .pipe(vinylPaths(del));
-});
-
 gulp.task('build', function(callback) {
   return runSequence(
     'clean',
-    ['build-es2015', 'build-commonjs', 'build-amd', 'build-system'],
     'build-index',
+    ['build-es2015-temp', 'build-es2015', 'build-commonjs', 'build-amd', 'build-system'],
     'build-dts',
-    'remove-dts-folder',
     callback
   );
 });

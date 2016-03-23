@@ -1,3 +1,7 @@
+### 0.6.6 (2016-03-23)
+
+* Fix build to properly generate d.ts files.
+
 ### 0.6.5 (2016-03-22)
 
 
