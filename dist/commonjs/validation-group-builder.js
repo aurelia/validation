@@ -1,8 +1,9 @@
 'use strict';
 
-exports.__esModule = true;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ValidationGroupBuilder = undefined;
 
 var _validationRulesCollection = require('./validation-rules-collection');
 
@@ -12,7 +13,9 @@ var _validationConfig = require('./validation-config');
 
 var _validationRules = require('./validation-rules');
 
-var ValidationGroupBuilder = (function () {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ValidationGroupBuilder = exports.ValidationGroupBuilder = function () {
   function ValidationGroupBuilder(observerLocator, validationGroup) {
     _classCallCheck(this, ValidationGroupBuilder);
 
@@ -181,24 +184,24 @@ var ValidationGroupBuilder = (function () {
     return this.validationGroup;
   };
 
-  ValidationGroupBuilder.prototype['if'] = function _if(conditionExpression) {
+  ValidationGroupBuilder.prototype.if = function _if(conditionExpression) {
     var conditionalCollection = new _validationRulesCollection.SwitchCaseValidationRulesCollection(conditionExpression);
-    conditionalCollection['case'](true);
+    conditionalCollection.case(true);
     this.validationRuleCollections[0].addValidationRuleCollection(conditionalCollection);
     this.validationRuleCollections.unshift(conditionalCollection);
     return this.validationGroup;
   };
 
-  ValidationGroupBuilder.prototype['else'] = function _else() {
-    if (!this.validationRuleCollections[0]['default']) {
+  ValidationGroupBuilder.prototype.else = function _else() {
+    if (!this.validationRuleCollections[0].default) {
       throw Error('Invalid statement: \'else\'');
     }
-    this.validationRuleCollections[0]['default']();
+    this.validationRuleCollections[0].default();
     return this.validationGroup;
   };
 
   ValidationGroupBuilder.prototype.endIf = function endIf() {
-    if (!this.validationRuleCollections[0]['default']) {
+    if (!this.validationRuleCollections[0].default) {
       throw Error('Invalid statement: \'endIf\'');
     }
     this.validationRuleCollections.shift();
@@ -206,14 +209,14 @@ var ValidationGroupBuilder = (function () {
     return this.validationGroup;
   };
 
-  ValidationGroupBuilder.prototype['switch'] = function _switch(conditionExpression) {
+  ValidationGroupBuilder.prototype.switch = function _switch(conditionExpression) {
     var _this = this;
 
     var condition = conditionExpression;
     if (condition === undefined) {
       (function () {
         var observer = _this.validationGroup.validationProperties[_this.validationGroup.validationProperties.length - 1].observer;
-        condition = function () {
+        condition = function condition() {
           return observer.getValue();
         };
       })();
@@ -224,24 +227,24 @@ var ValidationGroupBuilder = (function () {
     return this.validationGroup;
   };
 
-  ValidationGroupBuilder.prototype['case'] = function _case(caseLabel) {
-    if (!this.validationRuleCollections[0]['default']) {
+  ValidationGroupBuilder.prototype.case = function _case(caseLabel) {
+    if (!this.validationRuleCollections[0].default) {
       throw Error('Invalid statement: \'case\'');
     }
-    this.validationRuleCollections[0]['case'](caseLabel);
+    this.validationRuleCollections[0].case(caseLabel);
     return this.validationGroup;
   };
 
-  ValidationGroupBuilder.prototype['default'] = function _default() {
-    if (!this.validationRuleCollections[0]['default']) {
+  ValidationGroupBuilder.prototype.default = function _default() {
+    if (!this.validationRuleCollections[0].default) {
       throw Error('Invalid statement: \'case\'');
     }
-    this.validationRuleCollections[0]['default']();
+    this.validationRuleCollections[0].default();
     return this.validationGroup;
   };
 
   ValidationGroupBuilder.prototype.endSwitch = function endSwitch() {
-    if (!this.validationRuleCollections[0]['default']) {
+    if (!this.validationRuleCollections[0].default) {
       throw Error('Invalid statement: \'endIf\'');
     }
     this.validationRuleCollections.shift();
@@ -250,6 +253,4 @@ var ValidationGroupBuilder = (function () {
   };
 
   return ValidationGroupBuilder;
-})();
-
-exports.ValidationGroupBuilder = ValidationGroupBuilder;
+}();

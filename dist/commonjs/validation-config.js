@@ -1,25 +1,26 @@
 'use strict';
 
-exports.__esModule = true;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ValidationConfig = exports.ValidationConfigDefaults = undefined;
 
 var _validationLocale = require('./validation-locale');
 
-var _strategiesTwbootstrapViewStrategy = require('./strategies/twbootstrap-view-strategy');
+var _twbootstrapViewStrategy = require('./strategies/twbootstrap-view-strategy');
 
-var ValidationConfigDefaults = function ValidationConfigDefaults() {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ValidationConfigDefaults = exports.ValidationConfigDefaults = function ValidationConfigDefaults() {
   _classCallCheck(this, ValidationConfigDefaults);
 };
-
-exports.ValidationConfigDefaults = ValidationConfigDefaults;
 
 ValidationConfigDefaults._defaults = {
   debounceTimeout: 0,
   dependencies: [],
   locale: 'en-US',
   localeResources: 'aurelia-validation/resources/',
-  viewStrategy: _strategiesTwbootstrapViewStrategy.TWBootstrapViewStrategy.AppendToMessage,
+  viewStrategy: _twbootstrapViewStrategy.TWBootstrapViewStrategy.AppendToMessage,
   allPropertiesAreMandatory: false
 };
 ValidationConfigDefaults.defaults = function () {
@@ -28,7 +29,7 @@ ValidationConfigDefaults.defaults = function () {
   return defaults;
 };
 
-var ValidationConfig = (function () {
+var ValidationConfig = exports.ValidationConfig = function () {
   function ValidationConfig(innerConfig) {
     _classCallCheck(this, ValidationConfig);
 
@@ -61,7 +62,7 @@ var ValidationConfig = (function () {
     var id = ++ValidationConfig.uniqueListenerId;
     this.changedHandlers.set(id, callback);
     return function () {
-      _this.changedHandlers['delete'](id);
+      _this.changedHandlers.delete(id);
     };
   };
 
@@ -118,8 +119,6 @@ var ValidationConfig = (function () {
   };
 
   return ValidationConfig;
-})();
-
-exports.ValidationConfig = ValidationConfig;
+}();
 
 ValidationConfig.uniqueListenerId = 0;

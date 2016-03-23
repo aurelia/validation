@@ -1,8 +1,11 @@
 define(['exports', '../utilities'], function (exports, _utilities) {
   'use strict';
 
-  exports.__esModule = true;
-  var data = {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.data = undefined;
+  var data = exports.data = {
     settings: {
       'numericRegex': /^-?(?:\d+)(?:\,\d+)?$/
     },
@@ -92,5 +95,4 @@ define(['exports', '../utilities'], function (exports, _utilities) {
       }
     }
   };
-  exports.data = data;
 });

@@ -1,13 +1,22 @@
 define(['exports', 'aurelia-binding', './validation-group', 'aurelia-dependency-injection', './validation-config'], function (exports, _aureliaBinding, _validationGroup, _aureliaDependencyInjection, _validationConfig) {
   'use strict';
 
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.Validation = undefined;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
-  var Validation = (function () {
+  var _dec, _class;
+
+  var Validation = exports.Validation = (_dec = (0, _aureliaDependencyInjection.inject)(_aureliaBinding.ObserverLocator), _dec(_class = function () {
     function Validation(observerLocator, validationConfig) {
-      _classCallCheck(this, _Validation);
+      _classCallCheck(this, Validation);
 
       this.observerLocator = observerLocator;
       this.config = validationConfig ? validationConfig : Validation.defaults;
@@ -27,12 +36,8 @@ define(['exports', 'aurelia-binding', './validation-group', 'aurelia-dependency-
       return validation;
     };
 
-    var _Validation = Validation;
-    Validation = _aureliaDependencyInjection.inject(_aureliaBinding.ObserverLocator)(Validation) || Validation;
     return Validation;
-  })();
-
-  exports.Validation = Validation;
+  }()) || _class);
 
   Validation.defaults = new _validationConfig.ValidationConfig();
 });

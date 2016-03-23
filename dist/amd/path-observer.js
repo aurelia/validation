@@ -1,11 +1,17 @@
 define(['exports'], function (exports) {
   'use strict';
 
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
-  var PathObserver = (function () {
+  var PathObserver = exports.PathObserver = function () {
     function PathObserver(observerLocator, subject, path) {
       _classCallCheck(this, PathObserver);
 
@@ -23,12 +29,12 @@ define(['exports'], function (exports) {
       var _this = this;
 
       var currentSubject = this.subject;
-      var observersAreComplete = undefined;
+      var observersAreComplete = void 0;
 
       if (propertyName !== undefined && propertyName !== null) {
         for (var i = this.observers.length - 1; i >= 0; i--) {
           var currentObserver = this.observers[i];
-          var observer = undefined;
+          var observer = void 0;
           if (currentObserver.propertyName === propertyName) {
             break;
           }
@@ -41,11 +47,11 @@ define(['exports'], function (exports) {
 
       observersAreComplete = this.observers.length === this.path.length;
 
-      var _loop = function (i) {
-        var observer = _this.observers[i];
-        var currentPath = _this.path[i];
-        var subscription = undefined;
-        var currentValue = undefined;
+      var _loop = function _loop(_i) {
+        var observer = _this.observers[_i];
+        var currentPath = _this.path[_i];
+        var subscription = void 0;
+        var currentValue = void 0;
         if (!observer) {
           observer = _this.observerLocator.getObserver(currentSubject, currentPath);
           _this.observers.push(observer);
@@ -62,16 +68,16 @@ define(['exports'], function (exports) {
         }
       };
 
-      for (var i = 0; i < this.path.length; i++) {
-        var _ret = _loop(i);
+      for (var _i = 0; _i < this.path.length; _i++) {
+        var _ret = _loop(_i);
 
         if (_ret === 'break') break;
       }
 
       if (!observersAreComplete && this.observers.length === this.path.length) {
         var actualObserver = this.observers[this.observers.length - 1];
-        for (var i = 0; i < this.callbacks.length; i++) {
-          actualObserver.subscribe(this.callbacks[i]);
+        for (var _i2 = 0; _i2 < this.callbacks.length; _i2++) {
+          actualObserver.subscribe(this.callbacks[_i2]);
         }
       }
     };
@@ -143,7 +149,5 @@ define(['exports'], function (exports) {
     };
 
     return PathObserver;
-  })();
-
-  exports.PathObserver = PathObserver;
+  }();
 });

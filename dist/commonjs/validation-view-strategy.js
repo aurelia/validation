@@ -1,10 +1,12 @@
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ValidationViewStrategy = (function () {
+var ValidationViewStrategy = exports.ValidationViewStrategy = function () {
   function ValidationViewStrategy() {
     _classCallCheck(this, ValidationViewStrategy);
 
@@ -15,8 +17,8 @@ var ValidationViewStrategy = (function () {
     var atts = element.attributes;
     for (var i = 0; i < this.bindingPathAttributes.length; i++) {
       var attributeName = this.bindingPathAttributes[i];
-      var bindingPath = undefined;
-      var validationProperty = undefined;
+      var bindingPath = void 0;
+      var validationProperty = void 0;
       if (atts[attributeName]) {
         bindingPath = atts[attributeName].value.trim();
         if (bindingPath.indexOf('|') !== -1) {
@@ -44,6 +46,4 @@ var ValidationViewStrategy = (function () {
   };
 
   return ValidationViewStrategy;
-})();
-
-exports.ValidationViewStrategy = ValidationViewStrategy;
+}();

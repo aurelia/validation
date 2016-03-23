@@ -1,10 +1,12 @@
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ValidationLocale = (function () {
+var ValidationLocale = exports.ValidationLocale = function () {
   function ValidationLocale(defaults, data) {
     _classCallCheck(this, ValidationLocale);
 
@@ -13,8 +15,8 @@ var ValidationLocale = (function () {
   }
 
   ValidationLocale.prototype.getValueFor = function getValueFor(identifier, category) {
-    var currentLocaleSetting = undefined;
-    var defaultSetting = undefined;
+    var currentLocaleSetting = void 0;
+    var defaultSetting = void 0;
     if (this.currentLocale && this.currentLocale[category]) {
       currentLocaleSetting = this.currentLocale[category][identifier];
       if (currentLocaleSetting !== undefined && currentLocaleSetting !== null) {
@@ -46,15 +48,13 @@ var ValidationLocale = (function () {
   };
 
   return ValidationLocale;
-})();
+}();
 
-exports.ValidationLocale = ValidationLocale;
-
-var ValidationLocaleRepository = (function () {
+var ValidationLocaleRepository = function () {
   function ValidationLocaleRepository() {
     _classCallCheck(this, ValidationLocaleRepository);
 
-    this['default'] = null;
+    this.default = null;
     this.instances = new Map();
     this.defaults = {
       settings: {
@@ -75,7 +75,7 @@ var ValidationLocaleRepository = (function () {
         var locale = _this.instances.get(localeIdentifier);
         resolve(locale);
       } else {
-        System['import'](basePath + localeIdentifier).then(function (resource) {
+        System.import(basePath + localeIdentifier).then(function (resource) {
           var locale = _this.addLocale(localeIdentifier, resource.data);
           resolve(locale);
         });
@@ -86,13 +86,13 @@ var ValidationLocaleRepository = (function () {
   ValidationLocaleRepository.prototype.addLocale = function addLocale(localeIdentifier, data) {
     var instance = new ValidationLocale(this.defaults, data);
     this.instances.set(localeIdentifier, instance);
-    if (this['default'] === null) {
-      this['default'] = instance;
+    if (this.default === null) {
+      this.default = instance;
     }
     return instance;
   };
 
   return ValidationLocaleRepository;
-})();
+}();
 
 ValidationLocale.Repository = new ValidationLocaleRepository();

@@ -1,20 +1,12 @@
-System.register(['aurelia-metadata'], function (_export) {
-  'use strict';
+'use strict';
 
-  var metadata, ValidationMetadata, ValidationPropertyMetadata;
+System.register(['aurelia-metadata'], function (_export, _context) {
+  var metadata, _class, _temp, ValidationMetadata, ValidationPropertyMetadata;
 
-  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-  _export('ensure', ensure);
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-  function ensure(setupStep) {
-    return function (target, propertyName) {
-      var validationMetadata = metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
-      var property = validationMetadata.getOrCreateProperty(propertyName);
-      property.addSetupStep(setupStep);
-    };
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
   }
 
   return {
@@ -22,13 +14,7 @@ System.register(['aurelia-metadata'], function (_export) {
       metadata = _aureliaMetadata.metadata;
     }],
     execute: function () {
-      ValidationMetadata = (function () {
-        _createClass(ValidationMetadata, null, [{
-          key: 'metadataKey',
-          value: 'aurelia:validation',
-          enumerable: true
-        }]);
-
+      _export('ValidationMetadata', ValidationMetadata = (_temp = _class = function () {
         function ValidationMetadata() {
           _classCallCheck(this, ValidationMetadata);
 
@@ -53,11 +39,11 @@ System.register(['aurelia-metadata'], function (_export) {
         };
 
         return ValidationMetadata;
-      })();
+      }(), _class.metadataKey = 'aurelia:validation', _temp));
 
       _export('ValidationMetadata', ValidationMetadata);
 
-      ValidationPropertyMetadata = (function () {
+      ValidationPropertyMetadata = function () {
         function ValidationPropertyMetadata(propertyName) {
           _classCallCheck(this, ValidationPropertyMetadata);
 
@@ -77,7 +63,17 @@ System.register(['aurelia-metadata'], function (_export) {
         };
 
         return ValidationPropertyMetadata;
-      })();
+      }();
+
+      function ensure(setupStep) {
+        return function (target, propertyName) {
+          var validationMetadata = metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
+          var property = validationMetadata.getOrCreateProperty(propertyName);
+          property.addSetupStep(setupStep);
+        };
+      }
+
+      _export('ensure', ensure);
     }
   };
 });

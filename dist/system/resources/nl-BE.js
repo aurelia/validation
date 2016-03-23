@@ -1,13 +1,13 @@
-System.register(['../utilities'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['../utilities'], function (_export, _context) {
   var Utilities, data;
   return {
     setters: [function (_utilities) {
       Utilities = _utilities.Utilities;
     }],
     execute: function () {
-      data = {
+      _export('data', data = {
         settings: {
           'numericRegex': /^-?(?:\d+)(?:\,\d+)?$/
         },
@@ -96,7 +96,7 @@ System.register(['../utilities'], function (_export) {
             return 'is geen geldige URL';
           }
         }
-      };
+      });
 
       _export('data', data);
     }

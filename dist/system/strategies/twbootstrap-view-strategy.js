@@ -1,27 +1,55 @@
-System.register(['../validation-view-strategy'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['../validation-view-strategy'], function (_export, _context) {
   var ValidationViewStrategy, TWBootstrapViewStrategyBase, TWBootstrapViewStrategy;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
-  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
 
   return {
     setters: [function (_validationViewStrategy) {
       ValidationViewStrategy = _validationViewStrategy.ValidationViewStrategy;
     }],
     execute: function () {
-      TWBootstrapViewStrategyBase = (function (_ValidationViewStrategy) {
-        _inherits(TWBootstrapViewStrategyBase, _ValidationViewStrategy);
+      _export('TWBootstrapViewStrategyBase', TWBootstrapViewStrategyBase = function (_ValidationViewStrate) {
+        _inherits(TWBootstrapViewStrategyBase, _ValidationViewStrate);
 
         function TWBootstrapViewStrategyBase(appendMessageToInput, appendMessageToLabel, helpBlockClass) {
           _classCallCheck(this, TWBootstrapViewStrategyBase);
 
-          _ValidationViewStrategy.call(this);
-          this.appendMessageToInput = appendMessageToInput;
-          this.appendMessageToLabel = appendMessageToLabel;
-          this.helpBlockClass = helpBlockClass;
+          var _this = _possibleConstructorReturn(this, _ValidationViewStrate.call(this));
+
+          _this.appendMessageToInput = appendMessageToInput;
+          _this.appendMessageToLabel = appendMessageToLabel;
+          _this.helpBlockClass = helpBlockClass;
+          return _this;
         }
 
         TWBootstrapViewStrategyBase.prototype.searchFormGroup = function searchFormGroup(currentElement, currentDepth) {
@@ -46,7 +74,7 @@ System.register(['../validation-view-strategy'], function (_export) {
           if (currentDepth === 5) {
             return;
           }
-          if (currentElement.nodeName === 'LABEL' && (currentElement.attributes['for'] && currentElement.attributes['for'].value === inputId || !currentElement.attributes['for'])) {
+          if (currentElement.nodeName === 'LABEL' && (currentElement.attributes.for && currentElement.attributes.for.value === inputId || !currentElement.attributes.for)) {
             currentLabels.push(currentElement);
           }
           for (var i = 0; i < currentElement.children.length; i++) {
@@ -119,13 +147,13 @@ System.register(['../validation-view-strategy'], function (_export) {
         };
 
         return TWBootstrapViewStrategyBase;
-      })(ValidationViewStrategy);
+      }(ValidationViewStrategy));
 
       _export('TWBootstrapViewStrategyBase', TWBootstrapViewStrategyBase);
 
-      TWBootstrapViewStrategy = function TWBootstrapViewStrategy() {
+      _export('TWBootstrapViewStrategy', TWBootstrapViewStrategy = function TWBootstrapViewStrategy() {
         _classCallCheck(this, TWBootstrapViewStrategy);
-      };
+      });
 
       _export('TWBootstrapViewStrategy', TWBootstrapViewStrategy);
 

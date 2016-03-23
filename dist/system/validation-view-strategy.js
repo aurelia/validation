@@ -1,14 +1,18 @@
-System.register([], function (_export) {
-  'use strict';
+'use strict';
 
+System.register([], function (_export, _context) {
   var ValidationViewStrategy;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [],
     execute: function () {
-      ValidationViewStrategy = (function () {
+      _export('ValidationViewStrategy', ValidationViewStrategy = function () {
         function ValidationViewStrategy() {
           _classCallCheck(this, ValidationViewStrategy);
 
@@ -19,8 +23,8 @@ System.register([], function (_export) {
           var atts = element.attributes;
           for (var i = 0; i < this.bindingPathAttributes.length; i++) {
             var attributeName = this.bindingPathAttributes[i];
-            var bindingPath = undefined;
-            var validationProperty = undefined;
+            var bindingPath = void 0;
+            var validationProperty = void 0;
             if (atts[attributeName]) {
               bindingPath = atts[attributeName].value.trim();
               if (bindingPath.indexOf('|') !== -1) {
@@ -48,7 +52,7 @@ System.register([], function (_export) {
         };
 
         return ValidationViewStrategy;
-      })();
+      }());
 
       _export('ValidationViewStrategy', ValidationViewStrategy);
     }

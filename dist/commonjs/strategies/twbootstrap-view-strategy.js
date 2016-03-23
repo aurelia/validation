@@ -1,23 +1,30 @@
 'use strict';
 
-exports.__esModule = true;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TWBootstrapViewStrategy = exports.TWBootstrapViewStrategyBase = undefined;
 
 var _validationViewStrategy = require('../validation-view-strategy');
 
-var TWBootstrapViewStrategyBase = (function (_ValidationViewStrategy) {
-  _inherits(TWBootstrapViewStrategyBase, _ValidationViewStrategy);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TWBootstrapViewStrategyBase = exports.TWBootstrapViewStrategyBase = function (_ValidationViewStrate) {
+  _inherits(TWBootstrapViewStrategyBase, _ValidationViewStrate);
 
   function TWBootstrapViewStrategyBase(appendMessageToInput, appendMessageToLabel, helpBlockClass) {
     _classCallCheck(this, TWBootstrapViewStrategyBase);
 
-    _ValidationViewStrategy.call(this);
-    this.appendMessageToInput = appendMessageToInput;
-    this.appendMessageToLabel = appendMessageToLabel;
-    this.helpBlockClass = helpBlockClass;
+    var _this = _possibleConstructorReturn(this, _ValidationViewStrate.call(this));
+
+    _this.appendMessageToInput = appendMessageToInput;
+    _this.appendMessageToLabel = appendMessageToLabel;
+    _this.helpBlockClass = helpBlockClass;
+    return _this;
   }
 
   TWBootstrapViewStrategyBase.prototype.searchFormGroup = function searchFormGroup(currentElement, currentDepth) {
@@ -42,7 +49,7 @@ var TWBootstrapViewStrategyBase = (function (_ValidationViewStrategy) {
     if (currentDepth === 5) {
       return;
     }
-    if (currentElement.nodeName === 'LABEL' && (currentElement.attributes['for'] && currentElement.attributes['for'].value === inputId || !currentElement.attributes['for'])) {
+    if (currentElement.nodeName === 'LABEL' && (currentElement.attributes.for && currentElement.attributes.for.value === inputId || !currentElement.attributes.for)) {
       currentLabels.push(currentElement);
     }
     for (var i = 0; i < currentElement.children.length; i++) {
@@ -115,15 +122,11 @@ var TWBootstrapViewStrategyBase = (function (_ValidationViewStrategy) {
   };
 
   return TWBootstrapViewStrategyBase;
-})(_validationViewStrategy.ValidationViewStrategy);
+}(_validationViewStrategy.ValidationViewStrategy);
 
-exports.TWBootstrapViewStrategyBase = TWBootstrapViewStrategyBase;
-
-var TWBootstrapViewStrategy = function TWBootstrapViewStrategy() {
+var TWBootstrapViewStrategy = exports.TWBootstrapViewStrategy = function TWBootstrapViewStrategy() {
   _classCallCheck(this, TWBootstrapViewStrategy);
 };
-
-exports.TWBootstrapViewStrategy = TWBootstrapViewStrategy;
 
 TWBootstrapViewStrategy.AppendToInput = new TWBootstrapViewStrategyBase(true, false, 'aurelia-validation-message');
 TWBootstrapViewStrategy.AppendToMessage = new TWBootstrapViewStrategyBase(false, true, 'aurelia-validation-message');

@@ -1,9 +1,13 @@
-System.register(['aurelia-binding', './validation-group', 'aurelia-dependency-injection', './validation-config'], function (_export) {
-  'use strict';
+'use strict';
 
-  var ObserverLocator, ValidationGroup, inject, ValidationConfig, Validation;
+System.register(['aurelia-binding', './validation-group', 'aurelia-dependency-injection', './validation-config'], function (_export, _context) {
+  var ObserverLocator, ValidationGroup, inject, ValidationConfig, _dec, _class, Validation;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [function (_aureliaBinding) {
@@ -16,9 +20,9 @@ System.register(['aurelia-binding', './validation-group', 'aurelia-dependency-in
       ValidationConfig = _validationConfig.ValidationConfig;
     }],
     execute: function () {
-      Validation = (function () {
+      _export('Validation', Validation = (_dec = inject(ObserverLocator), _dec(_class = function () {
         function Validation(observerLocator, validationConfig) {
-          _classCallCheck(this, _Validation);
+          _classCallCheck(this, Validation);
 
           this.observerLocator = observerLocator;
           this.config = validationConfig ? validationConfig : Validation.defaults;
@@ -38,10 +42,8 @@ System.register(['aurelia-binding', './validation-group', 'aurelia-dependency-in
           return validation;
         };
 
-        var _Validation = Validation;
-        Validation = inject(ObserverLocator)(Validation) || Validation;
         return Validation;
-      })();
+      }()) || _class));
 
       _export('Validation', Validation);
 

@@ -1,8 +1,9 @@
 'use strict';
 
-exports.__esModule = true;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ValidationProperty = undefined;
 
 var _validationRulesCollection = require('./validation-rules-collection');
 
@@ -10,7 +11,9 @@ var _pathObserver = require('./path-observer');
 
 var _debouncer = require('./debouncer');
 
-var ValidationProperty = (function () {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ValidationProperty = exports.ValidationProperty = function () {
   function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult, config) {
     var _this = this;
 
@@ -79,7 +82,7 @@ var ValidationProperty = (function () {
             _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
           }
           return validationResponse.isValid;
-        })['catch'](function (err) {
+        }).catch(function (err) {
           throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
         });
       }, function () {
@@ -89,6 +92,4 @@ var ValidationProperty = (function () {
   };
 
   return ValidationProperty;
-})();
-
-exports.ValidationProperty = ValidationProperty;
+}();

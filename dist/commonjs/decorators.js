@@ -1,22 +1,19 @@
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ValidationMetadata = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _class, _temp;
 
 exports.ensure = ensure;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
 var _aureliaMetadata = require('aurelia-metadata');
 
-var ValidationMetadata = (function () {
-  _createClass(ValidationMetadata, null, [{
-    key: 'metadataKey',
-    value: 'aurelia:validation',
-    enumerable: true
-  }]);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var ValidationMetadata = exports.ValidationMetadata = (_temp = _class = function () {
   function ValidationMetadata() {
     _classCallCheck(this, ValidationMetadata);
 
@@ -41,11 +38,9 @@ var ValidationMetadata = (function () {
   };
 
   return ValidationMetadata;
-})();
+}(), _class.metadataKey = 'aurelia:validation', _temp);
 
-exports.ValidationMetadata = ValidationMetadata;
-
-var ValidationPropertyMetadata = (function () {
+var ValidationPropertyMetadata = function () {
   function ValidationPropertyMetadata(propertyName) {
     _classCallCheck(this, ValidationPropertyMetadata);
 
@@ -65,7 +60,7 @@ var ValidationPropertyMetadata = (function () {
   };
 
   return ValidationPropertyMetadata;
-})();
+}();
 
 function ensure(setupStep) {
   return function (target, propertyName) {

@@ -1,10 +1,12 @@
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ValidationResult = (function () {
+var ValidationResult = exports.ValidationResult = function () {
   function ValidationResult() {
     _classCallCheck(this, ValidationResult);
 
@@ -34,11 +36,9 @@ var ValidationResult = (function () {
   };
 
   return ValidationResult;
-})();
+}();
 
-exports.ValidationResult = ValidationResult;
-
-var ValidationResultProperty = (function () {
+var ValidationResultProperty = exports.ValidationResultProperty = function () {
   function ValidationResultProperty(group) {
     _classCallCheck(this, ValidationResultProperty);
 
@@ -86,6 +86,4 @@ var ValidationResultProperty = (function () {
   };
 
   return ValidationResultProperty;
-})();
-
-exports.ValidationResultProperty = ValidationResultProperty;
+}();

@@ -1,21 +1,21 @@
 define(['exports', 'aurelia-metadata'], function (exports, _aureliaMetadata) {
   'use strict';
 
-  exports.__esModule = true;
-
-  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.ValidationMetadata = undefined;
   exports.ensure = ensure;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
-  var ValidationMetadata = (function () {
-    _createClass(ValidationMetadata, null, [{
-      key: 'metadataKey',
-      value: 'aurelia:validation',
-      enumerable: true
-    }]);
+  var _class, _temp;
 
+  var ValidationMetadata = exports.ValidationMetadata = (_temp = _class = function () {
     function ValidationMetadata() {
       _classCallCheck(this, ValidationMetadata);
 
@@ -40,11 +40,9 @@ define(['exports', 'aurelia-metadata'], function (exports, _aureliaMetadata) {
     };
 
     return ValidationMetadata;
-  })();
+  }(), _class.metadataKey = 'aurelia:validation', _temp);
 
-  exports.ValidationMetadata = ValidationMetadata;
-
-  var ValidationPropertyMetadata = (function () {
+  var ValidationPropertyMetadata = function () {
     function ValidationPropertyMetadata(propertyName) {
       _classCallCheck(this, ValidationPropertyMetadata);
 
@@ -64,7 +62,7 @@ define(['exports', 'aurelia-metadata'], function (exports, _aureliaMetadata) {
     };
 
     return ValidationPropertyMetadata;
-  })();
+  }();
 
   function ensure(setupStep) {
     return function (target, propertyName) {

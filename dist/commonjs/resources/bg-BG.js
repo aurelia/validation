@@ -1,10 +1,13 @@
 'use strict';
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.data = undefined;
 
 var _utilities = require('../utilities');
 
-var data = {
+var data = exports.data = {
   settings: {
     'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
   },
@@ -88,4 +91,3 @@ var data = {
     }
   }
 };
-exports.data = data;

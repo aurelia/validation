@@ -1,11 +1,18 @@
 define(['exports', './validation-rules-collection', './path-observer', './debouncer'], function (exports, _validationRulesCollection, _pathObserver, _debouncer) {
   'use strict';
 
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.ValidationProperty = undefined;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
-  var ValidationProperty = (function () {
+  var ValidationProperty = exports.ValidationProperty = function () {
     function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult, config) {
       var _this = this;
 
@@ -74,7 +81,7 @@ define(['exports', './validation-rules-collection', './path-observer', './deboun
               _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
             }
             return validationResponse.isValid;
-          })['catch'](function (err) {
+          }).catch(function (err) {
             throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
           });
         }, function () {
@@ -84,7 +91,5 @@ define(['exports', './validation-rules-collection', './path-observer', './deboun
     };
 
     return ValidationProperty;
-  })();
-
-  exports.ValidationProperty = ValidationProperty;
+  }();
 });

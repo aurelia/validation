@@ -1,14 +1,18 @@
-System.register([], function (_export) {
-  'use strict';
+'use strict';
 
+System.register([], function (_export, _context) {
   var ValidationResult, ValidationResultProperty;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [],
     execute: function () {
-      ValidationResult = (function () {
+      _export('ValidationResult', ValidationResult = function () {
         function ValidationResult() {
           _classCallCheck(this, ValidationResult);
 
@@ -38,11 +42,11 @@ System.register([], function (_export) {
         };
 
         return ValidationResult;
-      })();
+      }());
 
       _export('ValidationResult', ValidationResult);
 
-      ValidationResultProperty = (function () {
+      _export('ValidationResultProperty', ValidationResultProperty = function () {
         function ValidationResultProperty(group) {
           _classCallCheck(this, ValidationResultProperty);
 
@@ -90,7 +94,7 @@ System.register([], function (_export) {
         };
 
         return ValidationResultProperty;
-      })();
+      }());
 
       _export('ValidationResultProperty', ValidationResultProperty);
     }
