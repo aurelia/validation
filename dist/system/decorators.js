@@ -66,6 +66,7 @@ System.register(['aurelia-metadata'], function (_export, _context) {
       }();
 
       function ensure(setupStep) {
+        console.warn('The ensure decorator has been deprecated and will be removed in the next release.');
         return function (target, propertyName) {
           var validationMetadata = metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
           var property = validationMetadata.getOrCreateProperty(propertyName);

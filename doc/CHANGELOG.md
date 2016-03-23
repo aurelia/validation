@@ -1,3 +1,11 @@
+### 0.6.5 (2016-03-22)
+
+
+#### Bug Fixes
+
+* **decorators:** deprecate the ensure decorator ([0e82a6bb](https://github.com/aurelia/validation/commit/0e82a6bb87ba212a01e276faf08d5f05c682b159))
+
+
 ### 0.6.4 (2016-03-22)
 
 * Update to Babel 6
