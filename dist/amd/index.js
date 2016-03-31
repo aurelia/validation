@@ -1,4 +1,4 @@
-define(['exports', './utilities', './validation-config', './validation-locale', './validation-result', './validation-rules', './validation', './validation-group', './validate-custom-attribute', './validation-view-strategy', './strategies/twbootstrap-view-strategy', './decorators'], function (exports, _utilities, _validationConfig, _validationLocale, _validationResult, _validationRules, _validation, _validationGroup, _validateCustomAttribute, _validationViewStrategy, _twbootstrapViewStrategy, _decorators) {
+define(['exports', './utilities', './validation-config', './validation-locale', './validation-result', './validation-rules', './validation', './validation-group', './validate-custom-attribute', './validation-view-strategy', './strategies/twbootstrap-view-strategy', './decorators', 'aurelia-loader'], function (exports, _utilities, _validationConfig, _validationLocale, _validationResult, _validationRules, _validation, _validationGroup, _validateCustomAttribute, _validationViewStrategy, _twbootstrapViewStrategy, _decorators, _aureliaLoader) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -84,6 +84,8 @@ define(['exports', './utilities', './validation-config', './validation-locale', 
       configCallback(_validation.Validation.defaults);
     }
     aurelia.singleton(_validationConfig.ValidationConfig, _validation.Validation.defaults);
+    var loader = aurelia.container.get(_aureliaLoader.Loader);
+    window.loader = window.loader || loader;
     return _validation.Validation.defaults.locale();
   }
 });

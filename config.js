@@ -15,6 +15,7 @@ System.config({
   map: {
     "aurelia-binding": "npm:aurelia-binding@1.0.0-beta.1.1.0",
     "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-beta.1.1.2",
+    "aurelia-loader": "github:aurelia/loader@1.0.0-beta.1.2.0",
     "aurelia-logging": "npm:aurelia-logging@1.0.0-beta.1.1.1",
     "aurelia-metadata": "npm:aurelia-metadata@1.0.0-beta.1.1.3",
     "aurelia-pal-browser": "npm:aurelia-pal-browser@1.0.0-beta.1.1.2",
@@ -25,6 +26,10 @@ System.config({
     "core-js": "npm:core-js@2.0.3",
     "traceur": "github:jmcriffey/bower-traceur@0.0.91",
     "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.91",
+    "github:aurelia/loader@1.0.0-beta.1.2.0": {
+      "aurelia-metadata": "npm:aurelia-metadata@1.0.0-beta.1.1.3",
+      "aurelia-path": "npm:aurelia-path@1.0.0-beta.1.1.0"
+    },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },

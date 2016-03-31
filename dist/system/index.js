@@ -1,7 +1,7 @@
 'use strict';
 
-System.register(['./utilities', './validation-config', './validation-locale', './validation-result', './validation-rules', './validation', './validation-group', './validate-custom-attribute', './validation-view-strategy', './strategies/twbootstrap-view-strategy', './decorators'], function (_export, _context) {
-  var ValidationConfig, Validation;
+System.register(['./utilities', './validation-config', './validation-locale', './validation-result', './validation-rules', './validation', './validation-group', './validate-custom-attribute', './validation-view-strategy', './strategies/twbootstrap-view-strategy', './decorators', 'aurelia-loader'], function (_export, _context) {
+  var Loader, ValidationConfig, Validation;
   return {
     setters: [function (_utilities) {
       var _exportObj = {};
@@ -66,6 +66,8 @@ System.register(['./utilities', './validation-config', './validation-locale', '.
       _exportObj11.ensure = _decorators.ensure;
 
       _export(_exportObj11);
+    }, function (_aureliaLoader) {
+      Loader = _aureliaLoader.Loader;
     }],
     execute: function () {
       function configure(aurelia, configCallback) {
@@ -74,6 +76,8 @@ System.register(['./utilities', './validation-config', './validation-locale', '.
           configCallback(Validation.defaults);
         }
         aurelia.singleton(ValidationConfig, Validation.defaults);
+        var loader = aurelia.container.get(Loader);
+        window.loader = window.loader || loader;
         return Validation.defaults.locale();
       }
 

@@ -80,7 +80,7 @@ define(['exports'], function (exports) {
           var locale = _this.instances.get(localeIdentifier);
           resolve(locale);
         } else {
-          System.import(basePath + localeIdentifier).then(function (resource) {
+          window.loader.loadModule(basePath + localeIdentifier).then(function (resource) {
             var locale = _this.addLocale(localeIdentifier, resource.data);
             resolve(locale);
           });
