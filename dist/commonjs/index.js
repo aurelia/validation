@@ -110,11 +110,16 @@ Object.defineProperty(exports, 'ensure', {
   }
 });
 exports.configure = configure;
+
+var _aureliaLoader = require('aurelia-loader');
+
 function configure(aurelia, configCallback) {
   aurelia.globalResources('./validate-custom-attribute');
   if (configCallback !== undefined && typeof configCallback === 'function') {
     configCallback(_validation.Validation.defaults);
   }
   aurelia.singleton(_validationConfig.ValidationConfig, _validation.Validation.defaults);
+  var loader = aurelia.container.get(_aureliaLoader.Loader);
+  window.loader = window.loader || loader;
   return _validation.Validation.defaults.locale();
 }
