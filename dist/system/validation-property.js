@@ -1,9 +1,13 @@
-System.register(['./validation-rules-collection', './path-observer', './debouncer'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['./validation-rules-collection', './path-observer', './debouncer'], function (_export, _context) {
   var ValidationRulesCollection, PathObserver, Debouncer, ValidationProperty;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [function (_validationRulesCollection) {
@@ -14,7 +18,7 @@ System.register(['./validation-rules-collection', './path-observer', './debounce
       Debouncer = _debouncer.Debouncer;
     }],
     execute: function () {
-      ValidationProperty = (function () {
+      _export('ValidationProperty', ValidationProperty = function () {
         function ValidationProperty(observerLocator, propertyName, validationGroup, propertyResult, config) {
           var _this = this;
 
@@ -83,7 +87,7 @@ System.register(['./validation-rules-collection', './path-observer', './debounce
                   _this2.propertyResult.setValidity(validationResponse, shouldBeDirty);
                 }
                 return validationResponse.isValid;
-              })['catch'](function (err) {
+              }).catch(function (err) {
                 throw Error('Unexpected behavior: a validation-rules-collection should always fulfil');
               });
             }, function () {
@@ -93,7 +97,7 @@ System.register(['./validation-rules-collection', './path-observer', './debounce
         };
 
         return ValidationProperty;
-      })();
+      }());
 
       _export('ValidationProperty', ValidationProperty);
     }

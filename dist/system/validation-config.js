@@ -1,9 +1,13 @@
-System.register(['./validation-locale', './strategies/twbootstrap-view-strategy'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['./validation-locale', './strategies/twbootstrap-view-strategy'], function (_export, _context) {
   var ValidationLocale, TWBootstrapViewStrategy, ValidationConfigDefaults, ValidationConfig;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [function (_validationLocale) {
@@ -12,9 +16,9 @@ System.register(['./validation-locale', './strategies/twbootstrap-view-strategy'
       TWBootstrapViewStrategy = _strategiesTwbootstrapViewStrategy.TWBootstrapViewStrategy;
     }],
     execute: function () {
-      ValidationConfigDefaults = function ValidationConfigDefaults() {
+      _export('ValidationConfigDefaults', ValidationConfigDefaults = function ValidationConfigDefaults() {
         _classCallCheck(this, ValidationConfigDefaults);
-      };
+      });
 
       _export('ValidationConfigDefaults', ValidationConfigDefaults);
 
@@ -32,7 +36,7 @@ System.register(['./validation-locale', './strategies/twbootstrap-view-strategy'
         return defaults;
       };
 
-      ValidationConfig = (function () {
+      _export('ValidationConfig', ValidationConfig = function () {
         function ValidationConfig(innerConfig) {
           _classCallCheck(this, ValidationConfig);
 
@@ -65,7 +69,7 @@ System.register(['./validation-locale', './strategies/twbootstrap-view-strategy'
           var id = ++ValidationConfig.uniqueListenerId;
           this.changedHandlers.set(id, callback);
           return function () {
-            _this.changedHandlers['delete'](id);
+            _this.changedHandlers.delete(id);
           };
         };
 
@@ -122,7 +126,7 @@ System.register(['./validation-locale', './strategies/twbootstrap-view-strategy'
         };
 
         return ValidationConfig;
-      })();
+      }());
 
       _export('ValidationConfig', ValidationConfig);
 

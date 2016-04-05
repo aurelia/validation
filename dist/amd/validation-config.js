@@ -1,22 +1,27 @@
-define(['exports', './validation-locale', './strategies/twbootstrap-view-strategy'], function (exports, _validationLocale, _strategiesTwbootstrapViewStrategy) {
+define(['exports', './validation-locale', './strategies/twbootstrap-view-strategy'], function (exports, _validationLocale, _twbootstrapViewStrategy) {
   'use strict';
 
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.ValidationConfig = exports.ValidationConfigDefaults = undefined;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
-  var ValidationConfigDefaults = function ValidationConfigDefaults() {
+  var ValidationConfigDefaults = exports.ValidationConfigDefaults = function ValidationConfigDefaults() {
     _classCallCheck(this, ValidationConfigDefaults);
   };
-
-  exports.ValidationConfigDefaults = ValidationConfigDefaults;
 
   ValidationConfigDefaults._defaults = {
     debounceTimeout: 0,
     dependencies: [],
     locale: 'en-US',
     localeResources: 'aurelia-validation/resources/',
-    viewStrategy: _strategiesTwbootstrapViewStrategy.TWBootstrapViewStrategy.AppendToMessage,
+    viewStrategy: _twbootstrapViewStrategy.TWBootstrapViewStrategy.AppendToMessage,
     allPropertiesAreMandatory: false
   };
   ValidationConfigDefaults.defaults = function () {
@@ -25,7 +30,7 @@ define(['exports', './validation-locale', './strategies/twbootstrap-view-strateg
     return defaults;
   };
 
-  var ValidationConfig = (function () {
+  var ValidationConfig = exports.ValidationConfig = function () {
     function ValidationConfig(innerConfig) {
       _classCallCheck(this, ValidationConfig);
 
@@ -58,7 +63,7 @@ define(['exports', './validation-locale', './strategies/twbootstrap-view-strateg
       var id = ++ValidationConfig.uniqueListenerId;
       this.changedHandlers.set(id, callback);
       return function () {
-        _this.changedHandlers['delete'](id);
+        _this.changedHandlers.delete(id);
       };
     };
 
@@ -115,9 +120,7 @@ define(['exports', './validation-locale', './strategies/twbootstrap-view-strateg
     };
 
     return ValidationConfig;
-  })();
-
-  exports.ValidationConfig = ValidationConfig;
+  }();
 
   ValidationConfig.uniqueListenerId = 0;
 });

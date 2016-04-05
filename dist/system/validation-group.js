@@ -1,9 +1,13 @@
-System.register(['aurelia-metadata', './validation-group-builder', './validation-result', './decorators'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['aurelia-metadata', './validation-group-builder', './validation-result', './decorators'], function (_export, _context) {
   var metadata, ValidationGroupBuilder, ValidationResult, ValidationMetadata, ValidationGroup;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [function (_aureliaMetadata) {
@@ -16,13 +20,13 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
       ValidationMetadata = _decorators.ValidationMetadata;
     }],
     execute: function () {
-      ValidationGroup = (function () {
+      _export('ValidationGroup', ValidationGroup = function () {
         function ValidationGroup(subject, observerLocator, config) {
           var _this = this;
 
           _classCallCheck(this, ValidationGroup);
 
-          var validationMetadata = undefined;
+          var validationMetadata = void 0;
           this.result = new ValidationResult();
           this.subject = subject;
           this.validationProperties = [];
@@ -34,7 +38,7 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
           this.onDestroy = config.onLocaleChanged(function () {
             _this.validate(false, true);
           });
-          validationMetadata = metadata.getOwn(ValidationMetadata.metadataKey, this.subject);
+          validationMetadata = metadata.getOwn(ValidationMetadata.metadataKey, Object.getPrototypeOf(this.subject));
           if (validationMetadata) {
             validationMetadata.setup(this);
           }
@@ -59,7 +63,7 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
 
           var breezeEntity = this.subject;
           var me = this;
-          var errors = undefined;
+          var errors = void 0;
           this.onPropertyValidate(function (propertyBindingPath) {
             _this2.passes(function () {
               breezeEntity.entityAspect.validateProperty(propertyBindingPath);
@@ -77,7 +81,7 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
           breezeEntity.entityAspect.validationErrorsChanged.subscribe(function () {
             breezeEntity.entityAspect.getValidationErrors().forEach(function (validationError) {
               var propertyName = validationError.propertyName;
-              var currentResultProp = undefined;
+              var currentResultProp = void 0;
               if (!me.result.properties[propertyName]) {
                 me.ensure(propertyName);
               }
@@ -103,7 +107,7 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
           this.isValidating = true;
           var promise = Promise.resolve(true);
 
-          var _loop = function (i) {
+          var _loop = function _loop(i) {
             var validatorProperty = _this3.validationProperties[i];
             promise = promise.then(function () {
               return validatorProperty.validateCurrentValue(forceDirty, forceExecution);
@@ -114,7 +118,7 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
             _loop(i);
           }
 
-          promise = promise['catch'](function () {
+          promise = promise.catch(function () {
             throw Error('Should never get here: a validation property should always resolve to true/false!');
           });
           this.onValidateCallbacks.forEach(function (onValidateCallback) {
@@ -123,9 +127,9 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
             }).then(function (locale) {
               return Promise.resolve(onValidateCallback.validationFunction()).then(function (callbackResult) {
                 for (var prop in callbackResult) {
-                  var resultProp = undefined;
-                  var result = undefined;
-                  var newPropResult = undefined;
+                  var resultProp = void 0;
+                  var result = void 0;
+                  var newPropResult = void 0;
                   if (!_this3.result.properties[prop]) {
                     _this3.ensure(prop);
                   }
@@ -307,28 +311,28 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
           return this.builder.passesRule(validationRule);
         };
 
-        ValidationGroup.prototype['if'] = function _if(conditionExpression, threshold) {
-          return this.builder['if'](conditionExpression, threshold);
+        ValidationGroup.prototype.if = function _if(conditionExpression, threshold) {
+          return this.builder.if(conditionExpression, threshold);
         };
 
-        ValidationGroup.prototype['else'] = function _else() {
-          return this.builder['else']();
+        ValidationGroup.prototype.else = function _else() {
+          return this.builder.else();
         };
 
         ValidationGroup.prototype.endIf = function endIf() {
           return this.builder.endIf();
         };
 
-        ValidationGroup.prototype['switch'] = function _switch(conditionExpression) {
-          return this.builder['switch'](conditionExpression);
+        ValidationGroup.prototype.switch = function _switch(conditionExpression) {
+          return this.builder.switch(conditionExpression);
         };
 
-        ValidationGroup.prototype['case'] = function _case(caseLabel) {
-          return this.builder['case'](caseLabel);
+        ValidationGroup.prototype.case = function _case(caseLabel) {
+          return this.builder.case(caseLabel);
         };
 
-        ValidationGroup.prototype['default'] = function _default() {
-          return this.builder['default']();
+        ValidationGroup.prototype.default = function _default() {
+          return this.builder.default();
         };
 
         ValidationGroup.prototype.endSwitch = function endSwitch() {
@@ -340,7 +344,7 @@ System.register(['aurelia-metadata', './validation-group-builder', './validation
         };
 
         return ValidationGroup;
-      })();
+      }());
 
       _export('ValidationGroup', ValidationGroup);
     }

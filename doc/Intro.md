@@ -161,7 +161,7 @@ Validates that the value entered contains no whitespaces.
 
 ####containsOnly(regex)
 Validates that value entered tests true for the given *regex*.
-> Note: for now this is a synonymn for *matches(regegx)*, however in the future we will try to add the possibility to prevent invalid input for any of the *containsOnly* validation rules.
+> Note: for now this is a synonymn for *matches(regex)*, however in the future we will try to add the possibility to prevent invalid input for any of the *containsOnly* validation rules.
 
 ####containsOnlyAlpha()
 Validates that the value entered contains only alpha (lowercase and uppercase letters).
@@ -501,7 +501,7 @@ The ValidationRule base class needs three constructor arguments:
 - **message**: a static string or a javascript function that takes two arguments (**newValue**: the current value that was evaluated, and **threshold**: the javascript object that you passed earlier) and returns a string that's used as the message when the property is not valid
 
 
->Note: It suggested to name your variables **newValue** and **threshold**, so that custom (*withMessage*) or localized messages will properly work.
+>Note: It's suggested to name your variables **newValue** and **threshold**, so that custom (*withMessage*) or localized messages will properly work.
 
 ####Custom validation functions
 In addition to calling *passes(myCustomValidationRule)*, you can add custom validation functions to the **ValidationGroup** object's prototype.

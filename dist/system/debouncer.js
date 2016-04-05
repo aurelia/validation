@@ -1,14 +1,18 @@
-System.register([], function (_export) {
-  "use strict";
+"use strict";
 
+System.register([], function (_export, _context) {
   var Debouncer;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [],
     execute: function () {
-      Debouncer = (function () {
+      _export("Debouncer", Debouncer = function () {
         function Debouncer(debounceTimeout) {
           _classCallCheck(this, Debouncer);
 
@@ -31,7 +35,7 @@ System.register([], function (_export) {
         };
 
         return Debouncer;
-      })();
+      }());
 
       _export("Debouncer", Debouncer);
     }

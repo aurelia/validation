@@ -14,7 +14,8 @@ module.exports = function(config) {
 
     jspm: {
       // Edit this to your needs
-      loadFiles: ['src/**/*.js', 'test/**/*.js']
+      loadFiles: ['test/setup.js', 'test/**/*.js'],
+      serveFiles: ['src/**/*.js'],
     },
 
 
@@ -36,14 +37,11 @@ module.exports = function(config) {
     'babelPreprocessor': {
       options: {
         sourceMap: 'inline',
-        modules: 'system',
-        moduleIds: false,
-        comments: false,
-        compact: false,
-        stage:2,
-        optional: [
-          "es7.decorators",
-          "es7.classProperties"
+        presets: [ 'es2015-loose', 'stage-1'],
+        plugins: [
+          'syntax-flow',
+          'transform-decorators-legacy',
+          'transform-flow-strip-types'
         ]
       }
     },

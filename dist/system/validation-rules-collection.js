@@ -1,9 +1,13 @@
-System.register(['./utilities', './validation-locale'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['./utilities', './validation-locale'], function (_export, _context) {
   var Utilities, ValidationLocale, ValidationRulesCollection, SwitchCaseValidationRulesCollection;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [function (_utilities) {
@@ -12,7 +16,7 @@ System.register(['./utilities', './validation-locale'], function (_export) {
       ValidationLocale = _validationLocale.ValidationLocale;
     }],
     execute: function () {
-      ValidationRulesCollection = (function () {
+      _export('ValidationRulesCollection', ValidationRulesCollection = function () {
         function ValidationRulesCollection(config) {
           _classCallCheck(this, ValidationRulesCollection);
 
@@ -24,10 +28,10 @@ System.register(['./utilities', './validation-locale'], function (_export) {
 
         ValidationRulesCollection.prototype.validate = function validate(newValue, locale) {
           var executeRules = true;
-          var thisMessage = undefined;
-          var checks = undefined;
+          var thisMessage = void 0;
+          var checks = void 0;
           if (locale === undefined) {
-            locale = ValidationLocale.Repository['default'];
+            locale = ValidationLocale.Repository.default;
           }
           newValue = Utilities.getValue(newValue);
           if (this.isRequiredMessage) {
@@ -114,11 +118,11 @@ System.register(['./utilities', './validation-locale'], function (_export) {
         };
 
         return ValidationRulesCollection;
-      })();
+      }());
 
       _export('ValidationRulesCollection', ValidationRulesCollection);
 
-      SwitchCaseValidationRulesCollection = (function () {
+      _export('SwitchCaseValidationRulesCollection', SwitchCaseValidationRulesCollection = function () {
         function SwitchCaseValidationRulesCollection(conditionExpression, config) {
           _classCallCheck(this, SwitchCaseValidationRulesCollection);
 
@@ -130,12 +134,12 @@ System.register(['./utilities', './validation-locale'], function (_export) {
           this.defaultCaseLabel = { description: 'this is the case label for \'default\'' };
         }
 
-        SwitchCaseValidationRulesCollection.prototype['case'] = function _case(caseLabel) {
+        SwitchCaseValidationRulesCollection.prototype.case = function _case(caseLabel) {
           this.caseLabel = caseLabel;
           this.getCurrentCollection(caseLabel, true);
         };
 
-        SwitchCaseValidationRulesCollection.prototype['default'] = function _default() {
+        SwitchCaseValidationRulesCollection.prototype.default = function _default() {
           this.caseLabel = this.defaultCaseLabel;
         };
 
@@ -209,7 +213,7 @@ System.register(['./utilities', './validation-locale'], function (_export) {
         };
 
         return SwitchCaseValidationRulesCollection;
-      })();
+      }());
 
       _export('SwitchCaseValidationRulesCollection', SwitchCaseValidationRulesCollection);
     }

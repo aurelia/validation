@@ -1,55 +1,115 @@
 'use strict';
 
-exports.__esModule = true;
-exports.configure = configure;
-
-function _interopExportWildcard(obj, defaults) { var newObj = defaults({}, obj); delete newObj['default']; return newObj; }
-
-function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-var _validationConfig = require('./validation-config');
-
-var _validation = require('./validation');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ensure = exports.TWBootstrapViewStrategy = exports.ValidationViewStrategy = exports.ValidateCustomAttribute = exports.ValidationGroup = exports.Validation = exports.ValidationLocale = exports.ValidationConfig = exports.Utilities = undefined;
 
 var _utilities = require('./utilities');
 
-exports.Utilities = _utilities.Utilities;
-exports.ValidationConfig = _validationConfig.ValidationConfig;
+Object.defineProperty(exports, 'Utilities', {
+  enumerable: true,
+  get: function get() {
+    return _utilities.Utilities;
+  }
+});
+
+var _validationConfig = require('./validation-config');
+
+Object.defineProperty(exports, 'ValidationConfig', {
+  enumerable: true,
+  get: function get() {
+    return _validationConfig.ValidationConfig;
+  }
+});
 
 var _validationLocale = require('./validation-locale');
 
-exports.ValidationLocale = _validationLocale.ValidationLocale;
+Object.defineProperty(exports, 'ValidationLocale', {
+  enumerable: true,
+  get: function get() {
+    return _validationLocale.ValidationLocale;
+  }
+});
 
 var _validationResult = require('./validation-result');
 
-_defaults(exports, _interopExportWildcard(_validationResult, _defaults));
+Object.keys(_validationResult).forEach(function (key) {
+  if (key === "default") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _validationResult[key];
+    }
+  });
+});
 
 var _validationRules = require('./validation-rules');
 
-_defaults(exports, _interopExportWildcard(_validationRules, _defaults));
+Object.keys(_validationRules).forEach(function (key) {
+  if (key === "default") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _validationRules[key];
+    }
+  });
+});
 
-exports.Validation = _validation.Validation;
+var _validation = require('./validation');
+
+Object.defineProperty(exports, 'Validation', {
+  enumerable: true,
+  get: function get() {
+    return _validation.Validation;
+  }
+});
 
 var _validationGroup = require('./validation-group');
 
-exports.ValidationGroup = _validationGroup.ValidationGroup;
+Object.defineProperty(exports, 'ValidationGroup', {
+  enumerable: true,
+  get: function get() {
+    return _validationGroup.ValidationGroup;
+  }
+});
 
 var _validateCustomAttribute = require('./validate-custom-attribute');
 
-exports.ValidateCustomAttribute = _validateCustomAttribute.ValidateCustomAttribute;
+Object.defineProperty(exports, 'ValidateCustomAttribute', {
+  enumerable: true,
+  get: function get() {
+    return _validateCustomAttribute.ValidateCustomAttribute;
+  }
+});
 
 var _validationViewStrategy = require('./validation-view-strategy');
 
-exports.ValidationViewStrategy = _validationViewStrategy.ValidationViewStrategy;
+Object.defineProperty(exports, 'ValidationViewStrategy', {
+  enumerable: true,
+  get: function get() {
+    return _validationViewStrategy.ValidationViewStrategy;
+  }
+});
 
-var _strategiesTwbootstrapViewStrategy = require('./strategies/twbootstrap-view-strategy');
+var _twbootstrapViewStrategy = require('./strategies/twbootstrap-view-strategy');
 
-exports.TWBootstrapViewStrategy = _strategiesTwbootstrapViewStrategy.TWBootstrapViewStrategy;
+Object.defineProperty(exports, 'TWBootstrapViewStrategy', {
+  enumerable: true,
+  get: function get() {
+    return _twbootstrapViewStrategy.TWBootstrapViewStrategy;
+  }
+});
 
 var _decorators = require('./decorators');
 
-exports.ensure = _decorators.ensure;
-
+Object.defineProperty(exports, 'ensure', {
+  enumerable: true,
+  get: function get() {
+    return _decorators.ensure;
+  }
+});
+exports.configure = configure;
 function configure(aurelia, configCallback) {
   aurelia.globalResources('./validate-custom-attribute');
   if (configCallback !== undefined && typeof configCallback === 'function') {

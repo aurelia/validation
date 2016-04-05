@@ -1,8 +1,16 @@
 declare module 'aurelia-validation' {
-  import { metadata }  from 'aurelia-metadata';
-  import { inject }  from 'aurelia-dependency-injection';
-  import { customAttribute }  from 'aurelia-templating';
-  import { ObserverLocator }  from 'aurelia-binding';
+  import {
+    metadata
+  } from 'aurelia-metadata';
+  import {
+    inject
+  } from 'aurelia-dependency-injection';
+  import {
+    customAttribute
+  } from 'aurelia-templating';
+  import {
+    ObserverLocator
+  } from 'aurelia-binding';
   export class Debouncer {
     constructor(debounceTimeout: any);
     debounce(func: any): any;
@@ -13,16 +21,11 @@ declare module 'aurelia-validation' {
     getOrCreateProperty(propertyName: any): any;
     setup(validation: any): any;
   }
-  class ValidationPropertyMetadata {
-    constructor(propertyName: any);
-    addSetupStep(setupStep: any): any;
-    setup(validation: any): any;
-  }
-  export function ensure(setupStep: any): any;
+  export function ensure(setupStep: ((it: ValidationGroup) => void)): any;
   export class PathObserver {
     constructor(observerLocator: any, subject: any, path: any);
     
-    // TODO: this should be replaced with reuse of the Binding system
+    //TODO: this should be replaced with reuse of the Binding system
     observeParts(propertyName: any): any;
     observePart(part: any): any;
     getObserver(): any;
@@ -38,18 +41,19 @@ declare module 'aurelia-validation' {
     constructor(element: any);
     valueChanged(newValue: any): any;
     
-    // this is just to tell the real validation instance (higher in the DOM) the exact property-path to bind to
+    //this is just to tell the real validation instance (higher in the DOM) the exact property-path to bind to
     subscribeChangedHandlers(currentElement: any): any;
     attached(): any;
   }
   export class ValidationConfigDefaults {
+  
   }
   export class ValidationConfig {
     constructor(innerConfig: any);
     getValue(identifier: any): any;
     setValue(identifier: any, value: any): any;
     
-    // fluent API
+    //fluent API
     onLocaleChanged(callback: any): any;
     getDebounceTimeout(): any;
     useDebounceTimeout(value: any): any;
@@ -90,14 +94,14 @@ declare module 'aurelia-validation' {
     isStrongPassword(minimumComplexityLevel: any): any;
     containsOnly(regex: any): any;
     matches(regex: any): any;
-    passes(customFunction: any, threshold: any): any;
+    passes(customFunction: ((newValue: any, threshold: any) => boolean), threshold: any): any;
     passesRule(validationRule: any): any;
     checkLast(): any;
-    withMessage(message: any): any;
-    if(conditionExpression: any): any;
+    withMessage(message: string | ((newValue: any, threshold: any) => any)): any;
+    if(conditionExpression: (() => boolean)): any;
     else(): any;
     endIf(): any;
-    switch(conditionExpression: any): any;
+    switch(conditionExpression: (() => any)): any;
     case(caseLabel: any): any;
     default(): any;
     endSwitch(): any;
@@ -117,19 +121,19 @@ declare module 'aurelia-validation' {
        * @param config The configuration
        */
     constructor(subject: any, observerLocator: any, config: any);
-    destroy(): any;
+    destroy(): void;
     
-    //  TODO: what else needs to be done for proper cleanup?
-    clear(): any;
+    // TODO: what else needs to be done for proper cleanup?
+    clear(): void;
     onBreezeEntity(): any;
     
     /**
        * Causes complete re-evaluation: gets the latest value, marks the property as 'dirty' (unless false is passed), runs validation rules asynchronously and updates this.result
        * @returns {Promise} A promise that fulfils when valid, rejects when invalid.
        */
-    validate(forceDirty?: any, forceExecution?: any): any;
-    onValidate(validationFunction: any, validationFunctionFailedCallback: any): any;
-    onPropertyValidate(validationFunction: any): any;
+    validate(forceDirty?: boolean, forceExecution?: boolean): Promise<ValidationResult>;
+    onValidate(validationFunction: (() => any), validationFunctionFailedCallback?: ((a: any, b: any, c: any, d: any, e: any) => any)): ValidationGroup;
+    onPropertyValidate(validationFunction: any): ValidationGroup;
     
     /**
        * Adds a validation property for the specified path
@@ -137,33 +141,33 @@ declare module 'aurelia-validation' {
        * @param configCallback a configuration callback
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    ensure(bindingPath: any, configCallback: any): any;
+    ensure(bindingPath: string, configCallback?: ((config: ValidationConfig) => void)): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being 'isNotEmpty', 'required'
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isNotEmpty(): any;
+    isNotEmpty(): ValidationGroup;
     
     /**
        * Adds a validation rule that allows a value to be empty/null
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    canBeEmpty(): any;
+    canBeEmpty(): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being greater than or equal to a threshold
        * @param minimumValue the threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isGreaterThanOrEqualTo(minimumValue: any): any;
+    isGreaterThanOrEqualTo(minimumValue: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being greater than a threshold
        * @param minimumValue the threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isGreaterThan(minimumValue: any): any;
+    isGreaterThan(minimumValue: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being greater than or equal to a threshold, and less than or equal to another threshold
@@ -171,21 +175,21 @@ declare module 'aurelia-validation' {
        * @param maximumValue The isLessThanOrEqualTo threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isBetween(minimumValue: any, maximumValue: any): any;
+    isBetween(minimumValue: any, maximumValue: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being less than a threshold
        * @param maximumValue The threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isLessThanOrEqualTo(maximumValue: any): any;
+    isLessThanOrEqualTo(maximumValue: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being less than or equal to a threshold
        * @param maximumValue The threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isLessThan(maximumValue: any): any;
+    isLessThan(maximumValue: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being equal to a threshold
@@ -193,7 +197,7 @@ declare module 'aurelia-validation' {
        * @param otherValueLabel Optional: a label to use in the validation message
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isEqualTo(otherValue: any, otherValueLabel: any): any;
+    isEqualTo(otherValue: any, otherValueLabel: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for not being equal to a threshold
@@ -201,40 +205,40 @@ declare module 'aurelia-validation' {
        * @param otherValueLabel Optional: a label to use in the validation message
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isNotEqualTo(otherValue: any, otherValueLabel: any): any;
+    isNotEqualTo(otherValue: any, otherValueLabel: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being a valid isEmail address
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isEmail(): any;
+    isEmail(): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being a valid URL
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isURL(): any;
+    isURL(): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being equal to at least one other value in a particular collection
        * @param collection The threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isIn(collection: any): any;
+    isIn(collection: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for having a length greater than or equal to a specified threshold
        * @param minimumValue The threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    hasMinLength(minimumValue: any): any;
+    hasMinLength(minimumValue: number): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for having a length less than a specified threshold
        * @param maximumValue The threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    hasMaxLength(maximumValue: any): any;
+    hasMaxLength(maximumValue: number): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for having a length greater than or equal to a specified threshold and less than another threshold
@@ -242,56 +246,56 @@ declare module 'aurelia-validation' {
        * @param maximumValue The max threshold
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    hasLengthBetween(minimumValue: any, maximumValue: any): any;
+    hasLengthBetween(minimumValue: number, maximumValue: number): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being numeric, this includes formatted numbers like '-3,600.25'
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isNumber(): any;
+    isNumber(): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for containing not a single whitespace
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    containsNoSpaces(): any;
+    containsNoSpaces(): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being strictly numeric, this excludes formatted numbers like '-3,600.25'
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    containsOnlyDigits(): any;
-    containsOnly(regex: any): any;
-    containsOnlyAlpha(): any;
-    containsOnlyAlphaOrWhitespace(): any;
-    containsOnlyLetters(): any;
-    containsOnlyLettersOrWhitespace(): any;
+    containsOnlyDigits(): ValidationGroup;
+    containsOnly(regex: any): ValidationGroup;
+    containsOnlyAlpha(): ValidationGroup;
+    containsOnlyAlphaOrWhitespace(): ValidationGroup;
+    containsOnlyLetters(): ValidationGroup;
+    containsOnlyLettersOrWhitespace(): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for only containing alphanumerical characters
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    containsOnlyAlphanumerics(): any;
+    containsOnlyAlphanumerics(): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for only containing alphanumerical characters or whitespace
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    containsOnlyAlphanumericsOrWhitespace(): any;
+    containsOnlyAlphanumericsOrWhitespace(): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for being a strong password. A strong password contains at least the specified of the following groups: lowercase characters, uppercase characters, digits and special characters.
        * @param minimumComplexityLevel {Number} Optionally, specifiy the number of groups to match. Default is 4.
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    isStrongPassword(minimumComplexityLevel: any): any;
+    isStrongPassword(minimumComplexityLevel: number): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for matching a particular regex
        * @param regex the regex to match
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    matches(regex: any): any;
+    matches(regex: any): ValidationGroup;
     
     /**
        * Adds a validation rule that checks a value for passing a custom function
@@ -299,14 +303,14 @@ declare module 'aurelia-validation' {
        * @param threshold {Object} An optional threshold that will be passed to the customFunction
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    passes(customFunction: any, threshold: any): any;
+    passes(customFunction: Function, threshold: any): ValidationGroup;
     
     /**
        * Adds the {ValidationRule}
-       * @param validationRule {ValudationRule} The rule that needs to pass
+       * @param validationRule {ValidationRule} The rule that needs to pass
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    passesRule(validationRule: any): any;
+    passesRule(validationRule: ValidationRule): ValidationGroup;
     
     /**
        * Specifies that the next validation rules only need to be evaluated when the specified conditionExpression is true
@@ -314,28 +318,28 @@ declare module 'aurelia-validation' {
        * @param threshold {Object} an optional treshold object that is passed to the conditionExpression
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    if(conditionExpression: any, threshold: any): any;
+    if(conditionExpression: Function, threshold: any): ValidationGroup;
     
     /**
        * Specifies that the next validation rules only need to be evaluated when the previously specified conditionExpression is false.
        * See: if (conditionExpression, threshold)
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    else(): any;
+    else(): ValidationGroup;
     
     /**
        * Specifies that the execution of next validation rules no longer depend on the the previously specified conditionExpression.
        * See: if (conditionExpression, threshold)
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    endIf(): any;
+    endIf(): ValidationGroup;
     
     /**
        * Specifies that the next validation rules only need to be evaluated when they are preceded by a case that matches the conditionExpression
        * @param conditionExpression {Function} a function that returns a case label to execute. This is optional, when omitted the case label will be matched using the underlying property's value
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    switch(conditionExpression: any): any;
+    switch(conditionExpression: Function): ValidationGroup;
     
     /**
        * Specifies that the next validation rules only need to be evaluated when the caseLabel matches the value returned by a preceding switch statement
@@ -343,39 +347,34 @@ declare module 'aurelia-validation' {
        * @param caseLabel {Object} the case label
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    case(caseLabel: any): any;
+    case(caseLabel: any): ValidationGroup;
     
     /**
        * Specifies that the next validation rules only need to be evaluated when not other caseLabel matches the value returned by a preceding switch statement
        * See: switch(conditionExpression)
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    default(): any;
+    default(): ValidationGroup;
     
     /**
        * Specifies that the execution of next validation rules no longer depend on the the previously specified conditionExpression.
        * See: switch(conditionExpression)
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    endSwitch(): any;
+    endSwitch(): ValidationGroup;
     
     /**
        * Specifies that the execution of the previous validation rule should use the specified error message if it fails
        * @param message either a static string or a function that takes two arguments: newValue (the value that has been evaluated) and threshold.
        * @returns {ValidationGroup} returns this ValidationGroup, to enable fluent API
        */
-    withMessage(message: any): any;
+    withMessage(message: string | ((newValue: any, threshold: any) => any)): any;
   }
   export class ValidationLocale {
     constructor(defaults: any, data: any);
     getValueFor(identifier: any, category: any): any;
     setting(settingIdentifier: any): any;
     translate(translationIdentifier: any, newValue: any, threshold: any): any;
-  }
-  class ValidationLocaleRepository {
-    constructor();
-    load(localeIdentifier: any, basePath: any): any;
-    addLocale(localeIdentifier: any, data: any): any;
   }
   export class ValidationProperty {
     constructor(observerLocator: any, propertyName: any, validationGroup: any, propertyResult: any, config: any);
@@ -384,7 +383,7 @@ declare module 'aurelia-validation' {
     clear(): any;
     destroy(): any;
     
-    //  TODO: what else needs to be done for proper cleanup?
+    // TODO: what else needs to be done for proper cleanup?
     /**
        * returns a promise that fulfils and resolves to true/false
        */
@@ -398,10 +397,10 @@ declare module 'aurelia-validation' {
   }
   export class ValidationResultProperty {
     constructor(group: any);
-    clear(): any;
-    onValidate(onValidateCallback: any): any;
-    notifyObserversOfChange(): any;
-    setValidity(validationResponse: any, shouldBeDirty: any): any;
+    clear(): void;
+    onValidate(onValidateCallback: any): void;
+    notifyObserversOfChange(): void;
+    setValidity(validationResponse: any, shouldBeDirty: boolean): void;
   }
   export class ValidationRulesCollection {
     constructor(config: any);
@@ -420,7 +419,7 @@ declare module 'aurelia-validation' {
     constructor(conditionExpression: any, config: any);
     case(caseLabel: any): any;
     
-    // force creation
+    //force creation
     default(): any;
     getCurrentCollection(caseLabel: any, createIfNotExists?: any): any;
     validate(newValue: any, locale: any): any;
@@ -439,21 +438,21 @@ declare module 'aurelia-validation' {
     /**
        * Validation rules: return a promise that fulfills and resolves to true/false
        */
-    validate(currentValue: any, locale: any): any;
+    validate(currentValue: any, locale: any): Promise<any>;
   }
   export class URLValidationRule extends ValidationRule {
     
-    // https://github.com/chriso/validator.js/blob/master/LICENSE
+    //https://github.com/chriso/validator.js/blob/master/LICENSE
     static isIP(str: any, version: any): any;
     static isFQDN(str: any, options: any): any;
     
-    //  threshold here renamed to startingThreshold because linter was mad,
-    //   probably not the best name
+    // threshold here renamed to startingThreshold because linter was mad,
+    //  probably not the best name
     constructor(startingThreshold: any);
   }
   export class EmailValidationRule extends ValidationRule {
     
-    // https://github.com/chriso/validator.js/blob/master/LICENSE
+    //https://github.com/chriso/validator.js/blob/master/LICENSE
     static testEmailUserUtf8Regex(user: any): any;
     static isFQDN(str: any): any;
     constructor();
@@ -555,15 +554,15 @@ declare module 'aurelia-validation' {
        * @param observerLocator the observerLocator used to observer properties
        * @param validationConfig the configuration
        */
-    constructor(observerLocator: any, validationConfig: any);
+    constructor(observerLocator: any, validationConfig: ValidationConfig);
     
     /**
        * Returns a new validation group on the subject
        * @param subject The subject to validate
        * @returns {ValidationGroup} A ValidationGroup that encapsulates the validation rules and current validation state for this subject
        */
-    on(subject: any, configCallback: any): any;
-    onBreezeEntity(breezeEntity: any, configCallback: any): any;
+    on(subject: any, configCallback?: ((conf: ValidationConfig) => void)): ValidationGroup;
+    onBreezeEntity(breezeEntity: any, configCallback?: ((conf: ValidationConfig) => void)): ValidationGroup;
   }
   export class TWBootstrapViewStrategyBase extends ValidationViewStrategy {
     constructor(appendMessageToInput: any, appendMessageToLabel: any, helpBlockClass: any);
@@ -576,5 +575,6 @@ declare module 'aurelia-validation' {
     updateElement(validationProperty: any, element: any): any;
   }
   export class TWBootstrapViewStrategy {
+  
   }
 }

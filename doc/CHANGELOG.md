@@ -1,3 +1,29 @@
+### 0.6.6 (2016-03-23)
+
+* Fix build to properly generate d.ts files.
+
+### 0.6.5 (2016-03-22)
+
+
+#### Bug Fixes
+
+* **decorators:** deprecate the ensure decorator ([0e82a6bb](https://github.com/aurelia/validation/commit/0e82a6bb87ba212a01e276faf08d5f05c682b159))
+
+
+### 0.6.4 (2016-03-22)
+
+* Update to Babel 6
+
+### 0.6.3 (2016-03-01)
+
+
+#### Features
+
+* **I18N:**
+  * update pt-BR ([f0dd26d4](https://github.com/aurelia/validation/commit/f0dd26d4545ce378bd297d69b03c60e1be2157d7))
+  * add pt-BR ([f684272e](https://github.com/aurelia/validation/commit/f684272ef9fa32a1e2a8970426526d3c01e4ef67))
+
+
 ### 0.6.2 (2016-02-08)
 
 
@@ -241,4 +267,3 @@
 
 
 ### 0.1.1 (2015-03-24)
-

@@ -1,13 +1,13 @@
-System.register(['../utilities'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['../utilities'], function (_export, _context) {
   var Utilities, data;
   return {
     setters: [function (_utilities) {
       Utilities = _utilities.Utilities;
     }],
     execute: function () {
-      data = {
+      _export('data', data = {
         settings: {
           'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
         },
@@ -90,7 +90,7 @@ System.register(['../utilities'], function (_export) {
             return 'трябва да съдържа поне  ' + Utilities.getValue(threshold) + ' от следните групи: малки и големи букви, цифри и специални знаци';
           }
         }
-      };
+      });
 
       _export('data', data);
     }

@@ -1,9 +1,13 @@
-System.register(['./validation-rules-collection', './validation-property', './validation-config', './validation-rules'], function (_export) {
-  'use strict';
+'use strict';
 
+System.register(['./validation-rules-collection', './validation-property', './validation-config', './validation-rules'], function (_export, _context) {
   var SwitchCaseValidationRulesCollection, ValidationProperty, ValidationConfig, MinimumValueValidationRule, MinimumInclusiveValueValidationRule, BetweenValueValidationRule, InCollectionValidationRule, MaximumValueValidationRule, MaximumInclusiveValueValidationRule, EqualityValidationRule, EqualityWithOtherLabelValidationRule, InEqualityValidationRule, InEqualityWithOtherLabelValidationRule, EmailValidationRule, URLValidationRule, MinimumLengthValidationRule, MaximumLengthValidationRule, BetweenLengthValidationRule, NumericValidationRule, NoSpacesValidationRule, DigitValidationRule, AlphaValidationRule, AlphaOrWhitespaceValidationRule, AlphaNumericValidationRule, AlphaNumericOrWhitespaceValidationRule, StrongPasswordValidationRule, MediumPasswordValidationRule, ContainsOnlyValidationRule, RegexValidationRule, CustomFunctionValidationRule, ValidationGroupBuilder;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   return {
     setters: [function (_validationRulesCollection) {
@@ -42,7 +46,7 @@ System.register(['./validation-rules-collection', './validation-property', './va
       CustomFunctionValidationRule = _validationRules.CustomFunctionValidationRule;
     }],
     execute: function () {
-      ValidationGroupBuilder = (function () {
+      _export('ValidationGroupBuilder', ValidationGroupBuilder = function () {
         function ValidationGroupBuilder(observerLocator, validationGroup) {
           _classCallCheck(this, ValidationGroupBuilder);
 
@@ -211,24 +215,24 @@ System.register(['./validation-rules-collection', './validation-property', './va
           return this.validationGroup;
         };
 
-        ValidationGroupBuilder.prototype['if'] = function _if(conditionExpression) {
+        ValidationGroupBuilder.prototype.if = function _if(conditionExpression) {
           var conditionalCollection = new SwitchCaseValidationRulesCollection(conditionExpression);
-          conditionalCollection['case'](true);
+          conditionalCollection.case(true);
           this.validationRuleCollections[0].addValidationRuleCollection(conditionalCollection);
           this.validationRuleCollections.unshift(conditionalCollection);
           return this.validationGroup;
         };
 
-        ValidationGroupBuilder.prototype['else'] = function _else() {
-          if (!this.validationRuleCollections[0]['default']) {
+        ValidationGroupBuilder.prototype.else = function _else() {
+          if (!this.validationRuleCollections[0].default) {
             throw Error('Invalid statement: \'else\'');
           }
-          this.validationRuleCollections[0]['default']();
+          this.validationRuleCollections[0].default();
           return this.validationGroup;
         };
 
         ValidationGroupBuilder.prototype.endIf = function endIf() {
-          if (!this.validationRuleCollections[0]['default']) {
+          if (!this.validationRuleCollections[0].default) {
             throw Error('Invalid statement: \'endIf\'');
           }
           this.validationRuleCollections.shift();
@@ -236,14 +240,14 @@ System.register(['./validation-rules-collection', './validation-property', './va
           return this.validationGroup;
         };
 
-        ValidationGroupBuilder.prototype['switch'] = function _switch(conditionExpression) {
+        ValidationGroupBuilder.prototype.switch = function _switch(conditionExpression) {
           var _this = this;
 
           var condition = conditionExpression;
           if (condition === undefined) {
             (function () {
               var observer = _this.validationGroup.validationProperties[_this.validationGroup.validationProperties.length - 1].observer;
-              condition = function () {
+              condition = function condition() {
                 return observer.getValue();
               };
             })();
@@ -254,24 +258,24 @@ System.register(['./validation-rules-collection', './validation-property', './va
           return this.validationGroup;
         };
 
-        ValidationGroupBuilder.prototype['case'] = function _case(caseLabel) {
-          if (!this.validationRuleCollections[0]['default']) {
+        ValidationGroupBuilder.prototype.case = function _case(caseLabel) {
+          if (!this.validationRuleCollections[0].default) {
             throw Error('Invalid statement: \'case\'');
           }
-          this.validationRuleCollections[0]['case'](caseLabel);
+          this.validationRuleCollections[0].case(caseLabel);
           return this.validationGroup;
         };
 
-        ValidationGroupBuilder.prototype['default'] = function _default() {
-          if (!this.validationRuleCollections[0]['default']) {
+        ValidationGroupBuilder.prototype.default = function _default() {
+          if (!this.validationRuleCollections[0].default) {
             throw Error('Invalid statement: \'case\'');
           }
-          this.validationRuleCollections[0]['default']();
+          this.validationRuleCollections[0].default();
           return this.validationGroup;
         };
 
         ValidationGroupBuilder.prototype.endSwitch = function endSwitch() {
-          if (!this.validationRuleCollections[0]['default']) {
+          if (!this.validationRuleCollections[0].default) {
             throw Error('Invalid statement: \'endIf\'');
           }
           this.validationRuleCollections.shift();
@@ -280,7 +284,7 @@ System.register(['./validation-rules-collection', './validation-property', './va
         };
 
         return ValidationGroupBuilder;
-      })();
+      }());
 
       _export('ValidationGroupBuilder', ValidationGroupBuilder);
     }

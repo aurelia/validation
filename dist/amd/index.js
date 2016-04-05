@@ -1,28 +1,83 @@
-define(['exports', './validation-config', './validation', './utilities', './validation-locale', './validation-result', './validation-rules', './validation-group', './validate-custom-attribute', './validation-view-strategy', './strategies/twbootstrap-view-strategy', './decorators'], function (exports, _validationConfig, _validation, _utilities, _validationLocale, _validationResult, _validationRules, _validationGroup, _validateCustomAttribute, _validationViewStrategy, _strategiesTwbootstrapViewStrategy, _decorators) {
+define(['exports', './utilities', './validation-config', './validation-locale', './validation-result', './validation-rules', './validation', './validation-group', './validate-custom-attribute', './validation-view-strategy', './strategies/twbootstrap-view-strategy', './decorators'], function (exports, _utilities, _validationConfig, _validationLocale, _validationResult, _validationRules, _validation, _validationGroup, _validateCustomAttribute, _validationViewStrategy, _twbootstrapViewStrategy, _decorators) {
   'use strict';
 
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.ensure = exports.TWBootstrapViewStrategy = exports.ValidationViewStrategy = exports.ValidateCustomAttribute = exports.ValidationGroup = exports.Validation = exports.ValidationLocale = exports.ValidationConfig = exports.Utilities = undefined;
+  Object.defineProperty(exports, 'Utilities', {
+    enumerable: true,
+    get: function () {
+      return _utilities.Utilities;
+    }
+  });
+  Object.defineProperty(exports, 'ValidationConfig', {
+    enumerable: true,
+    get: function () {
+      return _validationConfig.ValidationConfig;
+    }
+  });
+  Object.defineProperty(exports, 'ValidationLocale', {
+    enumerable: true,
+    get: function () {
+      return _validationLocale.ValidationLocale;
+    }
+  });
+  Object.keys(_validationResult).forEach(function (key) {
+    if (key === "default") return;
+    Object.defineProperty(exports, key, {
+      enumerable: true,
+      get: function () {
+        return _validationResult[key];
+      }
+    });
+  });
+  Object.keys(_validationRules).forEach(function (key) {
+    if (key === "default") return;
+    Object.defineProperty(exports, key, {
+      enumerable: true,
+      get: function () {
+        return _validationRules[key];
+      }
+    });
+  });
+  Object.defineProperty(exports, 'Validation', {
+    enumerable: true,
+    get: function () {
+      return _validation.Validation;
+    }
+  });
+  Object.defineProperty(exports, 'ValidationGroup', {
+    enumerable: true,
+    get: function () {
+      return _validationGroup.ValidationGroup;
+    }
+  });
+  Object.defineProperty(exports, 'ValidateCustomAttribute', {
+    enumerable: true,
+    get: function () {
+      return _validateCustomAttribute.ValidateCustomAttribute;
+    }
+  });
+  Object.defineProperty(exports, 'ValidationViewStrategy', {
+    enumerable: true,
+    get: function () {
+      return _validationViewStrategy.ValidationViewStrategy;
+    }
+  });
+  Object.defineProperty(exports, 'TWBootstrapViewStrategy', {
+    enumerable: true,
+    get: function () {
+      return _twbootstrapViewStrategy.TWBootstrapViewStrategy;
+    }
+  });
+  Object.defineProperty(exports, 'ensure', {
+    enumerable: true,
+    get: function () {
+      return _decorators.ensure;
+    }
+  });
   exports.configure = configure;
-
-  function _interopExportWildcard(obj, defaults) { var newObj = defaults({}, obj); delete newObj['default']; return newObj; }
-
-  function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-  exports.Utilities = _utilities.Utilities;
-  exports.ValidationConfig = _validationConfig.ValidationConfig;
-  exports.ValidationLocale = _validationLocale.ValidationLocale;
-
-  _defaults(exports, _interopExportWildcard(_validationResult, _defaults));
-
-  _defaults(exports, _interopExportWildcard(_validationRules, _defaults));
-
-  exports.Validation = _validation.Validation;
-  exports.ValidationGroup = _validationGroup.ValidationGroup;
-  exports.ValidateCustomAttribute = _validateCustomAttribute.ValidateCustomAttribute;
-  exports.ValidationViewStrategy = _validationViewStrategy.ValidationViewStrategy;
-  exports.TWBootstrapViewStrategy = _strategiesTwbootstrapViewStrategy.TWBootstrapViewStrategy;
-  exports.ensure = _decorators.ensure;
-
   function configure(aurelia, configCallback) {
     aurelia.globalResources('./validate-custom-attribute');
     if (configCallback !== undefined && typeof configCallback === 'function') {

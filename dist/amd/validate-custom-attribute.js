@@ -1,13 +1,22 @@
 define(['exports', 'aurelia-dependency-injection', 'aurelia-templating'], function (exports, _aureliaDependencyInjection, _aureliaTemplating) {
   'use strict';
 
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.ValidateCustomAttribute = undefined;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
-  var ValidateCustomAttribute = (function () {
+  var _dec, _dec2, _class;
+
+  var ValidateCustomAttribute = exports.ValidateCustomAttribute = (_dec = (0, _aureliaTemplating.customAttribute)('validate'), _dec2 = (0, _aureliaDependencyInjection.inject)(Element), _dec(_class = _dec2(_class = function () {
     function ValidateCustomAttribute(element) {
-      _classCallCheck(this, _ValidateCustomAttribute);
+      _classCallCheck(this, ValidateCustomAttribute);
 
       this.element = element;
       this.processedValidation = null;
@@ -49,11 +58,6 @@ define(['exports', 'aurelia-dependency-injection', 'aurelia-templating'], functi
       }
     };
 
-    var _ValidateCustomAttribute = ValidateCustomAttribute;
-    ValidateCustomAttribute = _aureliaDependencyInjection.inject(Element)(ValidateCustomAttribute) || ValidateCustomAttribute;
-    ValidateCustomAttribute = _aureliaTemplating.customAttribute('validate')(ValidateCustomAttribute) || ValidateCustomAttribute;
     return ValidateCustomAttribute;
-  })();
-
-  exports.ValidateCustomAttribute = ValidateCustomAttribute;
+  }()) || _class) || _class);
 });

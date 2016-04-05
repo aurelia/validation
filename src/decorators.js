@@ -36,6 +36,7 @@ class ValidationPropertyMetadata {
 }
 
 export function ensure(setupStep: (it: ValidationGroup) => void) {
+  console.warn('The ensure decorator has been deprecated and will be removed in the next release.');
   return function(target, propertyName) {
     let validationMetadata = metadata.getOrCreateOwn(ValidationMetadata.metadataKey, ValidationMetadata, target);
     let property = validationMetadata.getOrCreateProperty(propertyName);

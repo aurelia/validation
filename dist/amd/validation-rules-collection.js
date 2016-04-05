@@ -1,11 +1,18 @@
 define(['exports', './utilities', './validation-locale'], function (exports, _utilities, _validationLocale) {
   'use strict';
 
-  exports.__esModule = true;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.SwitchCaseValidationRulesCollection = exports.ValidationRulesCollection = undefined;
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
-  var ValidationRulesCollection = (function () {
+  var ValidationRulesCollection = exports.ValidationRulesCollection = function () {
     function ValidationRulesCollection(config) {
       _classCallCheck(this, ValidationRulesCollection);
 
@@ -17,10 +24,10 @@ define(['exports', './utilities', './validation-locale'], function (exports, _ut
 
     ValidationRulesCollection.prototype.validate = function validate(newValue, locale) {
       var executeRules = true;
-      var thisMessage = undefined;
-      var checks = undefined;
+      var thisMessage = void 0;
+      var checks = void 0;
       if (locale === undefined) {
-        locale = _validationLocale.ValidationLocale.Repository['default'];
+        locale = _validationLocale.ValidationLocale.Repository.default;
       }
       newValue = _utilities.Utilities.getValue(newValue);
       if (this.isRequiredMessage) {
@@ -107,11 +114,9 @@ define(['exports', './utilities', './validation-locale'], function (exports, _ut
     };
 
     return ValidationRulesCollection;
-  })();
+  }();
 
-  exports.ValidationRulesCollection = ValidationRulesCollection;
-
-  var SwitchCaseValidationRulesCollection = (function () {
+  var SwitchCaseValidationRulesCollection = exports.SwitchCaseValidationRulesCollection = function () {
     function SwitchCaseValidationRulesCollection(conditionExpression, config) {
       _classCallCheck(this, SwitchCaseValidationRulesCollection);
 
@@ -123,12 +128,12 @@ define(['exports', './utilities', './validation-locale'], function (exports, _ut
       this.defaultCaseLabel = { description: 'this is the case label for \'default\'' };
     }
 
-    SwitchCaseValidationRulesCollection.prototype['case'] = function _case(caseLabel) {
+    SwitchCaseValidationRulesCollection.prototype.case = function _case(caseLabel) {
       this.caseLabel = caseLabel;
       this.getCurrentCollection(caseLabel, true);
     };
 
-    SwitchCaseValidationRulesCollection.prototype['default'] = function _default() {
+    SwitchCaseValidationRulesCollection.prototype.default = function _default() {
       this.caseLabel = this.defaultCaseLabel;
     };
 
@@ -202,7 +207,5 @@ define(['exports', './utilities', './validation-locale'], function (exports, _ut
     };
 
     return SwitchCaseValidationRulesCollection;
-  })();
-
-  exports.SwitchCaseValidationRulesCollection = SwitchCaseValidationRulesCollection;
+  }();
 });
