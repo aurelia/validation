@@ -242,7 +242,7 @@ export class ValidateCustomAttribute {
   subscribeChangedHandlers(currentElement) {
     let viewStrategy = this.value.config.getViewStrategy();
     let validationProperty = viewStrategy.getValidationProperty(this.value, currentElement);
-    let children = currentElement.children;
+    let children = currentElement.children || currentElement.childNodes;
     this.viewStrategy = viewStrategy;
     if (validationProperty !== null && validationProperty !== undefined) {
       this.viewStrategy.prepareElement(validationProperty, currentElement);
@@ -253,6 +253,7 @@ export class ValidateCustomAttribute {
       );
     }
     for (let i = 0; i < children.length; i++) {
+      if (children[i].nodeType == 3) continue;
       this.subscribeChangedHandlers(children[i]);
     }
   }
