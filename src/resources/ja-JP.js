@@ -5,7 +5,7 @@ export let data = {
 		'numericRegex': /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
 	},
 	messages: {
-		'isRequired': 'は必須入力項目です。',
+		'isRequired': '必ず入力してください。',
 		'onValidateCallback': '無効な入力値です。',
 		'AlphaNumericOrWhitespaceValidationRule': (newValue, threshold) => {
 			return `英数字または半角スペースのみ入力可能です。`;
