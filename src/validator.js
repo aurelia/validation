@@ -6,3 +6,4 @@ export class Validator {
    throw new Error('A Validator must implement getProperties(...)');
   }
 }
+
