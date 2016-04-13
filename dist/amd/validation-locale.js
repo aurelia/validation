@@ -1,9 +1,10 @@
-define(['exports'], function (exports) {
+define(['exports', 'aurelia-dependency-injection', 'aurelia-loader'], function (exports, _aureliaDependencyInjection, _aureliaLoader) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.ValidationLocale = undefined;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -80,7 +81,8 @@ define(['exports'], function (exports) {
           var locale = _this.instances.get(localeIdentifier);
           resolve(locale);
         } else {
-          System.import(basePath + localeIdentifier).then(function (resource) {
+          var loader = _aureliaDependencyInjection.Container.instance.get(_aureliaLoader.Loader);
+          loader.loadModule(basePath + localeIdentifier).then(function (resource) {
             var locale = _this.addLocale(localeIdentifier, resource.data);
             resolve(locale);
           });

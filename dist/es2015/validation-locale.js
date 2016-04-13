@@ -35,6 +35,9 @@ export let ValidationLocale = class ValidationLocale {
   }
 };
 
+import { Container } from 'aurelia-dependency-injection';
+import { Loader } from 'aurelia-loader';
+
 let ValidationLocaleRepository = class ValidationLocaleRepository {
   constructor() {
     this.default = null;
@@ -55,7 +58,8 @@ let ValidationLocaleRepository = class ValidationLocaleRepository {
         let locale = this.instances.get(localeIdentifier);
         resolve(locale);
       } else {
-        System.import(basePath + localeIdentifier).then(resource => {
+        let loader = Container.instance.get(Loader);
+        loader.loadModule(basePath + localeIdentifier).then(resource => {
           let locale = this.addLocale(localeIdentifier, resource.data);
           resolve(locale);
         });
@@ -71,5 +75,6 @@ let ValidationLocaleRepository = class ValidationLocaleRepository {
     return instance;
   }
 };
+
 
 ValidationLocale.Repository = new ValidationLocaleRepository();

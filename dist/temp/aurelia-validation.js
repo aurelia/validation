@@ -15,6 +15,8 @@ var _aureliaDependencyInjection = require('aurelia-dependency-injection');
 
 var _aureliaTemplating = require('aurelia-templating');
 
+var _aureliaLoader = require('aurelia-loader');
+
 var _aureliaBinding = require('aurelia-binding');
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1078,7 +1080,8 @@ var ValidationLocaleRepository = function () {
         var locale = _this10.instances.get(localeIdentifier);
         resolve(locale);
       } else {
-        System.import(basePath + localeIdentifier).then(function (resource) {
+        var loader = _aureliaDependencyInjection.Container.instance.get(_aureliaLoader.Loader);
+        loader.loadModule(basePath + localeIdentifier).then(function (resource) {
           var locale = _this10.addLocale(localeIdentifier, resource.data);
           resolve(locale);
         });

@@ -3,11 +3,15 @@ declare module 'aurelia-validation' {
     metadata
   } from 'aurelia-metadata';
   import {
-    inject
+    inject,
+    Container
   } from 'aurelia-dependency-injection';
   import {
     customAttribute
   } from 'aurelia-templating';
+  import {
+    Loader
+  } from 'aurelia-loader';
   import {
     ObserverLocator
   } from 'aurelia-binding';

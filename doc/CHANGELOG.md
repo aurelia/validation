@@ -1,3 +1,21 @@
+### 0.6.7 (2016-04-13)
+
+
+#### Bug Fixes
+
+* **loader:** switch to using apps loader ([a10cfb1e](https://github.com/aurelia/validation/commit/a10cfb1edc70868c6d738c82e68654703ac9f41b), closes [#226](https://github.com/aurelia/validation/issues/226))
+* **resources:**
+  * fixed a message ([9c413546](https://github.com/aurelia/validation/commit/9c4135463ecd572fcb336717d30b3a28810ffcbe))
+  * fixed a message ([cc1319dd](https://github.com/aurelia/validation/commit/cc1319dde091c7b903408d0d794dc19598b20bf6))
+  * update format ([ab2770ed](https://github.com/aurelia/validation/commit/ab2770edfc172a55bfa59d49c9f2398ddfc87d1b))
+  * update format ([d4b3a2ec](https://github.com/aurelia/validation/commit/d4b3a2ec13facff1564c371efc4e64047ae6b8b8))
+
+
+#### Features
+
+* **resources:** create ja-JP ([242f15c5](https://github.com/aurelia/validation/commit/242f15c5b4f7b60377d7929fb5824dde39e3d8ca))
+
+
 ### 0.6.6 (2016-03-23)
 
 * Fix build to properly generate d.ts files.

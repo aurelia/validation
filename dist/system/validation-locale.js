@@ -1,7 +1,7 @@
 'use strict';
 
-System.register([], function (_export, _context) {
-  var ValidationLocale, ValidationLocaleRepository;
+System.register(['aurelia-dependency-injection', 'aurelia-loader'], function (_export, _context) {
+  var Container, Loader, ValidationLocale, ValidationLocaleRepository;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -10,7 +10,11 @@ System.register([], function (_export, _context) {
   }
 
   return {
-    setters: [],
+    setters: [function (_aureliaDependencyInjection) {
+      Container = _aureliaDependencyInjection.Container;
+    }, function (_aureliaLoader) {
+      Loader = _aureliaLoader.Loader;
+    }],
     execute: function () {
       _export('ValidationLocale', ValidationLocale = function () {
         function ValidationLocale(defaults, data) {
@@ -83,7 +87,8 @@ System.register([], function (_export, _context) {
               var locale = _this.instances.get(localeIdentifier);
               resolve(locale);
             } else {
-              System.import(basePath + localeIdentifier).then(function (resource) {
+              var loader = Container.instance.get(Loader);
+              loader.loadModule(basePath + localeIdentifier).then(function (resource) {
                 var locale = _this.addLocale(localeIdentifier, resource.data);
                 resolve(locale);
               });

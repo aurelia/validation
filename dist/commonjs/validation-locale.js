@@ -3,6 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.ValidationLocale = undefined;
+
+var _aureliaDependencyInjection = require('aurelia-dependency-injection');
+
+var _aureliaLoader = require('aurelia-loader');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -75,7 +80,8 @@ var ValidationLocaleRepository = function () {
         var locale = _this.instances.get(localeIdentifier);
         resolve(locale);
       } else {
-        System.import(basePath + localeIdentifier).then(function (resource) {
+        var loader = _aureliaDependencyInjection.Container.instance.get(_aureliaLoader.Loader);
+        loader.loadModule(basePath + localeIdentifier).then(function (resource) {
           var locale = _this.addLocale(localeIdentifier, resource.data);
           resolve(locale);
         });
