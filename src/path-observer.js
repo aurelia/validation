@@ -36,7 +36,12 @@ export class PathObserver {
       let subscription;
       let currentValue;
       if (!observer) {
-        observer = this.observerLocator.getObserver(currentSubject, currentPath);
+        if (Array.isArray(currentSubject[currentPath])) {
+          observer = this.observerLocator.getArrayObserver(currentSubject[currentPath]);
+        }
+        else {
+          observer = this.observerLocator.getObserver(currentSubject, currentPath);
+        }
         this.observers.push(observer);
         subscription = observer.subscribe((newValue, oldValue) => {
           this.observeParts(observer.propertyName);
@@ -67,7 +72,12 @@ export class PathObserver {
   getObserver() {
     if (this.path.length === 1) {
       this.subject[this.path[0]]; //binding issue with @bindable properties, see: https://github.com/aurelia/binding/issues/89
-      return this.observerLocator.getObserver(this.subject, this.path[0]);
+      if (Array.isArray(this.subject[this.path[0]])) {
+        observer = this.observerLocator.getArrayObserver(this.subject[this.path[0]]);
+      }
+      else {
+        observer = this.observerLocator.getObserver(this.subject, this.path[0]);
+      }
     }
     return this;
   }
