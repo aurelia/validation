@@ -39,7 +39,7 @@ define(['exports', 'aurelia-dependency-injection', 'aurelia-templating'], functi
 
       var viewStrategy = this.value.config.getViewStrategy();
       var validationProperty = viewStrategy.getValidationProperty(this.value, currentElement);
-      var children = currentElement.children;
+      var children = currentElement.children || currentElement.childNodes;
       this.viewStrategy = viewStrategy;
       if (validationProperty !== null && validationProperty !== undefined) {
         this.viewStrategy.prepareElement(validationProperty, currentElement);
@@ -48,6 +48,7 @@ define(['exports', 'aurelia-dependency-injection', 'aurelia-templating'], functi
         });
       }
       for (var i = 0; i < children.length; i++) {
+        if (children[i].nodeType == 3) continue;
         this.subscribeChangedHandlers(children[i]);
       }
     };
