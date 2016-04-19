@@ -176,6 +176,18 @@ export class ValidationGroup {
   }
 
   /**
+   * Adds a callback which will be fired when any validation result property changes.
+   *
+   * @param callback A function to be called when any rule newly fails or succeededs. The callee can check the isValid flag of this object.
+   *
+   * @returns {ValidationGroup} returns this ValidationGroup to enable fluent API
+   */
+  onResultPropertyChanged(callback) {
+    this.result.addPropertyValidationCallback(callback);
+    return this;
+  }
+
+  /**
    * Adds a validation property for the specified path
    * @param {String} bindingPath the path of the property/field, for example 'firstName' or 'address.muncipality.zipCode'
    * @param configCallback a configuration callback
