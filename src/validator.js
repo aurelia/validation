@@ -3,7 +3,7 @@ export class Validator {
     throw new Error('A Validator must implement validate(...)');
   }
   getProperties() {
-   throw new Error('A Validator must implement getProperties(...)');
+    throw new Error('A Validator must implement getProperties(...)');
   }
 }
 
