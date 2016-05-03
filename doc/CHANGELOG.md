@@ -1,3 +1,11 @@
+## 0.8.0 (2016-05-03)
+
+
+#### Bug Fixes
+
+* **package.json:** fix dependencies ([3415f243](https://github.com/aurelia/validation/commit/3415f243b158682bbcb0b45adaac2838a536fb33))
+
+
 ### 1.0.0-beta.1.0.0 (2016-01-29)
 
 
