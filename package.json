@@ -28,23 +28,14 @@
     },
     "dependencies": {
       "aurelia-dependency-injection": "^1.0.0-beta.1.2.0",
-      "aurelia-metadata": "^1.0.0-beta.1.1.4"
     },
     "peerDependencies": {
-      "aurelia-binding": "^1.0.0-beta.1.1.0",
-      "aurelia-dependency-injection": "^1.0.0-beta.1.1.2",
-      "aurelia-loader": "^1.0.0-beta.1.2.0",
-      "aurelia-logging": "^1.0.0-beta.1.1.1",
-      "aurelia-metadata": "^1.0.0-beta.1.1.3",
-      "aurelia-templating": "^1.0.0-beta.1.1.0"
+      "aurelia-dependency-injection": "^1.0.0-beta.1.2.0"
     },
     "devDependencies": {
       "aurelia-pal-browser": "^1.0.0-beta.1.1.2",
       "babel": "babel-core@^5.8.24",
-      "babel-runtime": "^5.8.24",
-      "core-js": "^1.1.4",
-      "traceur": "github:jmcriffey/bower-traceur@0.0.91",
-      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.91"
+      "babel-runtime": "^5.8.24"
     }
   },
   "devDependencies": {
@@ -89,6 +80,6 @@
     "yargs": "^2.1.1"
   },
   "dependencies": {
-    "aurelia-dependency-injection": "^1.0.0-beta.1.1.3"
+    "aurelia-dependency-injection": "^1.0.0-beta.1.2.0"
   }
 }
