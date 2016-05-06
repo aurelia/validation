@@ -3,4 +3,7 @@ export class ValidationError {
   object;
   propertyName = '';
   value;
+  constructor(data) {
+    Object.assign(this, data);
+  }
 }
