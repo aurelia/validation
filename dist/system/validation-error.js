@@ -12,11 +12,13 @@ System.register([], function (_export, _context) {
   return {
     setters: [],
     execute: function () {
-      _export('ValidationError', ValidationError = function ValidationError() {
+      _export('ValidationError', ValidationError = function ValidationError(data) {
         _classCallCheck(this, ValidationError);
 
         this.message = '';
         this.propertyName = '';
+
+        Object.assign(this, data);
       });
 
       _export('ValidationError', ValidationError);

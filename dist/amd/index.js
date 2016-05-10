@@ -1,4 +1,4 @@
-define(['exports', './validator', './validation-reporter', './validation-engine'], function (exports, _validator, _validationReporter, _validationEngine) {
+define(['exports', './validator', './validation-reporter', './validation-engine', './validation-error'], function (exports, _validator, _validationReporter, _validationEngine, _validationError) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -20,6 +20,12 @@ define(['exports', './validator', './validation-reporter', './validation-engine'
     enumerable: true,
     get: function () {
       return _validationEngine.ValidationEngine;
+    }
+  });
+  Object.defineProperty(exports, 'ValidationError', {
+    enumerable: true,
+    get: function () {
+      return _validationError.ValidationError;
     }
   });
   exports.configure = configure;

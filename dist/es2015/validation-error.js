@@ -1,7 +1,8 @@
 export let ValidationError = class ValidationError {
-  constructor() {
+  constructor(data) {
     this.message = '';
     this.propertyName = '';
-  }
 
+    Object.assign(this, data);
+  }
 };

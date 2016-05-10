@@ -30,5 +30,14 @@ Object.defineProperty(exports, 'ValidationEngine', {
     return _validationEngine.ValidationEngine;
   }
 });
+
+var _validationError = require('./validation-error');
+
+Object.defineProperty(exports, 'ValidationError', {
+  enumerable: true,
+  get: function get() {
+    return _validationError.ValidationError;
+  }
+});
 exports.configure = configure;
 function configure(config) {}

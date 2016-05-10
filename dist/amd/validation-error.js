@@ -11,10 +11,12 @@ define(['exports'], function (exports) {
     }
   }
 
-  var ValidationError = exports.ValidationError = function ValidationError() {
+  var ValidationError = exports.ValidationError = function ValidationError(data) {
     _classCallCheck(this, ValidationError);
 
     this.message = '';
     this.propertyName = '';
+
+    Object.assign(this, data);
   };
 });
