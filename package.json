@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/aurelia/validation/issues"
   },
-  "license": "CC0-1.0",
+  "license": "MIT",
   "author": "Patrick Walters <patrickwaltersc21@yahoo.com> (http://patrickwalters.net/)",
   "main": "dist/commonjs/index.js",
   "repository": {
@@ -37,6 +37,9 @@
       "babel": "babel-core@^5.8.24",
       "babel-runtime": "^5.8.24"
     }
+  },
+  "dependencies": {
+    "aurelia-dependency-injection": "^1.0.0-beta.1.2.0"
   },
   "devDependencies": {
     "aurelia-tools": "^0.1.3",
@@ -78,8 +81,5 @@
     "vinyl": "^1.1.1",
     "vinyl-paths": "^1.0.0",
     "yargs": "^2.1.1"
-  },
-  "dependencies": {
-    "aurelia-dependency-injection": "^1.0.0-beta.1.2.0"
   }
 }
