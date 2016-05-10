@@ -12,13 +12,13 @@
   "moduleType": "node",
   "license": "MIT",
   "authors": [
-    "Patrick Walters <patrickwaltersc21@yahoo.com> (http://patrickwalters.net/)",
+    "Patrick Walters <patrickwaltersc21@yahoo.com> (http://patrickwalters.net/)"
   ],
   "repository": {
     "type": "git",
     "url": "http://github.com/aurelia/validation"
   },
   "dependencies": {
-
+    "aurelia-dependency-injection": "^1.0.0-beta.1.2.0"
   }
 }
