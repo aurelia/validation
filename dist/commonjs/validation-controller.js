@@ -11,8 +11,6 @@ var _aureliaDependencyInjection = require('aurelia-dependency-injection');
 
 var _validator = require('./validator');
 
-var _validationRenderer = require('./validation-renderer');
-
 var _validateTrigger = require('./validate-trigger');
 
 var _propertyInfo = require('./property-info');

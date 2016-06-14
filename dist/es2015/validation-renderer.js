@@ -1,4 +1,5 @@
 import { protocol } from 'aurelia-metadata';
+import { ValidationError } from './validation-error';
 
 export const validationRenderer = protocol.create('aurelia:validation-renderer', function (target) {
   if (!(typeof target.render === 'function')) {

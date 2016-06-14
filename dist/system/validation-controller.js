@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['aurelia-dependency-injection', './validator', './validation-renderer', './validate-trigger', './property-info'], function (_export, _context) {
+System.register(['aurelia-dependency-injection', './validator', './validate-trigger', './property-info'], function (_export, _context) {
   "use strict";
 
-  var inject, Validator, ValidationRenderer, validateTrigger, getPropertyInfo, _dec, _class, ValidationController;
+  var inject, Validator, validateTrigger, getPropertyInfo, _dec, _class, ValidationController;
 
   
 
@@ -12,8 +12,6 @@ System.register(['aurelia-dependency-injection', './validator', './validation-re
       inject = _aureliaDependencyInjection.inject;
     }, function (_validator) {
       Validator = _validator.Validator;
-    }, function (_validationRenderer) {
-      ValidationRenderer = _validationRenderer.ValidationRenderer;
     }, function (_validateTrigger) {
       validateTrigger = _validateTrigger.validateTrigger;
     }, function (_propertyInfo) {

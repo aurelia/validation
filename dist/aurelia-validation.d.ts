@@ -1,7 +1,4 @@
 import {
-  protocol
-} from 'aurelia-metadata';
-import {
   AccessMember,
   AccessScope,
   AccessKeyed,
@@ -9,6 +6,9 @@ import {
   ValueConverter,
   bindingMode
 } from 'aurelia-binding';
+import {
+  protocol
+} from 'aurelia-metadata';
 import {
   inject,
   Optional,
@@ -20,11 +20,10 @@ import {
 import {
   customAttribute
 } from 'aurelia-templating';
-
-/**
-* Decorator: Indicates that the decorated class/object is a validation-renderer.
-*/
-export declare const validationRenderer: Function;
+export declare interface ValidationRenderer {
+  render(error: ValidationError, target: Element): void;
+  unrender(error: ValidationError, target: Element): void;
+}
 export declare class ValidationError {
   
   /**
@@ -55,9 +54,14 @@ export declare class ValidationError {
 */
 export declare const validateTrigger: any;
 export declare function getPropertyInfo(expression?: any, source?: any): any;
+
+/**
+* Decorator: Indicates that the decorated class/object is a validation-renderer.
+*/
+export declare const validationRenderer: Function;
 export declare class Validator {
-  validateProperty(object?: any, propertyName?: any, rules?: any): ValidationErrors[];
-  validateObject(object?: any, rules?: any): ValidationErrors[];
+  validateProperty(object?: any, propertyName?: any, rules?: any): ValidationError[];
+  validateObject(object?: any, rules?: any): ValidationError[];
 }
 export declare class ValidationController {
   bindings: any;

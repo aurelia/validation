@@ -1,4 +1,5 @@
 import {protocol} from 'aurelia-metadata';
+import {ValidationError} from './validation-error';
 
 /**
 * Decorator: Indicates that the decorated class/object is a validation-renderer.
@@ -14,3 +15,8 @@ export const validationRenderer: Function = protocol.create('aurelia:validation-
 
   return true;
 });
+
+interface ValidationRenderer {
+  render(error: ValidationError, target: Element): void;
+  unrender(error: ValidationError, target: Element): void
+}

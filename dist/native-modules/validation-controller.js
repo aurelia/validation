@@ -4,7 +4,6 @@ var _dec, _class;
 
 import { inject } from 'aurelia-dependency-injection';
 import { Validator } from './validator';
-import { ValidationRenderer } from './validation-renderer';
 import { validateTrigger } from './validate-trigger';
 import { getPropertyInfo } from './property-info';
 

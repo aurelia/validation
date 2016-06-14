@@ -1,23 +1,8 @@
-import {protocol} from 'aurelia-metadata';
 import {AccessMember,AccessScope,AccessKeyed,BindingBehavior,ValueConverter,bindingMode} from 'aurelia-binding';
+import {protocol} from 'aurelia-metadata';
 import {inject,Optional,Lazy} from 'aurelia-dependency-injection';
 import {TaskQueue} from 'aurelia-task-queue';
 import {customAttribute} from 'aurelia-templating';
-
-/**
-* Decorator: Indicates that the decorated class/object is a validation-renderer.
-*/
-export const validationRenderer: Function = protocol.create('aurelia:validation-renderer', function(target) {
-  if (!(typeof target.render === 'function')) {
-    return 'Validation renderers must implement: render(error: ValidationError, target: Element): void';
-  }
-
-  if (!(typeof target.unrender === 'function')) {
-    return 'Validation renderers must implement: unrender(error: ValidationError, target: Element): void';
-  }
-
-  return true;
-});
 
 export class ValidationError {
   /**
@@ -108,12 +93,32 @@ export function getPropertyInfo(expression, source) {
   return { object, property };
 }
 
+/**
+* Decorator: Indicates that the decorated class/object is a validation-renderer.
+*/
+export const validationRenderer: Function = protocol.create('aurelia:validation-renderer', function(target) {
+  if (!(typeof target.render === 'function')) {
+    return 'Validation renderers must implement: render(error: ValidationError, target: Element): void';
+  }
+
+  if (!(typeof target.unrender === 'function')) {
+    return 'Validation renderers must implement: unrender(error: ValidationError, target: Element): void';
+  }
+
+  return true;
+});
+
+interface ValidationRenderer {
+  render(error: ValidationError, target: Element): void;
+  unrender(error: ValidationError, target: Element): void
+}
+
 export class Validator {
-  validateProperty(object, propertyName, rules = null): ValidationErrors[] {
+  validateProperty(object, propertyName, rules = null): ValidationError[] {
     throw new Error('A Validator must implement validateProperty');
   }
 
-  validateObject(object, rules = null): ValidationErrors[] {
+  validateObject(object, rules = null): ValidationError[] {
     throw new Error('A Validator must implement validateObject');
   }
 }

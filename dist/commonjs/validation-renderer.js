@@ -7,6 +7,8 @@ exports.validationRenderer = undefined;
 
 var _aureliaMetadata = require('aurelia-metadata');
 
+var _validationError = require('./validation-error');
+
 var validationRenderer = exports.validationRenderer = _aureliaMetadata.protocol.create('aurelia:validation-renderer', function (target) {
   if (!(typeof target.render === 'function')) {
     return 'Validation renderers must implement: render(error: ValidationError, target: Element): void';

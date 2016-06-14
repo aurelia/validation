@@ -1,4 +1,4 @@
-define(['exports', 'aurelia-dependency-injection', './validator', './validation-renderer', './validate-trigger', './property-info'], function (exports, _aureliaDependencyInjection, _validator, _validationRenderer, _validateTrigger, _propertyInfo) {
+define(['exports', 'aurelia-dependency-injection', './validator', './validate-trigger', './property-info'], function (exports, _aureliaDependencyInjection, _validator, _validateTrigger, _propertyInfo) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {

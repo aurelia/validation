@@ -1,4 +1,4 @@
-define(['exports', 'aurelia-metadata'], function (exports, _aureliaMetadata) {
+define(['exports', 'aurelia-metadata', './validation-error'], function (exports, _aureliaMetadata, _validationError) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {

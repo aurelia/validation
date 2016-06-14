@@ -1,12 +1,14 @@
 'use strict';
 
-System.register(['aurelia-metadata'], function (_export, _context) {
+System.register(['aurelia-metadata', './validation-error'], function (_export, _context) {
   "use strict";
 
-  var protocol, validationRenderer;
+  var protocol, ValidationError, validationRenderer;
   return {
     setters: [function (_aureliaMetadata) {
       protocol = _aureliaMetadata.protocol;
+    }, function (_validationError) {
+      ValidationError = _validationError.ValidationError;
     }],
     execute: function () {
       _export('validationRenderer', validationRenderer = protocol.create('aurelia:validation-renderer', function (target) {

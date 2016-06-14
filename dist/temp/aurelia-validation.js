@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ValidationRendererCustomAttribute = exports.ValidationErrorsCustomAttribute = exports.ValidateBindingBehavior = exports.ValidationController = exports.Validator = exports.validateTrigger = exports.ValidationError = exports.validationRenderer = undefined;
+exports.ValidationRendererCustomAttribute = exports.ValidationErrorsCustomAttribute = exports.ValidateBindingBehavior = exports.ValidationController = exports.Validator = exports.validationRenderer = exports.validateTrigger = exports.ValidationError = undefined;
 
 var _dec, _class2, _dec2, _class4, _dec3, _dec4, _class5;
 
@@ -11,9 +11,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.getPropertyInfo = getPropertyInfo;
 
-var _aureliaMetadata = require('aurelia-metadata');
-
 var _aureliaBinding = require('aurelia-binding');
+
+var _aureliaMetadata = require('aurelia-metadata');
 
 var _aureliaDependencyInjection = require('aurelia-dependency-injection');
 
@@ -22,18 +22,6 @@ var _aureliaTaskQueue = require('aurelia-task-queue');
 var _aureliaTemplating = require('aurelia-templating');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var validationRenderer = exports.validationRenderer = _aureliaMetadata.protocol.create('aurelia:validation-renderer', function (target) {
-  if (!(typeof target.render === 'function')) {
-    return 'Validation renderers must implement: render(error: ValidationError, target: Element): void';
-  }
-
-  if (!(typeof target.unrender === 'function')) {
-    return 'Validation renderers must implement: unrender(error: ValidationError, target: Element): void';
-  }
-
-  return true;
-});
 
 var ValidationError = exports.ValidationError = function ValidationError(rule, message, object) {
   var propertyName = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
@@ -91,6 +79,18 @@ function getPropertyInfo(expression, source) {
   return { object: object, property: property };
 }
 
+var validationRenderer = exports.validationRenderer = _aureliaMetadata.protocol.create('aurelia:validation-renderer', function (target) {
+  if (!(typeof target.render === 'function')) {
+    return 'Validation renderers must implement: render(error: ValidationError, target: Element): void';
+  }
+
+  if (!(typeof target.unrender === 'function')) {
+    return 'Validation renderers must implement: unrender(error: ValidationError, target: Element): void';
+  }
+
+  return true;
+});
+
 var Validator = exports.Validator = function () {
   function Validator() {
     _classCallCheck(this, Validator);
@@ -138,12 +138,12 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
       var _ref2 = _ref;
       var binding = _ref2[0];
       var _ref2$ = _ref2[1];
-      var target = _ref2$.target;
+      var _target = _ref2$.target;
       var rules = _ref2$.rules;
       var errors = _ref2$.errors;
 
       for (var i = 0, ii = errors.length; i < ii; i++) {
-        renderer.render(errors[i], target);
+        renderer.render(errors[i], _target);
       }
     }
     this.renderers.push(renderer);
@@ -165,12 +165,12 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
       var _ref4 = _ref3;
       var binding = _ref4[0];
       var _ref4$ = _ref4[1];
-      var target = _ref4$.target;
+      var _target2 = _ref4$.target;
       var rules = _ref4$.rules;
       var errors = _ref4$.errors;
 
       for (var i = 0, ii = errors.length; i < ii; i++) {
-        renderer.unrender(errors[i], target);
+        renderer.unrender(errors[i], _target2);
       }
     }
     this.renderers.splice(this.renderers.indexOf(renderer), 1);
