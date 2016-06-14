@@ -14,7 +14,8 @@ module.exports = function(config) {
 
     jspm: {
       // Edit this to your needs
-      loadFiles: ['src/**/*.js', 'test/setup.js',  'test/**/*.js']
+      loadFiles: ['test/setup.js', 'test/**/*.js'],
+      serveFiles: ['src/**/*.js']
     },
 
 
