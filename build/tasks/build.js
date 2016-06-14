@@ -9,8 +9,7 @@ var concat = require('gulp-concat');
 var insert = require('gulp-insert');
 var rename = require('gulp-rename');
 var tools = require('aurelia-tools');
-var del = require('del');
-var vinylPaths = require('vinyl-paths');
+var gulpIgnore = require('gulp-ignore');
 
 var jsName = paths.packageName + '.js';
 
@@ -27,11 +26,9 @@ function removeDTSPlugin(options) {
 gulp.task('build-index', function(){
   var importsToAdd = [];
 
-  return gulp.src([
-    paths.root + '*.js',
-    paths.root + '**/*.js',
-   '!' + paths.root + 'index.js',
-   '!' + paths.root + 'resources/*.js'])
+  return gulp.src(paths.source)
+    .pipe(tools.sortFiles())
+    .pipe(gulpIgnore.exclude('aurelia-templating-resources.js'))
     .pipe(through2.obj(function(file, enc, callback) {
       file.contents = new Buffer(tools.extractImports(file.contents.toString("utf8"), importsToAdd));
       this.push(file);
@@ -41,7 +38,13 @@ gulp.task('build-index', function(){
     .pipe(insert.transform(function(contents) {
       return tools.createImportBlock(importsToAdd) + contents;
     }))
-    .pipe(to5(assign({}, compilerOptions.commonjs())));
+    .pipe(gulp.dest(paths.output));
+});
+
+gulp.task('build-es2015-temp', function () {
+    return gulp.src(paths.output + jsName)
+      .pipe(to5(assign({}, compilerOptions.commonjs())))
+      .pipe(gulp.dest(paths.output + 'temp'));
 });
 
 gulp.task('build-es2015', function () {
@@ -69,8 +72,7 @@ gulp.task('build-system', function () {
 });
 
 gulp.task('build-dts', function(){
-  var tdsPath = paths.output + paths.packageName + '/' + paths.packageName + '.d.ts';
-  return gulp.src(tdsPath)
+  return gulp.src(paths.output + paths.packageName + '.d.ts')
       .pipe(rename(paths.packageName + '.d.ts'))
       .pipe(gulp.dest(paths.output + 'es2015'))
       .pipe(gulp.dest(paths.output + 'commonjs'))
@@ -78,19 +80,12 @@ gulp.task('build-dts', function(){
       .pipe(gulp.dest(paths.output + 'system'));
 });
 
-gulp.task('remove-dts-folder', function() {
-    var tdsFolder = paths.output + paths.packageName;
-    return gulp.src([tdsFolder])
-      .pipe(vinylPaths(del));
-});
-
 gulp.task('build', function(callback) {
   return runSequence(
     'clean',
-    ['build-es2015', 'build-commonjs', 'build-amd', 'build-system'],
     'build-index',
+    ['build-es2015-temp', 'build-es2015', 'build-commonjs', 'build-amd', 'build-system'],
     'build-dts',
-    'remove-dts-folder',
     callback
   );
 });

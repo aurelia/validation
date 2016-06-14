@@ -1,9 +1,11 @@
+import {ValidationError} from './validation-error';
+
 export class Validator {
-  validate(object, prop) {
-    throw new Error('A Validator must implement validate(...)');
+  validateProperty(object, propertyName, rules = null): ValidationErrors[] {
+    throw new Error('A Validator must implement validateProperty');
   }
-  getProperties() {
-    throw new Error('A Validator must implement getProperties(...)');
+
+  validateObject(object, rules = null): ValidationErrors[] {
+    throw new Error('A Validator must implement validateObject');
   }
 }
-
