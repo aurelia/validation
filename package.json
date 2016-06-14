@@ -43,6 +43,7 @@
     },
     "devDependencies": {
       "aurelia-pal-browser": "^1.0.0-beta.1.1.2",
+      "aurelia-polyfills": "^1.0.0-beta.2.0.0",
       "babel": "babel-core@^5.8.24",
       "babel-runtime": "^5.8.24",
       "core-js": "^1.1.4"
