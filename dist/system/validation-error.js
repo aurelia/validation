@@ -1,27 +1,27 @@
-'use strict';
+"use strict";
 
 System.register([], function (_export, _context) {
+  "use strict";
+
   var ValidationError;
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
+  
 
   return {
     setters: [],
     execute: function () {
-      _export('ValidationError', ValidationError = function ValidationError(data) {
-        _classCallCheck(this, ValidationError);
+      _export("ValidationError", ValidationError = function ValidationError(rule, message, object) {
+        var propertyName = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
 
-        this.message = '';
-        this.propertyName = '';
+        
 
-        Object.assign(this, data);
+        this.rule = rule;
+        this.message = message;
+        this.object = object;
+        this.propertyName = propertyName || null;
       });
 
-      _export('ValidationError', ValidationError);
+      _export("ValidationError", ValidationError);
     }
   };
 });

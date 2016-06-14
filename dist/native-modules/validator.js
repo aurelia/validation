@@ -1,15 +1,8 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Validator = undefined;
-
-var _validationError = require('./validation-error');
 
 
+import { ValidationError } from './validation-error';
 
-var Validator = exports.Validator = function () {
+export var Validator = function () {
   function Validator() {
     
   }

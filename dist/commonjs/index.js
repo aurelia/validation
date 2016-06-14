@@ -4,40 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _validator = require('./validator');
+var _aureliaValidation = require('./aurelia-validation');
 
-Object.defineProperty(exports, 'Validator', {
-  enumerable: true,
-  get: function get() {
-    return _validator.Validator;
-  }
+Object.keys(_aureliaValidation).forEach(function (key) {
+  if (key === "default") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _aureliaValidation[key];
+    }
+  });
 });
-
-var _validationReporter = require('./validation-reporter');
-
-Object.defineProperty(exports, 'ValidationReporter', {
-  enumerable: true,
-  get: function get() {
-    return _validationReporter.ValidationReporter;
-  }
-});
-
-var _validationEngine = require('./validation-engine');
-
-Object.defineProperty(exports, 'ValidationEngine', {
-  enumerable: true,
-  get: function get() {
-    return _validationEngine.ValidationEngine;
-  }
-});
-
-var _validationError = require('./validation-error');
-
-Object.defineProperty(exports, 'ValidationError', {
-  enumerable: true,
-  get: function get() {
-    return _validationError.ValidationError;
-  }
-});
-exports.configure = configure;
-function configure(config) {}

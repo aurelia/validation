@@ -1,12 +1,6 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 
-
-var ValidationError = exports.ValidationError = function ValidationError(rule, message, object) {
+export var ValidationError = function ValidationError(rule, message, object) {
   var propertyName = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
 
   

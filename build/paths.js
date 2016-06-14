@@ -18,12 +18,12 @@ var paths = {
   e2eSpecsSrc: 'test/e2e/src/*.js',
   e2eSpecsDist: 'test/e2e/dist/',
   packageName: pkg.name,
-  ignore: ['aurelia-templating-resources.js'],
   useTypeScriptForDTS: false,
   importsToAdd: [],
   sort: true
 };
 
+paths.ignore = ['aurelia-validation.js'];
 paths.files = [
   paths.source
 ];

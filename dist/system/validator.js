@@ -1,28 +1,32 @@
 'use strict';
 
-System.register([], function (_export, _context) {
-  var Validator;
+System.register(['./validation-error'], function (_export, _context) {
+  "use strict";
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
+  var ValidationError, Validator;
+
+  
 
   return {
-    setters: [],
+    setters: [function (_validationError) {
+      ValidationError = _validationError.ValidationError;
+    }],
     execute: function () {
       _export('Validator', Validator = function () {
         function Validator() {
-          _classCallCheck(this, Validator);
+          
         }
 
-        Validator.prototype.validate = function validate(object, prop) {
-          throw new Error('A Validator must implement validate(...)');
+        Validator.prototype.validateProperty = function validateProperty(object, propertyName) {
+          var rules = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+          throw new Error('A Validator must implement validateProperty');
         };
 
-        Validator.prototype.getProperties = function getProperties() {
-          throw new Error('A Validator must implement getProperties(...)');
+        Validator.prototype.validateObject = function validateObject(object) {
+          var rules = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+          throw new Error('A Validator must implement validateObject');
         };
 
         return Validator;

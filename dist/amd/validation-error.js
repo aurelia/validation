@@ -1,22 +1,20 @@
-define(['exports'], function (exports) {
-  'use strict';
+define(["exports"], function (exports) {
+  "use strict";
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
+  
 
-  var ValidationError = exports.ValidationError = function ValidationError(data) {
-    _classCallCheck(this, ValidationError);
+  var ValidationError = exports.ValidationError = function ValidationError(rule, message, object) {
+    var propertyName = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
 
-    this.message = '';
-    this.propertyName = '';
+    
 
-    Object.assign(this, data);
+    this.rule = rule;
+    this.message = message;
+    this.object = object;
+    this.propertyName = propertyName || null;
   };
 });
