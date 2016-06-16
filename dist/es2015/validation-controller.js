@@ -16,7 +16,7 @@ export let ValidationController = (_dec = inject(Validator), _dec(_class = class
   }
 
   addRenderer(renderer) {
-    for (let [binding, { target, rules, errors }] of this.bindings) {
+    for (let { target, errors } of this.bindings.values()) {
       for (let i = 0, ii = errors.length; i < ii; i++) {
         renderer.render(errors[i], target);
       }
@@ -25,7 +25,7 @@ export let ValidationController = (_dec = inject(Validator), _dec(_class = class
   }
 
   removeRenderer(renderer) {
-    for (let [binding, { target, rules, errors }] of this.bindings) {
+    for (let { target, errors } of this.bindings.values()) {
       for (let i = 0, ii = errors.length; i < ii; i++) {
         renderer.unrender(errors[i], target);
       }
@@ -36,6 +36,11 @@ export let ValidationController = (_dec = inject(Validator), _dec(_class = class
   registerBinding(binding, target, rules = null) {
     const errors = [];
     this.bindings.set(binding, { target, rules, errors });
+  }
+
+  unregisterBinding(binding) {
+    this._resetBinding(binding);
+    this.bindings.delete(binding);
   }
 
   validate() {
@@ -99,7 +104,7 @@ export let ValidationController = (_dec = inject(Validator), _dec(_class = class
   }
 
   _resetBinding(binding) {
-    const { target, rules, errors } = this.bindings.get(binding);
+    const { target, errors } = this.bindings.get(binding);
     this._updateErrors(errors, [], target);
   }
 }) || _class);

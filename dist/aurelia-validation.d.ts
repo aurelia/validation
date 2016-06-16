@@ -84,9 +84,16 @@ export declare class ValidationController {
   /**
     * Registers a binding with the controller.
     * @param binding The binding instance.
+    * @param target The DOM element.
     * @param rules (optional) rules associated with the binding. Validator implementation specific.
     */
   registerBinding(binding?: any, target?: any, rules?: any): any;
+  
+  /**
+    * Unregisters a binding with the controller.
+    * @param binding The binding instance.
+    */
+  unregisterBinding(binding?: any): any;
   
   /**
     * Validates all bindings and renders any validation errors.

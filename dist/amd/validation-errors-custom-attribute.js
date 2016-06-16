@@ -40,10 +40,6 @@ define(['exports', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-t
     };
 
     ValidationErrorsCustomAttribute.prototype.unrender = function unrender(error, target) {
-      if (!target || !(this.boundaryElement === target || this.boundaryElement.contains(target))) {
-        return;
-      }
-
       var index = this.errors.findIndex(function (x) {
         return x.error === error;
       });

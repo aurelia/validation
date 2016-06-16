@@ -123,7 +123,7 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
   }
 
   ValidationController.prototype.addRenderer = function addRenderer(renderer) {
-    for (var _iterator = this.bindings, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+    for (var _iterator = this.bindings.values(), _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
       var _ref;
 
       if (_isArray) {
@@ -136,11 +136,8 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
       }
 
       var _ref2 = _ref;
-      var binding = _ref2[0];
-      var _ref2$ = _ref2[1];
-      var _target = _ref2$.target;
-      var rules = _ref2$.rules;
-      var errors = _ref2$.errors;
+      var _target = _ref2.target;
+      var errors = _ref2.errors;
 
       for (var i = 0, ii = errors.length; i < ii; i++) {
         renderer.render(errors[i], _target);
@@ -150,7 +147,7 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
   };
 
   ValidationController.prototype.removeRenderer = function removeRenderer(renderer) {
-    for (var _iterator2 = this.bindings, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+    for (var _iterator2 = this.bindings.values(), _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
       var _ref3;
 
       if (_isArray2) {
@@ -163,11 +160,8 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
       }
 
       var _ref4 = _ref3;
-      var binding = _ref4[0];
-      var _ref4$ = _ref4[1];
-      var _target2 = _ref4$.target;
-      var rules = _ref4$.rules;
-      var errors = _ref4$.errors;
+      var _target2 = _ref4.target;
+      var errors = _ref4.errors;
 
       for (var i = 0, ii = errors.length; i < ii; i++) {
         renderer.unrender(errors[i], _target2);
@@ -181,6 +175,11 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
 
     var errors = [];
     this.bindings.set(binding, { target: target, rules: rules, errors: errors });
+  };
+
+  ValidationController.prototype.unregisterBinding = function unregisterBinding(binding) {
+    this._resetBinding(binding);
+    this.bindings.delete(binding);
   };
 
   ValidationController.prototype.validate = function validate() {
@@ -293,7 +292,6 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
     var _bindings$get2 = this.bindings.get(binding);
 
     var target = _bindings$get2.target;
-    var rules = _bindings$get2.rules;
     var errors = _bindings$get2.errors;
 
     this._updateErrors(errors, [], target);
@@ -328,7 +326,7 @@ var ValidateBindingBehavior = exports.ValidateBindingBehavior = (_dec2 = (0, _au
 
     var target = this.getTarget(binding, source);
 
-    var controller = source.container.get(_aureliaDependencyInjection.Optional.of(ValidationController));
+    var controller = source.container.get(_aureliaDependencyInjection.Optional.of(ValidationController, true));
     if (controller === null) {
       throw new Error('A ValidationController has not been registered.');
     }
@@ -410,10 +408,6 @@ var ValidationErrorsCustomAttribute = exports.ValidationErrorsCustomAttribute = 
   };
 
   ValidationErrorsCustomAttribute.prototype.unrender = function unrender(error, target) {
-    if (!target || !(this.boundaryElement === target || this.boundaryElement.contains(target))) {
-      return;
-    }
-
     var index = this.errors.findIndex(function (x) {
       return x.error === error;
     });

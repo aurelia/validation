@@ -44,7 +44,7 @@ var ValidateBindingBehavior = exports.ValidateBindingBehavior = (_dec = (0, _aur
 
     var target = this.getTarget(binding, source);
 
-    var controller = source.container.get(_aureliaDependencyInjection.Optional.of(_validationController.ValidationController));
+    var controller = source.container.get(_aureliaDependencyInjection.Optional.of(_validationController.ValidationController, true));
     if (controller === null) {
       throw new Error('A ValidationController has not been registered.');
     }

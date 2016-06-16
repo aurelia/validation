@@ -30,7 +30,7 @@ System.register(['aurelia-dependency-injection', './validator', './validate-trig
         }
 
         ValidationController.prototype.addRenderer = function addRenderer(renderer) {
-          for (var _iterator = this.bindings, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+          for (var _iterator = this.bindings.values(), _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
             var _ref;
 
             if (_isArray) {
@@ -43,11 +43,8 @@ System.register(['aurelia-dependency-injection', './validator', './validate-trig
             }
 
             var _ref2 = _ref;
-            var binding = _ref2[0];
-            var _ref2$ = _ref2[1];
-            var target = _ref2$.target;
-            var rules = _ref2$.rules;
-            var errors = _ref2$.errors;
+            var target = _ref2.target;
+            var errors = _ref2.errors;
 
             for (var i = 0, ii = errors.length; i < ii; i++) {
               renderer.render(errors[i], target);
@@ -57,7 +54,7 @@ System.register(['aurelia-dependency-injection', './validator', './validate-trig
         };
 
         ValidationController.prototype.removeRenderer = function removeRenderer(renderer) {
-          for (var _iterator2 = this.bindings, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+          for (var _iterator2 = this.bindings.values(), _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
             var _ref3;
 
             if (_isArray2) {
@@ -70,11 +67,8 @@ System.register(['aurelia-dependency-injection', './validator', './validate-trig
             }
 
             var _ref4 = _ref3;
-            var binding = _ref4[0];
-            var _ref4$ = _ref4[1];
-            var target = _ref4$.target;
-            var rules = _ref4$.rules;
-            var errors = _ref4$.errors;
+            var target = _ref4.target;
+            var errors = _ref4.errors;
 
             for (var i = 0, ii = errors.length; i < ii; i++) {
               renderer.unrender(errors[i], target);
@@ -88,6 +82,11 @@ System.register(['aurelia-dependency-injection', './validator', './validate-trig
 
           var errors = [];
           this.bindings.set(binding, { target: target, rules: rules, errors: errors });
+        };
+
+        ValidationController.prototype.unregisterBinding = function unregisterBinding(binding) {
+          this._resetBinding(binding);
+          this.bindings.delete(binding);
         };
 
         ValidationController.prototype.validate = function validate() {
@@ -200,7 +199,6 @@ System.register(['aurelia-dependency-injection', './validator', './validate-trig
           var _bindings$get2 = this.bindings.get(binding);
 
           var target = _bindings$get2.target;
-          var rules = _bindings$get2.rules;
           var errors = _bindings$get2.errors;
 
           this._updateErrors(errors, [], target);

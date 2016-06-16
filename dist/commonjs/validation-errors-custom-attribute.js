@@ -49,10 +49,6 @@ var ValidationErrorsCustomAttribute = exports.ValidationErrorsCustomAttribute = 
   };
 
   ValidationErrorsCustomAttribute.prototype.unrender = function unrender(error, target) {
-    if (!target || !(this.boundaryElement === target || this.boundaryElement.contains(target))) {
-      return;
-    }
-
     var index = this.errors.findIndex(function (x) {
       return x.error === error;
     });

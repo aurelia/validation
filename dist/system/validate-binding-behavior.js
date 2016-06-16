@@ -46,7 +46,7 @@ System.register(['aurelia-dependency-injection', 'aurelia-task-queue', './valida
 
           var target = this.getTarget(binding, source);
 
-          var controller = source.container.get(Optional.of(ValidationController));
+          var controller = source.container.get(Optional.of(ValidationController, true));
           if (controller === null) {
             throw new Error('A ValidationController has not been registered.');
           }
