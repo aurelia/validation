@@ -35,10 +35,6 @@ export class ValidationErrorsCustomAttribute {
   }
 
   unrender(error, target) {
-    if (!target || !(this.boundaryElement === target || this.boundaryElement.contains(target))) {
-      return;
-    }
-
     const index = this.errors.findIndex(x => x.error === error);
     if (index === -1) {
       return;

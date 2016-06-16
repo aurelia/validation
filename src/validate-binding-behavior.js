@@ -29,7 +29,7 @@ export class ValidateBindingBehavior {
     const target = this.getTarget(binding, source);
 
     // locate the controller.
-    const controller = source.container.get(Optional.of(ValidationController));
+    const controller = source.container.get(Optional.of(ValidationController, true));
     if (controller === null) {
       throw new Error('A ValidationController has not been registered.');
     }

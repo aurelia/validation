@@ -18,7 +18,7 @@ export class ValidationController {
   * @param renderer The renderer.
   */
   addRenderer(renderer: ValidationRenderer) {
-    for (let [binding, { target, rules, errors }] of this.bindings) {
+    for (let { target, errors } of this.bindings.values()) {
       for (let i = 0, ii = errors.length; i < ii; i++) {
         renderer.render(errors[i], target);
       }
@@ -31,7 +31,7 @@ export class ValidationController {
   * @param renderer The renderer.
   */
   removeRenderer(renderer: ValidationRenderer) {
-    for (let [binding, { target, rules, errors }] of this.bindings) {
+    for (let { target, errors } of this.bindings.values()) {
       for (let i = 0, ii = errors.length; i < ii; i++) {
         renderer.unrender(errors[i], target);
       }
@@ -42,11 +42,21 @@ export class ValidationController {
   /**
   * Registers a binding with the controller.
   * @param binding The binding instance.
+  * @param target The DOM element.
   * @param rules (optional) rules associated with the binding. Validator implementation specific.
   */
   registerBinding(binding, target, rules = null) {
     const errors = [];
     this.bindings.set(binding, { target, rules, errors });
+  }
+
+  /**
+  * Unregisters a binding with the controller.
+  * @param binding The binding instance.
+  */
+  unregisterBinding(binding) {
+    this._resetBinding(binding);
+    this.bindings.delete(binding);
   }
 
   /**
@@ -127,7 +137,7 @@ export class ValidationController {
   * Resets and unrenders errors for a particular binding.
   */
   _resetBinding(binding) {
-    const { target, rules, errors } = this.bindings.get(binding);
+    const { target, errors } = this.bindings.get(binding);
     this._updateErrors(errors, [], target);
   }
 }
