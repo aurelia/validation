@@ -19,7 +19,7 @@
     "url": "http://github.com/aurelia/validation"
   },
   "dependencies": {
-    "aurelia-binding": "^1.0.0-beta.2.0.4",
+    "aurelia-binding": "^1.0.0-beta.2.0.6",
     "aurelia-dependency-injection": "^1.0.0-beta.2.1.0",
     "aurelia-metadata": "^1.0.0-beta.2.0.0",
     "aurelia-task-queue": "^1.0.0-beta.2.0.0",

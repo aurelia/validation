@@ -28,14 +28,14 @@
       "dist": "dist/amd"
     },
     "peerDependencies": {
-      "aurelia-binding": "^1.0.0-beta.2.0.4",
+      "aurelia-binding": "^1.0.0-beta.2.0.6",
       "aurelia-dependency-injection": "^1.0.0-beta.2.1.0",
       "aurelia-metadata": "^1.0.0-beta.2.0.0",
       "aurelia-task-queue": "^1.0.0-beta.2.0.0",
       "aurelia-templating": "^1.0.0-beta.3.0.2"
     },
     "dependencies": {
-      "aurelia-binding": "^1.0.0-beta.2.0.4",
+      "aurelia-binding": "^1.0.0-beta.2.0.6",
       "aurelia-dependency-injection": "^1.0.0-beta.2.1.0",
       "aurelia-metadata": "^1.0.0-beta.2.0.0",
       "aurelia-task-queue": "^1.0.0-beta.2.0.0",
@@ -50,7 +50,7 @@
     }
   },
   "dependencies": {
-    "aurelia-binding": "^1.0.0-beta.2.0.4",
+    "aurelia-binding": "^1.0.0-beta.2.0.6",
     "aurelia-dependency-injection": "^1.0.0-beta.2.1.0",
     "aurelia-metadata": "^1.0.0-beta.2.0.0",
     "aurelia-task-queue": "^1.0.0-beta.2.0.0",
@@ -98,8 +98,8 @@
     "require-dir": "^0.3.0",
     "run-sequence": "^1.2.1",
     "through2": "^2.0.1",
-    "typedoc": "^0.4.2",
-    "typescript": "^1.9.0-dev.20160614-1.0",
+    "typedoc": "^0.4.3",
+    "typescript": "^1.9.0-dev.20160615-1.0",
     "vinyl": "^1.1.1",
     "vinyl-paths": "^2.1.0",
     "yargs": "^4.7.1"
