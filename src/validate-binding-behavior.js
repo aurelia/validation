@@ -14,6 +14,10 @@ export class ValidateBindingBehavior {
     if (target instanceof Element) {
       return target;
     }
+    if (target.element && target.element instanceof Element) {
+      return target.element;
+    }
+
     let controller;
     for (let id in view.controllers) {
       controller = view.controllers[id];

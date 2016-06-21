@@ -74,24 +74,14 @@ export let ValidationController = (_dec = inject(Validator), _dec(_class = class
   }
 
   _updateErrors(errors, newErrors, target) {
-    let i = 0;
-    while (i < errors.length) {
-      const error = errors[i];
-      const index = newErrors.findIndex(x => x.rule === error.rule);
-      if (index === -1) {
-        errors.splice(i, 1);
-        this._unrenderError(error, target);
-        continue;
-      }
-      newErrors.splice(index, 1);
-      i++;
+    let error;
+    while (error = errors.pop()) {
+      this._unrenderError(error, target);
     }
-    i = 0;
-    while (i < newErrors.length) {
-      const error = newErrors[i];
+    for (let i = 0, ii = newErrors.length; i < ii; i++) {
+      error = newErrors[i];
       errors.push(error);
       this._renderError(error, target);
-      i++;
     }
   }
 
