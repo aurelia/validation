@@ -9,6 +9,12 @@ export class ValidateBindingBehavior {
     this.taskQueue = taskQueue;
   }
 
+  /**
+  * Gets the DOM element associated with the data-binding. Most of the time it's
+  * the binding.target but sometimes binding.target is an aurelia custom element,
+  * which is a javascript "class" instance, so we need to use the controller to
+  * locate the actual DOM element.
+  */
   getTarget(binding, view) {
     const target = binding.target;
     if (target instanceof Element) {
