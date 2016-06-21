@@ -19,6 +19,10 @@ export var ValidateBindingBehavior = (_dec = inject(TaskQueue), _dec(_class = fu
     if (target instanceof Element) {
       return target;
     }
+    if (target.element && target.element instanceof Element) {
+      return target.element;
+    }
+
     var controller = void 0;
     for (var id in view.controllers) {
       controller = view.controllers[id];
