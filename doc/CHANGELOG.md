@@ -1,3 +1,13 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/aurelia/validation/compare/0.9.2...v0.10.0) (2016-06-22)
+
+
+### Bug Fixes
+
+* **validate-binding-behavior:** IE11 compat ([396e785](https://github.com/aurelia/validation/commit/396e785)), closes [#257](https://github.com/aurelia/validation/issues/257)
+
+
+
 ### 0.8.1 (2016-05-10)
 
 

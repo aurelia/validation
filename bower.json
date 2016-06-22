@@ -1,6 +1,6 @@
 {
   "name": "aurelia-validation",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "This is a validation interface for hooking in to Aurelia's binding and templating engines.",
   "keywords": [
     "aurelia",
