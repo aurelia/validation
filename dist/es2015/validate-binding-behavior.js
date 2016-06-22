@@ -22,7 +22,7 @@ export let ValidateBindingBehavior = (_dec = inject(TaskQueue), _dec(_class = cl
         break;
       }
     }
-    return controller.view.firstChild.parentElement;
+    return controller.view.firstChild.parentNode;
   }
 
   bind(binding, source, rules) {

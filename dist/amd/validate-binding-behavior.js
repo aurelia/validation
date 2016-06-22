@@ -29,7 +29,7 @@ define(['exports', 'aurelia-dependency-injection', 'aurelia-task-queue', './vali
           break;
         }
       }
-      return controller.view.firstChild.parentElement;
+      return controller.view.firstChild.parentNode;
     };
 
     ValidateBindingBehavior.prototype.bind = function bind(binding, source, rules) {

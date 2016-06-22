@@ -38,7 +38,7 @@ System.register(['aurelia-dependency-injection', 'aurelia-task-queue', './valida
               break;
             }
           }
-          return controller.view.firstChild.parentElement;
+          return controller.view.firstChild.parentNode;
         };
 
         ValidateBindingBehavior.prototype.bind = function bind(binding, source, rules) {

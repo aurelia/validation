@@ -26,7 +26,7 @@ export var ValidateBindingBehavior = (_dec = inject(TaskQueue), _dec(_class = fu
         break;
       }
     }
-    return controller.view.firstChild.parentElement;
+    return controller.view.firstChild.parentNode;
   };
 
   ValidateBindingBehavior.prototype.bind = function bind(binding, source, rules) {

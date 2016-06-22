@@ -221,24 +221,14 @@ export class ValidationController {
   * rules that are no longer broken.
   */
   _updateErrors(errors, newErrors, target) {
-    let i = 0;
-    while (i < errors.length) {
-      const error = errors[i];
-      const index = newErrors.findIndex(x => x.rule === error.rule);
-      if (index === -1) {
-        errors.splice(i, 1);
-        this._unrenderError(error, target);
-        continue;
-      }
-      newErrors.splice(index, 1);
-      i++;
+    let error;
+    while (error = errors.pop()) {
+      this._unrenderError(error, target);
     }
-    i = 0;
-    while (i < newErrors.length) {
-      const error = newErrors[i];
+    for (let i = 0, ii = newErrors.length; i < ii; i++) {
+      error = newErrors[i];
       errors.push(error);
       this._renderError(error, target);
-      i++;
     }
   }
 
@@ -268,6 +258,12 @@ export class ValidateBindingBehavior {
     this.taskQueue = taskQueue;
   }
 
+  /**
+  * Gets the DOM element associated with the data-binding. Most of the time it's
+  * the binding.target but sometimes binding.target is an aurelia custom element,
+  * which is a javascript "class" instance, so we need to use the controller to
+  * locate the actual DOM element.
+  */
   getTarget(binding, view) {
     const target = binding.target;
     if (target instanceof Element) {
@@ -280,7 +276,7 @@ export class ValidateBindingBehavior {
         break;
       }
     }
-    return controller.view.firstChild.parentElement;
+    return controller.view.firstChild.parentNode;
   }
 
   bind(binding, source, rules) {

@@ -36,7 +36,7 @@ var ValidateBindingBehavior = exports.ValidateBindingBehavior = (_dec = (0, _aur
         break;
       }
     }
-    return controller.view.firstChild.parentElement;
+    return controller.view.firstChild.parentNode;
   };
 
   ValidateBindingBehavior.prototype.bind = function bind(binding, source, rules) {

@@ -239,35 +239,14 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
   };
 
   ValidationController.prototype._updateErrors = function _updateErrors(errors, newErrors, target) {
-    var _this = this;
-
-    var i = 0;
-
-    var _loop = function _loop() {
-      var error = errors[i];
-      var index = newErrors.findIndex(function (x) {
-        return x.rule === error.rule;
-      });
-      if (index === -1) {
-        errors.splice(i, 1);
-        _this._unrenderError(error, target);
-        return 'continue';
-      }
-      newErrors.splice(index, 1);
-      i++;
-    };
-
-    while (i < errors.length) {
-      var _ret = _loop();
-
-      if (_ret === 'continue') continue;
+    var error = void 0;
+    while (error = errors.pop()) {
+      this._unrenderError(error, target);
     }
-    i = 0;
-    while (i < newErrors.length) {
-      var _error = newErrors[i];
-      errors.push(_error);
-      this._renderError(_error, target);
-      i++;
+    for (var i = 0, ii = newErrors.length; i < ii; i++) {
+      error = newErrors[i];
+      errors.push(error);
+      this._renderError(error, target);
     }
   };
 
@@ -318,11 +297,11 @@ var ValidateBindingBehavior = exports.ValidateBindingBehavior = (_dec2 = (0, _au
         break;
       }
     }
-    return controller.view.firstChild.parentElement;
+    return controller.view.firstChild.parentNode;
   };
 
   ValidateBindingBehavior.prototype.bind = function bind(binding, source, rules) {
-    var _this2 = this;
+    var _this = this;
 
     var target = this.getTarget(binding, source);
 
@@ -341,7 +320,7 @@ var ValidateBindingBehavior = exports.ValidateBindingBehavior = (_dec2 = (0, _au
       };
     } else if (controller.validateTrigger === validateTrigger.blur) {
       binding.validateBlurHandler = function () {
-        _this2.taskQueue.queueMicroTask(function () {
+        _this.taskQueue.queueMicroTask(function () {
           return controller._validateBinding(binding);
         });
       };

@@ -104,28 +104,16 @@ export declare class ValidationController {
     * Resets all renderers (clears all the validation errors).
     */
   reset(): any;
-  _renderError(error?: any, target?: any): any;
-  _unrenderError(error?: any, target?: any): any;
-  
-  /*
-    * Reconciles a binding's existing errors array with the new errors array.
-    * Renders errors related to newly broken rules.  Unrenders errors related to
-    * rules that are no longer broken.
-    */
-  _updateErrors(errors?: any, newErrors?: any, target?: any): any;
-  
-  /**
-    * Validates and renders errors for a particular binding.
-    */
-  _validateBinding(binding?: any): any;
-  
-  /**
-    * Resets and unrenders errors for a particular binding.
-    */
-  _resetBinding(binding?: any): any;
 }
 export declare class ValidateBindingBehavior {
   constructor(taskQueue?: any);
+  
+  /**
+    * Gets the DOM element associated with the data-binding. Most of the time it's
+    * the binding.target but sometimes binding.target is an aurelia custom element,
+    * which is a javascript "class" instance, so we need to use the controller to
+    * locate the actual DOM element.
+    */
   getTarget(binding?: any, view?: any): any;
   bind(binding?: any, source?: any, rules?: any): any;
   unbind(binding?: any, source?: any): any;
