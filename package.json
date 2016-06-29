@@ -103,5 +103,14 @@
     "vinyl": "^1.1.1",
     "vinyl-paths": "^2.1.0",
     "yargs": "^4.7.1"
+  },
+  "aurelia": {
+    "build": {
+      "resources": [
+        "aurelia-validation/validation-renderer-custom-attribute",
+        "aurelia-validation/validation-errors-custom-attribute",
+        "aurelia-validation/validate-binding-behavior"
+      ]
+    }
   }
 }
