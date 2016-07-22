@@ -1,3 +1,13 @@
+<a name="0.10.1"></a>
+## [0.10.1](https://github.com/aurelia/validation/compare/0.10.0...v0.10.1) (2016-07-22)
+
+
+### Bug Fixes
+
+* **validation:** Add proper resources to package.json for webpack ([#268](https://github.com/aurelia/validation/issues/268)) ([dca4031](https://github.com/aurelia/validation/commit/dca4031))
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/aurelia/validation/compare/0.9.2...v0.10.0) (2016-06-22)
 
