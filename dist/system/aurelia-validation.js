@@ -3,6 +3,12 @@
 System.register(['./validate-binding-behavior', './validate-trigger', './validation-controller', './validation-error', './validation-errors-custom-attribute', './validation-renderer-custom-attribute', './validation-renderer', './validator'], function (_export, _context) {
   "use strict";
 
+  function configure(config) {
+    config.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
+  }
+
+  _export('configure', configure);
+
   return {
     setters: [function (_validateBindingBehavior) {
       var _exportObj = {};
@@ -45,12 +51,6 @@ System.register(['./validate-binding-behavior', './validate-trigger', './validat
 
       _export(_exportObj8);
     }],
-    execute: function () {
-      function configure(config) {
-        config.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
-      }
-
-      _export('configure', configure);
-    }
+    execute: function () {}
   };
 });
