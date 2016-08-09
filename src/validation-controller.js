@@ -118,8 +118,10 @@ export class ValidationController {
   _validateBinding(binding) {
     const { target, rules, errors } = this.bindings.get(binding);
     const { object, property } = getPropertyInfo(binding.sourceExpression, binding.source);
-    const newErrors = this.validator.validateProperty(object, property, rules);
-    this._updateErrors(errors, newErrors, target);
+    if (object) {
+        const newErrors = this.validator.validateProperty(object, property, rules);
+        this._updateErrors(errors, newErrors, target);
+    }
     return errors;
   }
 
