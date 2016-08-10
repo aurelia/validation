@@ -8,13 +8,8 @@ import {
 
 function getObject(expression, objectExpression, source) {
   let value = objectExpression.evaluate(source);
-  if (value !== null && (typeof value === 'object' || typeof value === 'function')) {
+  if (value === null || value === undefined || typeof value === 'object' || typeof value === 'function') {
     return value;
-  }
-  if (value === null) {
-    value = 'null';
-  } else if (value === undefined) {
-    value = 'undefined';
   }
   throw new Error(`The '${objectExpression}' part of '${expression}' evaluates to ${value} instead of an object.`);
 }

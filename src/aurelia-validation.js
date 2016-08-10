@@ -6,6 +6,9 @@ export {ValidationErrorsCustomAttribute} from './validation-errors-custom-attrib
 export {ValidationRendererCustomAttribute} from './validation-renderer-custom-attribute';
 export {validationRenderer} from './validation-renderer';
 export {Validator} from './validator';
+export {ValidationRule} from './validation-rule';
+export {RulesContainer} from './rules-container';
+export {metadataKey} from './metadata-key';
 
 export function configure(config) {
   config.globalResources(
