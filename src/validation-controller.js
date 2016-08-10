@@ -1,11 +1,14 @@
 import {inject} from 'aurelia-dependency-injection';
+import {metadata} from 'aurelia-metadata';
 import {Validator} from './validator';
 import {validateTrigger} from './validate-trigger';
 import {getPropertyInfo} from './property-info';
+import {metadataKey} from './metadata-key';
 
 @inject(Validator)
 export class ValidationController {
   bindings = new Map();
+  bindingDependencies = new Map();
   renderers = [];
   validateTrigger = validateTrigger.blur;
 
@@ -48,6 +51,11 @@ export class ValidationController {
   registerBinding(binding, target, rules = null) {
     const errors = [];
     this.bindings.set(binding, { target, rules, errors });
+    const { object, property } = getPropertyInfo(binding.sourceExpression, binding.source);
+    if (!this.bindingDependencies.has(property)) {
+      this.bindingDependencies.set(property, []);
+    }
+    this.bindingDependencies.get(property).push(binding);
   }
 
   /**
@@ -115,12 +123,27 @@ export class ValidationController {
   /**
   * Validates and renders errors for a particular binding.
   */
-  _validateBinding(binding) {
+  _validateBinding(binding, parentRules?) {
     const { target, rules, errors } = this.bindings.get(binding);
     const { object, property } = getPropertyInfo(binding.sourceExpression, binding.source);
     if (object) {
-        const newErrors = this.validator.validateProperty(object, property, rules);
-        this._updateErrors(errors, newErrors, target);
+      let rulesContainer = rules || metadata.get(metadataKey, object);
+      if (parentRules && parentRules !== rulesContainer) {
+        // we're checking a dependent binding but the set of rules differs, skip
+        return errors;
+      }
+      const newErrors = this.validator.validateProperty(object, property, rules);
+      this._updateErrors(errors, newErrors, target);
+      if (rulesContainer && Array.isArray(rulesContainer.rules)) {
+        rulesContainer.rules.forEach(rule => {
+          if (Array.isArray(rule.dependsOn) && rule.dependsOn.indexOf(property) >= 0) {
+            let dependentBindings = this.bindingDependencies.get(rule.key);
+            if (dependentBindings) {
+              dependentBindings.forEach(dependentBinding => this._validateBinding(dependentBinding, rules));
+            }
+          }
+        });
+      }
     }
     return errors;
   }
