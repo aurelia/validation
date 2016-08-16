@@ -1,0 +1,30 @@
+{
+  "name": "aurelia-validation",
+  "version": "0.10.0",
+  "description": "Validation for Aurelia applications",
+  "keywords": [
+    "aurelia",
+    "plugin",
+    "validation"
+  ],
+  "homepage": "http://aurelia.io",
+  "bugs": {
+    "url": "https://github.com/aurelia/validation/issues"
+  },
+  "license": "MIT",
+  "author": "Jeremy Danyow <jdanyow@gmail.com> (https:/danyow.net/)",
+  "main": "dist/commonjs/aurelia-validation.js",
+  "typings": "dist/aurelia-validation.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aurelia/validation"
+  },
+  "dependencies": {
+    "aurelia-binding": "^1.0.1",
+    "aurelia-metadata": "^1.0.0",
+    "aurelia-templating": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "beta"
+  }
+}

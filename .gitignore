@@ -1,0 +1,8 @@
+node_modules
+dist
+jspm_packages
+bower_components
+.idea
+.DS_STORE
+*.swp
+npm-debug.log
