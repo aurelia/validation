@@ -1,4 +1,3 @@
-import {autoinject} from 'aurelia-dependency-injection';
 import {Expression, LookupFunctions} from 'aurelia-binding';
 import {ViewResources} from 'aurelia-templating';
 import {metadata} from 'aurelia-metadata';
@@ -8,8 +7,9 @@ import {Rule} from './rule';
 import {metadataKey} from './metadata-key';
 import {ValidationMessageProvider} from './validation-messages';
 
-@autoinject
-export class ValidatorImplementation extends Validator {
+export class StandardValidator extends Validator {
+  static inject = [ValidationMessageProvider, ViewResources];
+
   private messageProvider: ValidationMessageProvider;
   private lookupFunctions: LookupFunctions;
 
@@ -21,11 +21,16 @@ export class ValidatorImplementation extends Validator {
 
   private getMessage(rule: Rule<any, any>, object: any, value: any): string {
     const expression: Expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
+    let { name: propertyName, displayName } = rule.property;
+    if (displayName === null && propertyName !== null) {
+      displayName = this.messageProvider.computeDisplayName(propertyName);
+    }
     const overrideContext: any = {
-      $displayName: rule.property.displayName,
-      $propertyName: rule.property.name,
+      $displayName: displayName,
+      $propertyName: propertyName,
       $value: value,
-      $object: object
+      $object: object,
+      $config: rule.config
     };
     return expression.evaluate(
       { bindingContext: object, overrideContext },
@@ -70,7 +75,7 @@ export class ValidatorImplementation extends Validator {
       }
 
       // validate.
-      const value = object[rule.property.name];
+      const value = rule.property.name === null ? object : object[rule.property.name];
       const promiseOrBoolean = rule.condition(value, object);
       if (promiseOrBoolean instanceof Promise) {
         promises.push(promiseOrBoolean.then(isValid => {

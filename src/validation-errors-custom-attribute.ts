@@ -1,5 +1,5 @@
 import {bindingMode} from 'aurelia-binding';
-import {inject, Lazy} from 'aurelia-dependency-injection';
+import {Lazy} from 'aurelia-dependency-injection';
 import {customAttribute} from 'aurelia-templating';
 import {ValidationController} from './validation-controller';
 import {ValidationError} from './validation-error';
@@ -11,8 +11,9 @@ export interface RenderedError {
 }
 
 @customAttribute('validation-errors', bindingMode.twoWay)
-@inject(Element, Lazy.of(ValidationController))
 export class ValidationErrorsCustomAttribute implements ValidationRenderer {
+  static inject = [Element, Lazy.of(ValidationController)];
+
   value: RenderedError[];
   errors: RenderedError[] = [];
 
@@ -40,12 +41,14 @@ export class ValidationErrorsCustomAttribute implements ValidationRenderer {
           this.errors.push({ error: instruction.newError, targets });
         }
       } else if (instruction.type === 'remove') {
-        const index = this.errors.findIndex(x => x.error === instruction.oldError);
+        const instr = instruction; // TypeScript bug
+        const index = this.errors.findIndex(x => x.error === instr.oldError);
         if (index !== -1) {
           this.errors.splice(index, 1);
         }
       } else if (instruction.type === 'update') {
-        const index = this.errors.findIndex(x => x.error === instruction.oldError);
+        const instr = instruction; // TypeScript bug
+        const index = this.errors.findIndex(x => x.error === instr.oldError);
         const targets = this.interestingElements(instruction.newElements);          
         if (index !== -1) {
           this.errors.splice(index, 1);

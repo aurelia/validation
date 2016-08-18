@@ -13,8 +13,8 @@
   },
   "license": "MIT",
   "author": "Jeremy Danyow <jdanyow@gmail.com> (https:/danyow.net/)",
-  "main": "dist/commonjs/aurelia-validation.js",
-  "typings": "dist/aurelia-validation.d.ts",
+  "main": "dist/amd/aurelia-validation.js",
+  "typings": "dist/amd/aurelia-validation.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/aurelia/validation"

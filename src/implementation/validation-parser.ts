@@ -1,4 +1,3 @@
-import {autoinject} from 'aurelia-dependency-injection';
 import {
   Parser,
   Expression,
@@ -7,7 +6,7 @@ import {
   LiteralString,
   Binary,
   Conditional,
-  LiteralPrimative,
+  LiteralPrimitive,
   CallMember
 } from 'aurelia-binding';
 import {BindingLanguage} from 'aurelia-templating';
@@ -18,11 +17,12 @@ export interface PropertyAccessor<TObject, TValue> {
   (object: TObject): TValue;
 }
 
-@autoinject
 export class ValidationParser {
+  static inject = [Parser, BindingLanguage];
+
   private emptyStringExpression = new LiteralString('');
-  private nullExpression = new LiteralPrimative(null);
-  private undefinedExpression = new LiteralPrimative(undefined);
+  private nullExpression = new LiteralPrimitive(null);
+  private undefinedExpression = new LiteralPrimitive(undefined);
 
   constructor(private parser: Parser, private bindinqLanguage: BindingLanguage) {}
 
@@ -44,7 +44,7 @@ export class ValidationParser {
     if (parts === null) {
       return new LiteralString(message);
     }
-    let expression: Expression = new LiteralString(parts[0]);
+    let expression: Expression = new LiteralString(<string>parts[0]);
     for (let i = 1; i < parts.length; i += 2) {
       expression = new Binary(
         '+',

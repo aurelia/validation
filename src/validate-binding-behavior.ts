@@ -1,10 +1,14 @@
-import {inject, Optional} from 'aurelia-dependency-injection';
+import {Optional} from 'aurelia-dependency-injection';
 import {TaskQueue} from 'aurelia-task-queue';
 import {ValidationController} from './validation-controller';
 import {validateTrigger} from './validate-trigger';
 
-@inject(TaskQueue)
+/**
+ * Binding behavior. Indicates the bound property should be validated.
+ */
 export class ValidateBindingBehavior {
+  static inject = [TaskQueue];
+
   constructor(private taskQueue: TaskQueue) {}
 
   /**

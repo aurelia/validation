@@ -1,4 +1,3 @@
-import {autoinject} from 'aurelia-dependency-injection';
 import {Binding, Expression} from 'aurelia-binding';
 import {Validator} from './validator';
 import {validateTrigger} from './validate-trigger';
@@ -49,8 +48,9 @@ export interface ValidateInstruction extends ValidateInstructionBase {
 export interface ResetInstruction extends ValidateInstructionBase {
 }
 
-@autoinject
 export class ValidationController {
+  static inject = [Validator];
+
   // Registered bindings (via the validate binding behavior)
   private bindings = new Map<Binding, BindingInfo>();
 
@@ -70,7 +70,7 @@ export class ValidationController {
   private objects = new Map<any, any>();
 
   // The trigger that will invoke automatic validation of a property used in a binding.
-  public validateTrigger = validateTrigger.blur;
+  public validateTrigger = validateTrigger.change;
 
   // Promise that resolves when validation has completed.
   private finishValidating = Promise.resolve();
@@ -92,7 +92,9 @@ export class ValidationController {
    */
   removeObject(object: any): void {
     this.objects.delete(object);
-    // unrender errors....
+    this.processErrorDelta(
+      this.errors.filter(error => error.object === object),
+      []);
   }
 
   /**
@@ -119,8 +121,11 @@ export class ValidationController {
    */
   addRenderer(renderer: ValidationRenderer) {
     this.renderers.push(renderer);
-    // render all error+target combinations;
-    throw new Error('not implemented');
+    renderer.render(this.errors.map(error => (<RenderInstruction>{
+      type: 'add',
+      newError: error,
+      newElements: <Element[]>this.elements.get(error)
+    })));
   }
 
   /**
@@ -129,8 +134,11 @@ export class ValidationController {
    */
   removeRenderer(renderer: ValidationRenderer) {
     this.renderers.splice(this.renderers.indexOf(renderer), 1);
-    // unrender all error+target combinations;
-    throw new Error('not implemented');
+    renderer.render(this.errors.map(error => (<RenderInstruction>{
+      type: 'remove',
+      oldError: error,
+      oldElements: <Element[]>this.elements.get(error)
+    })));
   }
 
   /**
@@ -189,17 +197,17 @@ export class ValidationController {
       // validate all objects and bindings.
       execute = () => {
         const promises: Promise<ValidationError[]>[] = [];
-        for (let [object, rules] of this.objects) {
+        for (let [object, rules] of Array.from(this.objects)) {
           promises.push(this.validator.validateObject(object, rules));
         }
-        for (let [binding, rules] of this.bindings) {
+        for (let [binding, { rules }] of Array.from(this.bindings)) {
           const { object, propertyName } = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
           if (this.objects.has(object)) {
             continue;
           }
           promises.push(this.validator.validateProperty(object, propertyName, rules));        
         }
-        return Promise.all(promises).then(errorSets => errorSets.reduce((a, b) => a.concat(b)));
+        return Promise.all(promises).then(errorSets => errorSets.reduce((a, b) => a.concat(b), []));
       };
     }
 
@@ -215,6 +223,13 @@ export class ValidationController {
           this.validating = false;
         }
         return newErrors;   
+      })
+      .catch(error => {
+        // recover, to enable subsequent calls to validate()
+        this.validating = false;
+        this.finishValidating = Promise.resolve();
+
+        return Promise.reject(error);
       });
     
     this.finishValidating = result;
@@ -237,7 +252,7 @@ export class ValidationController {
    */
   private getAssociatedElements({ object, propertyName }: ValidationError): Element[] {
     const elements: Element[] = [];
-    for (let [binding, { target }] of this.bindings) {
+    for (let [binding, { target }] of Array.from(this.bindings)) {
       const { object: o, propertyName: p } = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
       if (o === object && p === propertyName) {
         elements.push(target);
@@ -266,7 +281,7 @@ export class ValidationController {
       } else {
         const oldElements = this.elements.get(oldError);
         this.elements.delete(oldError);
-        instructions.push({ type: 'update', newError, newElements, oldError, oldElements });
+        instructions.push(<RenderInstruction>{ type: 'update', newError, newElements, oldError, oldElements }); // casting due to TypeScript bug
         this.errors.splice(this.errors.indexOf(oldError), 1, newError);
         oldErrors.splice(oldIndex, 1);
       }
@@ -276,7 +291,7 @@ export class ValidationController {
     for (let oldError of oldErrors) {
       const oldElements = this.elements.get(oldError);
       this.elements.delete(oldError);
-      instructions.push({ type: 'remove', oldError, oldElements });
+      instructions.push(<RenderInstruction>{ type: 'remove', oldError, oldElements }); // casting due to TypeScript bug
       this.errors.splice(this.errors.indexOf(oldError), 1);
     }
 

@@ -1,32 +1,31 @@
 import {metadata} from 'aurelia-metadata';
-import {Rule, Subject, Condition, WhenFunction} from './rule';
-import {ValidationParser} from './validation-parser';
+import {Rule, RuleProperty} from './rule';
+import {ValidationParser, PropertyAccessor} from './validation-parser';
 import {isString} from './util';
-import {rebaseExpression} from './expression-rebaser';
 import {metadataKey} from './metadata-key';
 
 export const $all = 0;
 
-export class Builder3<TModel, TValue> {
-  private rule: Rule;
+export class FluentRuleCustomizer<TObject, TValue> {
+  private rule: Rule<TObject, TValue>;
 
   constructor(
-    subject: Subject,
-    condition: Condition<TModel, TValue>,
+    property: RuleProperty,
+    condition: (value: TValue, object?: TObject) => boolean|Promise<boolean>,
     config: Object = {},
-    private builder1: Builder1<TModel>,
-    private builder2: Builder2<TModel, TValue>,
+    private fluentEnsure: FluentEnsure<TObject>,
+    private fluentRules: FluentRules<TObject, TValue>,
     private parser: ValidationParser
   ) {
     this.rule = {
-      subject,
+      property,
       condition,
       config,
       when: null,
       messageKey: 'default',
       message: null
     };
-    this.builder1.rules.push(this.rule);
+    this.fluentEnsure.rules.push(this.rule);
   }
 
   withMessageKey(key: string) {
@@ -41,90 +40,86 @@ export class Builder3<TModel, TValue> {
     return this;
   }
 
-  when(condition: WhenFunction<TModel>) {
+  when(condition: (object: TObject) => boolean) {
     this.rule.when = condition;
     return this;
   }
 
   /** Builder1 APIs **/
 
-  ensure<TValue2>(subject: string|{ (model: TModel): TValue2; }) {
-    return this.builder1.ensure<TValue2>(subject);
+  ensure<TValue2>(subject: string|{ (model: TObject): TValue2; }) {
+    return this.fluentEnsure.ensure<TValue2>(subject);
   }
 
-  ensureModel() {
-    return this.builder1.ensureModel();
-  }
-
-  compose<TModel2>(accessor: { (model: TModel): TModel2; }, rules: Rule[]) {
-    return this.builder1.compose(accessor, rules);
+  ensureObject() {
+    return this.fluentEnsure.ensureObject();
   }
 
   get rules() {
-    return this.builder1.rules;
+    return this.fluentEnsure.rules;
   }  
 
   on(target: any) {
-    return this.builder1.on(target);
+    return this.fluentEnsure.on(target);
   }
 
   /** Builder2 APIs **/
 
-  satisfies(condition: Condition<TModel, TValue>, config?: Object) {
-    return this.builder2.satisfies(condition, config);
+  satisfies(condition: (value: TValue, object?: TObject) => boolean|Promise<boolean>, config?: Object) {
+    return this.fluentRules.satisfies(condition, config);
   }
 
   required() {
-    return this.builder2.required();
+    return this.fluentRules.required();
   }
 
   matches(regex: RegExp) {
-    return this.builder2.matches(regex);
+    return this.fluentRules.matches(regex);
   }
 
   email() {
-    return this.builder2.email();
+    return this.fluentRules.email();
   }
 
   minLength(length: number) {
-    return this.builder2.minLength(length);
+    return this.fluentRules.minLength(length);
   }
 
   maxLength(length: number) {
-    return this.builder2.maxLength(length);
+    return this.fluentRules.maxLength(length);
   }
 
   minItems(count: number) {
-    return this.builder2.minItems(count);
+    return this.fluentRules.minItems(count);
   }
 
   maxItems(count: number) {
-    return this.builder2.maxItems(count);
+    return this.fluentRules.maxItems(count);
   }
 }
 
-export class Builder2<TModel, TValue> {
+export class FluentRules<TObject, TValue> {
   constructor(
-    private builder1: Builder1<TModel>,
+    private fluentEnsure: FluentEnsure<TObject>,
     private parser: ValidationParser,
-    private subject: Subject
+    private property: RuleProperty
   ) {}
 
   displayName(name: string) {
-    this.subject.displayName = name;
+    this.property.displayName = name;
     return this;
   }
 
-  satisfies(condition: Condition<TModel, TValue>, config?: Object) {
-    return new Builder3<TModel, TValue>(this.subject, condition, config, this.builder1, this, this.parser);
+  satisfies(condition: (value: TValue, object?: TObject) => boolean|Promise<boolean>, config?: Object) {
+    return new FluentRuleCustomizer<TObject, TValue>(this.property, condition, config, this.fluentEnsure, this, this.parser);
   }
 
   required() {
     return this.satisfies(
-      value => !(
-        value === null
-        || value === undefined
-        || isString(value) && !/S/.test(<any>value))
+      value => 
+        value !== null
+        && value !== undefined
+        && !(isString(value) && !/\S/.test(<any>value))
     ).withMessageKey('required');
   }
 
@@ -159,39 +154,19 @@ export class Builder2<TModel, TValue> {
   }
 }
 
-export class Builder1<TModel> {
-  public rules: Rule[] = [];
+export class FluentEnsure<TObject> {
+  public rules: Rule<TObject, any>[] = [];
 
   constructor(private parser: ValidationParser) {}
 
-  ensure<TValue>(subject: string|{ (model: TModel): TValue; }) {
-    return new Builder2<TModel, TValue>(this, this.parser, this.parser.parseSubject(subject));
+  ensure<TValue>(property: string|PropertyAccessor<TObject, TValue>) {
+    this.assertInitialized();
+    return new FluentRules<TObject, TValue>(this, this.parser, this.parser.parseProperty(property));
   }
 
-  ensureModel() {
-    return this.ensure<TModel>('$this');
-  }
-
-  compose<TModel2>(accessor: { (model: TModel): TModel2; }, rules: Rule[]) {
-    const base = this.parser.parseSubject(accessor).value;
-    for (let original of rules) {
-      let rule: Rule = {
-        subject: {
-          model: base,
-          object: rebaseExpression(original.subject.object, base),
-          value: rebaseExpression(original.subject.value, base),
-          propertyName: original.subject.propertyName,
-          displayName: original.subject.displayName
-        },
-        condition: original.condition,
-        config: Object,
-        when: original.when,
-        messageKey: original.messageKey,
-        message: original.message === null ? null : rebaseExpression(original.message, base)
-      };
-      this.rules.push(rule);
-    }
-    return this;
+  ensureObject() {
+    this.assertInitialized();
+    return new FluentRules<TObject, TObject>(this, this.parser, { name: null, displayName: null })
   }
 
   on(target: any) {
@@ -200,6 +175,13 @@ export class Builder1<TModel> {
     }
     metadata.define(metadataKey, this.rules, target);
     return this;
+  }
+
+  private assertInitialized() {
+    if (this.parser) {
+      return;
+    }
+    throw new Error(`Did you forget to add ".plugin('aurelia-validation)" to your main.js?`);
   }
 }
 
@@ -210,11 +192,11 @@ export class ValidationRules {
     ValidationRules.parser = parser;
   }
 
-  static ensure<TModel, TValue>(subject: string|{ (model: TModel): TValue }) {
-    return new Builder1<TModel>(ValidationRules.parser).ensure(subject);
+  static ensure<TObject, TValue>(property: string|PropertyAccessor<TObject, TValue>) {
+    return new FluentEnsure<TObject>(ValidationRules.parser).ensure(property);
   }
 
-  static ensureModel<TModel>() {
-    return new Builder1<TModel>(ValidationRules.parser).ensureModel();
+  static ensureObject<TObject>() {
+    return new FluentEnsure<TObject>(ValidationRules.parser).ensureObject();
   }
 }

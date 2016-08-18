@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "amd",
     "moduleResolution": "node",
-    "target": "ES6",
-    "outDir": "dist/commonjs",
+    "target": "es5",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "outDir": "../validation-sample/node_modules/aurelia-validation/dist/amd",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -12,6 +16,6 @@
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
-    "noEmitHelpers": true
+    "noEmitHelpers": false
   }
 }

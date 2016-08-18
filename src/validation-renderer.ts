@@ -63,7 +63,6 @@ export interface RenderUpdateInstruction {
 
 export type RenderInstruction = RenderAddInstruction|RenderUpdateInstruction|RenderRemoveInstruction;
 
-
 /**
  * Renders validation errors.
  */

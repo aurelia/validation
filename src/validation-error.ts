@@ -12,6 +12,6 @@ export class ValidationError {
     public rule: any,
     public message: string, 
     public object: any, 
-    public propertyName?: string) {
+    public propertyName: string|null = null) {
   }
 }

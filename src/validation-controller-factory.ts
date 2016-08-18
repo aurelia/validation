@@ -1,8 +1,9 @@
-import {autoinject, Container} from 'aurelia-dependency-injection';
+import {Container} from 'aurelia-dependency-injection';
 import {ValidationController} from './validation-controller';
 
-@autoinject
 export class ValidationControllerFactory {
+  static inject = [Container];
+
   constructor(private container: Container) {}
 
   /**
