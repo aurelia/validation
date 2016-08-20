@@ -57,10 +57,14 @@ export class ValidationController {
   // Renderers that have been added to the controller instance.
   private renderers: ValidationRenderer[] = [];
 
-  // Errors that have been rendered.
+  /**
+   * Errors that have been rendered by the controller.
+   */
   public errors: ValidationError[] = [];
 
-  // Whether the controller is currently validating.
+  /**
+   *  Whether the controller is currently validating.
+   */
   public validating: boolean = false;
 
   // Elements related to errors that have been rendered.

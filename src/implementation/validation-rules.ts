@@ -4,8 +4,6 @@ import {ValidationParser, PropertyAccessor} from './validation-parser';
 import {isString} from './util';
 import {metadataKey} from './metadata-key';
 
-export const $all = 0;
-
 export class FluentRuleCustomizer<TObject, TValue> {
   private rule: Rule<TObject, TValue>;
 
@@ -45,7 +43,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
     return this;
   }
 
-  /** Builder1 APIs **/
+  /** FluentEnsure APIs **/
 
   ensure<TValue2>(subject: string|{ (model: TObject): TValue2; }) {
     return this.fluentEnsure.ensure<TValue2>(subject);
@@ -63,7 +61,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
     return this.fluentEnsure.on(target);
   }
 
-  /** Builder2 APIs **/
+  /** FluentRules APIs **/
 
   satisfies(condition: (value: TValue, object?: TObject) => boolean|Promise<boolean>, config?: Object) {
     return this.fluentRules.satisfies(condition, config);

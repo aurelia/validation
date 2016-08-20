@@ -26,5 +26,15 @@
   },
   "devDependencies": {
     "typescript": "beta"
-  }
+  },
+  "aurelia": {
+    "documentation": {
+      "articles": [
+        {
+          "title": "Validation: Basics",
+          "href": "doc/article/en-US/validation-basics.md"
+        }
+      ]
+    }
+  }   
 }
