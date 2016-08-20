@@ -75,6 +75,8 @@ todo: lead off with basic example.
 * "entity" validation
   * enables `ensureObject`
 
+* extending the fluent rules API
+
 * Integration with other libraries
   * breeze
 
