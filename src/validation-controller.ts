@@ -73,8 +73,10 @@ export class ValidationController {
   // Objects that have been added to the controller instance (entity-style validation).
   private objects = new Map<any, any>();
 
-  // The trigger that will invoke automatic validation of a property used in a binding.
-  public validateTrigger = validateTrigger.change;
+  /**
+   * The trigger that will invoke automatic validation of a property used in a binding.
+   */
+  public validateTrigger = validateTrigger.blur;
 
   // Promise that resolves when validation has completed.
   private finishValidating = Promise.resolve();
