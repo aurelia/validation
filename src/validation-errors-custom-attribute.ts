@@ -33,30 +33,19 @@ export class ValidationErrorsCustomAttribute implements ValidationRenderer {
     return elements.filter(e => this.boundaryElement.contains(e));
   }
 
-  render(instructions: RenderInstruction[]) {    
-    for (let instruction of instructions) {
-      if (instruction.type === 'add') {
-        const targets = this.interestingElements(instruction.newElements);
-        if (targets.length) {
-          this.errors.push({ error: instruction.newError, targets });
-        }
-      } else if (instruction.type === 'remove') {
-        const instr = instruction; // TypeScript bug
-        const index = this.errors.findIndex(x => x.error === instr.oldError);
-        if (index !== -1) {
-          this.errors.splice(index, 1);
-        }
-      } else if (instruction.type === 'update') {
-        const instr = instruction; // TypeScript bug
-        const index = this.errors.findIndex(x => x.error === instr.oldError);
-        const targets = this.interestingElements(instruction.newElements);          
-        if (index !== -1) {
-          this.errors.splice(index, 1);
-        }
-        if (targets.length) {
-          this.errors.push({ error: instruction.newError, targets })
-        }
+  render(instruction: RenderInstruction) {    
+    for (let { error } of instruction.unrender) {
+      const index = this.errors.findIndex(x => x.error === error);
+      if (index !== -1) {
+        this.errors.splice(index, 1);
       }
+    }
+
+    for (let { error, elements } of instruction.render) {
+      const targets = this.interestingElements(elements);
+      if (targets.length) {
+        this.errors.push({ error: error, targets });
+      }    
     }
 
     this.sort();

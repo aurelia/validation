@@ -127,11 +127,10 @@ export class ValidationController {
    */
   addRenderer(renderer: ValidationRenderer) {
     this.renderers.push(renderer);
-    renderer.render(this.errors.map(error => (<RenderInstruction>{
-      type: 'add',
-      newError: error,
-      newElements: <Element[]>this.elements.get(error)
-    })));
+    renderer.render({
+      render: this.errors.map(error => ({ error, elements: <Element[]>this.elements.get(error) })),
+      unrender: []
+    });
   }
 
   /**
@@ -140,11 +139,10 @@ export class ValidationController {
    */
   removeRenderer(renderer: ValidationRenderer) {
     this.renderers.splice(this.renderers.indexOf(renderer), 1);
-    renderer.render(this.errors.map(error => (<RenderInstruction>{
-      type: 'remove',
-      oldError: error,
-      oldElements: <Element[]>this.elements.get(error)
-    })));
+    renderer.render({
+      render: [],
+      unrender: this.errors.map(error => ({ error, elements: <Element[]>this.elements.get(error) }))
+    });
   }
 
   /**
@@ -268,42 +266,55 @@ export class ValidationController {
   }
 
   private processErrorDelta(oldErrors: ValidationError[], newErrors: ValidationError[]) {
-    const instructions: RenderInstruction[] = [];
+    const instruction: RenderInstruction = {
+      render: [],
+      unrender: []
+    };
 
-    // create the "add" and "update" instructions.
-    for (let newError of newErrors) {
-      const newElements = this.getAssociatedElements(newError);
+    // create unrender instructions from the old errors.
+    for (let oldError of oldErrors) {
+      // get the elements associated with the old error.
+      const elements = <Element[]>this.elements.get(oldError);
+      
+      // remove the old error from the element map.
+      this.elements.delete(oldError);
 
-      const oldIndex = oldErrors.findIndex(
-        ({ rule, object, propertyName }) => rule === newError.rule
-          && object === newError.object
-          && propertyName === newError.propertyName);
+      // create the unrender instruction.
+      instruction.unrender.push({ error: oldError, elements });
 
-      const oldError = oldErrors[oldIndex];
-      if (oldIndex === -1) {
-        instructions.push({ type: 'add', newError, newElements });
-        this.errors.push(newError);
-        this.elements.set(newError, newElements);
+      // determine if there's a corresponding new error for the old error we are unrendering.
+      const newErrorIndex = newErrors.findIndex(x => x.rule === oldError.rule && x.object === oldError.object && x.propertyName === oldError.propertyName);
+      if (newErrorIndex === -1) {
+        // no corresponding new error... simple remove.
+        this.errors.splice(this.errors.indexOf(oldError), 1);
       } else {
-        const oldElements = this.elements.get(oldError);
-        this.elements.delete(oldError);
-        instructions.push(<RenderInstruction>{ type: 'update', newError, newElements, oldError, oldElements }); // casting due to TypeScript bug
+        // there is a corresponding new error...        
+        const newError = newErrors.splice(newErrorIndex, 1)[0];
+        
+        // get the elements that are associated with the new error.
+        const elements = this.getAssociatedElements(newError);
+        this.elements.set(newError, elements);
+        
+        // create a render instruction for the new error.
+        instruction.render.push({ error: newError, elements });
+
+        // do an in-place replacement of the old error with the new error.
+        // this ensures any repeats bound to this.errors will not thrash.
         this.errors.splice(this.errors.indexOf(oldError), 1, newError);
-        oldErrors.splice(oldIndex, 1);
       }
     }
 
-    // remaining are "delete" instructions.
-    for (let oldError of oldErrors) {
-      const oldElements = this.elements.get(oldError);
-      this.elements.delete(oldError);
-      instructions.push(<RenderInstruction>{ type: 'remove', oldError, oldElements }); // casting due to TypeScript bug
-      this.errors.splice(this.errors.indexOf(oldError), 1);
+    // create render instructions from the remaining new errors.
+    for (let error of newErrors) {
+      const elements = this.getAssociatedElements(error);
+      instruction.render.push({ error, elements });
+      this.elements.set(error, elements);
+      this.errors.push(error);
     }
 
-    // render the errors.
+    // render.
     for (let renderer of this.renderers) {
-      renderer.render(instructions);
+      renderer.render(instruction);
     }
   }
 

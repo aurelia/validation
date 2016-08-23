@@ -3,6 +3,7 @@ import {Rule, RuleProperty} from './rule';
 import {ValidationParser, PropertyAccessor} from './validation-parser';
 import {isString} from './util';
 import {metadataKey} from './metadata-key';
+import {validationMessages} from './validation-messages';
 
 export class FluentRuleCustomizer<TObject, TValue> {
   private rule: Rule<TObject, TValue>;
@@ -67,6 +68,15 @@ export class FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.satisfies(condition, config);
   }
 
+  /**
+   * Applies a custom rule.
+   * @param name The name of the custom rule.
+   * @param args The custom rule's arguments.
+   */
+  satisfiesRule(name: string, ...args: any[]) {
+    return this.fluentRules.satisfiesRule(name, ...args);
+  }
+
   required() {
     return this.fluentRules.required();
   }
@@ -97,6 +107,13 @@ export class FluentRuleCustomizer<TObject, TValue> {
 }
 
 export class FluentRules<TObject, TValue> {
+  static customRules: { 
+    [name: string]: {
+      condition: (value: any, object?: any, ...fluentArgs: any[]) => boolean|Promise<boolean>;
+      argsToConfig?: (...args: any[]) => any;
+    }
+  } = {};
+
   constructor(
     private fluentEnsure: FluentEnsure<TObject>,
     private parser: ValidationParser,
@@ -110,6 +127,21 @@ export class FluentRules<TObject, TValue> {
 
   satisfies(condition: (value: TValue, object?: TObject) => boolean|Promise<boolean>, config?: Object) {
     return new FluentRuleCustomizer<TObject, TValue>(this.property, condition, config, this.fluentEnsure, this, this.parser);
+  }
+
+  /**
+   * Applies a custom rule.
+   * @param name The name of the custom rule.
+   * @param args The custom rule's arguments.
+   */
+  satisfiesRule(name: string, ...args: any[]) {
+    const rule = FluentRules.customRules[name];
+    if (!rule) {
+      throw new Error(`Custom rule with name "${name}" does not exist.`);
+    }
+    const config = rule.argsToConfig ? rule.argsToConfig(...args) : undefined;
+    return this.satisfies((value, obj) => rule.condition.call(this, value, obj, ...args), config)
+      .withMessageKey(name);
   }
 
   required() {
@@ -197,4 +229,21 @@ export class ValidationRules {
   static ensureObject<TObject>() {
     return new FluentEnsure<TObject>(ValidationRules.parser).ensureObject();
   }
+
+  /**
+   * Defines a custom rule.
+   * @param name The name of the custom rule. Also serves as the message key.
+   * @param condition The rule function.
+   * @param message The message expression
+   * @param argsToConfig A function that maps the rule's arguments to a "config" object that can be used when evaluating the message expression.
+   */
+  static customRule(
+    name: string,
+    condition: (value: any, object?: any, ...args: any[]) => boolean|Promise<boolean>,
+    message: string,
+    argsToConfig?: (...args: any[]) => any
+  ) {
+    validationMessages[name] = message;
+    FluentRules.customRules[name] = { condition, argsToConfig };
+  }  
 }

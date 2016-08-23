@@ -18,7 +18,7 @@
 
 This article covers the basics of validation with Aurelia's validation plugin. You'll learn how to add validation to your applications with minimal framework intrusion.
 
-To add aurelia-validation to your project you must install it: `jspm install aurelia-validation` or `npm install aurelia-validation --save`. Afterwards, add `.plugin('aurelia-validation')` to the configuration in your `main.js` to ensure the plugin and it's resources are loaded when your application starts.
+To get started you'll need to install `aurelia-validation` using `jspm install aurelia-validation` or `npm install aurelia-validation --save`. Afterwards, add `.plugin('aurelia-validation')` to the configuration in your `main.js` to ensure the plugin is loaded at application startup.
 
 ## [Defining Rules](aurelia-doc://section/2/version/1.0.0)
 
@@ -380,11 +380,76 @@ This first form-group div uses the `validation-errors` custom attribute to creat
 
 The `validation-errors` custom attribute is implements the `ValidationRenderer` interface. Instead of doing direct DOM manipulation to display the errors it "renders" the errors to an array property to enable the data-binding and templating scenarios illustrated above. It also automatically adds itself to the controller using `addRender` when it's "bind" lifecycle event occurs and removes itself from the controller using the `removeRenderer` method when it's "unbind" composition lifecycle event occurs.
 
-## [Custom Renderers](aurelia-doc://section/11/version/1.0.0)
+## [Custom Renderers](aurelia-doc://section/12/version/1.0.0)
 
+The templating approaches described in the previous section may require more markup than you wish to include in your templates. If you would prefer use direct DOM manipulation to render validation errors you can implement a custom renderer.
 
+Custom renderers implement a one-method interface: `render(instruction: RenderInstruction)`. The `RenderInstruction` is an object with two properties: the errors to render and the errors to unrender. Below is an example implementation for bootstrap forms:
 
-## [Entity Validation](aurelia-doc://section/12/version/1.0.0)
+<code-listing heading="bootstrap-form-renderer.ts">
+  <source-code lang="TypeScript">
+    import {
+      ValidationRenderer,
+      RenderInstruction,
+      ValidationError
+    } from 'aurelia-validation';
+
+    export class BootstrapFormRenderer {
+      render(instruction: RenderInstruction) {
+        for (let { error, elements } of instruction.unrender) {
+          for (let element of elements) {
+            this.remove(element, error);
+          }
+        }
+
+        for (let { error, elements } of instruction.render) {
+          for (let element of elements) {
+            this.add(element, error);
+          }
+        }
+      }
+
+      private add(element: Element, error: ValidationError) {
+        const formGroup = element.closest('.form-group');
+        if (!formGroup) {
+          return;
+        }
+        
+        // add the has-error class to the enclosing form-group div
+        formGroup.classList.add('has-error');
+
+        // add help-block
+        const message = document.createElement('span');
+        message.className = 'help-block validation-message';
+        message.textContent = error.message;
+        message.id = `validation-message-${error.id}`;
+        formGroup.appendChild(message);
+      }
+
+      private remove(element: Element, error: ValidationError) {
+        const formGroup = element.closest('.form-group');
+        if (!formGroup) {
+          return;
+        }
+
+        // remove help-block
+        const message = formGroup.querySelector(`#validation-message-${error.id}`);
+        if (message) {
+          formGroup.removeChild(message);
+          
+          // remove the has-error class from the enclosing form-group div
+          if (formGroup.querySelectorAll('.help-block.validation-message').length === 0) {    
+            formGroup.classList.remove('has-error');
+          }
+        }
+      }
+    }
+  </source-code>
+</code-listing>
+
+To use a custom renderer you'll need to instantiate it and pass it to your controller via the `addRenderer` method. Any of the controller's existing errors will be renderered immediately. You can remove a renderer using the `removeRenderer` method. Removing a renderer will unrender any errors that renderer had previously rendered.
+
+## [Entity Validation](aurelia-doc://section/13/version/1.0.0)
 
 The examples so far show the controller validating specific properties used in `& validate` bindings. The controller can validate whole entities even if some of the properties aren't used in data bindings. Opt in to this "entity" style validation using the controller's `addObject(object, rules?)` method. Calling `addObject` will add the specified object to the set of objects the controller should validate when it's `validate` method is called. The `rules` parameter is optional. Use it when the rules for the object haven't been specified using the fluent syntax's `.on` method. You can remove objects from the controller's list of objects to validate using `removeObject(object)`. Calling `removeObject` will unrender any errors associated with the object.
 
@@ -399,27 +464,49 @@ You may have rules that are not associated with a single property. The fluent ru
   </source-code>
 </code-listing>
 
-## [Extending the Fluent API](aurelia-doc://section/12/version/1.0.0)
+## [Custom Rules](aurelia-doc://section/14/version/1.0.0)
 
-The fluent API can be extended using the `add(ruleName: string, condition: (value, object?) => boolean|Promise<boolean>, message: string)` method. Here's how you could add a simple date validation rule. Remember to leave the `required` checks to the built-in `required` validator.
+The fluent API's `satisfies` method enables quick custom rules. If you have a custom rule that you need to use multiple times you can define it using the `customRule` method. Once defined, you can apply the rule using `satisfiesRule`.  Here's how you could define and use a simple date validation rule:
 
 <code-listing heading="addRule">
   <source-code lang="ES 2015">
-    ValidationRules.add(
+    ValidationRules.customRule(
       'date',
-      value => value === null || value === undefined || value instanceof Date,
+      (value, obj) => value === null || value === undefined || value instanceof Date,
       `\${$displayName} must be a Date.` 
     );
+
+    ValidationRules
+      .ensure('startDate')
+        .required()
+        .satisfiesRule('date');
   </source-code>
 </code-listing>
 
-If you're using TypeScript you'll need to extend the IFluentRules interface to enable intellisense for your custom rule.
+You will often need to pass arguments to your custom rule. Below is an example of an "integer range" rule that accepts "min" and "max" arguments. Notice the last parameter to the `customRule` method packages up the expected parameters into a "config" object. The config object is used when computing the validation message when an error occurs, enabling the message expression to access the rule's configuration.
 
-*todo: example... https://www.typescriptlang.org/docs/handbook/declaration-merging.html*
+<code-listing heading="addRule">
+  <source-code lang="ES 2015">
+    ValidationRules.customRule(
+      'integerRange',
+      (value, obj, min, max) => value === null || value === undefined 
+        || Number.isInteger(value) && value >= config.min && value <= config.max,
+      `\${$displayName} must be an integer between \${$config.min} and \${config.max}.`,
+      (min, max) => ({ min, max }) 
+    );
 
-## [Integration With Other Libraries](aurelia-doc://section/12/version/1.0.0)
+    ValidationRules
+      .ensure('volume')
+        .required()
+        .satisfiesRule('integerRange', 1, 5000);
+  </source-code>
+</code-listing>
 
-In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` understands the rules created by the fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has it's own validation logic. You can disable the `StandardValidator` registration by passing some configuration to the `.plugin` call that installs the `aurelia-validation` plugin. Change `.plugin('aurelia-validation')` to `.plugin('aurelia-validation', { customValidator: true })`. Then create a class that implements the `Validator` interface and register it in the container. Here's an example using breeze.
+You may have noticed the custom rule examples above consider `null` and `undefined` to be valid. This is intentional- typically you should not mix "required" checks into your custom rule's logic. Doing so would prevent using your custom rule with non-required fields.
+
+## [Integration With Other Libraries](aurelia-doc://section/15/version/1.0.0)
+
+In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has it's own validation logic. You can disable the `StandardValidator` registration by passing configuration to the `.plugin` call that installs the `aurelia-validation`. Change `.plugin('aurelia-validation')` to `.plugin('aurelia-validation', { customValidator: true })`. Then create a class that implements the `Validator` interface and register it in the container. Here's an example using breeze.
 
  <code-listing heading="breeze-validator">
   <source-code lang="ES 2015">
@@ -451,17 +538,20 @@ In `aurelia-validation` the object and property validation work is handled by th
     import {Validator} from 'aurelia-validation';
     import {BreezeValidator} from './breeze-validator';
 
-    export function configure(config) {
-      ...
+    export function configure(aurelia) {
+      aurelia.use
+        .standardConfiguration()
+        .plugin('aurelia-validation', { customValidator: true })
+        ...
 
-      config.container.registerInstance(Validator, new BreezeValidator());      
+      aurelia.container.registerInstance(Validator, new BreezeValidator());      
       ...
     }
   </source-code>
 </code-listing>
 
 
-## [Server-Side Validation](aurelia-doc://section/12/version/1.0.0)
+## [Server-Side Validation](aurelia-doc://section/16/version/1.0.0)
 
 The fluent rule API and Validator API can be used server-side in a NodeJS application.
 
