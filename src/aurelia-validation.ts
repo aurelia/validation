@@ -25,18 +25,23 @@ import {StandardValidator} from './implementation/standard-validator';
 import {ValidationParser} from './implementation/validation-parser';
 import {ValidationRules} from './implementation/validation-rules';
 
-export function configure(config: { container: Container, globalResources: (...resources: string[]) => any }) {
+export function configure(
+  frameworkConfig: { container: Container, globalResources: (...resources: string[]) => any },
+  config: { customValidator?: boolean }
+) {
   // the fluent rule definition API needs the parser to translate messages
   // to interpolation expressions. 
-  const parser = config.container.get(ValidationParser);
+  const parser = frameworkConfig.container.get(ValidationParser);
   ValidationRules.initialize(parser);
 
-  // register the standard implementation of the Validator abstract class.
-  const validator = config.container.get(StandardValidator);
-  config.container.registerInstance(Validator, validator);
+  if (!config.customValidator) {
+    // register the standard implementation of the Validator abstract class.
+    const validator = frameworkConfig.container.get(StandardValidator);
+    frameworkConfig.container.registerInstance(Validator, validator);
+  }
 
   // globalize the behaviors.
-  config.globalResources(
+  frameworkConfig.globalResources(
     './validate-binding-behavior',
     './validation-errors-custom-attribute',
     './validation-renderer-custom-attribute');
