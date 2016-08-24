@@ -16,7 +16,7 @@
 
 ## [Introduction](aurelia-doc://section/1/version/1.0.0)
 
-This article covers the basics of validation with Aurelia's validation plugin. You'll learn how to add validation to your applications with minimal framework intrusion.
+This article covers the basics of validation with Aurelia's validation plugin. You'll learn how to add validation to your applications using a fluent rule API and minimal changes to your templates.
 
 To get started you'll need to install `aurelia-validation` using `jspm install aurelia-validation` or `npm install aurelia-validation --save`. Afterwards, add `.plugin('aurelia-validation')` to the configuration in your `main.js` to ensure the plugin is loaded at application startup.
 
@@ -27,6 +27,8 @@ Aurelia Validation's standard rule engine uses a fluent syntax to define a set o
 2. Associating rules with the property using `.required`, `.matches`, etc
 3. Customizing property rules using `.withMessage`, `.when`, etc
 4. Applying the ruleset to a class or instance using `.on`
+
+### ensure
 
 To begin defining a ruleset, use the `ValidationRules` class. Start by targetting a property using `ValidationRules.ensure(...)`. The `ensure` method accepts one argument representing the property name. The argument can be a string or a simple property access expression. If you're using TypeScript you'll probably want to use a property access expression because you'll get the benefit of intellisense, refactoring and avoid using "magic strings" that can be a maintenance issue.
 
@@ -47,6 +49,8 @@ To begin defining a ruleset, use the `ValidationRules` class. Start by targettin
   </source-code>
 </code-listing>
 
+### displayName
+
 Once you've targetted a property using `ensure` you can define the property's display name using `.displayName(name: string)`. Display names are used in validation messages. Specifying a display name is optional. If you do not explicitly set the display name the validation engine will attempt to compute the display name for you by splitting the property name on upper-case letters. A `firstName` property's display name would be `First Name`.
 
 <code-listing heading="displayName">
@@ -55,6 +59,8 @@ Once you've targetted a property using `ensure` you can define the property's di
       .ensure('ssn').displayName('SSN')...
   </source-code>
 </code-listing>
+
+### Applying Rules
 
 After targetting a property with `ensure` and optionally setting it's display name you can begin associating rules with the property using the built-in rule methods:
 
@@ -66,6 +72,8 @@ After targetting a property with `ensure` and optionally setting it's display na
 * `satisfies((value: any, object?: any) => boolean|Promise<boolean>)` validates the supplied function returns `true` or a `Promise` that resolves to `true`. The function will be invoked with two arguments:
   * the property's current value.
   * the object the property belongs to.
+
+### withMessage
 
 All rules have a standard message that can be overriden on a case-by-case basis using `.withMessage(message)`. The `message` argument is a string that will be interpretted as an interpolation binding expression and evaluated against the validated object when a validation error occurs. The interpolation binding expression can access any of the object's properties as well as the contextual properties listed below:
 
@@ -86,6 +94,8 @@ Here's an example:
   </source-code>
 </code-listing>
 
+### withMessageKey
+
 Another way to override messages on a case-by-case basis is to use the `.withMessageKey(key)` fluent API. Key is a string representing a key in the `validationMessages` dictionary. You can add new keys to the dictionary using the following code:
 
 <code-listing heading="withMessageKey">
@@ -100,6 +110,8 @@ Another way to override messages on a case-by-case basis is to use the `.withMes
   </source-code>
 </code-listing>
 
+### Conditional Validation
+
 You may run into situations where you only want a rule to be evaluated when certain conditions are met. Use the `.when(condition: (object) => boolean)` fluent API to define a condition that must be met before the rule is evaluated. `when` accepts one argument, a function that takes the object and returns a boolean that indicates whether the rule should (`true`) or should not (`false`) be evaluated.
 
 <code-listing heading="Conditional Validation">
@@ -112,6 +124,8 @@ You may run into situations where you only want a rule to be evaluated when cert
           .withMessage('Email is required when shipment notifications have been requested.');
   </source-code>
 </code-listing>
+
+### on
 
 Once your ruleset has been defined you can apply them to a class using the `.on` method. This will ensure the validation engine can locate the rules when evaluating a particular object.
 
@@ -197,7 +211,7 @@ You can also override the `ValidationMessageProvider`'s `computeDisplayName(prop
 
 The `ValidationController` orchestrates the UI process of validating properties in response to various triggers and surfacing validation errors via renderers. Typically you'll have one validation controller instance per "form" view model. Depending on the use-case you may have multiple.
 
-### [Creating a Controller](aurelia-doc://section/5/version/1.0.0)
+### Creating a Controller
 
 Validation controllers can be created using the `NewInstance` resolver:
 
@@ -238,7 +252,7 @@ Both techniques create a new instance of a `ValidationController` and register t
 
 If you'd like to be completely explicit when wiring up controllers with view models and bindings, or if you need to use multiple controllers in your component, you can use the `Factory` resolver or the `ValidationControllerFactory`'s `create` method to create controller instances. Using these approaches will not automatically register the controller instance in the container which will prevent the automatic wire-up of controllers with bindings and renderers and will force you to specify the controller instance in your bindings and add renderers to the controller manually.
 
-### [Setting the Validate Trigger](aurelia-doc://section/6/version/1.0.0)
+### Setting the Validate Trigger
 
 Once you've created a controller you can set it's `validationTrigger` to either `blur`, `change` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus). 
 
@@ -263,7 +277,7 @@ Use the `manual` trigger to indicate the controller should not automatically val
   </source-code>
 </code-listing>
 
-### [validate & reset](aurelia-doc://section/7/version/1.0.0)
+### validate & reset
 
 You can force the validation controller to run validation by invoking the `validate()` method. Validate will run the validation, render any resulting validation errors and return a `Promise` that resolves with an array of validation errors. *The promise will only reject when there is an unexpected application error. Be sure to catch these rejections like you would any other unexpected application error.*
 
@@ -287,15 +301,15 @@ The opposite method to `validate` is `reset`. Calling reset with no arguments wi
   </source-code>
 </code-listing>
 
-### [addError & removeError](aurelia-doc://section/8/version/1.0.0)
+### addError & removeError
 
 You may need to surface validation errors from other sources. Perhaps while attempting to save a change the server returned a business rule error. You can display the server error using the controller's `addError(message: string, object: any, propertyName?: string): ValidationError` method. The method returns the resulting `ValidationError` instance which can be used to unrender the error using `removeError(validationError: ValidationError)`.
 
-### [addRenderer & removeRenderer](aurelia-doc://section/9/version/1.0.0)
+### addRenderer & removeRenderer
 
 The validation controller renders errors by sending them to classes that implement the `ValidationRenderer` interface. The library ships with a built-in renderer that "renders" the errors to an array property for data-binding/templating purposes. This is covered in the [displaying errors](aurelia-doc://section/11/version/1.0.0) section below. You can create you're own [custom renderer](aurelia-doc://section/12/version/1.0.0) and add it to the controller's set of renderers using the `addRenderer(renderer)` method.
 
-## [Validate Binding Behavior](aurelia-doc://section/10/version/1.0.0)
+## [Validate Binding Behavior](aurelia-doc://section/5/version/1.0.0)
 
 The `validate` binding behavior enables quick and easy validation for two-way data-bindings. The behavior registers the binding instance with a controller, enabling the system to validate the binding's associated property when the validate trigger occurs (blur / change). The binding behavior is able to identify the object and property name to validate in all sorts of binding expressions:
 
@@ -323,7 +337,7 @@ The `validate` binding behavior enables quick and easy validation for two-way da
   </source-code>
 </code-listing>
 
-## [Displaying Errors](aurelia-doc://section/11/version/1.0.0)
+## [Displaying Errors](aurelia-doc://section/6/version/1.0.0)
 
 The controller exposes two properties that are useful for creating error UIs using standard Aurelia templating techniques:
 
@@ -380,7 +394,7 @@ This first form-group div uses the `validation-errors` custom attribute to creat
 
 The `validation-errors` custom attribute is implements the `ValidationRenderer` interface. Instead of doing direct DOM manipulation to display the errors it "renders" the errors to an array property to enable the data-binding and templating scenarios illustrated above. It also automatically adds itself to the controller using `addRender` when it's "bind" lifecycle event occurs and removes itself from the controller using the `removeRenderer` method when it's "unbind" composition lifecycle event occurs.
 
-## [Custom Renderers](aurelia-doc://section/12/version/1.0.0)
+## [Custom Renderers](aurelia-doc://section/7/version/1.0.0)
 
 The templating approaches described in the previous section may require more markup than you wish to include in your templates. If you would prefer use direct DOM manipulation to render validation errors you can implement a custom renderer.
 
@@ -449,7 +463,7 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
 
 To use a custom renderer you'll need to instantiate it and pass it to your controller via the `addRenderer` method. Any of the controller's existing errors will be renderered immediately. You can remove a renderer using the `removeRenderer` method. Removing a renderer will unrender any errors that renderer had previously rendered.
 
-## [Entity Validation](aurelia-doc://section/13/version/1.0.0)
+## [Entity Validation](aurelia-doc://section/8/version/1.0.0)
 
 The examples so far show the controller validating specific properties used in `& validate` bindings. The controller can validate whole entities even if some of the properties aren't used in data bindings. Opt in to this "entity" style validation using the controller's `addObject(object, rules?)` method. Calling `addObject` will add the specified object to the set of objects the controller should validate when it's `validate` method is called. The `rules` parameter is optional. Use it when the rules for the object haven't been specified using the fluent syntax's `.on` method. You can remove objects from the controller's list of objects to validate using `removeObject(object)`. Calling `removeObject` will unrender any errors associated with the object.
 
@@ -464,7 +478,7 @@ You may have rules that are not associated with a single property. The fluent ru
   </source-code>
 </code-listing>
 
-## [Custom Rules](aurelia-doc://section/14/version/1.0.0)
+## [Custom Rules](aurelia-doc://section/9/version/1.0.0)
 
 The fluent API's `satisfies` method enables quick custom rules. If you have a custom rule that you need to use multiple times you can define it using the `customRule` method. Once defined, you can apply the rule using `satisfiesRule`.  Here's how you could define and use a simple date validation rule:
 
@@ -504,7 +518,7 @@ You will often need to pass arguments to your custom rule. Below is an example o
 
 You may have noticed the custom rule examples above consider `null` and `undefined` to be valid. This is intentional- typically you should not mix "required" checks into your custom rule's logic. Doing so would prevent using your custom rule with non-required fields.
 
-## [Integration With Other Libraries](aurelia-doc://section/15/version/1.0.0)
+## [Integration With Other Libraries](aurelia-doc://section/10/version/1.0.0)
 
 In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has it's own validation logic. You can disable the `StandardValidator` registration by passing configuration to the `.plugin` call that installs the `aurelia-validation`. Change `.plugin('aurelia-validation')` to `.plugin('aurelia-validation', { customValidator: true })`. Then create a class that implements the `Validator` interface and register it in the container. Here's an example using breeze.
 
@@ -551,75 +565,8 @@ In `aurelia-validation` the object and property validation work is handled by th
 </code-listing>
 
 
-## [Server-Side Validation](aurelia-doc://section/16/version/1.0.0)
+## [Server-Side Validation](aurelia-doc://section/11/version/1.0.0)
 
 The fluent rule API and Validator API can be used server-side in a NodeJS application.
 
 *todo: example*
-
----
-
-# Doc Outline
-
-* Definining rules
-  * Fluent syntax  
-  * target a property use `ensure`
-    * string property name
-    * lambda property name
-    * optionally set the property's display name using `displayName`. If you don't explicitly set the display name aurelia-validation will attempt to guess the name...
-  * add rules
-    * required
-    * matches
-    * email
-    * minLength / maxLength
-    * minItems / maxItems
-    * satisfies
-      * boolean or Promise<boolean>
-  * Customize a specific rule's message using `withMessage` `withMessageKey`.
-  * Conditionally validate a rule using `when`
-  * apply rules using `.on()`
-  * return rules using `.rules`
-
-* Customizing messages
-  * Overriding default messages
-  * Adding custom message keys
-  * ValidationMessageProvider 
-    * `getMessage`
-    * `computeDisplayName`
-
-* validation controller
-  * creating using NewInstance.of / ValidationControllerFactory
-  * validation trigger
-    * blur (default)
-    * change
-    * manual
-  * validate
-  * reset
-  * addError / removeError
-  * errors
-  * validating
-
-* validate binding behavior
-  * basic
-  * explicit rules
-  * explicit rules and controller
-
-* validation-errors custom attribute
-
-* validation-renderer custom attribute
-
-* writing a custom renderer
-  bootstrap
-  * why? performance, simpler markup, reuse
-
-* "entity" validation
-  * enables `ensureObject`
-
-* extending the fluent rules API
-
-* Integration with other libraries
-  * breeze
-
-* Server-Side Validation / Validation without UI
-  * Validator class - validateObject,validateProperty
-

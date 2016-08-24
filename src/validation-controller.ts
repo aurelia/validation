@@ -266,10 +266,14 @@ export class ValidationController {
   }
 
   private processErrorDelta(oldErrors: ValidationError[], newErrors: ValidationError[]) {
+    // prepare the instruction.
     const instruction: RenderInstruction = {
       render: [],
       unrender: []
     };
+
+    // create a shallow copy of newErrors so we can mutate it without causing side-effects.
+    newErrors = newErrors.slice(0);
 
     // create unrender instructions from the old errors.
     for (let oldError of oldErrors) {
