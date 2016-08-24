@@ -26,7 +26,7 @@
     "postbuild": "npm run build:doc",
     "prebuild:doc": "del 'doc/api.json'",
     "build:doc": "./node_modules/.bin/typedoc --json doc/api.json --excludeExternals --includeDeclarations --mode modules --target ES6 --name aurelia-validation-docs --ignoreCompilerErrors --tsconfig doc/tsconfig.json src/",
-    "postbuild:doc": "node doc/shape-doc",
+    "postbuild:doc": "node doc/shape-doc"
   },
   "dependencies": {
     "aurelia-binding": "^1.0.1",
