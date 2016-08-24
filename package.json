@@ -14,10 +14,19 @@
   "license": "MIT",
   "author": "Jeremy Danyow <jdanyow@gmail.com> (https:/danyow.net/)",
   "main": "dist/amd/aurelia-validation.js",
-  "typings": "dist/amd/aurelia-validation.d.ts",
+  "typings": "dist/commonjs/aurelia-validation.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/aurelia/validation"
+  },
+  "scripts": {
+    "prebuild:compile": "del 'dist/**'",
+    "build:compile": "concurrently \"node_modules/.bin/tsc --outFile dist/amd/aurelia-validation.js\" \"node_modules/.bin/tsc --outDir dist/commonjs --module commonjs\" \"node_modules/.bin/tsc --outDir dist/native-modules --module es2015\" \"node_modules/.bin/tsc --outDir dist/system --module system\" \"node_modules/.bin/tsc --outDir dist/es2015 --target es2015 --module es2015\" || true",
+    "build": "npm run build:compile",
+    "postbuild": "npm run build:doc",
+    "prebuild:doc": "del 'doc/api.json'",
+    "build:doc": "./node_modules/.bin/typedoc --json doc/api.json --excludeExternals --includeDeclarations --mode modules --target ES6 --name aurelia-validation-docs --ignoreCompilerErrors --tsconfig doc/tsconfig.json src/",
+    "postbuild:doc": "node doc/shape-doc",
   },
   "dependencies": {
     "aurelia-binding": "^1.0.1",
@@ -25,7 +34,10 @@
     "aurelia-templating": "^1.0.0"
   },
   "devDependencies": {
-    "typescript": "beta"
+    "concurrently": "^2.2.0",
+    "del-cli": "^0.2.0",
+    "typedoc": "^0.4.5",
+    "typescript": "^2.0.0"
   },
   "aurelia": {
     "documentation": {
@@ -36,5 +48,5 @@
         }
       ]
     }
-  }   
+  }
 }
