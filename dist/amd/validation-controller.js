@@ -7,16 +7,22 @@ define(["require", "exports", './validator', './validate-trigger', './property-i
             this.bindings = new Map();
             // Renderers that have been added to the controller instance.
             this.renderers = [];
-            // Errors that have been rendered.
+            /**
+             * Errors that have been rendered by the controller.
+             */
             this.errors = [];
-            // Whether the controller is currently validating.
+            /**
+             *  Whether the controller is currently validating.
+             */
             this.validating = false;
             // Elements related to errors that have been rendered.
             this.elements = new Map();
             // Objects that have been added to the controller instance (entity-style validation).
             this.objects = new Map();
-            // The trigger that will invoke automatic validation of a property used in a binding.
-            this.validateTrigger = validate_trigger_1.validateTrigger.change;
+            /**
+             * The trigger that will invoke automatic validation of a property used in a binding.
+             */
+            this.validateTrigger = validate_trigger_1.validateTrigger.blur;
             // Promise that resolves when validation has completed.
             this.finishValidating = Promise.resolve();
         }
@@ -59,11 +65,10 @@ define(["require", "exports", './validator', './validate-trigger', './property-i
         ValidationController.prototype.addRenderer = function (renderer) {
             var _this = this;
             this.renderers.push(renderer);
-            renderer.render(this.errors.map(function (error) { return ({
-                type: 'add',
-                newError: error,
-                newElements: _this.elements.get(error)
-            }); }));
+            renderer.render({
+                render: this.errors.map(function (error) { return ({ error: error, elements: _this.elements.get(error) }); }),
+                unrender: []
+            });
         };
         /**
          * Removes a renderer.
@@ -72,11 +77,10 @@ define(["require", "exports", './validator', './validate-trigger', './property-i
         ValidationController.prototype.removeRenderer = function (renderer) {
             var _this = this;
             this.renderers.splice(this.renderers.indexOf(renderer), 1);
-            renderer.render(this.errors.map(function (error) { return ({
-                type: 'remove',
-                oldError: error,
-                oldElements: _this.elements.get(error)
-            }); }));
+            renderer.render({
+                render: [],
+                unrender: this.errors.map(function (error) { return ({ error: error, elements: _this.elements.get(error) }); })
+            });
         };
         /**
          * Registers a binding with the controller.
@@ -198,47 +202,57 @@ define(["require", "exports", './validator', './validate-trigger', './property-i
             return elements;
         };
         ValidationController.prototype.processErrorDelta = function (oldErrors, newErrors) {
-            var instructions = [];
-            // create the "add" and "update" instructions.
-            var _loop_1 = function(newError) {
-                var newElements = this_1.getAssociatedElements(newError);
-                var oldIndex = oldErrors.findIndex(function (_a) {
-                    var rule = _a.rule, object = _a.object, propertyName = _a.propertyName;
-                    return rule === newError.rule
-                        && object === newError.object
-                        && propertyName === newError.propertyName;
-                });
-                var oldError = oldErrors[oldIndex];
-                if (oldIndex === -1) {
-                    instructions.push({ type: 'add', newError: newError, newElements: newElements });
-                    this_1.errors.push(newError);
-                    this_1.elements.set(newError, newElements);
+            // prepare the instruction.
+            var instruction = {
+                render: [],
+                unrender: []
+            };
+            // create a shallow copy of newErrors so we can mutate it without causing side-effects.
+            newErrors = newErrors.slice(0);
+            // create unrender instructions from the old errors.
+            var _loop_1 = function(oldError) {
+                // get the elements associated with the old error.
+                var elements = this_1.elements.get(oldError);
+                // remove the old error from the element map.
+                this_1.elements.delete(oldError);
+                // create the unrender instruction.
+                instruction.unrender.push({ error: oldError, elements: elements });
+                // determine if there's a corresponding new error for the old error we are unrendering.
+                var newErrorIndex = newErrors.findIndex(function (x) { return x.rule === oldError.rule && x.object === oldError.object && x.propertyName === oldError.propertyName; });
+                if (newErrorIndex === -1) {
+                    // no corresponding new error... simple remove.
+                    this_1.errors.splice(this_1.errors.indexOf(oldError), 1);
                 }
                 else {
-                    var oldElements = this_1.elements.get(oldError);
-                    this_1.elements.delete(oldError);
-                    instructions.push({ type: 'update', newError: newError, newElements: newElements, oldError: oldError, oldElements: oldElements }); // casting due to TypeScript bug
+                    // there is a corresponding new error...        
+                    var newError = newErrors.splice(newErrorIndex, 1)[0];
+                    // get the elements that are associated with the new error.
+                    var elements_1 = this_1.getAssociatedElements(newError);
+                    this_1.elements.set(newError, elements_1);
+                    // create a render instruction for the new error.
+                    instruction.render.push({ error: newError, elements: elements_1 });
+                    // do an in-place replacement of the old error with the new error.
+                    // this ensures any repeats bound to this.errors will not thrash.
                     this_1.errors.splice(this_1.errors.indexOf(oldError), 1, newError);
-                    oldErrors.splice(oldIndex, 1);
                 }
             };
             var this_1 = this;
-            for (var _i = 0, newErrors_1 = newErrors; _i < newErrors_1.length; _i++) {
-                var newError = newErrors_1[_i];
-                _loop_1(newError);
+            for (var _i = 0, oldErrors_1 = oldErrors; _i < oldErrors_1.length; _i++) {
+                var oldError = oldErrors_1[_i];
+                _loop_1(oldError);
             }
-            // remaining are "delete" instructions.
-            for (var _a = 0, oldErrors_1 = oldErrors; _a < oldErrors_1.length; _a++) {
-                var oldError = oldErrors_1[_a];
-                var oldElements = this.elements.get(oldError);
-                this.elements.delete(oldError);
-                instructions.push({ type: 'remove', oldError: oldError, oldElements: oldElements }); // casting due to TypeScript bug
-                this.errors.splice(this.errors.indexOf(oldError), 1);
+            // create render instructions from the remaining new errors.
+            for (var _a = 0, newErrors_1 = newErrors; _a < newErrors_1.length; _a++) {
+                var error = newErrors_1[_a];
+                var elements = this.getAssociatedElements(error);
+                instruction.render.push({ error: error, elements: elements });
+                this.elements.set(error, elements);
+                this.errors.push(error);
             }
-            // render the errors.
+            // render.
             for (var _b = 0, _c = this.renderers; _b < _c.length; _b++) {
                 var renderer = _c[_b];
-                renderer.render(instructions);
+                renderer.render(instruction);
             }
         };
         /**

@@ -31,10 +31,19 @@ export declare class ValidationController {
     static inject: typeof Validator[];
     private bindings;
     private renderers;
+    /**
+     * Errors that have been rendered by the controller.
+     */
     errors: ValidationError[];
+    /**
+     *  Whether the controller is currently validating.
+     */
     validating: boolean;
     private elements;
     private objects;
+    /**
+     * The trigger that will invoke automatic validation of a property used in a binding.
+     */
     validateTrigger: string;
     private finishValidating;
     constructor(validator: Validator);

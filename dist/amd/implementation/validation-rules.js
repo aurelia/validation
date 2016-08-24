@@ -1,6 +1,5 @@
-define(["require", "exports", 'aurelia-metadata', './util', './metadata-key'], function (require, exports, aurelia_metadata_1, util_1, metadata_key_1) {
+define(["require", "exports", 'aurelia-metadata', './util', './metadata-key', './validation-messages'], function (require, exports, aurelia_metadata_1, util_1, metadata_key_1, validation_messages_1) {
     "use strict";
-    exports.$all = 0;
     var FluentRuleCustomizer = (function () {
         function FluentRuleCustomizer(property, condition, config, fluentEnsure, fluentRules, parser) {
             if (config === void 0) { config = {}; }
@@ -31,7 +30,7 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key'], f
             this.rule.when = condition;
             return this;
         };
-        /** Builder1 APIs **/
+        /** FluentEnsure APIs **/
         FluentRuleCustomizer.prototype.ensure = function (subject) {
             return this.fluentEnsure.ensure(subject);
         };
@@ -48,9 +47,22 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key'], f
         FluentRuleCustomizer.prototype.on = function (target) {
             return this.fluentEnsure.on(target);
         };
-        /** Builder2 APIs **/
+        /** FluentRules APIs **/
         FluentRuleCustomizer.prototype.satisfies = function (condition, config) {
             return this.fluentRules.satisfies(condition, config);
+        };
+        /**
+         * Applies a custom rule.
+         * @param name The name of the custom rule.
+         * @param args The custom rule's arguments.
+         */
+        FluentRuleCustomizer.prototype.satisfiesRule = function (name) {
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            return (_a = this.fluentRules).satisfiesRule.apply(_a, [name].concat(args));
+            var _a;
         };
         FluentRuleCustomizer.prototype.required = function () {
             return this.fluentRules.required();
@@ -89,6 +101,25 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key'], f
         FluentRules.prototype.satisfies = function (condition, config) {
             return new FluentRuleCustomizer(this.property, condition, config, this.fluentEnsure, this, this.parser);
         };
+        /**
+         * Applies a custom rule.
+         * @param name The name of the custom rule.
+         * @param args The custom rule's arguments.
+         */
+        FluentRules.prototype.satisfiesRule = function (name) {
+            var _this = this;
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            var rule = FluentRules.customRules[name];
+            if (!rule) {
+                throw new Error("Custom rule with name \"" + name + "\" does not exist.");
+            }
+            var config = rule.argsToConfig ? rule.argsToConfig.apply(rule, args) : undefined;
+            return this.satisfies(function (value, obj) { return (_a = rule.condition).call.apply(_a, [_this, value, obj].concat(args)); var _a; }, config)
+                .withMessageKey(name);
+        };
         FluentRules.prototype.required = function () {
             return this.satisfies(function (value) {
                 return value !== null
@@ -97,7 +128,7 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key'], f
             }).withMessageKey('required');
         };
         FluentRules.prototype.matches = function (regex) {
-            return this.satisfies(function (value) { return value === null || value === undefined || regex.test(value); })
+            return this.satisfies(function (value) { return value === null || value === undefined || value.length === 0 || regex.test(value); })
                 .withMessageKey('matches');
         };
         FluentRules.prototype.email = function () {
@@ -105,11 +136,11 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key'], f
                 .withMessageKey('email');
         };
         FluentRules.prototype.minLength = function (length) {
-            return this.satisfies(function (value) { return value === null || value === undefined || value.length >= length; }, { length: length })
+            return this.satisfies(function (value) { return value === null || value === undefined || value.length === 0 || value.length >= length; }, { length: length })
                 .withMessageKey('minLength');
         };
         FluentRules.prototype.maxLength = function (length) {
-            return this.satisfies(function (value) { return value === null || value === undefined || value.length <= length; }, { length: length })
+            return this.satisfies(function (value) { return value === null || value === undefined || value.length === 0 || value.length <= length; }, { length: length })
                 .withMessageKey('maxLength');
         };
         FluentRules.prototype.minItems = function (count) {
@@ -120,6 +151,7 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key'], f
             return this.satisfies(function (value) { return value === null || value === undefined || value.length <= count; }, { count: count })
                 .withMessageKey('maxItems');
         };
+        FluentRules.customRules = {};
         return FluentRules;
     }());
     exports.FluentRules = FluentRules;
@@ -163,6 +195,17 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key'], f
         };
         ValidationRules.ensureObject = function () {
             return new FluentEnsure(ValidationRules.parser).ensureObject();
+        };
+        /**
+         * Defines a custom rule.
+         * @param name The name of the custom rule. Also serves as the message key.
+         * @param condition The rule function.
+         * @param message The message expression
+         * @param argsToConfig A function that maps the rule's arguments to a "config" object that can be used when evaluating the message expression.
+         */
+        ValidationRules.customRule = function (name, condition, message, argsToConfig) {
+            validation_messages_1.validationMessages[name] = message;
+            FluentRules.customRules[name] = { condition: condition, argsToConfig: argsToConfig };
         };
         return ValidationRules;
     }());

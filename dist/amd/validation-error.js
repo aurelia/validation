@@ -16,7 +16,9 @@ define(["require", "exports"], function (require, exports) {
             this.message = message;
             this.object = object;
             this.propertyName = propertyName;
+            this.id = ValidationError.nextId++;
         }
+        ValidationError.nextId = 0;
         return ValidationError;
     }());
     exports.ValidationError = ValidationError;

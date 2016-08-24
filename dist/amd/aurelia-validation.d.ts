@@ -14,7 +14,9 @@ export * from './implementation/validation-messages';
 export * from './implementation/validation-parser';
 export * from './implementation/validation-rules';
 import { Container } from 'aurelia-dependency-injection';
-export declare function configure(config: {
+export declare function configure(frameworkConfig: {
     container: Container;
     globalResources: (...resources: string[]) => any;
+}, config: {
+    customValidator?: boolean;
 }): void;

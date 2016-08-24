@@ -20,7 +20,7 @@ export declare class ValidationErrorsCustomAttribute implements ValidationRender
     });
     sort(): void;
     interestingElements(elements: Element[]): Element[];
-    render(instructions: RenderInstruction[]): void;
+    render(instruction: RenderInstruction): void;
     bind(): void;
     unbind(): void;
 }

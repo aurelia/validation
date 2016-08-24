@@ -17,16 +17,18 @@ define(["require", "exports", './validate-binding-behavior', './validate-trigger
     __export(validation_messages_1);
     __export(validation_parser_1);
     __export(validation_rules_1);
-    function configure(config) {
+    function configure(frameworkConfig, config) {
         // the fluent rule definition API needs the parser to translate messages
         // to interpolation expressions. 
-        var parser = config.container.get(validation_parser_2.ValidationParser);
+        var parser = frameworkConfig.container.get(validation_parser_2.ValidationParser);
         validation_rules_2.ValidationRules.initialize(parser);
-        // register the standard implementation of the Validator abstract class.
-        var validator = config.container.get(standard_validator_2.StandardValidator);
-        config.container.registerInstance(validator_2.Validator, validator);
+        if (!config.customValidator) {
+            // register the standard implementation of the Validator abstract class.
+            var validator = frameworkConfig.container.get(standard_validator_2.StandardValidator);
+            frameworkConfig.container.registerInstance(validator_2.Validator, validator);
+        }
         // globalize the behaviors.
-        config.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
+        frameworkConfig.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
     }
     exports.configure = configure;
 });

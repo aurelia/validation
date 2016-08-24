@@ -24,37 +24,24 @@ define(["require", "exports", 'aurelia-binding', 'aurelia-dependency-injection',
             var _this = this;
             return elements.filter(function (e) { return _this.boundaryElement.contains(e); });
         };
-        ValidationErrorsCustomAttribute.prototype.render = function (instructions) {
-            var _loop_1 = function(instruction) {
-                if (instruction.type === 'add') {
-                    var targets = this_1.interestingElements(instruction.newElements);
-                    if (targets.length) {
-                        this_1.errors.push({ error: instruction.newError, targets: targets });
-                    }
-                }
-                else if (instruction.type === 'remove') {
-                    var instr_1 = instruction; // TypeScript bug
-                    var index = this_1.errors.findIndex(function (x) { return x.error === instr_1.oldError; });
-                    if (index !== -1) {
-                        this_1.errors.splice(index, 1);
-                    }
-                }
-                else if (instruction.type === 'update') {
-                    var instr_2 = instruction; // TypeScript bug
-                    var index = this_1.errors.findIndex(function (x) { return x.error === instr_2.oldError; });
-                    var targets = this_1.interestingElements(instruction.newElements);
-                    if (index !== -1) {
-                        this_1.errors.splice(index, 1);
-                    }
-                    if (targets.length) {
-                        this_1.errors.push({ error: instruction.newError, targets: targets });
-                    }
+        ValidationErrorsCustomAttribute.prototype.render = function (instruction) {
+            var _loop_1 = function(error) {
+                var index = this_1.errors.findIndex(function (x) { return x.error === error; });
+                if (index !== -1) {
+                    this_1.errors.splice(index, 1);
                 }
             };
             var this_1 = this;
-            for (var _i = 0, instructions_1 = instructions; _i < instructions_1.length; _i++) {
-                var instruction = instructions_1[_i];
-                _loop_1(instruction);
+            for (var _i = 0, _a = instruction.unrender; _i < _a.length; _i++) {
+                var error = _a[_i].error;
+                _loop_1(error);
+            }
+            for (var _b = 0, _c = instruction.render; _b < _c.length; _b++) {
+                var _d = _c[_b], error = _d.error, elements = _d.elements;
+                var targets = this.interestingElements(elements);
+                if (targets.length) {
+                    this.errors.push({ error: error, targets: targets });
+                }
             }
             this.sort();
             this.value = this.errors;

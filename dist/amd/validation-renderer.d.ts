@@ -1,62 +1,38 @@
 import { ValidationError } from './validation-error';
-export interface RenderAddInstruction {
+/**
+ * An error to render (or unrender) and the associated elements (if any)
+ */
+export interface RenderErrorInstruction {
     /**
-     * The type of instruction. 'add', 'remove' or 'update'.
+     * The validation error.
      */
-    type: 'add';
+    error: ValidationError;
     /**
-     * The new error.
+     * The associated elements (if any).
      */
-    newError: ValidationError;
-    /**
-     * The DOM elements associated with the new error.
-     */
-    newElements: Element[];
+    elements: Element[];
 }
-export interface RenderRemoveInstruction {
+/**
+ * Defines which errors to render and which errors to unrender.
+ */
+export interface RenderInstruction {
     /**
-     * The type of instruction. 'add', 'remove' or 'update'.
+     * The errors to render.
      */
-    type: 'remove';
+    render: RenderErrorInstruction[];
     /**
-     * The old error.
+     * The errors to unrender.
      */
-    oldError: ValidationError;
-    /**
-     * The DOM Elements associated with the old error.
-     */
-    oldElements: Element[];
+    unrender: RenderErrorInstruction[];
 }
-export interface RenderUpdateInstruction {
-    /**
-     * The type of instruction. 'add', 'remove' or 'update'.
-     */
-    type: 'update';
-    /**
-     * The new error.
-     */
-    newError: ValidationError;
-    /**
-     * The DOM elements associated with the new error.
-     */
-    newElements: Element[];
-    /**
-     * The old error.
-     */
-    oldError: ValidationError;
-    /**
-     * The DOM Elements associated with the old error.
-     */
-    oldElements: Element[];
-}
-export declare type RenderInstruction = RenderAddInstruction | RenderUpdateInstruction | RenderRemoveInstruction;
 /**
  * Renders validation errors.
  */
 export interface ValidationRenderer {
     /**
      * Render the errors.
-     * @param instructions The render instructions.
+     * @param instruction The render instruction. Defines which errors to render and which
+     * errors to unrender.
      */
-    render(instructions: RenderInstruction[]): void;
+    render(instruction: RenderInstruction): void;
 }
