@@ -31,5 +31,10 @@
   Message customization: withMessage, withMessageKey
   when,
 * Replacing default messages
-* 
+
+# Building
+
+```shell
+npm run build
+```
 
