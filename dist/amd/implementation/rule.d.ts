@@ -18,4 +18,5 @@ export interface Rule<TObject, TValue> {
     } | null;
     messageKey: string;
     message: Expression | null;
+    tag?: string;
 }

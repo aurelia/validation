@@ -1,4 +1,7 @@
 import { Container } from 'aurelia-dependency-injection';
+/**
+ * Creates ValidationController instances.
+ */
 export declare class ValidationControllerFactory {
     private container;
     static inject: typeof Container[];

@@ -5,7 +5,13 @@ export interface ValidationMessages {
   [key: string]: string;
 }
 
+/**
+ * Dictionary of validation messages. [messageKey]: messageExpression
+ */
 export const validationMessages: ValidationMessages = {
+  /**
+   * The default validation message. Used with rules that have no standard message.
+   */
   default: `\${$displayName} is invalid.`,
   required: `\${$displayName} is required.`,
   matches: `\${$displayName} is not correctly formatted.`,
@@ -16,6 +22,9 @@ export const validationMessages: ValidationMessages = {
   maxItems: `\${$displayName} cannot contain more than \${$config.count} item\${$config.count === 1 ? '' : 's'}.`,
 }
 
+/**
+ * Retrieves validation messages and property display names.
+ */
 export class ValidationMessageProvider {
   static inject = [ValidationParser];
 

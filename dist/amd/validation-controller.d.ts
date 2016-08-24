@@ -26,6 +26,11 @@ export interface ValidateInstruction extends ValidateInstructionBase {
  */
 export interface ResetInstruction extends ValidateInstructionBase {
 }
+/**
+ * Orchestrates validation.
+ * Manages a set of bindings, renderers and objects.
+ * Exposes the current list of validation errors for binding purposes.
+ */
 export declare class ValidationController {
     private validator;
     static inject: typeof Validator[];

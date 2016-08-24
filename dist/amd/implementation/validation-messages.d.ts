@@ -3,7 +3,13 @@ import { ValidationParser } from './validation-parser';
 export interface ValidationMessages {
     [key: string]: string;
 }
+/**
+ * Dictionary of validation messages. [messageKey]: messageExpression
+ */
 export declare const validationMessages: ValidationMessages;
+/**
+ * Retrieves validation messages and property display names.
+ */
 export declare class ValidationMessageProvider {
     private parser;
     static inject: typeof ValidationParser[];

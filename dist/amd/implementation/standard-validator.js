@@ -5,6 +5,10 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 define(["require", "exports", 'aurelia-templating', 'aurelia-metadata', '../validator', '../validation-error', './metadata-key', './validation-messages'], function (require, exports, aurelia_templating_1, aurelia_metadata_1, validator_1, validation_error_1, metadata_key_1, validation_messages_1) {
     "use strict";
+    /**
+     * Validates.
+     * Responsible for validating objects and properties.
+     */
     var StandardValidator = (function (_super) {
         __extends(StandardValidator, _super);
         function StandardValidator(messageProvider, resources) {
@@ -80,9 +84,22 @@ define(["require", "exports", 'aurelia-templating', 'aurelia-metadata', '../vali
             }
             return Promise.all(promises).then(function () { return errors; });
         };
+        /**
+         * Validates the specified property.
+         * @param object The object to validate.
+         * @param propertyName The name of the property to validate.
+         * @param rules Optional. If unspecified, the rules will be looked up using the metadata
+         * for the object created by ValidationRules....on(class/object)
+         */
         StandardValidator.prototype.validateProperty = function (object, propertyName, rules) {
             return this.validate(object, propertyName, rules || null);
         };
+        /**
+         * Validates all rules for specified object and it's properties.
+         * @param object The object to validate.
+         * @param rules Optional. If unspecified, the rules will be looked up using the metadata
+         * for the object created by ValidationRules....on(class/object)
+         */
         StandardValidator.prototype.validateObject = function (object, rules) {
             return this.validate(object, null, rules || null);
         };

@@ -19,4 +19,5 @@ export interface Rule<TObject, TValue> {
   when: { (object: TObject): boolean }|null;
   messageKey: string;
   message: Expression|null;
+  tag?: string;
 }

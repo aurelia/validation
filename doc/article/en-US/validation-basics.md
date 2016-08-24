@@ -20,6 +20,20 @@ This article covers the basics of validation with Aurelia's validation plugin. Y
 
 To get started you'll need to install `aurelia-validation` using `jspm install aurelia-validation` or `npm install aurelia-validation --save`. Afterwards, add `.plugin('aurelia-validation')` to the configuration in your `main.js` to ensure the plugin is loaded at application startup.
 
+If you're using the `aurelia-cli`, add the following configuration to your `aurelia.json` after you've installed the package with npm. 
+
+<code-listing heading="aurelia.json">
+  <source-code lang="ES 2015">
+    {
+      "name": "aurelia-validation",
+      "path": "../node_modules/aurelia-validation/dist/amd",
+      "main": "aurelia-validation"
+    }
+  </source-code>
+</code-listing>
+
+If you're not sure where to put this, search your `aurelia.json` for *aurelia-templating-resources* and put it underneath.
+
 ## [Defining Rules](aurelia-doc://section/2/version/1.0.0)
 
 Aurelia Validation's standard rule engine uses a fluent syntax to define a set of rules. There are four parts to the syntax:
@@ -124,6 +138,10 @@ You may run into situations where you only want a rule to be evaluated when cert
           .withMessage('Email is required when shipment notifications have been requested.');
   </source-code>
 </code-listing>
+
+### Tagging Rules
+
+Use the `.tag(tag: string)` method to tag a specific property rule with a name. You can retrieve rules with a specific tag using `let someRules = ValidationRules.taggedRules(rules, tag)`. This can come in handy when you want to execute a specific rule or subset of rules. The documentation for the ValidationController (below) shows how to validate specific objects/properties/rules. You can also use the subset of rules with the Validator API (also documented below).
 
 ### on
 
@@ -295,13 +313,15 @@ Use the `manual` trigger to indicate the controller should not automatically val
 
 You can force the validation controller to run validation by invoking the `validate()` method. Validate will run the validation, render any resulting validation errors and return a `Promise` that resolves with an array of validation errors. *The promise will only reject when there is an unexpected application error. Be sure to catch these rejections like you would any other unexpected application error.*
 
-Invoking the validate method with no arguments will validate all bindings and objects registered with the controller. You can supply a validate instruction to limit the validation to a specific object or property:
+Invoking the validate method with no arguments will validate all bindings and objects registered with the controller. You can supply a validate instruction to limit the validation to a specific object, property and ruleset:
 
 <code-listing heading="validate">
   <source-code lang="ES 2015">
     controller.validate();
     controller.validate({ object: person });
+    controller.validate({ object: person, rules: myRules });
     controller.validate({ object: person, propertyName: 'firstName' });    
+    controller.validate({ object: person, propertyName: 'firstName', rules: myRules });    
   </source-code>
 </code-listing>
 

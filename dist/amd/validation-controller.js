@@ -1,5 +1,10 @@
 define(["require", "exports", './validator', './validate-trigger', './property-info', './validation-error'], function (require, exports, validator_1, validate_trigger_1, property_info_1, validation_error_1) {
     "use strict";
+    /**
+     * Orchestrates validation.
+     * Manages a set of bindings, renderers and objects.
+     * Exposes the current list of validation errors for binding purposes.
+     */
     var ValidationController = (function () {
         function ValidationController(validator) {
             this.validator = validator;

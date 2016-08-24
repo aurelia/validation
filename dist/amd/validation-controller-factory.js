@@ -1,5 +1,8 @@
 define(["require", "exports", 'aurelia-dependency-injection', './validation-controller'], function (require, exports, aurelia_dependency_injection_1, validation_controller_1) {
     "use strict";
+    /**
+     * Creates ValidationController instances.
+     */
     var ValidationControllerFactory = (function () {
         function ValidationControllerFactory(container) {
             this.container = container;

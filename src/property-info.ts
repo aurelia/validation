@@ -20,6 +20,11 @@ function getObject(expression: Expression, objectExpression: Expression, source:
   throw new Error(`The '${objectExpression}' part of '${expression}' evaluates to ${value} instead of an object.`);
 }
 
+/**
+ * Retrieves the object and property name for the specified expression.
+ * @param expression The expression
+ * @param source The scope
+ */
 export function getPropertyInfo(expression: Expression, source: any) {
   const originalExpression = expression;
   while (expression instanceof BindingBehavior || expression instanceof ValueConverter) {

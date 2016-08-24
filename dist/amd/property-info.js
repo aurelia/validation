@@ -13,6 +13,11 @@ define(["require", "exports", 'aurelia-binding'], function (require, exports, au
         }
         throw new Error("The '" + objectExpression + "' part of '" + expression + "' evaluates to " + value + " instead of an object.");
     }
+    /**
+     * Retrieves the object and property name for the specified expression.
+     * @param expression The expression
+     * @param source The scope
+     */
     function getPropertyInfo(expression, source) {
         var originalExpression = expression;
         while (expression instanceof aurelia_binding_1.BindingBehavior || expression instanceof aurelia_binding_1.ValueConverter) {

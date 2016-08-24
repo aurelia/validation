@@ -1,6 +1,12 @@
 define(["require", "exports", './validation-parser'], function (require, exports, validation_parser_1) {
     "use strict";
+    /**
+     * Dictionary of validation messages. [messageKey]: messageExpression
+     */
     exports.validationMessages = {
+        /**
+         * The default validation message. Used with rules that have no standard message.
+         */
         default: "${$displayName} is invalid.",
         required: "${$displayName} is required.",
         matches: "${$displayName} is not correctly formatted.",
@@ -10,6 +16,9 @@ define(["require", "exports", './validation-parser'], function (require, exports
         minItems: "${$displayName} must contain at least ${$config.count} item${$config.count === 1 ? '' : 's'}.",
         maxItems: "${$displayName} cannot contain more than ${$config.count} item${$config.count === 1 ? '' : 's'}.",
     };
+    /**
+     * Retrieves validation messages and property display names.
+     */
     var ValidationMessageProvider = (function () {
         function ValidationMessageProvider(parser) {
             this.parser = parser;
