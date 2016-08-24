@@ -154,7 +154,7 @@ export class FluentRules<TObject, TValue> {
   }
 
   matches(regex: RegExp) {
-    return this.satisfies(value => value === null || value === undefined || regex.test(<any>value))
+    return this.satisfies(value => value === null || value === undefined || (<any>value).length === 0 || regex.test(<any>value))
       .withMessageKey('matches');
   }
 
@@ -164,12 +164,12 @@ export class FluentRules<TObject, TValue> {
   }
 
   minLength(length: number) {
-    return this.satisfies((value: any) => value === null || value === undefined || value.length >= length, { length })
+    return this.satisfies((value: any) => value === null || value === undefined || value.length === 0 || value.length >= length, { length })
       .withMessageKey('minLength');
   }
 
   maxLength(length: number) {
-    return this.satisfies((value: any) => value === null || value === undefined || value.length <= length, { length })
+    return this.satisfies((value: any) => value === null || value === undefined || value.length === 0 || value.length <= length, { length })
       .withMessageKey('maxLength');
   }
 

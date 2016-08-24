@@ -165,7 +165,8 @@ There is no requirement to apply the rules directly to an object or class, you c
   <source-code lang="ES 2015">
     const personRules = ValidationRules
       .ensure('firstName').required()
-      .ensure('lastName').required();
+      .ensure('lastName').required()
+      .rules;
   </source-code>
 </code-listing>
 
@@ -471,10 +472,17 @@ You may have rules that are not associated with a single property. The fluent ru
 
  <code-listing heading="ensureObject">
   <source-code lang="ES 2015">
+    export class Shipment {
+      length = 0;
+      width = 0;
+      height = 0;
+    }
+
     ValidationRules
       .ensureObject()
         .satisfies(obj => obj.length * obj.width * obj.height <= 50)
-          .withMessage('Volume cannot be greater than 50 cubic centemeters.');
+          .withMessage('Volume cannot be greater than 50 cubic centemeters.')
+      .on(Shipment);
   </source-code>
 </code-listing>
 
