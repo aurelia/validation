@@ -242,8 +242,21 @@ Or with the `ValidationControllerFactory`:
     export class RegistrationForm {
       controller = null;
 
-      constructor(controller) {
-        this.controller = ValidationControllerFactory.createForCurrentScope();
+      constructor(controllerFactory) {
+        this.controller = controllerFactory.createForCurrentScope();
+      }
+    }
+  </source-code>
+  <source-code lang="TypeScript">
+    import {autoinject} from 'aurelia-dependency-injection';
+    import {ValidationControllerFactory, ValidationController} from 'aurelia-validation';
+
+    @autoinject
+    export class RegistrationForm {
+      controller: ValidationController;
+
+      constructor(controllerFactory: ValidationControllerFactory) {
+        this.controller = controllerFactory.createForCurrentScope();
       }
     }
   </source-code>
