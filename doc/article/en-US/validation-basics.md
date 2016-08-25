@@ -561,7 +561,7 @@ You may have noticed the custom rule examples above consider `null` and `undefin
 
 ## [Integration With Other Libraries](aurelia-doc://section/10/version/1.0.0)
 
-In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has it's own validation logic. You can disable the `StandardValidator` registration by passing configuration to the `.plugin` call that installs the `aurelia-validation`. Change `.plugin('aurelia-validation')` to `.plugin('aurelia-validation', { customValidator: true })`. Then create a class that implements the `Validator` interface and register it in the container. Here's an example using breeze.
+In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has it's own validation logic. You can replace the `StandardValidator` with your own implementation when the plugin is installed. Here's an example using breeze:
 
  <code-listing heading="breeze-validator">
   <source-code lang="ES 2015">
@@ -590,16 +590,14 @@ In `aurelia-validation` the object and property validation work is handled by th
 </code-listing>
 <code-listing heading="main">
   <source-code lang="ES 2015">
-    import {Validator} from 'aurelia-validation';
     import {BreezeValidator} from './breeze-validator';
 
     export function configure(aurelia) {
       aurelia.use
         .standardConfiguration()
-        .plugin('aurelia-validation', { customValidator: true })
+        .plugin('aurelia-validation', config => config.customValidator(BreezeValidator))
         ...
 
-      aurelia.container.registerInstance(Validator, new BreezeValidator());      
       ...
     }
   </source-code>

@@ -194,7 +194,10 @@ export class ValidationController {
     // Get a function that will process the validation instruction.
     let execute: () => Promise<ValidationError[]>;
     if (instruction) {
-      const { object, propertyName, rules } = instruction;
+      let { object, propertyName, rules } = instruction;
+      // if rules were not specified, check the object map.
+      rules = rules || this.objects.get(object);      
+      // property specified?
       if (instruction.propertyName === undefined) {
         // validate the specified object.
         execute = () => this.validator.validateObject(object, rules);
