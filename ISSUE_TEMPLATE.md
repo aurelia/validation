@@ -64,7 +64,7 @@ all | TypeScript X.X | ESNext
 <!--
 If the current behavior is a bug, please provide the steps to reproduce and, if possible, a minimal demo of the
 problem along with a runnable gist, if possible.
-To create a runnable gist, go to https://gist.run/?id=7542e061bc940cde506b&sha=6821c521a6c7bae6f59a36fb8628ecd1032b2d10
+To create a runnable gist, go to https://gist.run/?id=7542e061bc940cde506b
 Then click "Fork to Public Gist".
 Create your gist, then finally click "Update Gist." Include a link to the gist.run below.
 -->
