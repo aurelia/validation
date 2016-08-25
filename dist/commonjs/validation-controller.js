@@ -168,7 +168,13 @@ var ValidationController = exports.ValidationController = (_dec = (0, _aureliaDe
     var object = _getPropertyInfo.object;
     var property = _getPropertyInfo.property;
 
-    var newErrors = this.validator.validateProperty(object, property, rules);
+    var nesting = [];
+    if (binding._observerSlots > 1) {
+      for (var x = 0; x < binding._observerSlots; x++) {
+        nesting.push(binding['_observer' + x].propertyName);
+      }
+    }
+    var newErrors = this.validator.validateProperty(object, property, rules, { bindingContext: binding.source.bindingContext, hierarchy: nesting });
     this._updateErrors(errors, newErrors, target);
     return errors;
   };

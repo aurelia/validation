@@ -88,7 +88,13 @@ export let ValidationController = (_dec = inject(Validator), _dec(_class = class
   _validateBinding(binding) {
     const { target, rules, errors } = this.bindings.get(binding);
     const { object, property } = getPropertyInfo(binding.sourceExpression, binding.source);
-    const newErrors = this.validator.validateProperty(object, property, rules);
+    const nesting = [];
+    if (binding._observerSlots > 1) {
+      for (let x = 0; x < binding._observerSlots; x++) {
+        nesting.push(binding['_observer' + x].propertyName);
+      }
+    }
+    const newErrors = this.validator.validateProperty(object, property, rules, { bindingContext: binding.source.bindingContext, hierarchy: nesting });
     this._updateErrors(errors, newErrors, target);
     return errors;
   }
