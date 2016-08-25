@@ -458,9 +458,13 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
       }
 
       private add(element: Element, error: ValidationError) {
-        const formGroup = element.closest('.form-group');
-        if (!formGroup) {
-          return;
+        let formGroup = target.parentElement;
+        while (formGroup.nodeName !== "BODY" && !formGroup.classList.contains('form-group')) {
+            formGroup = formGroup.parentElement;
+        }
+
+        if (formGroup.nodeName === "BODY") {
+            return;
         }
         
         // add the has-error class to the enclosing form-group div
@@ -475,9 +479,13 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
       }
 
       private remove(element: Element, error: ValidationError) {
-        const formGroup = element.closest('.form-group');
-        if (!formGroup) {
-          return;
+        let formGroup = target.parentElement;
+        while (formGroup.nodeName !== "BODY" && !formGroup.classList.contains('form-group')) {
+            formGroup = formGroup.parentElement;
+        }
+
+        if (formGroup.nodeName === "BODY") {
+            return;
         }
 
         // remove help-block
