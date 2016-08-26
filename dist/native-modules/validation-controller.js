@@ -112,13 +112,19 @@ export var ValidationController = (function () {
      */
     ValidationController.prototype.getInstructionPredicate = function (instruction) {
         if (instruction) {
-            var object_1 = instruction.object, propertyName_1 = instruction.propertyName;
+            var object_1 = instruction.object, propertyName_1 = instruction.propertyName, rules_1 = instruction.rules;
+            var predicate_1;
             if (instruction.propertyName) {
-                return function (x) { return x.object === object_1 && x.propertyName === propertyName_1; };
+                predicate_1 = function (x) { return x.object === object_1 && x.propertyName === propertyName_1; };
             }
             else {
-                return function (x) { return x.object === object_1; };
+                predicate_1 = function (x) { return x.object === object_1; };
             }
+            // todo: move to Validator interface:
+            if (rules_1 && rules_1.indexOf) {
+                return function (x) { return predicate_1(x) && rules_1.indexOf(x.rule) !== -1; };
+            }
+            return predicate_1;
         }
         else {
             return function () { return true; };
@@ -133,14 +139,17 @@ export var ValidationController = (function () {
         // Get a function that will process the validation instruction.
         var execute;
         if (instruction) {
-            var object_2 = instruction.object, propertyName_2 = instruction.propertyName, rules_1 = instruction.rules;
+            var object_2 = instruction.object, propertyName_2 = instruction.propertyName, rules_2 = instruction.rules;
+            // if rules were not specified, check the object map.
+            rules_2 = rules_2 || this.objects.get(object_2);
+            // property specified?
             if (instruction.propertyName === undefined) {
                 // validate the specified object.
-                execute = function () { return _this.validator.validateObject(object_2, rules_1); };
+                execute = function () { return _this.validator.validateObject(object_2, rules_2); };
             }
             else {
                 // validate the specified property.
-                execute = function () { return _this.validator.validateProperty(object_2, propertyName_2, rules_1); };
+                execute = function () { return _this.validator.validateProperty(object_2, propertyName_2, rules_2); };
             }
         }
         else {

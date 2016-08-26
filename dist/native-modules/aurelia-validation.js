@@ -18,16 +18,42 @@ import { Validator } from './validator';
 import { StandardValidator } from './implementation/standard-validator';
 import { ValidationParser } from './implementation/validation-parser';
 import { ValidationRules } from './implementation/validation-rules';
-export function configure(frameworkConfig, config) {
+/**
+ * Aurelia Validation Configuration API
+ */
+export var AureliaValidationConfiguration = (function () {
+    function AureliaValidationConfiguration() {
+        this.validatorType = StandardValidator;
+    }
+    /**
+     * Use a custom Validator implementation.
+     */
+    AureliaValidationConfiguration.prototype.customValidator = function (type) {
+        this.validatorType = type;
+    };
+    /**
+     * Applies the configuration.
+     */
+    AureliaValidationConfiguration.prototype.apply = function (container) {
+        var validator = container.get(this.validatorType);
+        container.registerInstance(Validator, validator);
+    };
+    return AureliaValidationConfiguration;
+}());
+/**
+ * Configures the plugin.
+ */
+export function configure(frameworkConfig, callback) {
     // the fluent rule definition API needs the parser to translate messages
     // to interpolation expressions. 
     var parser = frameworkConfig.container.get(ValidationParser);
     ValidationRules.initialize(parser);
-    if (!config.customValidator) {
-        // register the standard implementation of the Validator abstract class.
-        var validator = frameworkConfig.container.get(StandardValidator);
-        frameworkConfig.container.registerInstance(Validator, validator);
+    // configure...
+    var config = new AureliaValidationConfiguration();
+    if (callback instanceof Function) {
+        callback(config);
     }
+    config.apply(frameworkConfig.container);
     // globalize the behaviors.
     frameworkConfig.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
 }

@@ -110,13 +110,19 @@ export class ValidationController {
      */
     getInstructionPredicate(instruction) {
         if (instruction) {
-            const { object, propertyName } = instruction;
+            const { object, propertyName, rules } = instruction;
+            let predicate;
             if (instruction.propertyName) {
-                return x => x.object === object && x.propertyName === propertyName;
+                predicate = x => x.object === object && x.propertyName === propertyName;
             }
             else {
-                return x => x.object === object;
+                predicate = x => x.object === object;
             }
+            // todo: move to Validator interface:
+            if (rules && rules.indexOf) {
+                return x => predicate(x) && rules.indexOf(x.rule) !== -1;
+            }
+            return predicate;
         }
         else {
             return () => true;
@@ -130,7 +136,10 @@ export class ValidationController {
         // Get a function that will process the validation instruction.
         let execute;
         if (instruction) {
-            const { object, propertyName, rules } = instruction;
+            let { object, propertyName, rules } = instruction;
+            // if rules were not specified, check the object map.
+            rules = rules || this.objects.get(object);
+            // property specified?
             if (instruction.propertyName === undefined) {
                 // validate the specified object.
                 execute = () => this.validator.validateObject(object, rules);

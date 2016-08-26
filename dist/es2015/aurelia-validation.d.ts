@@ -14,9 +14,27 @@ export * from './implementation/validation-messages';
 export * from './implementation/validation-parser';
 export * from './implementation/validation-rules';
 import { Container } from 'aurelia-dependency-injection';
+import { Validator } from './validator';
+/**
+ * Aurelia Validation Configuration API
+ */
+export declare class AureliaValidationConfiguration {
+    private validatorType;
+    /**
+     * Use a custom Validator implementation.
+     */
+    customValidator(type: {
+        new (...args: any[]): Validator;
+    }): void;
+    /**
+     * Applies the configuration.
+     */
+    apply(container: Container): void;
+}
+/**
+ * Configures the plugin.
+ */
 export declare function configure(frameworkConfig: {
     container: Container;
     globalResources: (...resources: string[]) => any;
-}, config: {
-    customValidator?: boolean;
-}): void;
+}, callback?: (config: AureliaValidationConfiguration) => void): void;

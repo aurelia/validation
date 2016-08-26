@@ -2,7 +2,293 @@
   "name": "aurelia-validation",
   "children": [
     {
-      "id": 524,
+      "id": 518,
+      "name": "AureliaValidationConfiguration",
+      "kind": 128,
+      "kindString": "Class",
+      "flags": {
+        "isExported": true
+      },
+      "comment": {
+        "shortText": "Aurelia Validation Configuration API"
+      },
+      "children": [
+        {
+          "id": 519,
+          "name": "validatorType",
+          "kind": 1024,
+          "kindString": "Property",
+          "flags": {
+            "isPrivate": true,
+            "isExported": true
+          },
+          "sources": [
+            {
+              "fileName": "aurelia-validation.ts",
+              "line": 32,
+              "character": 23
+            }
+          ],
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 520,
+              "name": "__type",
+              "kind": 65536,
+              "kindString": "Type literal",
+              "flags": {},
+              "children": [
+                {
+                  "id": 521,
+                  "name": "constructor",
+                  "kind": 512,
+                  "kindString": "Constructor",
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 522,
+                      "name": "new __type",
+                      "kind": 16384,
+                      "kindString": "Constructor signature",
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 523,
+                          "name": "args",
+                          "kind": 32768,
+                          "kindString": "Parameter",
+                          "flags": {
+                            "isRest": true
+                          },
+                          "type": {
+                            "type": "instrinct",
+                            "isArray": true,
+                            "name": "any"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "name": "__type",
+                        "id": 520
+                      }
+                    }
+                  ],
+                  "sources": [
+                    {
+                      "fileName": "aurelia-validation.ts",
+                      "line": 32,
+                      "character": 26
+                    }
+                  ]
+                }
+              ],
+              "groups": [
+                {
+                  "title": "Constructors",
+                  "kind": 512,
+                  "children": [
+                    521
+                  ]
+                }
+              ],
+              "sources": [
+                {
+                  "fileName": "aurelia-validation.ts",
+                  "line": 32,
+                  "character": 24
+                }
+              ]
+            }
+          },
+          "defaultValue": " StandardValidator"
+        },
+        {
+          "id": 531,
+          "name": "apply",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 532,
+              "name": "apply",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Applies the configuration."
+              },
+              "parameters": [
+                {
+                  "id": 533,
+                  "name": "container",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "Container"
+                  }
+                }
+              ],
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "aurelia-validation.ts",
+              "line": 44,
+              "character": 7
+            }
+          ]
+        },
+        {
+          "id": 524,
+          "name": "customValidator",
+          "kind": 2048,
+          "kindString": "Method",
+          "flags": {
+            "isExported": true
+          },
+          "signatures": [
+            {
+              "id": 525,
+              "name": "customValidator",
+              "kind": 4096,
+              "kindString": "Call signature",
+              "flags": {},
+              "comment": {
+                "shortText": "Use a custom Validator implementation."
+              },
+              "parameters": [
+                {
+                  "id": 526,
+                  "name": "type",
+                  "kind": 32768,
+                  "kindString": "Parameter",
+                  "flags": {},
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 527,
+                      "name": "__type",
+                      "kind": 65536,
+                      "kindString": "Type literal",
+                      "flags": {},
+                      "children": [
+                        {
+                          "id": 528,
+                          "name": "constructor",
+                          "kind": 512,
+                          "kindString": "Constructor",
+                          "flags": {},
+                          "signatures": [
+                            {
+                              "id": 529,
+                              "name": "new __type",
+                              "kind": 16384,
+                              "kindString": "Constructor signature",
+                              "flags": {},
+                              "parameters": [
+                                {
+                                  "id": 530,
+                                  "name": "args",
+                                  "kind": 32768,
+                                  "kindString": "Parameter",
+                                  "flags": {
+                                    "isRest": true
+                                  },
+                                  "type": {
+                                    "type": "instrinct",
+                                    "isArray": true,
+                                    "name": "any"
+                                  }
+                                }
+                              ],
+                              "type": {
+                                "type": "reference",
+                                "name": "__type",
+                                "id": 527
+                              }
+                            }
+                          ],
+                          "sources": [
+                            {
+                              "fileName": "aurelia-validation.ts",
+                              "line": 37,
+                              "character": 25
+                            }
+                          ]
+                        }
+                      ],
+                      "groups": [
+                        {
+                          "title": "Constructors",
+                          "kind": 512,
+                          "children": [
+                            528
+                          ]
+                        }
+                      ],
+                      "sources": [
+                        {
+                          "fileName": "aurelia-validation.ts",
+                          "line": 37,
+                          "character": 23
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "instrinct",
+                "name": "void"
+              }
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "aurelia-validation.ts",
+              "line": 37,
+              "character": 17
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "kind": 1024,
+          "children": [
+            519
+          ]
+        },
+        {
+          "title": "Methods",
+          "kind": 2048,
+          "children": [
+            531,
+            524
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "aurelia-validation.ts",
+          "line": 31,
+          "character": 43
+        }
+      ]
+    },
+    {
+      "id": 534,
       "name": "configure",
       "kind": 64,
       "kindString": "Function",
@@ -11,14 +297,17 @@
       },
       "signatures": [
         {
-          "id": 525,
+          "id": 535,
           "name": "configure",
           "kind": 4096,
           "kindString": "Call signature",
           "flags": {},
+          "comment": {
+            "shortText": "Configures the plugin."
+          },
           "parameters": [
             {
-              "id": 526,
+              "id": 536,
               "name": "frameworkConfig",
               "kind": 32768,
               "kindString": "Parameter",
@@ -26,14 +315,14 @@
               "type": {
                 "type": "reflection",
                 "declaration": {
-                  "id": 527,
+                  "id": 537,
                   "name": "__type",
                   "kind": 65536,
                   "kindString": "Type literal",
                   "flags": {},
                   "children": [
                     {
-                      "id": 528,
+                      "id": 538,
                       "name": "container",
                       "kind": 32,
                       "kindString": "Variable",
@@ -41,7 +330,7 @@
                       "sources": [
                         {
                           "fileName": "aurelia-validation.ts",
-                          "line": 29,
+                          "line": 54,
                           "character": 30
                         }
                       ],
@@ -51,7 +340,7 @@
                       }
                     },
                     {
-                      "id": 529,
+                      "id": 539,
                       "name": "globalResources",
                       "kind": 32,
                       "kindString": "Variable",
@@ -59,28 +348,28 @@
                       "sources": [
                         {
                           "fileName": "aurelia-validation.ts",
-                          "line": 29,
+                          "line": 54,
                           "character": 58
                         }
                       ],
                       "type": {
                         "type": "reflection",
                         "declaration": {
-                          "id": 530,
+                          "id": 540,
                           "name": "__type",
                           "kind": 65536,
                           "kindString": "Type literal",
                           "flags": {},
                           "signatures": [
                             {
-                              "id": 531,
+                              "id": 541,
                               "name": "__call",
                               "kind": 4096,
                               "kindString": "Call signature",
                               "flags": {},
                               "parameters": [
                                 {
-                                  "id": 532,
+                                  "id": 542,
                                   "name": "resources",
                                   "kind": 32768,
                                   "kindString": "Parameter",
@@ -103,7 +392,7 @@
                           "sources": [
                             {
                               "fileName": "aurelia-validation.ts",
-                              "line": 29,
+                              "line": 54,
                               "character": 59
                             }
                           ]
@@ -116,15 +405,15 @@
                       "title": "Variables",
                       "kind": 32,
                       "children": [
-                        528,
-                        529
+                        538,
+                        539
                       ]
                     }
                   ],
                   "sources": [
                     {
                       "fileName": "aurelia-validation.ts",
-                      "line": 29,
+                      "line": 54,
                       "character": 18
                     }
                   ]
@@ -132,55 +421,53 @@
               }
             },
             {
-              "id": 533,
-              "name": "config",
+              "id": 543,
+              "name": "callback",
               "kind": 32768,
               "kindString": "Parameter",
-              "flags": {},
+              "flags": {
+                "isOptional": true
+              },
               "type": {
                 "type": "reflection",
                 "declaration": {
-                  "id": 534,
+                  "id": 544,
                   "name": "__type",
                   "kind": 65536,
                   "kindString": "Type literal",
                   "flags": {},
-                  "children": [
+                  "signatures": [
                     {
-                      "id": 535,
-                      "name": "customValidator",
-                      "kind": 32,
-                      "kindString": "Variable",
-                      "flags": {
-                        "isOptional": true
-                      },
-                      "sources": [
+                      "id": 545,
+                      "name": "__call",
+                      "kind": 4096,
+                      "kindString": "Call signature",
+                      "flags": {},
+                      "parameters": [
                         {
-                          "fileName": "aurelia-validation.ts",
-                          "line": 30,
-                          "character": 27
+                          "id": 546,
+                          "name": "config",
+                          "kind": 32768,
+                          "kindString": "Parameter",
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "name": "AureliaValidationConfiguration",
+                            "id": 518
+                          }
                         }
                       ],
                       "type": {
                         "type": "instrinct",
-                        "name": "boolean"
+                        "name": "void"
                       }
-                    }
-                  ],
-                  "groups": [
-                    {
-                      "title": "Variables",
-                      "kind": 32,
-                      "children": [
-                        535
-                      ]
                     }
                   ],
                   "sources": [
                     {
                       "fileName": "aurelia-validation.ts",
-                      "line": 30,
-                      "character": 9
+                      "line": 55,
+                      "character": 12
                     }
                   ]
                 }
@@ -196,7 +483,7 @@
       "sources": [
         {
           "fileName": "aurelia-validation.ts",
-          "line": 28,
+          "line": 53,
           "character": 25
         }
       ]
@@ -204,10 +491,17 @@
   ],
   "groups": [
     {
+      "title": "Classes",
+      "kind": 128,
+      "children": [
+        518
+      ]
+    },
+    {
       "title": "Functions",
       "kind": 64,
       "children": [
-        524
+        534
       ]
     }
   ]

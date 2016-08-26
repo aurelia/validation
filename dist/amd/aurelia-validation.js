@@ -17,16 +17,43 @@ define(["require", "exports", './validate-binding-behavior', './validate-trigger
     __export(validation_messages_1);
     __export(validation_parser_1);
     __export(validation_rules_1);
-    function configure(frameworkConfig, config) {
+    /**
+     * Aurelia Validation Configuration API
+     */
+    var AureliaValidationConfiguration = (function () {
+        function AureliaValidationConfiguration() {
+            this.validatorType = standard_validator_2.StandardValidator;
+        }
+        /**
+         * Use a custom Validator implementation.
+         */
+        AureliaValidationConfiguration.prototype.customValidator = function (type) {
+            this.validatorType = type;
+        };
+        /**
+         * Applies the configuration.
+         */
+        AureliaValidationConfiguration.prototype.apply = function (container) {
+            var validator = container.get(this.validatorType);
+            container.registerInstance(validator_2.Validator, validator);
+        };
+        return AureliaValidationConfiguration;
+    }());
+    exports.AureliaValidationConfiguration = AureliaValidationConfiguration;
+    /**
+     * Configures the plugin.
+     */
+    function configure(frameworkConfig, callback) {
         // the fluent rule definition API needs the parser to translate messages
         // to interpolation expressions. 
         var parser = frameworkConfig.container.get(validation_parser_2.ValidationParser);
         validation_rules_2.ValidationRules.initialize(parser);
-        if (!config.customValidator) {
-            // register the standard implementation of the Validator abstract class.
-            var validator = frameworkConfig.container.get(standard_validator_2.StandardValidator);
-            frameworkConfig.container.registerInstance(validator_2.Validator, validator);
+        // configure...
+        var config = new AureliaValidationConfiguration();
+        if (callback instanceof Function) {
+            callback(config);
         }
+        config.apply(frameworkConfig.container);
         // globalize the behaviors.
         frameworkConfig.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
     }

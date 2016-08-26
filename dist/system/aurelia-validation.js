@@ -3,21 +3,27 @@ System.register(['./validate-binding-behavior', './validate-trigger', './validat
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var validator_1, standard_validator_1, validation_parser_1, validation_rules_1;
-    function configure(frameworkConfig, config) {
+    var AureliaValidationConfiguration;
+    /**
+     * Configures the plugin.
+     */
+    function configure(frameworkConfig, callback) {
         // the fluent rule definition API needs the parser to translate messages
         // to interpolation expressions. 
         var parser = frameworkConfig.container.get(validation_parser_1.ValidationParser);
         validation_rules_1.ValidationRules.initialize(parser);
-        if (!config.customValidator) {
-            // register the standard implementation of the Validator abstract class.
-            var validator = frameworkConfig.container.get(standard_validator_1.StandardValidator);
-            frameworkConfig.container.registerInstance(validator_1.Validator, validator);
+        // configure...
+        var config = new AureliaValidationConfiguration();
+        if (callback instanceof Function) {
+            callback(config);
         }
+        config.apply(frameworkConfig.container);
         // globalize the behaviors.
         frameworkConfig.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
     }
     exports_1("configure", configure);
     var exportedNames_1 = {
+        'AureliaValidationConfiguration': true,
         'configure': true
     };
     function exportStar_1(m) {
@@ -73,6 +79,29 @@ System.register(['./validate-binding-behavior', './validate-trigger', './validat
                 validation_rules_1 = validation_rules_2_1;
             }],
         execute: function() {
+            /**
+             * Aurelia Validation Configuration API
+             */
+            AureliaValidationConfiguration = (function () {
+                function AureliaValidationConfiguration() {
+                    this.validatorType = standard_validator_1.StandardValidator;
+                }
+                /**
+                 * Use a custom Validator implementation.
+                 */
+                AureliaValidationConfiguration.prototype.customValidator = function (type) {
+                    this.validatorType = type;
+                };
+                /**
+                 * Applies the configuration.
+                 */
+                AureliaValidationConfiguration.prototype.apply = function (container) {
+                    var validator = container.get(this.validatorType);
+                    container.registerInstance(validator_1.Validator, validator);
+                };
+                return AureliaValidationConfiguration;
+            }());
+            exports_1("AureliaValidationConfiguration", AureliaValidationConfiguration);
         }
     }
 });

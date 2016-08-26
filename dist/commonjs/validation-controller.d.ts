@@ -2,7 +2,7 @@ import { Binding } from 'aurelia-binding';
 import { Validator } from './validator';
 import { ValidationRenderer } from './validation-renderer';
 import { ValidationError } from './validation-error';
-export interface ValidateInstructionBase {
+export interface ValidateInstruction {
     /**
      * The object to validate.
      */
@@ -11,20 +11,10 @@ export interface ValidateInstructionBase {
      * The property to validate. Optional.
      */
     propertyName?: any;
-}
-/**
- * Validate instructions (what to validate).
- */
-export interface ValidateInstruction extends ValidateInstructionBase {
     /**
      * The rules to validate. Optional.
      */
     rules?: any;
-}
-/**
- * Reset instructions (what to reset).
- */
-export interface ResetInstruction extends ValidateInstructionBase {
 }
 /**
  * Orchestrates validation.
@@ -107,7 +97,7 @@ export declare class ValidationController {
      * Resets any rendered errors (unrenders).
      * @param instruction Optional. Instructions on what to reset. If unspecified all rendered errors will be unrendered.
      */
-    reset(instruction?: ResetInstruction): void;
+    reset(instruction?: ValidateInstruction): void;
     /**
      * Gets the elements associated with an object and propertyName (if any).
      */
