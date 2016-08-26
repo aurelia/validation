@@ -6,3 +6,4 @@ bower_components
 *.swp
 npm-debug.log*
 .test
+dist/doc-temp
