@@ -20,7 +20,7 @@ interface BindingInfo {
   rules?: any;
 }
 
-export interface ValidateInstructionBase {
+export interface ValidateInstruction {
   /**
    * The object to validate.
    */
@@ -30,22 +30,11 @@ export interface ValidateInstructionBase {
    * The property to validate. Optional.
    */
   propertyName?: any;
-}
 
-/**
- * Validate instructions (what to validate).
- */
-export interface ValidateInstruction extends ValidateInstructionBase {
   /**
    * The rules to validate. Optional.
    */
   rules?: any;
-}
-
-/**
- * Reset instructions (what to reset).
- */
-export interface ResetInstruction extends ValidateInstructionBase {
 }
 
 /**
@@ -173,14 +162,20 @@ export class ValidationController {
    * Interprets the instruction and returns a predicate that will identify
    * relevant errors in the list of rendered errors.
    */
-  private getInstructionPredicate(instruction?: ValidateInstructionBase): (error: ValidationError) => boolean {
+  private getInstructionPredicate(instruction?: ValidateInstruction): (error: ValidationError) => boolean {
     if (instruction) {
-      const { object, propertyName } = instruction;
+      const { object, propertyName, rules } = instruction;
+      let predicate: (error: ValidationError) => boolean; 
       if (instruction.propertyName) {
-        return x => x.object === object && x.propertyName === propertyName;
+        predicate = x => x.object === object && x.propertyName === propertyName;
       } else {
-        return x => x.object === object;
+        predicate = x => x.object === object;
       }
+      // todo: move to Validator interface:
+      if (rules && rules.indexOf) {
+        return x => predicate(x) && rules.indexOf(x.rule) !== -1;
+      }
+      return predicate;
     } else {
       return () => true;
     }
@@ -253,7 +248,7 @@ export class ValidationController {
    * Resets any rendered errors (unrenders).
    * @param instruction Optional. Instructions on what to reset. If unspecified all rendered errors will be unrendered.
    */
-  reset(instruction?: ResetInstruction) {    
+  reset(instruction?: ValidateInstruction) {    
     const predicate = this.getInstructionPredicate(instruction);        
     const oldErrors = this.errors.filter(predicate);
     this.processErrorDelta(oldErrors, []);    
