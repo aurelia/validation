@@ -221,4 +221,9 @@ export declare class ValidationRules {
      * @param tag The tag to search for.
      */
     static taggedRules(rules: Rule<any, any>[], tag: string): Rule<any, any>[];
+    /**
+     * Removes the rules from a class or object.
+     * @param target A class or object.
+     */
+    static off(target: any): void;
 }

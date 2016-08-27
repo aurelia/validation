@@ -4,10 +4,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 import { ViewResources } from 'aurelia-templating';
-import { metadata } from 'aurelia-metadata';
 import { Validator } from '../validator';
 import { ValidationError } from '../validation-error';
-import { metadataKey } from './metadata-key';
+import { Rules } from './rules';
 import { ValidationMessageProvider } from './validation-messages';
 /**
  * Validates.
@@ -40,8 +39,8 @@ export var StandardValidator = (function (_super) {
         var errors = [];
         // rules specified?
         if (!rules) {
-            // no. locate the rules via metadata.    
-            rules = metadata.get(metadataKey, object);
+            // no. locate the rules via metadata.
+            rules = Rules.get(object);
         }
         // any rules?
         if (!rules) {

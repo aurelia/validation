@@ -1,4 +1,4 @@
-define(["require", "exports", 'aurelia-metadata', './util', './metadata-key', './validation-messages'], function (require, exports, aurelia_metadata_1, util_1, metadata_key_1, validation_messages_1) {
+define(["require", "exports", './util', './rules', './validation-messages'], function (require, exports, util_1, rules_1, validation_messages_1) {
     "use strict";
     /**
      * Part of the fluent rule API. Enables customizing property rules.
@@ -303,10 +303,7 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key', '.
          * @param target A class or object.
          */
         FluentEnsure.prototype.on = function (target) {
-            if (target instanceof Function) {
-                target = target.prototype;
-            }
-            aurelia_metadata_1.metadata.define(metadata_key_1.metadataKey, this.rules, target);
+            rules_1.Rules.set(target, this.rules);
             return this;
         };
         FluentEnsure.prototype.assertInitialized = function () {
@@ -358,6 +355,13 @@ define(["require", "exports", 'aurelia-metadata', './util', './metadata-key', '.
          */
         ValidationRules.taggedRules = function (rules, tag) {
             return rules.filter(function (r) { return r.tag === tag; });
+        };
+        /**
+         * Removes the rules from a class or object.
+         * @param target A class or object.
+         */
+        ValidationRules.off = function (target) {
+            rules_1.Rules.unset(target);
         };
         return ValidationRules;
     }());

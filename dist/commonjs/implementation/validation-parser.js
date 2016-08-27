@@ -47,7 +47,8 @@ var ValidationParser = (function () {
         else {
             accessor = this.getAccessorExpression(property);
         }
-        if (accessor instanceof aurelia_binding_1.AccessMember && accessor.object instanceof aurelia_binding_1.AccessScope) {
+        if (accessor instanceof aurelia_binding_1.AccessScope
+            || accessor instanceof aurelia_binding_1.AccessMember && accessor.object instanceof aurelia_binding_1.AccessScope) {
             return {
                 name: accessor.name,
                 displayName: null

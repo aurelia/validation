@@ -5,10 +5,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var aurelia_templating_1 = require('aurelia-templating');
-var aurelia_metadata_1 = require('aurelia-metadata');
 var validator_1 = require('../validator');
 var validation_error_1 = require('../validation-error');
-var metadata_key_1 = require('./metadata-key');
+var rules_1 = require('./rules');
 var validation_messages_1 = require('./validation-messages');
 /**
  * Validates.
@@ -41,8 +40,8 @@ var StandardValidator = (function (_super) {
         var errors = [];
         // rules specified?
         if (!rules) {
-            // no. locate the rules via metadata.    
-            rules = aurelia_metadata_1.metadata.get(metadata_key_1.metadataKey, object);
+            // no. locate the rules via metadata.
+            rules = rules_1.Rules.get(object);
         }
         // any rules?
         if (!rules) {

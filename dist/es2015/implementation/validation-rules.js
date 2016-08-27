@@ -1,6 +1,5 @@
-import { metadata } from 'aurelia-metadata';
 import { isString } from './util';
-import { metadataKey } from './metadata-key';
+import { Rules } from './rules';
 import { validationMessages } from './validation-messages';
 /**
  * Part of the fluent rule API. Enables customizing property rules.
@@ -284,10 +283,7 @@ export class FluentEnsure {
      * @param target A class or object.
      */
     on(target) {
-        if (target instanceof Function) {
-            target = target.prototype;
-        }
-        metadata.define(metadataKey, this.rules, target);
+        Rules.set(target, this.rules);
         return this;
     }
     assertInitialized() {
@@ -335,5 +331,12 @@ export class ValidationRules {
      */
     static taggedRules(rules, tag) {
         return rules.filter(r => r.tag === tag);
+    }
+    /**
+     * Removes the rules from a class or object.
+     * @param target A class or object.
+     */
+    static off(target) {
+        Rules.unset(target);
     }
 }

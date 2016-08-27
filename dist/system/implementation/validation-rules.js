@@ -1,18 +1,15 @@
-System.register(['aurelia-metadata', './util', './metadata-key', './validation-messages'], function(exports_1, context_1) {
+System.register(['./util', './rules', './validation-messages'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var aurelia_metadata_1, util_1, metadata_key_1, validation_messages_1;
+    var util_1, rules_1, validation_messages_1;
     var FluentRuleCustomizer, FluentRules, FluentEnsure, ValidationRules;
     return {
         setters:[
-            function (aurelia_metadata_1_1) {
-                aurelia_metadata_1 = aurelia_metadata_1_1;
-            },
             function (util_1_1) {
                 util_1 = util_1_1;
             },
-            function (metadata_key_1_1) {
-                metadata_key_1 = metadata_key_1_1;
+            function (rules_1_1) {
+                rules_1 = rules_1_1;
             },
             function (validation_messages_1_1) {
                 validation_messages_1 = validation_messages_1_1;
@@ -321,10 +318,7 @@ System.register(['aurelia-metadata', './util', './metadata-key', './validation-m
                  * @param target A class or object.
                  */
                 FluentEnsure.prototype.on = function (target) {
-                    if (target instanceof Function) {
-                        target = target.prototype;
-                    }
-                    aurelia_metadata_1.metadata.define(metadata_key_1.metadataKey, this.rules, target);
+                    rules_1.Rules.set(target, this.rules);
                     return this;
                 };
                 FluentEnsure.prototype.assertInitialized = function () {
@@ -376,6 +370,13 @@ System.register(['aurelia-metadata', './util', './metadata-key', './validation-m
                  */
                 ValidationRules.taggedRules = function (rules, tag) {
                     return rules.filter(function (r) { return r.tag === tag; });
+                };
+                /**
+                 * Removes the rules from a class or object.
+                 * @param target A class or object.
+                 */
+                ValidationRules.off = function (target) {
+                    rules_1.Rules.unset(target);
                 };
                 return ValidationRules;
             }());

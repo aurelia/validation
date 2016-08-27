@@ -1,4 +1,4 @@
-System.register(['aurelia-templating', 'aurelia-metadata', '../validator', '../validation-error', './metadata-key', './validation-messages'], function(exports_1, context_1) {
+System.register(['aurelia-templating', '../validator', '../validation-error', './rules', './validation-messages'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
@@ -6,15 +6,12 @@ System.register(['aurelia-templating', 'aurelia-metadata', '../validator', '../v
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var aurelia_templating_1, aurelia_metadata_1, validator_1, validation_error_1, metadata_key_1, validation_messages_1;
+    var aurelia_templating_1, validator_1, validation_error_1, rules_1, validation_messages_1;
     var StandardValidator;
     return {
         setters:[
             function (aurelia_templating_1_1) {
                 aurelia_templating_1 = aurelia_templating_1_1;
-            },
-            function (aurelia_metadata_1_1) {
-                aurelia_metadata_1 = aurelia_metadata_1_1;
             },
             function (validator_1_1) {
                 validator_1 = validator_1_1;
@@ -22,8 +19,8 @@ System.register(['aurelia-templating', 'aurelia-metadata', '../validator', '../v
             function (validation_error_1_1) {
                 validation_error_1 = validation_error_1_1;
             },
-            function (metadata_key_1_1) {
-                metadata_key_1 = metadata_key_1_1;
+            function (rules_1_1) {
+                rules_1 = rules_1_1;
             },
             function (validation_messages_1_1) {
                 validation_messages_1 = validation_messages_1_1;
@@ -60,8 +57,8 @@ System.register(['aurelia-templating', 'aurelia-metadata', '../validator', '../v
                     var errors = [];
                     // rules specified?
                     if (!rules) {
-                        // no. locate the rules via metadata.    
-                        rules = aurelia_metadata_1.metadata.get(metadata_key_1.metadataKey, object);
+                        // no. locate the rules via metadata.
+                        rules = rules_1.Rules.get(object);
                     }
                     // any rules?
                     if (!rules) {

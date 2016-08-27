@@ -1,7 +1,6 @@
 "use strict";
-var aurelia_metadata_1 = require('aurelia-metadata');
 var util_1 = require('./util');
-var metadata_key_1 = require('./metadata-key');
+var rules_1 = require('./rules');
 var validation_messages_1 = require('./validation-messages');
 /**
  * Part of the fluent rule API. Enables customizing property rules.
@@ -306,10 +305,7 @@ var FluentEnsure = (function () {
      * @param target A class or object.
      */
     FluentEnsure.prototype.on = function (target) {
-        if (target instanceof Function) {
-            target = target.prototype;
-        }
-        aurelia_metadata_1.metadata.define(metadata_key_1.metadataKey, this.rules, target);
+        rules_1.Rules.set(target, this.rules);
         return this;
     };
     FluentEnsure.prototype.assertInitialized = function () {
@@ -361,6 +357,13 @@ var ValidationRules = (function () {
      */
     ValidationRules.taggedRules = function (rules, tag) {
         return rules.filter(function (r) { return r.tag === tag; });
+    };
+    /**
+     * Removes the rules from a class or object.
+     * @param target A class or object.
+     */
+    ValidationRules.off = function (target) {
+        rules_1.Rules.unset(target);
     };
     return ValidationRules;
 }());

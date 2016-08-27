@@ -46,7 +46,8 @@ export var ValidationParser = (function () {
         else {
             accessor = this.getAccessorExpression(property);
         }
-        if (accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
+        if (accessor instanceof AccessScope
+            || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
             return {
                 name: accessor.name,
                 displayName: null

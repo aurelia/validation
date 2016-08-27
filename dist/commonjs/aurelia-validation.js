@@ -11,7 +11,7 @@ __export(require('./validation-error'));
 __export(require('./validation-errors-custom-attribute'));
 __export(require('./validation-renderer-custom-attribute'));
 __export(require('./validator'));
-__export(require('./implementation/metadata-key'));
+__export(require('./implementation/rules'));
 __export(require('./implementation/standard-validator'));
 __export(require('./implementation/validation-messages'));
 __export(require('./implementation/validation-parser'));

@@ -1,5 +1,5 @@
 // Exports
-System.register(['./validate-binding-behavior', './validate-trigger', './validation-controller', './validation-controller-factory', './validation-error', './validation-errors-custom-attribute', './validation-renderer-custom-attribute', './validator', './implementation/metadata-key', './implementation/standard-validator', './implementation/validation-messages', './implementation/validation-parser', './implementation/validation-rules'], function(exports_1, context_1) {
+System.register(['./validate-binding-behavior', './validate-trigger', './validation-controller', './validation-controller-factory', './validation-error', './validation-errors-custom-attribute', './validation-renderer-custom-attribute', './validator', './implementation/rules', './implementation/standard-validator', './implementation/validation-messages', './implementation/validation-parser', './implementation/validation-rules'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var validator_1, standard_validator_1, validation_parser_1, validation_rules_1;
@@ -60,8 +60,8 @@ System.register(['./validate-binding-behavior', './validate-trigger', './validat
                 exportStar_1(validator_2_1);
                 validator_1 = validator_2_1;
             },
-            function (metadata_key_1_1) {
-                exportStar_1(metadata_key_1_1);
+            function (rules_1_1) {
+                exportStar_1(rules_1_1);
             },
             function (standard_validator_2_1) {
                 exportStar_1(standard_validator_2_1);

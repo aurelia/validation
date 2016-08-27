@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'aurelia-templating', 'aurelia-metadata', '../validator', '../validation-error', './metadata-key', './validation-messages'], function (require, exports, aurelia_templating_1, aurelia_metadata_1, validator_1, validation_error_1, metadata_key_1, validation_messages_1) {
+define(["require", "exports", 'aurelia-templating', '../validator', '../validation-error', './rules', './validation-messages'], function (require, exports, aurelia_templating_1, validator_1, validation_error_1, rules_1, validation_messages_1) {
     "use strict";
     /**
      * Validates.
@@ -36,8 +36,8 @@ define(["require", "exports", 'aurelia-templating', 'aurelia-metadata', '../vali
             var errors = [];
             // rules specified?
             if (!rules) {
-                // no. locate the rules via metadata.    
-                rules = aurelia_metadata_1.metadata.get(metadata_key_1.metadataKey, object);
+                // no. locate the rules via metadata.
+                rules = rules_1.Rules.get(object);
             }
             // any rules?
             if (!rules) {
