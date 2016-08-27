@@ -10,8 +10,8 @@ export * from './validation-renderer-custom-attribute';
 export * from './validation-renderer';
 export * from './validator';
 
-export * from './implementation/metadata-key';
 export * from './implementation/rule';
+export * from './implementation/rules';
 export * from './implementation/standard-validator';
 export * from './implementation/validation-messages';
 export * from './implementation/validation-parser';

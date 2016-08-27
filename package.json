@@ -38,12 +38,10 @@
     },
     "peerDependencies": {
       "aurelia-binding": "^1.0.1",
-      "aurelia-metadata": "^1.0.0",
       "aurelia-templating": "^1.0.0"
     },
     "dependencies": {
       "aurelia-binding": "^1.0.1",
-      "aurelia-metadata": "^1.0.0",
       "aurelia-templating": "^1.0.0"
     },
     "devDependencies": {
@@ -52,7 +50,6 @@
   },
   "dependencies": {
     "aurelia-binding": "^1.0.1",
-    "aurelia-metadata": "^1.0.0",
     "aurelia-templating": "^1.0.0"
   },
   "devDependencies": {

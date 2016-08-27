@@ -1,8 +1,7 @@
-import {metadata} from 'aurelia-metadata';
 import {Rule, RuleProperty} from './rule';
 import {ValidationParser, PropertyAccessor} from './validation-parser';
 import {isString} from './util';
-import {metadataKey} from './metadata-key';
+import {Rules} from './rules';
 import {validationMessages} from './validation-messages';
 
 /**
@@ -335,10 +334,7 @@ export class FluentEnsure<TObject> {
    * @param target A class or object.
    */
   on(target: any) {
-    if (target instanceof Function) {
-      target = target.prototype;
-    }
-    metadata.define(metadataKey, this.rules, target);
+    Rules.set(target, this.rules);
     return this;
   }
 
@@ -399,5 +395,13 @@ export class ValidationRules {
    */
   static taggedRules(rules: Rule<any, any>[], tag: string): Rule<any, any>[] {
     return rules.filter(r => r.tag === tag);
-  } 
+  }
+
+  /**
+   * Removes the rules from a class or object.
+   * @param target A class or object.
+   */
+  static off(target: any): void {
+    Rules.unset(target);
+  }
 }
