@@ -38,18 +38,19 @@
     },
     "peerDependencies": {
       "aurelia-binding": "^1.0.1",
+      "aurelia-dependency-injection": "^1.0.0",
       "aurelia-templating": "^1.0.0"
     },
     "dependencies": {
       "aurelia-binding": "^1.0.1",
+      "aurelia-dependency-injection": "^1.0.0",
       "aurelia-templating": "^1.0.0"
     },
-    "devDependencies": {
-
-    }
+    "devDependencies": {}
   },
   "dependencies": {
     "aurelia-binding": "^1.0.1",
+    "aurelia-dependency-injection": "^1.0.0",
     "aurelia-templating": "^1.0.0"
   },
   "devDependencies": {
