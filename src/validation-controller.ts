@@ -329,6 +329,9 @@ export class ValidationController {
   * Validates the property associated with a binding.
   */
   validateBinding(binding: Binding) {
+    if (!binding.isBound) {
+      return;
+    }
     const { object, propertyName } = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
     const registeredBinding = this.bindings.get(binding);
     const rules = registeredBinding ? registeredBinding.rules : undefined; 
