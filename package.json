@@ -59,6 +59,13 @@
     "typescript": "^2.0.0"
   },
   "aurelia": {
+    "build": {
+      "resources": [
+        "validate-binding-behavior",
+        "validation-errors-custom-attribute",
+        "validation-renderer-custom-attribute"
+      ]
+    },
     "documentation": {
       "articles": [
         {
