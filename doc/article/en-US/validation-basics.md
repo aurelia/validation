@@ -209,7 +209,7 @@ You can override the `ValidationMessageProvider`'s `getMessage(key: string): Exp
     ValidationMessageProvider.prototype.standardGetMessage = ValidationMessageProvider.prototype.getMessage;
     ValidationMessageProvider.prototype.getMessage = function(key) {
       const translation = i18next.t(key);
-      return this.standardGetMessage(translation);
+      return this.parser.parseMessage(translation);
     };
   </source-code>
 </code-listing>
