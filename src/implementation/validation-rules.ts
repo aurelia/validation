@@ -223,7 +223,7 @@ export class FluentRules<TObject, TValue> {
       // standard rule?
       rule = (<any>this)[name];
       if (rule instanceof Function) {
-        return rule.call(this, ...args);
+        return <FluentRuleCustomizer<TObject, TValue>>rule.call(this, ...args);
       }
       throw new Error(`Rule with name "${name}" does not exist.`);
     }
