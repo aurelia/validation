@@ -60,7 +60,7 @@ export declare class FluentRuleCustomizer<TObject, TValue> {
      * @param name The name of the custom or standard rule.
      * @param args The rule's arguments.
      */
-    satisfiesRule(name: string, ...args: any[]): any;
+    satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue>;
     /**
      * Applies the "required" rule to the property.
      * The value cannot be null, undefined or whitespace.
@@ -128,7 +128,7 @@ export declare class FluentRules<TObject, TValue> {
      * @param name The name of the custom or standard rule.
      * @param args The rule's arguments.
      */
-    satisfiesRule(name: string, ...args: any[]): any;
+    satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue>;
     /**
      * Applies the "required" rule to the property.
      * The value cannot be null, undefined or whitespace.

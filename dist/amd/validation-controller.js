@@ -273,6 +273,9 @@ define(["require", "exports", './validator', './validate-trigger', './property-i
         * Validates the property associated with a binding.
         */
         ValidationController.prototype.validateBinding = function (binding) {
+            if (!binding.isBound) {
+                return;
+            }
             var _a = property_info_1.getPropertyInfo(binding.sourceExpression, binding.source), object = _a.object, propertyName = _a.propertyName;
             var registeredBinding = this.bindings.get(binding);
             var rules = registeredBinding ? registeredBinding.rules : undefined;
