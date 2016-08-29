@@ -20,6 +20,7 @@
     "url": "https://github.com/aurelia/validation"
   },
   "scripts": {
+    "test": "./node_modules/.bin/tsc && ./node_modules/.bin/tsc --project tsconfig.test.json && ./node_modules/karma/bin/karma start --single-run",
     "prebuild:compile": "del 'dist/**'",
     "build:compile": "concurrently \"node_modules/.bin/tsc --outDir dist/amd\" \"node_modules/.bin/tsc --outDir dist/commonjs --module commonjs\" \"node_modules/.bin/tsc --outDir dist/native-modules --module es2015\" \"node_modules/.bin/tsc --outDir dist/system --module system\" \"node_modules/.bin/tsc --outDir dist/es2015 --target es2015 --module es2015\" || true",
     "build": "npm run build:compile",
@@ -57,8 +58,21 @@
     "aurelia-templating": "^1.0.0"
   },
   "devDependencies": {
+    "aurelia-bootstrapper": "^1.0.0",
+    "aurelia-pal": "^1.0.0",
+    "aurelia-pal-browser": "^1.0.0",
+    "aurelia-polyfills": "^1.0.0",
+    "aurelia-testing": "^1.0.0-beta.2.0.0",
     "concurrently": "^2.2.0",
     "del-cli": "^0.2.0",
+    "jasmine-core": "^2.4.1",
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-requirejs": "^1.0.0",
+    "requirejs": "^2.2.0",
+    "requirejs-text": "^2.0.12",
     "typedoc": "^0.4.5",
     "typescript": "^2.0.0"
   },
