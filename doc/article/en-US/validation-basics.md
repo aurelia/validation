@@ -458,8 +458,12 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
       }
 
       private add(element: Element, error: ValidationError) {
-        const formGroup = element.closest('.form-group');
-        if (!formGroup) {
+        let formGroup = element.parentElement;
+        while (formGroup.nodeName !== "BODY" && !formGroup.classList.contains('form-group')) {
+          formGroup = formGroup.parentElement;
+        }
+
+        if (formGroup.nodeName === "BODY") {
           return;
         }
         
@@ -475,8 +479,12 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
       }
 
       private remove(element: Element, error: ValidationError) {
-        const formGroup = element.closest('.form-group');
-        if (!formGroup) {
+        let formGroup = element.parentElement;
+        while (formGroup.nodeName !== "BODY" && !formGroup.classList.contains('form-group')) {
+          formGroup = formGroup.parentElement;
+        }
+
+        if (formGroup.nodeName === "BODY") {
           return;
         }
 
@@ -496,10 +504,6 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
 </code-listing>
 
 To use a custom renderer you'll need to instantiate it and pass it to your controller via the `addRenderer` method. Any of the controller's existing errors will be renderered immediately. You can remove a renderer using the `removeRenderer` method. Removing a renderer will unrender any errors that renderer had previously rendered.
-
-
-> Warning
-> The renderer example uses `Element.closest`. You'll need to [polyfill](https://github.com/jonathantneal/closest) this method in Internet Explorer.
 
 ## [Entity Validation](aurelia-doc://section/8/version/1.0.0)
 
