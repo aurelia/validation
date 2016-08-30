@@ -7,13 +7,12 @@
       "es2017",
       "dom"
     ],
-    "outDir": "dist/amd",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
-    "declaration": true,
+    "declaration": false,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "noEmitHelpers": false
@@ -23,6 +22,6 @@
     "dist",
     "doc",
     "node_modules",
-    "test"
+    "src"
   ]
 }
