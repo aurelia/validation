@@ -27,12 +27,12 @@ require.config({
   deps: ['aurelia-pal-browser', 'aurelia-polyfills'],
 
   // we have to kickoff jasmine, as it is asynchronous
-  callback: ({ initialize }) => {
+  callback: (pal: { initialize: () => void; }) => {
     if (started) {
       return;
     }
     started = true;
-    initialize();
+    pal.initialize();
     require(allTestFiles, () => window.__karma__.start());
   },
 

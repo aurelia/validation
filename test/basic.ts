@@ -6,8 +6,8 @@ import {RegistrationForm} from './resources/registration-form';
 import {validateTrigger} from '../src/aurelia-validation';
 
 declare var describe: { (name: string, fn: () => void): void };
-declare var beforeEach: { (fn: () => void): void };
-declare var afterEach: { (fn: () => void): void };
+// declare var beforeEach: { (fn: () => void): void };
+// declare var afterEach: { (fn: () => void): void };
 declare var it: { (name: string, fn: (done?: () => void) => void): void };
 declare var expect: (x: any) => any;
 
@@ -19,19 +19,19 @@ function configure(aurelia: Aurelia) {
     .feature('./test/resources');
 }
 
-function blur(element: Element): Promise {
+function blur(element: Element): Promise<void> {
   element.dispatchEvent(DOM.createCustomEvent('blur', {}));
-  return new Promise(setTimeout);
+  return new Promise<void>(setTimeout);
 }
 
-function change(element: HTMLInputElement, value: string): Promise {
+function change(element: HTMLInputElement, value: string): Promise<void> {
   element.value = value;
   element.dispatchEvent(DOM.createCustomEvent('change', { bubbles: true }));  
-  return new Promise(setTimeout);
+  return new Promise<void>(setTimeout);
 }
 
 describe('end to end', () => {
-  it('basic scenarios', done => {
+  it('basic scenarios', (done: () => void) => {
     const component: ComponentTester = StageComponent
       .withResources()
       .inView('<registration-form></registration-form>')
@@ -40,7 +40,7 @@ describe('end to end', () => {
 
     let firstName: HTMLInputElement, lastName: HTMLInputElement;
     let viewModel: RegistrationForm;
-    component.create(<any>bootstrap)
+    (<Promise<any>>component.create(<any>bootstrap))
       // grab some references.
       .then(() => {
         viewModel = component.viewModel;        
