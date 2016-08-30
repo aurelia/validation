@@ -23,18 +23,20 @@
 * `& validate` does not work with two-way custom attributes because it's unable to locate the associated DOM element.
 * Rule property decorators missing. `@required`, etc
 
-# Demos
-
-* Fluent API:
-  ensure, displayName
-  Rules: required, satisfies, min/max-length/items, email, matches 
-  Message customization: withMessage, withMessageKey
-  when,
-* Replacing default messages
-
 # Building
 
 ```shell
 npm run build
 ```
 
+# Tests
+
+```shell
+npm run test
+```
+
+# Developing
+
+```shell
+npm run test-watch
+```

@@ -81,11 +81,5 @@ require.config({
       location: '/base/dist/amd',
       main : 'aurelia-validation'
     }
-  ],
-  map: {
-    '*': {
-      //'src/aurelia-validation': 'dist/amd/aurelia-validation',
-     // '../src/aurelia-validation/index': 'dist/amd/aurelia-validation',
-    }
-  }
+  ]
 })

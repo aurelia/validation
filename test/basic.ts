@@ -14,7 +14,6 @@ declare var expect: (x: any) => any;
 function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
-    //.developmentLogging()
     .plugin('src/aurelia-validation')
     .feature('./test/resources');
 }

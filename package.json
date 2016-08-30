@@ -21,6 +21,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/tsc && ./node_modules/.bin/tsc --project tsconfig.test.json && ./node_modules/karma/bin/karma start --single-run",
+    "test-watch": "concurrently \"./node_modules/.bin/tsc --watch\" \"./node_modules/.bin/tsc --project tsconfig.test.json --watch\" \"./node_modules/karma/bin/karma start\"",
     "prebuild:compile": "del 'dist/**'",
     "build:compile": "concurrently \"node_modules/.bin/tsc --outDir dist/amd\" \"node_modules/.bin/tsc --outDir dist/commonjs --module commonjs\" \"node_modules/.bin/tsc --outDir dist/native-modules --module es2015\" \"node_modules/.bin/tsc --outDir dist/system --module system\" \"node_modules/.bin/tsc --outDir dist/es2015 --target es2015 --module es2015\" || true",
     "build": "npm run build:compile",
