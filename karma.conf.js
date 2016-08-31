@@ -15,10 +15,9 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/main.js',
-      { pattern: 'test/**/*.js', included: false, watched: true },
-      { pattern: 'test/**/*.html', included: false, watched: true },
-      { pattern: 'dist/amd/**/*.js', included: false, watched: true },
+      'dist/test/test/main.js',
+      { pattern: 'dist/test/**/*.js', included: false, watched: true },
+      //{ pattern: 'dist/test/**/*.html', included: false, watched: true },
       { pattern: 'node_modules/**/*.js', included: false, watched: false },
     ],
 

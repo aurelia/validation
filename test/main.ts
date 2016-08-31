@@ -1,5 +1,5 @@
 var allTestFiles: string[] = []
-var TEST_REGEXP = /^\/base\/test\/[^\/]+\.js$/i
+var TEST_REGEXP = /^\/base\/dist\/test\/test\/[^\/]+\.js$/i
 
 declare var require: any;
 
@@ -9,7 +9,7 @@ interface Window {
 
 // Get a list of all the test files to include
 Object.keys(window.__karma__.files).forEach(function (file) {
-  if (TEST_REGEXP.test(file) && file !== '/base/test/main.js') {
+  if (TEST_REGEXP.test(file) && file !== '/base/dist/test/test/main.js') {
     // Normalize paths to RequireJS module names.
     // If you require sub-dependencies of test files to be loaded as-is (requiring file extension)
     // then do not normalize the paths
@@ -77,8 +77,8 @@ require.config({
       main : 'aurelia-testing'
     },
     {
-      name: 'src/aurelia-validation',
-      location: '/base/dist/amd',
+      name: 'dist/test/src/aurelia-validation',
+      location: '/base/dist/test/src',
       main : 'aurelia-validation'
     }
   ]

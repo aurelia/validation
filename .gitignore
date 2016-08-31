@@ -7,5 +7,4 @@ bower_components
 npm-debug.log*
 .test
 dist/doc-temp
-test/**/*.js
-src/**/*.js
+dist/test
