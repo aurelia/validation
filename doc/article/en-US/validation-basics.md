@@ -78,11 +78,12 @@ Once you've targetted a property using `ensure` you can define the property's di
 
 After targetting a property with `ensure` and optionally setting it's display name you can begin associating rules with the property using the built-in rule methods:
 
-* `required()` validates a the property is not null, undefined or whitespace.
+* `required()` validates the property is not null, undefined or whitespace.
 * `matches(regex)` validates the property matches the specified regular expression.
 * `email()` validates an email address.
 * `minLength(length)` and `maxLength(length)` validate the length of string properties.
 * `minItems(count)` and `maxItems(count)` validate the number of items in an array.
+* `equals(expectedValue)` validates the property equals the expected value.
 * `satisfies((value: any, object?: any) => boolean|Promise<boolean>)` validates the supplied function returns `true` or a `Promise` that resolves to `true`. The function will be invoked with two arguments:
   * the property's current value.
   * the object the property belongs to.
