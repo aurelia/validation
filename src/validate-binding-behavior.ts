@@ -19,17 +19,43 @@ export class ValidateBindingBehavior {
   */
   getTarget(binding: any, view: any) {
     const target = binding.target;
+    // DOM element
     if (target instanceof Element) {
       return target;
     }
-    let controller: any;
-    for (let id in view.controllers) {
-      controller = view.controllers[id];
+    // custom element or custom attribute
+    for (let i = 0, ii = view.controllers.length; i < ii; i++) {
+      let controller: any = view.controllers[i];
       if (controller.viewModel === target) {
-        break;
+        // custom element
+        if (controller.behavior.elementName !== null) {
+          if (controller.view) {
+            return controller.view.firstChild.parentNode;
+          }
+          throw new Error(`Unable to locate target element for "${binding.sourceExpression}". The custom element does not have a view.`);
+        }
+        // custom attribute
+        if (controller.behavior.attributeName !== null) {
+          for (let targetId in controller.scope.viewFactory.instructions) {
+            const providers: any[] = controller.scope.viewFactory.instructions[targetId].providers;
+            if (!providers) {
+              continue;
+            }
+            for (let provider of providers) {
+              if (target instanceof provider) {
+                const element = controller.scope.firstChild.querySelector(`[au-target-id="${targetId}"]`);
+                const attributeController = element.au[controller.behavior.attributeName];
+                if (attributeController && attributeController.viewModel === target) {
+                  return element;
+                }
+              }
+            }
+          }
+        }
+        throw new Error(`Unable to locate target element for "${binding.sourceExpression}". Unexpected HTML Behavior type.`);
       }
     }
-    return controller.view.firstChild.parentNode;
+    throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
   }
 
   bind(binding: any, source: any, rulesOrController?: ValidationController|any, rules?: any) {

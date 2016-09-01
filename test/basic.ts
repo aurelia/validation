@@ -37,14 +37,16 @@ describe('end to end', () => {
       .boundTo({});
     component.bootstrap(configure);
 
-    let firstName: HTMLInputElement, lastName: HTMLInputElement;
+    let firstName: HTMLInputElement, lastName: HTMLInputElement, number1: HTMLInputElement, number2: HTMLInputElement;
     let viewModel: RegistrationForm;
     (<Promise<any>>component.create(<any>bootstrap))
       // grab some references.
       .then(() => {
         viewModel = component.viewModel;        
         firstName = <HTMLInputElement>component.element.querySelector('#firstName');
-        lastName = <HTMLInputElement>component.element.querySelector('#lastName');        
+        lastName = <HTMLInputElement>component.element.querySelector('#lastName');
+        number1 = <HTMLInputElement>component.element.querySelector('#number1');
+        number2 = <HTMLInputElement>component.element.querySelector('#number2');      
       })
       // initially there should not be any errors
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
@@ -61,7 +63,31 @@ describe('end to end', () => {
       .then(() => blur(lastName))
       // confirm there's an error.
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
-      
+
+      // blur the number1 field- this should trigger validation.
+      .then(() => blur(number1))
+      // confirm there's an error.
+      .then(() => expect(viewModel.controller.errors.length).toBe(2))
+      // blur the number2 field- this should trigger validation.
+      .then(() => blur(number2))
+      // confirm there's an error.
+      .then(() => expect(viewModel.controller.errors.length).toBe(3))
+      // make a model change to the number1 field. 
+      // this should reset the errors for the number1 field.
+      .then(() => viewModel.number1 = 1)
+      // confirm the error was reset.
+      .then(() => expect(viewModel.controller.errors.length).toBe(2))
+      // make a model change to the number2 field. 
+      // this should reset the errors for the number2 field.
+      .then(() => viewModel.number2 = 2)
+      // confirm the error was reset.
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))      
+      // change the numbers back to invalid values.
+      .then(() => {
+        viewModel.number1 = 0;
+        viewModel.number2 = 0;
+      })     
+
       // hide the form and change the validateTrigger.
       .then(() => {
         viewModel.showForm = false;
@@ -79,6 +105,27 @@ describe('end to end', () => {
       .then(() => change(firstName, ''))
       // confirm there's an error.
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
+      // change the number1 field- this should trigger validation.
+      .then(() => change(number1, '-1'))
+      // confirm there's an error.
+      .then(() => expect(viewModel.controller.errors.length).toBe(2))
+      // change the number2 field- this should trigger validation.
+      .then(() => change(<HTMLInputElement>number2.firstElementChild, '-1'))
+      // confirm there's an error.
+      .then(() => expect(viewModel.controller.errors.length).toBe(3))
+      // change the number1 field- this should trigger validation.
+      .then(() => change(number1, '32'))
+      // confirm the error was reset.
+      .then(() => expect(viewModel.controller.errors.length).toBe(2))
+      // change the number2 field- this should trigger validation.
+      .then(() => change(<HTMLInputElement>number2.firstElementChild, '23'))
+      // confirm the error was reset.
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))
+      // change the numbers back to invalid values.
+      .then(() => {
+        viewModel.number1 = 0;
+        viewModel.number2 = 0;
+      }) 
 
       // hide the form and change the validateTrigger.
       .then(() => {
@@ -92,7 +139,7 @@ describe('end to end', () => {
       // validate all bindings
       .then(() => viewModel.controller.validate())
       // confirm validating resulted in errors.
-      .then(() => expect(viewModel.controller.errors.length).toBe(3))
+      .then(() => expect(viewModel.controller.errors.length).toBe(5))
       // reset all bindings
       .then(() => viewModel.controller.reset())
       // confirm resetting cleared all errors.

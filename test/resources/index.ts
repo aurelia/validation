@@ -2,6 +2,7 @@ import {FrameworkConfiguration} from 'aurelia-framework';
 
 export function configure(config: FrameworkConfiguration) {
   config.globalResources([
-    './registration-form',
+    './number-value',
+    './registration-form'
   ]);
 }
