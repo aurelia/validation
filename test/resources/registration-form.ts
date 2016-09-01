@@ -37,5 +37,5 @@ ValidationRules
   .ensure(f => f.lastName).required()
   .ensure('email').required().email()
   .ensure(f => f.number1).satisfies(value => value > 0)
-  .ensure(f => f.number2).satisfies(value => value > 0)
+  .ensure(f => f.number2).satisfies(value => value > 0).withMessage('${displayName} gots to be greater than zero.')
   .on(RegistrationForm);

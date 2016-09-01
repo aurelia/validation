@@ -55,6 +55,7 @@
   "dependencies": {
     "aurelia-binding": "^1.0.3",
     "aurelia-dependency-injection": "^1.0.0",
+    "aurelia-logging": "^1.0.0",
     "aurelia-task-queue": "^1.0.0",
     "aurelia-templating": "^1.0.0"
   },

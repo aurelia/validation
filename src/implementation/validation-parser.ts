@@ -7,11 +7,14 @@ import {
   Binary,
   Conditional,
   LiteralPrimitive,
-  CallMember
+  CallMember,
+  Unparser
 } from 'aurelia-binding';
 import {BindingLanguage} from 'aurelia-templating';
 import {RuleProperty} from './rule';
 import {isString} from './util';
+
+import * as LogManager from 'aurelia-logging';
 
 export interface PropertyAccessor<TObject, TValue> {
   (object: TObject): TValue;
@@ -23,6 +26,7 @@ export class ValidationParser {
   private emptyStringExpression = new LiteralString('');
   private nullExpression = new LiteralPrimitive(null);
   private undefinedExpression = new LiteralPrimitive(undefined);
+  private cache: { [message: string]: Expression } = {};
 
   constructor(private parser: Parser, private bindinqLanguage: BindingLanguage) {}
 
@@ -40,6 +44,10 @@ export class ValidationParser {
   }
 
   parseMessage(message: string): Expression {
+    if (this.cache[message] !== undefined) {
+      return this.cache[message];
+    }
+
     const parts: (Expression|string)[]|null = (<any>this.bindinqLanguage).parseInterpolation(null, message);
     if (parts === null) {
       return new LiteralString(message);
@@ -56,6 +64,11 @@ export class ValidationParser {
         )
       );
     }
+    
+    MessageExpressionValidator.validate(expression, message);
+    
+    this.cache[message] = expression;
+    
     return expression;
   }
 
@@ -90,5 +103,26 @@ export class ValidationParser {
       };
     }
     throw new Error(`Invalid subject: "${accessor}"`);
+  }
+}
+
+export class MessageExpressionValidator extends Unparser {
+  static validate(expression: Expression, originalMessage: string) {
+    const visitor = new MessageExpressionValidator(originalMessage);
+    expression.accept(visitor);
+  }
+
+  constructor(private originalMessage: string) {
+    super([]);
+  }
+
+  visitAccessScope(access: AccessScope) {
+    if (access.ancestor !== 0) {
+      throw new Error('$parent is not permitted in validation message expressions.');
+    }
+    if (['displayName', 'propertyName', 'value', 'object', 'config'].indexOf(access.name) !== -1) {
+      LogManager.getLogger('aurelia-validation')
+        .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
+    }
   }
 }
