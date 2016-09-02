@@ -72,20 +72,14 @@ export class ValidationParser {
     return expression;
   }
 
-  private getFunctionBody(f: Function): string {
-    function removeCommentsFromSource(str: string): string {
-      return str.replace(/(?:\/\*(?:[\s\S]*?)\*\/)|(?:([\s;])+\/\/(?:.*)$)/gm, '$1');
+  private getAccessorExpression(fn: string): Expression {
+    const classic = /^function\s*\([$_\w\d]+\)\s*\{\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+    const arrow = /^[$_\w\d]+\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
+    const match = classic.exec(fn) || arrow.exec(fn);
+    if (match === null) {
+      throw new Error(`Unable to parse accessor function:\n${fn}`);
     }
-    let s = removeCommentsFromSource(f.toString());
-    return s.substring(s.indexOf('{') + 1, s.lastIndexOf('}'));
-  }
-
-  private getAccessorExpression(f: Function): Expression {
-    let body = this.getFunctionBody(f).trim();
-    body = body.replace(/^['"]use strict['"];/, '').trim();
-    body = body.substr('return'.length).trim();
-    body = body.replace(/;$/, '');
-    return this.parser.parse(body);
+    return this.parser.parse(match[1]);
   }
 
   parseProperty<TObject, TValue>(property: string|PropertyAccessor<TObject, TValue>): RuleProperty {
@@ -93,7 +87,7 @@ export class ValidationParser {
     if (isString(property)) {
       accessor = this.parser.parse(<string>property);
     } else {
-      accessor = this.getAccessorExpression(<Function>property);
+      accessor = this.getAccessorExpression(property.toString());
     }
     if (accessor instanceof AccessScope
       || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {      
