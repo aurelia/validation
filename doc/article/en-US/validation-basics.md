@@ -562,7 +562,12 @@ You will often need to pass arguments to your custom rule. Below is an example o
   </source-code>
 </code-listing>
 
-You may have noticed the custom rule examples above consider `null` and `undefined` to be valid. This is intentional- typically you should not mix "required" checks into your custom rule's logic. Doing so would prevent using your custom rule with non-required fields.
+You may have noticed the custom rule examples above consider `null` and `undefined` to be valid. This is intentional- **a rule should follow the single responsibility principle** and validate only one constraint. It's the `.required()` rule's job to validate whether the data is filled in, you shouldn't add required checking logic to your custom rule for two reasons:
+
+1. Rule reuse- if our "integerRange" rule also does "required" checks, we can't use it on optional fields.
+2. Messages Relevance- if our "integerRange" rule also does "required" checks the user will get "range" error messages when we they should have gotten "required" error messages.
+
+When you write a custom rule, the function should return `true` when the rule is "satisfied" / "valid" and `false` when the rule is "broken" / "invalid". Optionally you can return a `Promise` that resolves to `true` or `false`. The promise should not reject unless there's an unexpected exception. Promise rejection is not used for control flow or to represent "invalid" status.
 
 ## [Integration With Other Libraries](aurelia-doc://section/10/version/1.0.0)
 
