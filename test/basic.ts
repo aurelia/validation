@@ -14,7 +14,7 @@ declare var expect: (x: any) => any;
 function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
-    .developmentLogging()
+    //.developmentLogging()
     .plugin('dist/test/src/aurelia-validation')
     .feature('./dist/test/test/resources');
 }
@@ -38,7 +38,9 @@ describe('end to end', () => {
       .boundTo({});
     component.bootstrap(configure);
 
-    let firstName: HTMLInputElement, lastName: HTMLInputElement, number1: HTMLInputElement, number2: HTMLInputElement;
+    let firstName: HTMLInputElement, lastName: HTMLInputElement,
+        number1: HTMLInputElement, number2: HTMLInputElement,
+        password: HTMLInputElement, confirmPassword: HTMLInputElement;
     let viewModel: RegistrationForm;
     (<Promise<any>>component.create(<any>bootstrap))
       // grab some references.
@@ -47,7 +49,9 @@ describe('end to end', () => {
         firstName = <HTMLInputElement>component.element.querySelector('#firstName');
         lastName = <HTMLInputElement>component.element.querySelector('#lastName');
         number1 = <HTMLInputElement>component.element.querySelector('#number1');
-        number2 = <HTMLInputElement>component.element.querySelector('#number2');      
+        number2 = <HTMLInputElement>component.element.querySelector('#number2');
+        password = <HTMLInputElement>component.element.querySelector('#password');
+        confirmPassword = <HTMLInputElement>component.element.querySelector('#confirmPassword');
       })
       // initially there should not be any errors
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
@@ -126,7 +130,14 @@ describe('end to end', () => {
       .then(() => {
         viewModel.number1 = 0;
         viewModel.number2 = 0;
-      }) 
+        viewModel.password = 'a';
+        viewModel.confirmPassword = 'a';
+        viewModel.controller.reset();
+      })
+      // make the passwords mismatch.
+      .then(() => change(confirmPassword, 'b'))
+      // confirm the custom validator worked
+      .then(() => expect(viewModel.controller.errors[0].message).toBe('Confirm Password must match Password'))
 
       // hide the form and change the validateTrigger.
       .then(() => {
@@ -140,7 +151,7 @@ describe('end to end', () => {
       // validate all bindings
       .then(() => viewModel.controller.validate())
       // confirm validating resulted in errors.
-      .then(() => expect(viewModel.controller.errors.length).toBe(5))
+      .then(() => expect(viewModel.controller.errors.length).toBe(6))
       // reset all bindings
       .then(() => viewModel.controller.reset())
       // confirm resetting cleared all errors.

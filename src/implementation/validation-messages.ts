@@ -51,7 +51,7 @@ export class ValidationMessageProvider {
    * Override this with your own custom logic.
    * @param propertyName The property name.
    */
-  computeDisplayName(propertyName: string): string {
+  getDisplayName(propertyName: string): string {
     // split on upper-case letters.
     const words = propertyName.split(/(?=[A-Z])/).join(' ');
     // capitalize first letter.

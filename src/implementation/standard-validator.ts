@@ -15,25 +15,28 @@ export class StandardValidator extends Validator {
 
   private messageProvider: ValidationMessageProvider;
   private lookupFunctions: LookupFunctions;
+  private getDisplayName: (propertyName: string) => string;
 
   constructor(messageProvider: ValidationMessageProvider, resources: ViewResources) {
     super();
     this.messageProvider = messageProvider;
     this.lookupFunctions = (<any>resources).lookupFunctions;
+    this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
   }
 
   private getMessage(rule: Rule<any, any>, object: any, value: any): string {
     const expression: Expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
     let { name: propertyName, displayName } = rule.property;
     if (displayName === null && propertyName !== null) {
-      displayName = this.messageProvider.computeDisplayName(propertyName);
+      displayName = this.messageProvider.getDisplayName(propertyName);
     }
     const overrideContext: any = {
       $displayName: displayName,
       $propertyName: propertyName,
       $value: value,
       $object: object,
-      $config: rule.config
+      $config: rule.config,
+      $getDisplayName: this.getDisplayName  
     };
     return expression.evaluate(
       { bindingContext: object, overrideContext },

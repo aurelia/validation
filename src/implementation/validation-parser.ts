@@ -120,7 +120,7 @@ export class MessageExpressionValidator extends Unparser {
     if (access.ancestor !== 0) {
       throw new Error('$parent is not permitted in validation message expressions.');
     }
-    if (['displayName', 'propertyName', 'value', 'object', 'config'].indexOf(access.name) !== -1) {
+    if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
       LogManager.getLogger('aurelia-validation')
         .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
     }

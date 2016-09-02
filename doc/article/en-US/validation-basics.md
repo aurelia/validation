@@ -215,13 +215,13 @@ You can override the `ValidationMessageProvider`'s `getMessage(key: string): Exp
   </source-code>
 </code-listing>
 
-You can also override the `ValidationMessageProvider`'s `computeDisplayName(propertyName: string): string` method:
+You can also override the `ValidationMessageProvider`'s `getDisplayName(propertyName: string): string` method:
 
-<code-listing heading="Overriding computeDisplayName">
+<code-listing heading="Overriding getDisplayName">
   <source-code lang="ES 2015">
     import {ValidationMessageProvider} from 'aurelia-validation';
 
-    ValidationMessageProvider.prototype.computeDisplayName = function(propertyName) {
+    ValidationMessageProvider.prototype.getDisplayName = function(propertyName) {
       return i18next.t(propertyName);
     };
   </source-code>
