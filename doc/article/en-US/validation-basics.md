@@ -532,7 +532,13 @@ The fluent API's `satisfies` method enables quick custom rules. If you have a cu
   <source-code lang="ES 2015">
     ValidationRules.customRule(
       'date',
-      (value, obj) => value === null || value === undefined || value instanceof Date,
+      (value, obj) => {
+        var d = new Date(value);
+        return value === null
+          || value === undefined
+          || value.trim() === ''
+          || !isNaN(d.getTime()) 
+      },
       `\${$displayName} must be a Date.` 
     );
 
@@ -549,9 +555,14 @@ You will often need to pass arguments to your custom rule. Below is an example o
   <source-code lang="ES 2015">
     ValidationRules.customRule(
       'integerRange',
-      (value, obj, min, max) => value === null || value === undefined 
-        || Number.isInteger(value) && value >= config.min && value <= config.max,
-      `\${$displayName} must be an integer between \${$config.min} and \${config.max}.`,
+      (value, obj, min, max) => {
+        var num = Number.parseInt(value);
+        return value === null
+          || value === undefined 
+          || value.trim() === ''
+          || (Number.isInteger(num) && num >= min && num <= max)
+      },
+      `\${$displayName} must be an integer between \${$config.min} and \${$config.max}.`,
       (min, max) => ({ min, max }) 
     );
 
@@ -562,7 +573,7 @@ You will often need to pass arguments to your custom rule. Below is an example o
   </source-code>
 </code-listing>
 
-You may have noticed the custom rule examples above consider `null` and `undefined` to be valid. This is intentional- typically you should not mix "required" checks into your custom rule's logic. Doing so would prevent using your custom rule with non-required fields.
+You may have noticed the custom rule examples above consider `null` and `undefined` and `value.trim() === ''` to be valid. This is intentional- typically you should not mix "required" checks into your custom rule's logic. Doing so would prevent using your custom rule with non-required fields.
 
 ## [Integration With Other Libraries](aurelia-doc://section/10/version/1.0.0)
 
