@@ -562,7 +562,7 @@ You will often need to pass arguments to your custom rule. Below is an example o
   </source-code>
 </code-listing>
 
-You may have noticed the custom rule examples above consider `null` and `undefined` to be valid. This is intentional- typically you should not mix "required" checks into your custom rule's logic. Doing so would prevent using your custom rule with non-required fields.
+When you write a custom rule you are defining what is acceptable. The `date` custom rule is written to accept date values. If `startDate` is not a valid date the validation message will be displayed. The `integerRange` custom rule is written to accept values between two numbers, "min" and "max". If `volume` is not in that range, then the validation message is displayed. You will also need to write rules so that they are optional and not required. To do this you need to write rules that accept parameters without values (null, undefined, and blank). This is why you need to add the `value === null || value === undefined || value.trim() === ''` acceptance test in your custom rules. You will see these various acceptance tests in the examples above.
 
 ## [Integration With Other Libraries](aurelia-doc://section/10/version/1.0.0)
 
