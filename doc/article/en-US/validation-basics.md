@@ -641,7 +641,7 @@ In `aurelia-validation` the object and property validation work is handled by th
   </source-code>
 </code-listing>
 
-## [Integrating with Aurelia-I18N](aurelia-doc://section/11/version/1.0.0)
+## [Integrating with Aurelia-I18N](aurelia-doc://section/12/version/1.0.0)
 
 `aurelia-i18n` is Aurelia's official I18N plugin. Check out the project's [readme](https://github.com/aurelia/i18n/blob/master/README.md) for information on how to use `aurelia-i18n` in your application.
 
@@ -792,7 +792,7 @@ Last but not least, create translation files that include translations for each 
   </source-code>
 </code-listing>
 
-## [Server-Side Validation](aurelia-doc://section/12/version/1.0.0)
+## [Server-Side Validation](aurelia-doc://section/13/version/1.0.0)
 
 The fluent rule API and Validator API can be used server-side in a NodeJS application.
 
