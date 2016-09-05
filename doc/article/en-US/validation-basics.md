@@ -641,6 +641,156 @@ In `aurelia-validation` the object and property validation work is handled by th
   </source-code>
 </code-listing>
 
+## [Integrating with Aurelia-I18N](aurelia-doc://section/11/version/1.0.0)
+
+`aurelia-i18n` is Aurelia's official I18N plugin. Check out the project's [readme](https://github.com/aurelia/i18n/blob/master/README.md) for information on how to use `aurelia-i18n` in your application.
+
+Integrating `aurelia-i18n` with `aurelia-validation` is easy. All standard validation messages are supplied by the `ValidationMessageProvider` class. To translate the messages, override the `getMessage(key)` and `getDisplayName(propertyName)` methods with implementations that use `aurelia-i18n` to fetch translated versions of the messages/property-names.
+
+Here's how to override the methods, in your main.js, during application startup:
+
+<code-listing heading="main.js">
+  <source-code lang="ES 2015">
+    import {I18N} from 'aurelia-i18n';
+    import {ValidationMessageProvider} from 'aurelia-validation';
+
+    export function configure(aurelia) {
+      ...
+      ...
+
+      const i18n = aurelia.container.get(i18n);
+      ValidationMessageProvider.prototype.getMessage = function(key) {
+        const translation = i18n.tr(`errorMessages.${key}`);
+        return this.parser.parseMessage(translation);
+      };
+
+      ValidationMessageProvider.prototype.getDisplayName = function(propertyName) {
+        return i18n.tr(propertyName);
+      };
+
+      ...      
+      ...
+    }
+  </source-code>
+</code-listing>
+
+### Creating the view and view-model
+
+Once you've overriden the necessary methods in `ValidationMessageProvider` you're ready to create a view and view-model. Here's a view for a simple multi-language form with first and last name fields. All static text is translated using the [T binding behavior](https://github.com/aurelia/i18n#translating-with-the-tbindingbehavior). Validation occurs on form submission and a switch language button demonstrates the i18n capabilities.
+
+<code-listing heading="I18N View">
+  <source-code lang="HTML">
+    <template>
+      <form>
+        <label>${'firstName' & t}: <br /> 
+          <input type="text" value.bind="firstName & validate" />
+        </label>
+        <label>${'lastName' & t}: <br />
+          <input type="text" value.bind="lastName & validate" />
+        </label>
+        <button click.delegate="submit()">${'submit' & t}</button>
+      </form>
+	
+      <div>
+        <h3>${'latestValidationResult' & t}: ${message}</h3>
+        <ul if.bind="controller.errors.length">
+          <li repeat.for="error of controller.errors">
+            ${error.message}
+          </li>
+        </ul>
+      </div>
+
+	    <button click.trigger="switchLanguage()">${'switchLanguage' & t}</button>
+    <template>   
+  </source-code>
+</code-listing>
+
+Here's the view model:
+
+<code-listing heading="I18N ViewModel">
+  <source-code lang="ES 2015">
+    import {inject, NewInstance} from 'aurelia-framework';
+    import {I18N} from 'aurelia-i18n';
+    import {ValidationRules, ValidationController} from 'aurelia-validation';
+
+    @inject(NewInstance.of(ValidationController), I18N)
+    export class App {
+      firstName;
+      lastName;
+    
+      controller;
+      i18n;
+      message = '';
+    
+      constructor(controller, i18n) {
+        this.controller = controller;
+        this.i18n = i18n;
+    
+        ValidationRules
+          .ensure((m: App) => m.firstName).required()
+          .ensure((m: App) => m.lastName).required()
+          .on(this);
+      }
+    
+      submit() {
+        this.executeValidation();
+      }
+    
+      switchLanguage() {
+        const currentLocale = this.i18n.getLocale();
+        this.i18n.setLocale(currentLocale === 'en' ? 'de' : 'en')
+          .then(() => this.executeValidation());
+      }
+    
+      executeValidation() {
+        this.controller.validate()
+          .then(errors => {
+            if (errors.length === 0) {
+              this.message = this.i18n.tr('allGood');
+            } else {
+              this.message = this.i18n.tr('youHaveErrors');
+            }
+          });
+      }
+    }
+  </source-code>
+</code-listing>
+
+### Translation Files
+
+Last but not least, create translation files that include translations for each propertyName and each validation message key. Below are the German and English files for the example above. Notice the `errorMessages` section has the translation for the `required` rule. In practice, you would need translations for each rule that you use. Take a look at the [`validationMessages` export](https://github.com/aurelia/validation/blob/master/src/implementation/validation-messages.ts) for the full list.
+
+<code-listing heading="Translation files">
+  <source-code lang="JSON">
+	// file: locales/de/translation.json    
+	{
+	  "firstName": "Vorname",
+	  "lastName": "Nachname",
+	  "submit": "Abschicken",
+	  "switchLanguage": "Sprache wechseln", 
+    "youHaveErrors": "Es gibt Fehler!",
+    "allGood": "Alles in Ordnung!",
+    "latestValidationResult": "Aktuelles Validierungsergebnis",
+	  "errorMessages": {
+	    "required": "${$displayName} fehlt!",
+	  }
+	}
+
+	// file: locales/en/translation.json
+	{
+	  "firstName": "First name",
+	  "lastName": "Last name",
+	  "submit": "Submit",
+	  "switchLanguage": "Switch language",
+    "youHaveErrors": "You have errors!",
+    "allGood": "All is good!",
+    "latestValidationResult": "Latest validation result",
+	  "errorMessages": {
+	    "required": "${$displayName} is missing!",
+	  }
+	}
+  </source-code>
+</code-listing>
 
 ## [Server-Side Validation](aurelia-doc://section/12/version/1.0.0)
 
