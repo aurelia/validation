@@ -1,4 +1,5 @@
 import {Optional} from 'aurelia-dependency-injection';
+import {DOM} from 'aurelia-pal';
 import {TaskQueue} from 'aurelia-task-queue';
 import {ValidationController} from './validation-controller';
 import {validateTrigger} from './validate-trigger';
@@ -14,8 +15,8 @@ export class ValidateBindingBehavior {
   /**
   * Gets the DOM element associated with the data-binding. Most of the time it's
   * the binding.target but sometimes binding.target is an aurelia custom element,
-  * which is a javascript "class" instance, so we need to use the controller to
-  * locate the actual DOM element.
+  * or custom attribute which is a javascript "class" instance, so we need to use
+  * the controller's container to retrieve the actual DOM element.
   */
   getTarget(binding: any, view: any) {
     const target = binding.target;
@@ -27,32 +28,11 @@ export class ValidateBindingBehavior {
     for (let i = 0, ii = view.controllers.length; i < ii; i++) {
       let controller: any = view.controllers[i];
       if (controller.viewModel === target) {
-        // custom element
-        if (controller.behavior.elementName !== null) {
-          if (controller.view) {
-            return controller.view.firstChild.parentNode;
-          }
-          throw new Error(`Unable to locate target element for "${binding.sourceExpression}". The custom element does not have a view.`);
+        const element = controller.container.get(DOM.Element);
+        if (element) {
+          return element;
         }
-        // custom attribute
-        if (controller.behavior.attributeName !== null) {
-          for (let targetId in controller.scope.viewFactory.instructions) {
-            const providers: any[] = controller.scope.viewFactory.instructions[targetId].providers;
-            if (!providers) {
-              continue;
-            }
-            for (let provider of providers) {
-              if (target instanceof provider) {
-                const element = controller.scope.firstChild.querySelector(`[au-target-id="${targetId}"]`);
-                const attributeController = element.au[controller.behavior.attributeName];
-                if (attributeController && attributeController.viewModel === target) {
-                  return element;
-                }
-              }
-            }
-          }
-        }
-        throw new Error(`Unable to locate target element for "${binding.sourceExpression}". Unexpected HTML Behavior type.`);
+        throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
       }
     }
     throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);

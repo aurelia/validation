@@ -10,6 +10,7 @@ declare var describe: { (name: string, fn: () => void): void };
 // declare var afterEach: { (fn: () => void): void };
 declare var it: { (name: string, fn: (done?: () => void) => void): void };
 declare var expect: (x: any) => any;
+declare var jasmine: { createSpy: () => any; };
 
 function configure(aurelia: Aurelia) {
   aurelia.use
@@ -41,11 +42,16 @@ describe('end to end', () => {
     let firstName: HTMLInputElement, lastName: HTMLInputElement,
         number1: HTMLInputElement, number2: HTMLInputElement,
         password: HTMLInputElement, confirmPassword: HTMLInputElement;
+
     let viewModel: RegistrationForm;
+
+    let renderer = { render: jasmine.createSpy() };
+
     (<Promise<any>>component.create(<any>bootstrap))
       // grab some references.
       .then(() => {
-        viewModel = component.viewModel;        
+        viewModel = component.viewModel;
+        viewModel.controller.addRenderer(renderer);        
         firstName = <HTMLInputElement>component.element.querySelector('#firstName');
         lastName = <HTMLInputElement>component.element.querySelector('#lastName');
         number1 = <HTMLInputElement>component.element.querySelector('#number1');
@@ -67,16 +73,30 @@ describe('end to end', () => {
       // blur the lastName field- this should trigger validation.
       .then(() => blur(lastName))
       // confirm there's an error.
-      .then(() => expect(viewModel.controller.errors.length).toBe(1))
-
+      .then(() => {
+        expect(viewModel.controller.errors.length).toBe(1);
+        const calls = renderer.render.calls;
+        const renderInstruction = calls.argsFor(calls.count() - 1)[0];
+        expect(renderInstruction.render[0].elements[0]).toBe(lastName);
+      })
       // blur the number1 field- this should trigger validation.
       .then(() => blur(number1))
       // confirm there's an error.
-      .then(() => expect(viewModel.controller.errors.length).toBe(2))
+      .then(() => {
+        expect(viewModel.controller.errors.length).toBe(2);
+        const calls = renderer.render.calls;
+        const renderInstruction = calls.argsFor(calls.count() - 1)[0];
+        expect(renderInstruction.render[0].elements[0]).toBe(number1);
+      })
       // blur the number2 field- this should trigger validation.
       .then(() => blur(number2))
       // confirm there's an error.
-      .then(() => expect(viewModel.controller.errors.length).toBe(3))
+      .then(() => {
+        expect(viewModel.controller.errors.length).toBe(3);
+        const calls = renderer.render.calls;
+        const renderInstruction = calls.argsFor(calls.count() - 1)[0];
+        expect(renderInstruction.render[0].elements[0]).toBe(number2);
+      })
       // make a model change to the number1 field. 
       // this should reset the errors for the number1 field.
       .then(() => viewModel.number1 = 1)
