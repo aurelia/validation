@@ -47,14 +47,14 @@ export class ValidationController {
      */
     removeObject(object) {
         this.objects.delete(object);
-        this.processErrorDelta(this.errors.filter(error => error.object === object), []);
+        this.processErrorDelta('reset', this.errors.filter(error => error.object === object), []);
     }
     /**
      * Adds and renders a ValidationError.
      */
     addError(message, object, propertyName) {
         const error = new ValidationError({}, message, object, propertyName);
-        this.processErrorDelta([], [error]);
+        this.processErrorDelta('validate', [], [error]);
         return error;
     }
     /**
@@ -62,7 +62,7 @@ export class ValidationController {
      */
     removeError(error) {
         if (this.errors.indexOf(error) !== -1) {
-            this.processErrorDelta([error], []);
+            this.processErrorDelta('reset', [error], []);
         }
     }
     /**
@@ -72,6 +72,7 @@ export class ValidationController {
     addRenderer(renderer) {
         this.renderers.push(renderer);
         renderer.render({
+            kind: 'validate',
             render: this.errors.map(error => ({ error, elements: this.elements.get(error) })),
             unrender: []
         });
@@ -83,6 +84,7 @@ export class ValidationController {
     removeRenderer(renderer) {
         this.renderers.splice(this.renderers.indexOf(renderer), 1);
         renderer.render({
+            kind: 'reset',
             render: [],
             unrender: this.errors.map(error => ({ error, elements: this.elements.get(error) }))
         });
@@ -173,7 +175,7 @@ export class ValidationController {
             .then(newErrors => {
             const predicate = this.getInstructionPredicate(instruction);
             const oldErrors = this.errors.filter(predicate);
-            this.processErrorDelta(oldErrors, newErrors);
+            this.processErrorDelta('validate', oldErrors, newErrors);
             if (result === this.finishValidating) {
                 this.validating = false;
             }
@@ -195,7 +197,7 @@ export class ValidationController {
     reset(instruction) {
         const predicate = this.getInstructionPredicate(instruction);
         const oldErrors = this.errors.filter(predicate);
-        this.processErrorDelta(oldErrors, []);
+        this.processErrorDelta('reset', oldErrors, []);
     }
     /**
      * Gets the elements associated with an object and propertyName (if any).
@@ -210,9 +212,10 @@ export class ValidationController {
         }
         return elements;
     }
-    processErrorDelta(oldErrors, newErrors) {
+    processErrorDelta(kind, oldErrors, newErrors) {
         // prepare the instruction.
         const instruction = {
+            kind,
             render: [],
             unrender: []
         };

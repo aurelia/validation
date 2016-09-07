@@ -63,14 +63,14 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                  */
                 ValidationController.prototype.removeObject = function (object) {
                     this.objects.delete(object);
-                    this.processErrorDelta(this.errors.filter(function (error) { return error.object === object; }), []);
+                    this.processErrorDelta('reset', this.errors.filter(function (error) { return error.object === object; }), []);
                 };
                 /**
                  * Adds and renders a ValidationError.
                  */
                 ValidationController.prototype.addError = function (message, object, propertyName) {
                     var error = new validation_error_1.ValidationError({}, message, object, propertyName);
-                    this.processErrorDelta([], [error]);
+                    this.processErrorDelta('validate', [], [error]);
                     return error;
                 };
                 /**
@@ -78,7 +78,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                  */
                 ValidationController.prototype.removeError = function (error) {
                     if (this.errors.indexOf(error) !== -1) {
-                        this.processErrorDelta([error], []);
+                        this.processErrorDelta('reset', [error], []);
                     }
                 };
                 /**
@@ -89,6 +89,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     var _this = this;
                     this.renderers.push(renderer);
                     renderer.render({
+                        kind: 'validate',
                         render: this.errors.map(function (error) { return ({ error: error, elements: _this.elements.get(error) }); }),
                         unrender: []
                     });
@@ -101,6 +102,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     var _this = this;
                     this.renderers.splice(this.renderers.indexOf(renderer), 1);
                     renderer.render({
+                        kind: 'reset',
                         render: [],
                         unrender: this.errors.map(function (error) { return ({ error: error, elements: _this.elements.get(error) }); })
                     });
@@ -194,7 +196,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                         .then(function (newErrors) {
                         var predicate = _this.getInstructionPredicate(instruction);
                         var oldErrors = _this.errors.filter(predicate);
-                        _this.processErrorDelta(oldErrors, newErrors);
+                        _this.processErrorDelta('validate', oldErrors, newErrors);
                         if (result === _this.finishValidating) {
                             _this.validating = false;
                         }
@@ -216,7 +218,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                 ValidationController.prototype.reset = function (instruction) {
                     var predicate = this.getInstructionPredicate(instruction);
                     var oldErrors = this.errors.filter(predicate);
-                    this.processErrorDelta(oldErrors, []);
+                    this.processErrorDelta('reset', oldErrors, []);
                 };
                 /**
                  * Gets the elements associated with an object and propertyName (if any).
@@ -233,9 +235,10 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     }
                     return elements;
                 };
-                ValidationController.prototype.processErrorDelta = function (oldErrors, newErrors) {
+                ValidationController.prototype.processErrorDelta = function (kind, oldErrors, newErrors) {
                     // prepare the instruction.
                     var instruction = {
+                        kind: kind,
                         render: [],
                         unrender: []
                     };

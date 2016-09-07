@@ -158,6 +158,13 @@ var FluentRuleCustomizer = (function () {
     FluentRuleCustomizer.prototype.maxItems = function (count) {
         return this.fluentRules.maxItems(count);
     };
+    /**
+     * Applies the "equals" validation rule to the property.
+     * null, undefined and empty-string values are considered valid.
+     */
+    FluentRuleCustomizer.prototype.equals = function (expectedValue) {
+        return this.fluentRules.equals(expectedValue);
+    };
     return FluentRuleCustomizer;
 }());
 exports.FluentRuleCustomizer = FluentRuleCustomizer;
@@ -269,6 +276,14 @@ var FluentRules = (function () {
     FluentRules.prototype.maxItems = function (count) {
         return this.satisfies(function (value) { return value === null || value === undefined || value.length <= count; }, { count: count })
             .withMessageKey('maxItems');
+    };
+    /**
+     * Applies the "equals" validation rule to the property.
+     * null and undefined values are considered valid.
+     */
+    FluentRules.prototype.equals = function (expectedValue) {
+        return this.satisfies(function (value) { return value === null || value === undefined || value === '' || value === expectedValue; }, { expectedValue: expectedValue })
+            .withMessageKey('equals');
     };
     FluentRules.customRules = {};
     return FluentRules;

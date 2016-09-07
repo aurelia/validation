@@ -25,5 +25,5 @@ export declare class ValidationMessageProvider {
      * Override this with your own custom logic.
      * @param propertyName The property name.
      */
-    computeDisplayName(propertyName: string): string;
+    getDisplayName(propertyName: string): string;
 }

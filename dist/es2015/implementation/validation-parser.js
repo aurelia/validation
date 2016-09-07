@@ -1,6 +1,7 @@
-import { Parser, AccessMember, AccessScope, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember } from 'aurelia-binding';
+import { Parser, AccessMember, AccessScope, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, Unparser } from 'aurelia-binding';
 import { BindingLanguage } from 'aurelia-templating';
 import { isString } from './util';
+import * as LogManager from 'aurelia-logging';
 export class ValidationParser {
     constructor(parser, bindinqLanguage) {
         this.parser = parser;
@@ -8,12 +9,16 @@ export class ValidationParser {
         this.emptyStringExpression = new LiteralString('');
         this.nullExpression = new LiteralPrimitive(null);
         this.undefinedExpression = new LiteralPrimitive(undefined);
+        this.cache = {};
     }
     coalesce(part) {
         // part === null || part === undefined ? '' : part
         return new Conditional(new Binary('||', new Binary('===', part, this.nullExpression), new Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new CallMember(part, 'toString', []));
     }
     parseMessage(message) {
+        if (this.cache[message] !== undefined) {
+            return this.cache[message];
+        }
         const parts = this.bindinqLanguage.parseInterpolation(null, message);
         if (parts === null) {
             return new LiteralString(message);
@@ -22,21 +27,18 @@ export class ValidationParser {
         for (let i = 1; i < parts.length; i += 2) {
             expression = new Binary('+', expression, new Binary('+', this.coalesce(parts[i]), new LiteralString(parts[i + 1])));
         }
+        MessageExpressionValidator.validate(expression, message);
+        this.cache[message] = expression;
         return expression;
     }
-    getFunctionBody(f) {
-        function removeCommentsFromSource(str) {
-            return str.replace(/(?:\/\*(?:[\s\S]*?)\*\/)|(?:([\s;])+\/\/(?:.*)$)/gm, '$1');
+    getAccessorExpression(fn) {
+        const classic = /^function\s*\([$_\w\d]+\)\s*\{\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+        const arrow = /^[$_\w\d]+\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
+        const match = classic.exec(fn) || arrow.exec(fn);
+        if (match === null) {
+            throw new Error(`Unable to parse accessor function:\n${fn}`);
         }
-        let s = removeCommentsFromSource(f.toString());
-        return s.substring(s.indexOf('{') + 1, s.lastIndexOf('}'));
-    }
-    getAccessorExpression(f) {
-        let body = this.getFunctionBody(f).trim();
-        body = body.replace(/^['"]use strict['"];/, '').trim();
-        body = body.substr('return'.length).trim();
-        body = body.replace(/;$/, '');
-        return this.parser.parse(body);
+        return this.parser.parse(match[1]);
     }
     parseProperty(property) {
         let accessor;
@@ -44,7 +46,7 @@ export class ValidationParser {
             accessor = this.parser.parse(property);
         }
         else {
-            accessor = this.getAccessorExpression(property);
+            accessor = this.getAccessorExpression(property.toString());
         }
         if (accessor instanceof AccessScope
             || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
@@ -57,3 +59,22 @@ export class ValidationParser {
     }
 }
 ValidationParser.inject = [Parser, BindingLanguage];
+export class MessageExpressionValidator extends Unparser {
+    constructor(originalMessage) {
+        super([]);
+        this.originalMessage = originalMessage;
+    }
+    static validate(expression, originalMessage) {
+        const visitor = new MessageExpressionValidator(originalMessage);
+        expression.accept(visitor);
+    }
+    visitAccessScope(access) {
+        if (access.ancestor !== 0) {
+            throw new Error('$parent is not permitted in validation message expressions.');
+        }
+        if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
+            LogManager.getLogger('aurelia-validation')
+                .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
+        }
+    }
+}

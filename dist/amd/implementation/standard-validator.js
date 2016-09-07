@@ -15,19 +15,21 @@ define(["require", "exports", 'aurelia-templating', '../validator', '../validati
             _super.call(this);
             this.messageProvider = messageProvider;
             this.lookupFunctions = resources.lookupFunctions;
+            this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
         }
         StandardValidator.prototype.getMessage = function (rule, object, value) {
             var expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
             var _a = rule.property, propertyName = _a.name, displayName = _a.displayName;
             if (displayName === null && propertyName !== null) {
-                displayName = this.messageProvider.computeDisplayName(propertyName);
+                displayName = this.messageProvider.getDisplayName(propertyName);
             }
             var overrideContext = {
                 $displayName: displayName,
                 $propertyName: propertyName,
                 $value: value,
                 $object: object,
-                $config: rule.config
+                $config: rule.config,
+                $getDisplayName: this.getDisplayName
             };
             return expression.evaluate({ bindingContext: object, overrideContext: overrideContext }, this.lookupFunctions);
         };

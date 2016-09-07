@@ -1,4 +1,4 @@
-define(["require", "exports", 'aurelia-dependency-injection', 'aurelia-task-queue', './validation-controller', './validate-trigger'], function (require, exports, aurelia_dependency_injection_1, aurelia_task_queue_1, validation_controller_1, validate_trigger_1) {
+define(["require", "exports", 'aurelia-dependency-injection', 'aurelia-pal', 'aurelia-task-queue', './validation-controller', './validate-trigger'], function (require, exports, aurelia_dependency_injection_1, aurelia_pal_1, aurelia_task_queue_1, validation_controller_1, validate_trigger_1) {
     "use strict";
     /**
      * Binding behavior. Indicates the bound property should be validated.
@@ -10,22 +10,27 @@ define(["require", "exports", 'aurelia-dependency-injection', 'aurelia-task-queu
         /**
         * Gets the DOM element associated with the data-binding. Most of the time it's
         * the binding.target but sometimes binding.target is an aurelia custom element,
-        * which is a javascript "class" instance, so we need to use the controller to
-        * locate the actual DOM element.
+        * or custom attribute which is a javascript "class" instance, so we need to use
+        * the controller's container to retrieve the actual DOM element.
         */
         ValidateBindingBehavior.prototype.getTarget = function (binding, view) {
             var target = binding.target;
+            // DOM element
             if (target instanceof Element) {
                 return target;
             }
-            var controller;
-            for (var id in view.controllers) {
-                controller = view.controllers[id];
+            // custom element or custom attribute
+            for (var i = 0, ii = view.controllers.length; i < ii; i++) {
+                var controller = view.controllers[i];
                 if (controller.viewModel === target) {
-                    break;
+                    var element = controller.container.get(aurelia_pal_1.DOM.Element);
+                    if (element) {
+                        return element;
+                    }
+                    throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
                 }
             }
-            return controller.view.firstChild.parentNode;
+            throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
         };
         ValidateBindingBehavior.prototype.bind = function (binding, source, rulesOrController, rules) {
             var _this = this;

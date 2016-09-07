@@ -15,6 +15,7 @@ exports.validationMessages = {
     maxLength: "${$displayName} cannot be longer than ${$config.length} character${$config.length === 1 ? '' : 's'}.",
     minItems: "${$displayName} must contain at least ${$config.count} item${$config.count === 1 ? '' : 's'}.",
     maxItems: "${$displayName} cannot contain more than ${$config.count} item${$config.count === 1 ? '' : 's'}.",
+    equals: "${$displayName} must be ${$config.expectedValue}.",
 };
 /**
  * Retrieves validation messages and property display names.
@@ -43,7 +44,7 @@ var ValidationMessageProvider = (function () {
      * Override this with your own custom logic.
      * @param propertyName The property name.
      */
-    ValidationMessageProvider.prototype.computeDisplayName = function (propertyName) {
+    ValidationMessageProvider.prototype.getDisplayName = function (propertyName) {
         // split on upper-case letters.
         var words = propertyName.split(/(?=[A-Z])/).join(' ');
         // capitalize first letter.

@@ -12,19 +12,21 @@ export class StandardValidator extends Validator {
         super();
         this.messageProvider = messageProvider;
         this.lookupFunctions = resources.lookupFunctions;
+        this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
     }
     getMessage(rule, object, value) {
         const expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
         let { name: propertyName, displayName } = rule.property;
         if (displayName === null && propertyName !== null) {
-            displayName = this.messageProvider.computeDisplayName(propertyName);
+            displayName = this.messageProvider.getDisplayName(propertyName);
         }
         const overrideContext = {
             $displayName: displayName,
             $propertyName: propertyName,
             $value: value,
             $object: object,
-            $config: rule.config
+            $config: rule.config,
+            $getDisplayName: this.getDisplayName
         };
         return expression.evaluate({ bindingContext: object, overrideContext }, this.lookupFunctions);
     }

@@ -147,6 +147,13 @@ export class FluentRuleCustomizer {
     maxItems(count) {
         return this.fluentRules.maxItems(count);
     }
+    /**
+     * Applies the "equals" validation rule to the property.
+     * null, undefined and empty-string values are considered valid.
+     */
+    equals(expectedValue) {
+        return this.fluentRules.equals(expectedValue);
+    }
 }
 /**
  * Part of the fluent rule API. Enables applying rules to properties and objects.
@@ -249,6 +256,14 @@ export class FluentRules {
     maxItems(count) {
         return this.satisfies((value) => value === null || value === undefined || value.length <= count, { count })
             .withMessageKey('maxItems');
+    }
+    /**
+     * Applies the "equals" validation rule to the property.
+     * null and undefined values are considered valid.
+     */
+    equals(expectedValue) {
+        return this.satisfies(value => value === null || value === undefined || value === '' || value === expectedValue, { expectedValue })
+            .withMessageKey('equals');
     }
 }
 FluentRules.customRules = {};

@@ -102,7 +102,7 @@ export declare class ValidationController {
      * Gets the elements associated with an object and propertyName (if any).
      */
     private getAssociatedElements({object, propertyName});
-    private processErrorDelta(oldErrors, newErrors);
+    private processErrorDelta(kind, oldErrors, newErrors);
     /**
     * Validates the property associated with a binding.
     */

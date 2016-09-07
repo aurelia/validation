@@ -10,6 +10,7 @@ export declare class StandardValidator extends Validator {
     static inject: (typeof ValidationMessageProvider | typeof ViewResources)[];
     private messageProvider;
     private lookupFunctions;
+    private getDisplayName;
     constructor(messageProvider: ValidationMessageProvider, resources: ViewResources);
     private getMessage(rule, object, value);
     private validate(object, propertyName, rules);

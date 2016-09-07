@@ -17,6 +17,10 @@ export interface RenderErrorInstruction {
  */
 export interface RenderInstruction {
     /**
+     * The "kind" of render instruction. Either 'validate' or 'reset'.
+     */
+    kind: 'validate' | 'reset';
+    /**
      * The errors to render.
      */
     render: RenderErrorInstruction[];

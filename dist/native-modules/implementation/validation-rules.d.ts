@@ -97,6 +97,11 @@ export declare class FluentRuleCustomizer<TObject, TValue> {
      * null and undefined values are considered valid.
      */
     maxItems(count: number): FluentRuleCustomizer<TObject, TValue>;
+    /**
+     * Applies the "equals" validation rule to the property.
+     * null, undefined and empty-string values are considered valid.
+     */
+    equals(expectedValue: TValue): FluentRuleCustomizer<TObject, TValue>;
 }
 /**
  * Part of the fluent rule API. Enables applying rules to properties and objects.
@@ -165,6 +170,11 @@ export declare class FluentRules<TObject, TValue> {
      * null and undefined values are considered valid.
      */
     maxItems(count: number): FluentRuleCustomizer<TObject, TValue>;
+    /**
+     * Applies the "equals" validation rule to the property.
+     * null and undefined values are considered valid.
+     */
+    equals(expectedValue: TValue): FluentRuleCustomizer<TObject, TValue>;
 }
 /**
  * Part of the fluent rule API. Enables targeting properties and objects with rules.

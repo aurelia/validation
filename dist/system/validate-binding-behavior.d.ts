@@ -10,8 +10,8 @@ export declare class ValidateBindingBehavior {
     /**
     * Gets the DOM element associated with the data-binding. Most of the time it's
     * the binding.target but sometimes binding.target is an aurelia custom element,
-    * which is a javascript "class" instance, so we need to use the controller to
-    * locate the actual DOM element.
+    * or custom attribute which is a javascript "class" instance, so we need to use
+    * the controller's container to retrieve the actual DOM element.
     */
     getTarget(binding: any, view: any): any;
     bind(binding: any, source: any, rulesOrController?: ValidationController | any, rules?: any): void;
