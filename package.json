@@ -39,35 +39,35 @@
       "dist": "dist/amd"
     },
     "peerDependencies": {
-      "aurelia-binding": "^1.0.3",
+      "aurelia-binding": "^1.0.4",
       "aurelia-dependency-injection": "^1.0.0",
       "aurelia-logging": "^1.0.0",
       "aurelia-pal": "^1.0.0",
       "aurelia-task-queue": "^1.0.0",
-      "aurelia-templating": "^1.0.0"
+      "aurelia-templating": "^1.1.0"
     },
     "dependencies": {
-      "aurelia-binding": "^1.0.3",
+      "aurelia-binding": "^1.0.4",
       "aurelia-dependency-injection": "^1.0.0",
       "aurelia-logging": "^1.0.0",
       "aurelia-pal": "^1.0.0",
       "aurelia-task-queue": "^1.0.0",
-      "aurelia-templating": "^1.0.0"
+      "aurelia-templating": "^1.1.0"
     },
     "devDependencies": {}
   },
   "dependencies": {
-    "aurelia-binding": "^1.0.3",
+    "aurelia-binding": "^1.0.4",
     "aurelia-dependency-injection": "^1.0.0",
     "aurelia-logging": "^1.0.0",
     "aurelia-pal": "^1.0.0",
     "aurelia-task-queue": "^1.0.0",
-    "aurelia-templating": "^1.0.0"
+    "aurelia-templating": "^1.1.0"
   },
   "devDependencies": {
     "aurelia-bootstrapper": "^1.0.0",
     "aurelia-pal-browser": "^1.0.0",
-    "aurelia-polyfills": "^1.0.0",
+    "aurelia-polyfills": "^1.1.0",
     "aurelia-testing": "^1.0.0-beta.2.0.0",
     "concurrently": "^2.2.0",
     "del-cli": "^0.2.0",
