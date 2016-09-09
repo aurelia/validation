@@ -579,7 +579,7 @@ You will often need to pass arguments to your custom rule. Below is an example o
       'integerRange',
       (value, obj, min, max) => value === null || value === undefined 
         || Number.isInteger(value) && value >= config.min && value <= config.max,
-      `\${$displayName} must be an integer between \${$config.min} and \${config.max}.`,
+      `\${$displayName} must be an integer between \${$config.min} and \${$config.max}.`,
       (min, max) => ({ min, max }) 
     );
 
