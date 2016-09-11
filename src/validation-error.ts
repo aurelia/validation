@@ -23,4 +23,8 @@ export class ValidationError {
   ) {
       this.id = ValidationError.nextId++;
   }
+
+  toString() {
+    return this.message;
+  }
 }
