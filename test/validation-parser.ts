@@ -28,6 +28,8 @@ describe('Validator', () => {
     expect(parse('function (a1) { return a1.bcde; }')).toEqual(new AccessScope('bcde', 0));
     expect(parse('function ($a1) { return $a1.bcde; }')).toEqual(new AccessScope('bcde', 0));
     expect(parse('function (_) { return _.bc_de; }')).toEqual(new AccessScope('bc_de', 0));
+    expect(parse('function (a) {"use strict"; return a.b; }')).toEqual(new AccessScope('b', 0));
+    expect(parse('function (a) { "use strict";  return a.b; }')).toEqual(new AccessScope('b', 0));
     expect(parse('a=>a.b')).toEqual(new AccessScope('b', 0));
     expect(parse('a =>a.b')).toEqual(new AccessScope('b', 0));
     expect(parse('a=> a.b')).toEqual(new AccessScope('b', 0));
