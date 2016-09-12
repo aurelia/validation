@@ -16,6 +16,9 @@ export var ValidationError = (function () {
         this.propertyName = propertyName;
         this.id = ValidationError.nextId++;
     }
+    ValidationError.prototype.toString = function () {
+        return this.message;
+    };
     ValidationError.nextId = 0;
     return ValidationError;
 }());

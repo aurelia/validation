@@ -18,4 +18,5 @@ export declare class ValidationError {
      * @param propertyName The name of the invalid property. Optional.
      */
     constructor(rule: any, message: string, object: any, propertyName?: string | null);
+    toString(): string;
 }

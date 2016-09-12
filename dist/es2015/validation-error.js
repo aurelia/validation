@@ -15,5 +15,8 @@ export class ValidationError {
         this.propertyName = propertyName;
         this.id = ValidationError.nextId++;
     }
+    toString() {
+        return this.message;
+    }
 }
 ValidationError.nextId = 0;
