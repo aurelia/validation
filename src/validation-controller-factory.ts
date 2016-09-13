@@ -5,7 +5,9 @@ import {ValidationController} from './validation-controller';
  * Creates ValidationController instances.
  */
 export class ValidationControllerFactory {
-  static inject = [Container];
+  static get(container: Container) {
+    return new ValidationControllerFactory(container);
+  }
 
   constructor(private container: Container) {}
 
@@ -27,3 +29,5 @@ export class ValidationControllerFactory {
     return controller;
   }
 }
+
+(<any>ValidationControllerFactory)['protocol:aurelia:resolver'] = true;
