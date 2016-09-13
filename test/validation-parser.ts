@@ -33,4 +33,11 @@ describe('Validator', () => {
     expect(parse('_ => _.b')).toEqual(new AccessScope('b', 0));
     expect(parse('$ => $.b')).toEqual(new AccessScope('b', 0));
   });
+
+  it('parses properties', () => {
+    expect(parser.parseProperty('firstName')).toEqual({ name: 'firstName', displayName: null });
+    expect(parser.parseProperty('3_letter_id')).toEqual({ name: '3_letter_id', displayName: null });
+    expect(parser.parseProperty('. @$# ???')).toEqual({ name: '. @$# ???', displayName: null });
+    expect(parser.parseProperty((x: any) => x.firstName)).toEqual({ name: 'firstName', displayName: null });
+  });
 });

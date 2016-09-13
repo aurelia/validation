@@ -83,12 +83,10 @@ export class ValidationParser {
   }
 
   parseProperty<TObject, TValue>(property: string|PropertyAccessor<TObject, TValue>): RuleProperty {
-    let accessor: Expression;
     if (isString(property)) {
-      accessor = this.parser.parse(<string>property);
-    } else {
-      accessor = this.getAccessorExpression(property.toString());
-    }
+      return { name: <string>property, displayName: null };  
+    } 
+    const accessor = this.getAccessorExpression(property.toString());  
     if (accessor instanceof AccessScope
       || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {      
       return {
