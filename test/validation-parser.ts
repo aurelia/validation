@@ -4,11 +4,6 @@ import {BindingLanguage} from 'aurelia-templating'
 import {TemplatingBindingLanguage} from 'aurelia-templating-binding';
 import {ValidationParser} from '../src/aurelia-validation';
 
-declare var describe: { (name: string, fn: () => void): void };
-declare var beforeAll: { (fn: () => void): void };
-declare var it: { (name: string, fn: (done?: () => void) => void): void };
-declare var expect: (x: any) => any;
-
 describe('Validator', () => {
   let parser: ValidationParser;
 
