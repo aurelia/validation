@@ -4,7 +4,7 @@ import { Container } from 'aurelia-dependency-injection';
  */
 export declare class ValidationControllerFactory {
     private container;
-    static inject: typeof Container[];
+    static get(container: Container): ValidationControllerFactory;
     constructor(container: Container);
     /**
      * Creates a new controller and registers it in the current element's container so that it's

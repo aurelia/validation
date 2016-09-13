@@ -1,5 +1,4 @@
 "use strict";
-var aurelia_dependency_injection_1 = require('aurelia-dependency-injection');
 var validation_controller_1 = require('./validation-controller');
 /**
  * Creates ValidationController instances.
@@ -8,6 +7,9 @@ var ValidationControllerFactory = (function () {
     function ValidationControllerFactory(container) {
         this.container = container;
     }
+    ValidationControllerFactory.get = function (container) {
+        return new ValidationControllerFactory(container);
+    };
     /**
      * Creates a new controller and registers it in the current element's container so that it's
      * available to the validate binding behavior and renderers.
@@ -24,7 +26,7 @@ var ValidationControllerFactory = (function () {
         this.container.registerInstance(validation_controller_1.ValidationController, controller);
         return controller;
     };
-    ValidationControllerFactory.inject = [aurelia_dependency_injection_1.Container];
     return ValidationControllerFactory;
 }());
 exports.ValidationControllerFactory = ValidationControllerFactory;
+ValidationControllerFactory['protocol:aurelia:resolver'] = true;

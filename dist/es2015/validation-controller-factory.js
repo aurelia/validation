@@ -1,4 +1,3 @@
-import { Container } from 'aurelia-dependency-injection';
 import { ValidationController } from './validation-controller';
 /**
  * Creates ValidationController instances.
@@ -6,6 +5,9 @@ import { ValidationController } from './validation-controller';
 export class ValidationControllerFactory {
     constructor(container) {
         this.container = container;
+    }
+    static get(container) {
+        return new ValidationControllerFactory(container);
     }
     /**
      * Creates a new controller and registers it in the current element's container so that it's
@@ -24,4 +26,4 @@ export class ValidationControllerFactory {
         return controller;
     }
 }
-ValidationControllerFactory.inject = [Container];
+ValidationControllerFactory['protocol:aurelia:resolver'] = true;

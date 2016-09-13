@@ -38,7 +38,7 @@ var ValidationParser = (function () {
         return expression;
     };
     ValidationParser.prototype.getAccessorExpression = function (fn) {
-        var classic = /^function\s*\([$_\w\d]+\)\s*\{\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+        var classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
         var arrow = /^[$_\w\d]+\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
         var match = classic.exec(fn) || arrow.exec(fn);
         if (match === null) {
