@@ -28,6 +28,31 @@ export class FluentRuleCustomizer<TObject, TValue> {
     };
     this.fluentEnsure.rules.push(this.rule);
   }
+  
+  private addRules(target: any) {
+     var existingRules = Rules.get(target) || [];
+     Rules.set(target, existingRules.concat(this.rules));
+  }
+
+  /**
+   * Decorator
+   */
+  decorate() : Function
+  {
+     return function(target:any, propertyKey: string){
+       let isClassLevelDecorator = typeof target == 'function';
+       let rulesTarget = isClassLevelDecorator? target.prototype : target;
+       
+       if(!isClassLevelDecorator)
+       {
+          this.rules.forEach((rule: Rule<any,any>) => {
+            rule.property.name = propertyKey;
+          });
+       }
+
+       this.addRules(rulesTarget);
+     }.bind(this)
+  }
 
   /**
    * Specifies the key to use when looking up the rule's validation message.
@@ -379,6 +404,11 @@ export class ValidationRules {
    */
   static ensure<TObject, TValue>(property: string|PropertyAccessor<TObject, TValue>) {
     return new FluentEnsure<TObject>(ValidationRules.parser).ensure(property);
+  }
+
+  static ensureProperty<TObject, TValue>()
+  {
+    return new FluentEnsure<TObject>(ValidationRules.parser).ensure("");
   }
 
   /**
