@@ -19,7 +19,6 @@ describe('end to end', () => {
     
     (<Promise<any>>component.create(<any>bootstrap))
       .then(() => {
-        //@satisfies((o:TestClass)=>o.property4=="_value_")
         @ValidationRules.ensureObject().satisfies(()=>true).withMessage('123').decorate()
         class TestClass
         {
