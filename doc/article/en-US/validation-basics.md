@@ -76,7 +76,7 @@ Once you've targetted a property using `ensure` you can define the property's di
 
 ### Applying Rules
 
-After targetting a property with `ensure` and optionally setting it's display name you can begin associating rules with the property using the built-in rule methods:
+After targetting a property with `ensure` and optionally setting its display name you can begin associating rules with the property using the built-in rule methods:
 
 * `required()` validates the property is not null, undefined or whitespace.
 * `matches(regex)` validates the property matches the specified regular expression.
@@ -287,7 +287,7 @@ If you'd like to be completely explicit when wiring up controllers with view mod
 
 ### Setting the Validate Trigger
 
-Once you've created a controller you can set it's `validationTrigger` to either `blur`, `change` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus). 
+Once you've created a controller you can set its `validationTrigger` to either `blur`, `change` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus). 
 
 When the trigger is `change`, each change the binding makes to the model property will trigger validation of the property. Use the `throttle`, `debounce` and `updateTrigger` binding behaviors in conjunction with the `change` validate trigger to customize the behavior. 
 
@@ -423,7 +423,7 @@ Assuming your view-model had a controller property you could add a simple error 
   </source-code>
 </code-listing>
 
-To build more sophisticated error UIs you might need a list of errors specific to a particular binding or set of bindings. The `validation-errors` custom attribute creates an array containing all validation errors relevant to the element the `validation-errors` attribute appears on and it's descendent elements. Here's an example using bootstrap style form markup:
+To build more sophisticated error UIs you might need a list of errors specific to a particular binding or set of bindings. The `validation-errors` custom attribute creates an array containing all validation errors relevant to the element the `validation-errors` attribute appears on and its descendent elements. Here's an example using bootstrap style form markup:
 
 <code-listing heading="validation-errors custom attribute">
   <source-code lang="HTML">
@@ -455,7 +455,7 @@ To build more sophisticated error UIs you might need a list of errors specific t
 
 This first form-group div uses the `validation-errors` custom attribute to create a `firstNameErrors` property. When there are items in the array the bootstrap `has-error` class is applied to the form-group div. Each error message is displayed below the input using `help-block` spans. The same approach is used to display the lastName field's errors.
 
-The `validation-errors` custom attribute is implements the `ValidationRenderer` interface. Instead of doing direct DOM manipulation to display the errors it "renders" the errors to an array property to enable the data-binding and templating scenarios illustrated above. It also automatically adds itself to the controller using `addRender` when it's "bind" lifecycle event occurs and removes itself from the controller using the `removeRenderer` method when it's "unbind" composition lifecycle event occurs.
+The `validation-errors` custom attribute is implements the `ValidationRenderer` interface. Instead of doing direct DOM manipulation to display the errors it "renders" the errors to an array property to enable the data-binding and templating scenarios illustrated above. It also automatically adds itself to the controller using `addRender` when its "bind" lifecycle event occurs and removes itself from the controller using the `removeRenderer` method when its "unbind" composition lifecycle event occurs.
 
 ## [Custom Renderers](aurelia-doc://section/8/version/1.0.0)
 
@@ -532,7 +532,7 @@ To use a custom renderer you'll need to instantiate it and pass it to your contr
 
 ## [Entity Validation](aurelia-doc://section/9/version/1.0.0)
 
-The examples so far show the controller validating specific properties used in `& validate` bindings. The controller can validate whole entities even if some of the properties aren't used in data bindings. Opt in to this "entity" style validation using the controller's `addObject(object, rules?)` method. Calling `addObject` will add the specified object to the set of objects the controller should validate when it's `validate` method is called. The `rules` parameter is optional. Use it when the rules for the object haven't been specified using the fluent syntax's `.on` method. You can remove objects from the controller's list of objects to validate using `removeObject(object)`. Calling `removeObject` will unrender any errors associated with the object.
+The examples so far show the controller validating specific properties used in `& validate` bindings. The controller can validate whole entities even if some of the properties aren't used in data bindings. Opt in to this "entity" style validation using the controller's `addObject(object, rules?)` method. Calling `addObject` will add the specified object to the set of objects the controller should validate when its `validate` method is called. The `rules` parameter is optional. Use it when the rules for the object haven't been specified using the fluent syntax's `.on` method. You can remove objects from the controller's list of objects to validate using `removeObject(object)`. Calling `removeObject` will unrender any errors associated with the object.
 
 You may have rules that are not associated with a single property. The fluent rule syntax has an `ensureObject()` method you can use to define rules for the whole object.
 
@@ -599,7 +599,7 @@ When you write a custom rule, the function should return `true` when the rule is
 
 ## [Integration With Other Libraries](aurelia-doc://section/11/version/1.0.0)
 
-In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has it's own validation logic. You can replace the `StandardValidator` with your own implementation when the plugin is installed. Here's an example using breeze:
+In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has its own validation logic. You can replace the `StandardValidator` with your own implementation when the plugin is installed. Here's an example using breeze:
 
  <code-listing heading="breeze-validator">
   <source-code lang="ES 2015">
