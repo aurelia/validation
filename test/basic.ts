@@ -170,6 +170,30 @@ describe('end to end', () => {
       // confirm resetting cleared all errors.
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
 
+      // hide the form and change the validateTrigger.
+      .then(() => {
+        viewModel.showForm = false;
+        viewModel.controller.validateTrigger = validateTrigger.changeOrBlur;
+      })
+      // show the form
+      .then(() => viewModel.showForm = true)
+      // confirm hiding and showing the form reset the errors.
+      .then(() => expect(viewModel.controller.errors.length).toBe(0))
+      // blur the firstName field- this should trigger validation.
+      .then(() => blur(firstName))
+      // confirm there's an error.
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))
+      // make a model change to the firstName field. 
+      // this should reset the errors for the firstName field.
+      .then(() => viewModel.firstName = 'test')
+      // confirm the errors were reset.
+      .then(() => expect(viewModel.controller.errors.length).toBe(0))
+      // change the lastName field- this should trigger validation.
+      .then(() => change(lastName, 'abcdef'))
+      .then(() => change(lastName, ''))
+      // confirm there's an error.
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))
+
       // cleanup and finish.
       .then(() => component.dispose())
       .then(done);

@@ -57,13 +57,17 @@ export class ValidateBindingBehavior {
     controller.registerBinding(binding, target, rules);
     binding.validationController = controller;
 
-    if (controller.validateTrigger === validateTrigger.change) {
+    if (controller.validateTrigger === validateTrigger.change
+      || controller.validateTrigger === validateTrigger.changeOrBlur) {
       binding.standardUpdateSource = binding.updateSource;
       binding.updateSource = function(value: any) {
         this.standardUpdateSource(value);
         this.validationController.validateBinding(this);
       };
-    } else if (controller.validateTrigger === validateTrigger.blur) {
+    }
+    
+    if (controller.validateTrigger === validateTrigger.blur
+      || controller.validateTrigger === validateTrigger.changeOrBlur) {
       binding.validateBlurHandler = () => {
         this.taskQueue.queueMicroTask(() => controller.validateBinding(binding));
       };
