@@ -1,103 +1,68 @@
-import {Optional} from 'aurelia-dependency-injection';
-import {DOM} from 'aurelia-pal';
 import {TaskQueue} from 'aurelia-task-queue';
 import {ValidationController} from './validation-controller';
 import {validateTrigger} from './validate-trigger';
+import {ValidateBindingBehaviorBase} from './validate-binding-behavior-base';
 
 /**
- * Binding behavior. Indicates the bound property should be validated.
+ * Binding behavior. Indicates the bound property should be validated
+ * when the validate trigger specified by the associated controller's 
+ * validateTrigger property occurs.
  */
-export class ValidateBindingBehavior {
+export class ValidateBindingBehavior extends ValidateBindingBehaviorBase {  
   static inject = [TaskQueue];
 
-  constructor(private taskQueue: TaskQueue) {}
-
-  /**
-  * Gets the DOM element associated with the data-binding. Most of the time it's
-  * the binding.target but sometimes binding.target is an aurelia custom element,
-  * or custom attribute which is a javascript "class" instance, so we need to use
-  * the controller's container to retrieve the actual DOM element.
-  */
-  getTarget(binding: any, view: any) {
-    const target = binding.target;
-    // DOM element
-    if (target instanceof Element) {
-      return target;
-    }
-    // custom element or custom attribute
-    for (let i = 0, ii = view.controllers.length; i < ii; i++) {
-      let controller: any = view.controllers[i];
-      if (controller.viewModel === target) {
-        const element = controller.container.get(DOM.Element);
-        if (element) {
-          return element;
-        }
-        throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
-      }
-    }
-    throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
+  getValidateTrigger(controller: ValidationController) {
+    return controller.validateTrigger;
   }
+}
 
-  bind(binding: any, source: any, rulesOrController?: ValidationController|any, rules?: any) {
-    // identify the target element.
-    const target = this.getTarget(binding, source);
+/**
+ * Binding behavior. Indicates the bound property will be validated
+ * manually, by calling controller.validate(). No automatic validation
+ * triggered by data-entry or blur will occur.
+ */
+export class ValidateManuallyBindingBehavior extends ValidateBindingBehaviorBase {  
+  static inject = [TaskQueue];
 
-    // locate the controller.
-    let controller: ValidationController;
-    if (rulesOrController instanceof ValidationController) {
-      controller = rulesOrController;
-    } else {
-      controller = source.container.get(Optional.of(ValidationController));
-      rules = rulesOrController;
-    }     
-    if (controller === null) {
-      throw new Error(`A ValidationController has not been registered.`);
-    }
-
-    controller.registerBinding(binding, target, rules);
-    binding.validationController = controller;
-
-    if (controller.validateTrigger & validateTrigger.change) {
-      binding.standardUpdateSource = binding.updateSource;
-      binding.updateSource = function(value: any) {
-        this.standardUpdateSource(value);
-        this.validationController.validateBinding(this);
-      };
-    }
-    
-    if (controller.validateTrigger & validateTrigger.blur) {
-      binding.validateBlurHandler = () => {
-        this.taskQueue.queueMicroTask(() => controller.validateBinding(binding));
-      };
-      binding.validateTarget = target;
-      target.addEventListener('blur', binding.validateBlurHandler);
-    }
-
-    if (controller.validateTrigger !== validateTrigger.manual) {
-      binding.standardUpdateTarget = binding.updateTarget;
-      binding.updateTarget = function(value: any) {
-        this.standardUpdateTarget(value);
-        this.validationController.resetBinding(this);
-      };
-    }
+  getValidateTrigger() {
+    return validateTrigger.manual;
   }
+}
 
-  unbind(binding: any) {
-    // reset the binding to it's original state.
-    if (binding.standardUpdateSource) {
-      binding.updateSource = binding.standardUpdateSource;
-      binding.standardUpdateSource = null;
-    }
-    if (binding.standardUpdateTarget) {
-      binding.updateTarget = binding.standardUpdateTarget;
-      binding.standardUpdateTarget = null;
-    }
-    if (binding.validateBlurHandler) {
-      binding.validateTarget.removeEventListener('blur', binding.validateBlurHandler);
-      binding.validateBlurHandler = null;
-      binding.validateTarget = null;
-    }
-    binding.validationController.unregisterBinding(binding);
-    binding.validationController = null;
+/**
+ * Binding behavior. Indicates the bound property should be validated
+ * when the associated element blurs.
+ */
+export class ValidateOnBlurBindingBehavior extends ValidateBindingBehaviorBase {  
+  static inject = [TaskQueue];
+
+  getValidateTrigger() {
+    return validateTrigger.blur;
+  }
+}
+
+/**
+ * Binding behavior. Indicates the bound property should be validated
+ * when the associated element is changed by the user, causing a change
+ * to the model.
+ */
+export class ValidateOnChangeBindingBehavior extends ValidateBindingBehaviorBase {  
+  static inject = [TaskQueue];
+
+  getValidateTrigger() {
+    return validateTrigger.change;
+  }
+}
+
+/**
+ * Binding behavior. Indicates the bound property should be validated
+ * when the associated element blurs or is changed by the user, causing 
+ * a change to the model.
+ */
+export class ValidateOnChangeOrBlurBindingBehavior extends ValidateBindingBehaviorBase {  
+  static inject = [TaskQueue];
+
+  getValidateTrigger() {
+    return validateTrigger.changeOrBlur;
   }
 }
