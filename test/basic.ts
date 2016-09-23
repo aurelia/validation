@@ -1,28 +1,8 @@
 import {StageComponent, ComponentTester} from 'aurelia-testing';
-import {Aurelia} from 'aurelia-framework';
 import {bootstrap} from 'aurelia-bootstrapper';
-import {DOM} from 'aurelia-pal';
 import {RegistrationForm} from './resources/registration-form';
 import {validateTrigger} from '../src/aurelia-validation';
-
-function configure(aurelia: Aurelia) {
-  aurelia.use
-    .standardConfiguration()
-    //.developmentLogging()
-    .plugin('dist/test/src/aurelia-validation')
-    .feature('./dist/test/test/resources');
-}
-
-function blur(element: Element): Promise<void> {
-  element.dispatchEvent(DOM.createCustomEvent('blur', {}));
-  return new Promise<void>(setTimeout);
-}
-
-function change(element: HTMLInputElement, value: string): Promise<void> {
-  element.value = value;
-  element.dispatchEvent(DOM.createCustomEvent('change', { bubbles: true }));  
-  return new Promise<void>(setTimeout);
-}
+import {configure, blur, change} from './shared';
 
 describe('end to end', () => {
   it('basic scenarios', (done: () => void) => {

@@ -9,7 +9,6 @@ import {
 @inlineView(`
 <template>
   <form novalidate autocomplete="off" if.bind="showForm">
-    <ul><li repeat.for="error of controller.errors">\${error.message}</li></ul>
     <input        id="firstName" type="text" value.bind="firstName & validate">
     <input        id="lastName"  type="text" value.bind="lastName & validate">
     <input        id="email"     type="text" value.bind="email & validate">
