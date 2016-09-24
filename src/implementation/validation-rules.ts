@@ -24,9 +24,20 @@ export class FluentRuleCustomizer<TObject, TValue> {
       config,
       when: null,
       messageKey: 'default',
-      message: null
+      message: null,
+      sequence: fluentEnsure._sequence
     };
-    this.fluentEnsure.rules.push(this.rule);
+    this.fluentEnsure._addRule(this.rule);
+  }
+
+  /**
+   * Validate subsequent rules after previously declared rules have
+   * been validated successfully. Use to postpone validation of costly
+   * rules until less expensive rules pass validation. 
+   */
+  then() {
+    this.fluentEnsure._sequence++;
+    return this;
   }
 
   /**
@@ -325,7 +336,9 @@ export class FluentEnsure<TObject> {
   /**
    * Rules that have been defined using the fluent API.
    */
-  public rules: Rule<TObject, any>[] = [];
+  public rules: Rule<TObject, any>[][] = [];
+
+  public _sequence = 0;
 
   constructor(private parser: ValidationParser) {}
 
@@ -353,6 +366,16 @@ export class FluentEnsure<TObject> {
   on(target: any) {
     Rules.set(target, this.rules);
     return this;
+  }
+
+  /**
+   * Adds a rule definition to the sequenced ruleset.
+   */
+  _addRule(rule: Rule<TObject, any>) {
+    while (this.rules.length < rule.sequence + 1) {
+      this.rules.push([]);
+    }
+    this.rules[rule.sequence].push(rule);
   }
 
   private assertInitialized() {
@@ -410,8 +433,8 @@ export class ValidationRules {
    * @param rules The rules to search.
    * @param tag The tag to search for.
    */
-  static taggedRules(rules: Rule<any, any>[], tag: string): Rule<any, any>[] {
-    return rules.filter(r => r.tag === tag);
+  static taggedRules(rules: Rule<any, any>[][], tag: string): Rule<any, any>[][] {
+    return rules.map(x => x.filter(r => r.tag === tag));
   }
 
   /**

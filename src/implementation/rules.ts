@@ -12,7 +12,7 @@ export class Rules {
   /**
    * Applies the rules to a target.
    */
-  static set(target: any, rules: Rule<any, any>[]): void {
+  static set(target: any, rules: Rule<any, any>[][]): void {
     if (target instanceof Function) {
       target = target.prototype;
     }
@@ -35,7 +35,7 @@ export class Rules {
   /**
    * Retrieves the target's rules.
    */
-  static get(target: any): Rule<any, any>[]|null {
+  static get(target: any): Rule<any, any>[][]|null {
     return target[Rules.key] || null;
   }
 }
