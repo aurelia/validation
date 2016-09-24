@@ -310,7 +310,7 @@ If you'd like to be completely explicit when wiring up controllers with view mod
 
 ### Setting the Validate Trigger
 
-Once you've created a controller you can set its `validationTrigger` to either `blur`, `change` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus). 
+Once you've created a controller you can set its `validationTrigger` to either `blur`, `change`, `blurOrChange` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus). 
 
 When the trigger is `change`, each change the binding makes to the model property will trigger validation of the property. Use the `throttle`, `debounce` and `updateTrigger` binding behaviors in conjunction with the `change` validate trigger to customize the behavior. 
 
@@ -422,6 +422,13 @@ The `validate` binding behavior enables quick and easy validation for two-way da
     <input type="text" value.bind="firstName & validate:personController:personRules">
   </source-code>
 </code-listing>
+
+The `validate` binding behavior obeys the associated controller's `validateTrigger` (`blur`, `change`, `blurOrChange`, `manual`). If you'd like to use a different `validateTrigger` in a particular binding use one of the following binding behaviors in place of `& validate`:
+
+* `& validateOnBlur`: the DOM blur event triggers validation.
+* `& validateOnChange`: data entry that changes the model triggers validation.
+* `& validateOnBlurOrChange`: DOM blur or data entry triggers validation.
+* `& validateManually`: the binding is not validated automatically when the associated element is blurred or changed by the user.
 
 ## [Displaying Errors](aurelia-doc://section/7/version/1.0.0)
 
