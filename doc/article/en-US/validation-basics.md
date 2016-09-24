@@ -36,11 +36,12 @@ If you're not sure where to put this, search your `aurelia.json` for *aurelia-te
 
 ## [Defining Rules](aurelia-doc://section/2/version/1.0.0)
 
-Aurelia Validation's standard rule engine uses a fluent syntax to define a set of rules. There are four parts to the syntax:
+Aurelia Validation's standard rule engine uses a fluent syntax to define a set of rules. There are five parts to the syntax:
 1. Selecting a property using `.ensure`
 2. Associating rules with the property using `.required`, `.matches`, etc
 3. Customizing property rules using `.withMessage`, `.when`, etc
-4. Applying the ruleset to a class or instance using `.on`
+4. Sequencing rules using `.then`
+5. Applying the ruleset to a class or instance using `.on`
 
 ### ensure
 
@@ -139,6 +140,28 @@ You may run into situations where you only want a rule to be evaluated when cert
           .withMessage('Email is required when shipment notifications have been requested.');
   </source-code>
 </code-listing>
+
+### Sequencing Rule Evaluation
+
+Rules are evaluated in parallel. Use the `.then()` method to postpone evaluation of a rule until after the preceding rules in the `ensure` have been evaluated.
+
+<code-listing heading="Conditional Validation">
+  <source-code lang="ES 2015">
+    ValidationRules
+      .ensure('email')
+        .email()
+        .required()
+        .then()
+        .satisfiesRule('emailNotAlreadyRegistered')
+      .ensure('username')
+        .required()
+        .minLength(3)
+        .maxLength(50)
+        .satisfiesRule('usernameNotInUse')
+  </source-code>
+</code-listing>
+
+In the example above, the `emailNotAlreadyRegistered` custom rule will only be evaluated when the `email` property passes the `required()` and `email()` validations. Likewise, `usernameNotInUse` will be evaluated only when the `required()`, `minLength(3)` and `maxLength(50)` checks pass validation.
 
 ### Tagging Rules
 
