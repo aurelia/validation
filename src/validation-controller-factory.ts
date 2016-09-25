@@ -1,5 +1,6 @@
 import {Container} from 'aurelia-dependency-injection';
 import {ValidationController} from './validation-controller';
+import {Validator} from './validator';
 
 /**
  * Creates ValidationController instances.
@@ -15,16 +16,16 @@ export class ValidationControllerFactory {
    * Creates a new controller and registers it in the current element's container so that it's 
    * available to the validate binding behavior and renderers.
    */
-  create() {
-    return this.container.invoke(ValidationController);
+  create(validator?: Validator) {
+    return this.container.invoke(ValidationController, [validator]);
   }
 
   /**
    * Creates a new controller and registers it in the current element's container so that it's 
    * available to the validate binding behavior and renderers.
    */
-  createForCurrentScope() {
-    const controller = this.create();
+  createForCurrentScope(validator?: Validator) {
+    const controller = this.create(validator);
     this.container.registerInstance(ValidationController, controller);
     return controller;
   }

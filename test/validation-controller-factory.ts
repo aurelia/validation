@@ -13,4 +13,15 @@ describe('ValidationControllerFactory', () => {
     expect(container.get(Optional.of(ValidationController))).toBe(null);
     expect(childContainer.get(Optional.of(ValidationController))).toBe(controller);
   });
+
+  it('createForCurrentScopeWithValidator', () => {
+    const container = new Container();
+    const childContainer = container.createChild();
+    const factory = childContainer.get(ValidationControllerFactory);
+    const validator = {};
+
+    const controller = factory.createForCurrentScope(validator);
+   
+    expect(controller.validator).toBe(validator);
+  });
 });
