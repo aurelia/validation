@@ -157,7 +157,8 @@ Rules are evaluated in parallel. Use the `.then()` method to postpone evaluation
         .required()
         .minLength(3)
         .maxLength(50)
-        .satisfiesRule('usernameNotInUse')
+        .then()
+        .satisfiesRule('usernameNotInUse');
   </source-code>
 </code-listing>
 
