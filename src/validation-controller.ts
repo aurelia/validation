@@ -1,3 +1,4 @@
+import {Container} from 'aurelia-dependency-injection';
 import {Binding, Expression} from 'aurelia-binding';
 import {Validator} from './validator';
 import {validateTrigger} from './validate-trigger';
@@ -43,7 +44,6 @@ export interface ValidateInstruction {
  * Exposes the current list of validation errors for binding purposes.
  */
 export class ValidationController {
-  static inject = [Validator];
 
   // Registered bindings (via the validate binding behavior)
   private bindings = new Map<Binding, BindingInfo>();
@@ -75,7 +75,11 @@ export class ValidationController {
   // Promise that resolves when validation has completed.
   private finishValidating = Promise.resolve();
 
-  constructor(private validator: Validator) {}
+  constructor(private validator: Validator) {
+    if (!validator) {
+          this.validator = Container.instance.get(Validator);
+    }
+  }
 
   /**
    * Adds an object to the set of objects that should be validated when validate is called.
