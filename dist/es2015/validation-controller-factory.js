@@ -1,4 +1,5 @@
 import { ValidationController } from './validation-controller';
+import { Validator } from './validator';
 /**
  * Creates ValidationController instances.
  */
@@ -10,18 +11,20 @@ export class ValidationControllerFactory {
         return new ValidationControllerFactory(container);
     }
     /**
-     * Creates a new controller and registers it in the current element's container so that it's
-     * available to the validate binding behavior and renderers.
+     * Creates a new controller instance.
      */
-    create() {
-        return this.container.invoke(ValidationController);
+    create(validator) {
+        if (!validator) {
+            validator = this.container.get(Validator);
+        }
+        return new ValidationController(validator);
     }
     /**
      * Creates a new controller and registers it in the current element's container so that it's
      * available to the validate binding behavior and renderers.
      */
-    createForCurrentScope() {
-        const controller = this.create();
+    createForCurrentScope(validator) {
+        const controller = this.create(validator);
         this.container.registerInstance(ValidationController, controller);
         return controller;
     }

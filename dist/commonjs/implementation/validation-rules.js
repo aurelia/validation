@@ -17,10 +17,20 @@ var FluentRuleCustomizer = (function () {
             config: config,
             when: null,
             messageKey: 'default',
-            message: null
+            message: null,
+            sequence: fluentEnsure._sequence
         };
-        this.fluentEnsure.rules.push(this.rule);
+        this.fluentEnsure._addRule(this.rule);
     }
+    /**
+     * Validate subsequent rules after previously declared rules have
+     * been validated successfully. Use to postpone validation of costly
+     * rules until less expensive rules pass validation.
+     */
+    FluentRuleCustomizer.prototype.then = function () {
+        this.fluentEnsure._sequence++;
+        return this;
+    };
     /**
      * Specifies the key to use when looking up the rule's validation message.
      */
@@ -242,7 +252,7 @@ var FluentRules = (function () {
      * null, undefined and empty-string values are considered valid.
      */
     FluentRules.prototype.email = function () {
-        return this.matches(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/)
+        return this.matches(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i)
             .withMessageKey('email');
     };
     /**
@@ -299,6 +309,7 @@ var FluentEnsure = (function () {
          * Rules that have been defined using the fluent API.
          */
         this.rules = [];
+        this._sequence = 0;
     }
     /**
      * Target a property with validation rules.
@@ -322,6 +333,15 @@ var FluentEnsure = (function () {
     FluentEnsure.prototype.on = function (target) {
         rules_1.Rules.set(target, this.rules);
         return this;
+    };
+    /**
+     * Adds a rule definition to the sequenced ruleset.
+     */
+    FluentEnsure.prototype._addRule = function (rule) {
+        while (this.rules.length < rule.sequence + 1) {
+            this.rules.push([]);
+        }
+        this.rules[rule.sequence].push(rule);
     };
     FluentEnsure.prototype.assertInitialized = function () {
         if (this.parser) {
@@ -371,7 +391,7 @@ var ValidationRules = (function () {
      * @param tag The tag to search for.
      */
     ValidationRules.taggedRules = function (rules, tag) {
-        return rules.filter(function (r) { return r.tag === tag; });
+        return rules.map(function (x) { return x.filter(function (r) { return r.tag === tag; }); });
     };
     /**
      * Removes the rules from a class or object.

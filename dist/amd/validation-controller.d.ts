@@ -39,7 +39,7 @@ export declare class ValidationController {
     /**
      * The trigger that will invoke automatic validation of a property used in a binding.
      */
-    validateTrigger: string;
+    validateTrigger: number;
     private finishValidating;
     constructor(validator: Validator);
     /**

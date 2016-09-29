@@ -13,6 +13,7 @@ export declare class StandardValidator extends Validator {
     private getDisplayName;
     constructor(messageProvider: ValidationMessageProvider, resources: ViewResources);
     private getMessage(rule, object, value);
+    private validateRuleSequence(object, propertyName, ruleSequence, sequence);
     private validate(object, propertyName, rules);
     /**
      * Validates the specified property.

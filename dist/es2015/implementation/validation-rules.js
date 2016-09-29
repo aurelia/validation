@@ -15,9 +15,19 @@ export class FluentRuleCustomizer {
             config,
             when: null,
             messageKey: 'default',
-            message: null
+            message: null,
+            sequence: fluentEnsure._sequence
         };
-        this.fluentEnsure.rules.push(this.rule);
+        this.fluentEnsure._addRule(this.rule);
+    }
+    /**
+     * Validate subsequent rules after previously declared rules have
+     * been validated successfully. Use to postpone validation of costly
+     * rules until less expensive rules pass validation.
+     */
+    then() {
+        this.fluentEnsure._sequence++;
+        return this;
     }
     /**
      * Specifies the key to use when looking up the rule's validation message.
@@ -222,7 +232,7 @@ export class FluentRules {
      * null, undefined and empty-string values are considered valid.
      */
     email() {
-        return this.matches(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/)
+        return this.matches(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i)
             .withMessageKey('email');
     }
     /**
@@ -277,6 +287,7 @@ export class FluentEnsure {
          * Rules that have been defined using the fluent API.
          */
         this.rules = [];
+        this._sequence = 0;
     }
     /**
      * Target a property with validation rules.
@@ -300,6 +311,15 @@ export class FluentEnsure {
     on(target) {
         Rules.set(target, this.rules);
         return this;
+    }
+    /**
+     * Adds a rule definition to the sequenced ruleset.
+     */
+    _addRule(rule) {
+        while (this.rules.length < rule.sequence + 1) {
+            this.rules.push([]);
+        }
+        this.rules[rule.sequence].push(rule);
     }
     assertInitialized() {
         if (this.parser) {
@@ -345,7 +365,7 @@ export class ValidationRules {
      * @param tag The tag to search for.
      */
     static taggedRules(rules, tag) {
-        return rules.filter(r => r.tag === tag);
+        return rules.map(x => x.filter(r => r.tag === tag));
     }
     /**
      * Removes the rules from a class or object.

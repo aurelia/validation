@@ -10,6 +10,12 @@ export declare class FluentRuleCustomizer<TObject, TValue> {
     private rule;
     constructor(property: RuleProperty, condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config: Object, fluentEnsure: FluentEnsure<TObject>, fluentRules: FluentRules<TObject, TValue>, parser: ValidationParser);
     /**
+     * Validate subsequent rules after previously declared rules have
+     * been validated successfully. Use to postpone validation of costly
+     * rules until less expensive rules pass validation.
+     */
+    then(): this;
+    /**
      * Specifies the key to use when looking up the rule's validation message.
      */
     withMessageKey(key: string): this;
@@ -42,7 +48,7 @@ export declare class FluentRuleCustomizer<TObject, TValue> {
     /**
      * Rules that have been defined using the fluent API.
      */
-    readonly rules: Rule<TObject, any>[];
+    readonly rules: Rule<TObject, any>[][];
     /**
      * Applies the rules to a class or object, making them discoverable by the StandardValidator.
      * @param target A class or object.
@@ -184,7 +190,8 @@ export declare class FluentEnsure<TObject> {
     /**
      * Rules that have been defined using the fluent API.
      */
-    rules: Rule<TObject, any>[];
+    rules: Rule<TObject, any>[][];
+    _sequence: number;
     constructor(parser: ValidationParser);
     /**
      * Target a property with validation rules.
@@ -200,6 +207,10 @@ export declare class FluentEnsure<TObject> {
      * @param target A class or object.
      */
     on(target: any): this;
+    /**
+     * Adds a rule definition to the sequenced ruleset.
+     */
+    _addRule(rule: Rule<TObject, any>): void;
     private assertInitialized();
 }
 /**
@@ -230,7 +241,7 @@ export declare class ValidationRules {
      * @param rules The rules to search.
      * @param tag The tag to search for.
      */
-    static taggedRules(rules: Rule<any, any>[], tag: string): Rule<any, any>[];
+    static taggedRules(rules: Rule<any, any>[][], tag: string): Rule<any, any>[][];
     /**
      * Removes the rules from a class or object.
      * @param target A class or object.

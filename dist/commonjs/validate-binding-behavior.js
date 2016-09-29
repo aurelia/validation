@@ -1,100 +1,93 @@
 "use strict";
-var aurelia_dependency_injection_1 = require('aurelia-dependency-injection');
-var aurelia_pal_1 = require('aurelia-pal');
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var aurelia_task_queue_1 = require('aurelia-task-queue');
-var validation_controller_1 = require('./validation-controller');
 var validate_trigger_1 = require('./validate-trigger');
+var validate_binding_behavior_base_1 = require('./validate-binding-behavior-base');
 /**
- * Binding behavior. Indicates the bound property should be validated.
+ * Binding behavior. Indicates the bound property should be validated
+ * when the validate trigger specified by the associated controller's
+ * validateTrigger property occurs.
  */
-var ValidateBindingBehavior = (function () {
-    function ValidateBindingBehavior(taskQueue) {
-        this.taskQueue = taskQueue;
+var ValidateBindingBehavior = (function (_super) {
+    __extends(ValidateBindingBehavior, _super);
+    function ValidateBindingBehavior() {
+        _super.apply(this, arguments);
     }
-    /**
-    * Gets the DOM element associated with the data-binding. Most of the time it's
-    * the binding.target but sometimes binding.target is an aurelia custom element,
-    * or custom attribute which is a javascript "class" instance, so we need to use
-    * the controller's container to retrieve the actual DOM element.
-    */
-    ValidateBindingBehavior.prototype.getTarget = function (binding, view) {
-        var target = binding.target;
-        // DOM element
-        if (target instanceof Element) {
-            return target;
-        }
-        // custom element or custom attribute
-        for (var i = 0, ii = view.controllers.length; i < ii; i++) {
-            var controller = view.controllers[i];
-            if (controller.viewModel === target) {
-                var element = controller.container.get(aurelia_pal_1.DOM.Element);
-                if (element) {
-                    return element;
-                }
-                throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
-            }
-        }
-        throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
-    };
-    ValidateBindingBehavior.prototype.bind = function (binding, source, rulesOrController, rules) {
-        var _this = this;
-        // identify the target element.
-        var target = this.getTarget(binding, source);
-        // locate the controller.
-        var controller;
-        if (rulesOrController instanceof validation_controller_1.ValidationController) {
-            controller = rulesOrController;
-        }
-        else {
-            controller = source.container.get(aurelia_dependency_injection_1.Optional.of(validation_controller_1.ValidationController));
-            rules = rulesOrController;
-        }
-        if (controller === null) {
-            throw new Error("A ValidationController has not been registered.");
-        }
-        controller.registerBinding(binding, target, rules);
-        binding.validationController = controller;
-        if (controller.validateTrigger === validate_trigger_1.validateTrigger.change) {
-            binding.standardUpdateSource = binding.updateSource;
-            binding.updateSource = function (value) {
-                this.standardUpdateSource(value);
-                this.validationController.validateBinding(this);
-            };
-        }
-        else if (controller.validateTrigger === validate_trigger_1.validateTrigger.blur) {
-            binding.validateBlurHandler = function () {
-                _this.taskQueue.queueMicroTask(function () { return controller.validateBinding(binding); });
-            };
-            binding.validateTarget = target;
-            target.addEventListener('blur', binding.validateBlurHandler);
-        }
-        if (controller.validateTrigger !== validate_trigger_1.validateTrigger.manual) {
-            binding.standardUpdateTarget = binding.updateTarget;
-            binding.updateTarget = function (value) {
-                this.standardUpdateTarget(value);
-                this.validationController.resetBinding(this);
-            };
-        }
-    };
-    ValidateBindingBehavior.prototype.unbind = function (binding) {
-        // reset the binding to it's original state.
-        if (binding.standardUpdateSource) {
-            binding.updateSource = binding.standardUpdateSource;
-            binding.standardUpdateSource = null;
-        }
-        if (binding.standardUpdateTarget) {
-            binding.updateTarget = binding.standardUpdateTarget;
-            binding.standardUpdateTarget = null;
-        }
-        if (binding.validateBlurHandler) {
-            binding.validateTarget.removeEventListener('blur', binding.validateBlurHandler);
-            binding.validateBlurHandler = null;
-            binding.validateTarget = null;
-        }
-        binding.validationController.unregisterBinding(binding);
-        binding.validationController = null;
+    ValidateBindingBehavior.prototype.getValidateTrigger = function (controller) {
+        return controller.validateTrigger;
     };
     ValidateBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
     return ValidateBindingBehavior;
-}());
+}(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
 exports.ValidateBindingBehavior = ValidateBindingBehavior;
+/**
+ * Binding behavior. Indicates the bound property will be validated
+ * manually, by calling controller.validate(). No automatic validation
+ * triggered by data-entry or blur will occur.
+ */
+var ValidateManuallyBindingBehavior = (function (_super) {
+    __extends(ValidateManuallyBindingBehavior, _super);
+    function ValidateManuallyBindingBehavior() {
+        _super.apply(this, arguments);
+    }
+    ValidateManuallyBindingBehavior.prototype.getValidateTrigger = function () {
+        return validate_trigger_1.validateTrigger.manual;
+    };
+    ValidateManuallyBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
+    return ValidateManuallyBindingBehavior;
+}(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
+exports.ValidateManuallyBindingBehavior = ValidateManuallyBindingBehavior;
+/**
+ * Binding behavior. Indicates the bound property should be validated
+ * when the associated element blurs.
+ */
+var ValidateOnBlurBindingBehavior = (function (_super) {
+    __extends(ValidateOnBlurBindingBehavior, _super);
+    function ValidateOnBlurBindingBehavior() {
+        _super.apply(this, arguments);
+    }
+    ValidateOnBlurBindingBehavior.prototype.getValidateTrigger = function () {
+        return validate_trigger_1.validateTrigger.blur;
+    };
+    ValidateOnBlurBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
+    return ValidateOnBlurBindingBehavior;
+}(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
+exports.ValidateOnBlurBindingBehavior = ValidateOnBlurBindingBehavior;
+/**
+ * Binding behavior. Indicates the bound property should be validated
+ * when the associated element is changed by the user, causing a change
+ * to the model.
+ */
+var ValidateOnChangeBindingBehavior = (function (_super) {
+    __extends(ValidateOnChangeBindingBehavior, _super);
+    function ValidateOnChangeBindingBehavior() {
+        _super.apply(this, arguments);
+    }
+    ValidateOnChangeBindingBehavior.prototype.getValidateTrigger = function () {
+        return validate_trigger_1.validateTrigger.change;
+    };
+    ValidateOnChangeBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
+    return ValidateOnChangeBindingBehavior;
+}(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
+exports.ValidateOnChangeBindingBehavior = ValidateOnChangeBindingBehavior;
+/**
+ * Binding behavior. Indicates the bound property should be validated
+ * when the associated element blurs or is changed by the user, causing
+ * a change to the model.
+ */
+var ValidateOnChangeOrBlurBindingBehavior = (function (_super) {
+    __extends(ValidateOnChangeOrBlurBindingBehavior, _super);
+    function ValidateOnChangeOrBlurBindingBehavior() {
+        _super.apply(this, arguments);
+    }
+    ValidateOnChangeOrBlurBindingBehavior.prototype.getValidateTrigger = function () {
+        return validate_trigger_1.validateTrigger.changeOrBlur;
+    };
+    ValidateOnChangeOrBlurBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
+    return ValidateOnChangeOrBlurBindingBehavior;
+}(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
+exports.ValidateOnChangeOrBlurBindingBehavior = ValidateOnChangeOrBlurBindingBehavior;

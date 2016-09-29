@@ -30,23 +30,11 @@ export class StandardValidator extends Validator {
         };
         return expression.evaluate({ bindingContext: object, overrideContext }, this.lookupFunctions);
     }
-    validate(object, propertyName, rules) {
-        const errors = [];
-        // rules specified?
-        if (!rules) {
-            // no. locate the rules via metadata.
-            rules = Rules.get(object);
-        }
-        // any rules?
-        if (!rules) {
-            return Promise.resolve(errors);
-        }
+    validateRuleSequence(object, propertyName, ruleSequence, sequence) {
         // are we validating all properties or a single property?
         const validateAllProperties = propertyName === null || propertyName === undefined;
-        const addError = (rule, value) => {
-            const message = this.getMessage(rule, object, value);
-            errors.push(new ValidationError(rule, message, object, rule.property.name));
-        };
+        const rules = ruleSequence[sequence];
+        const errors = [];
         // validate each rule.
         const promises = [];
         for (let i = 0; i < rules.length; i++) {
@@ -61,23 +49,37 @@ export class StandardValidator extends Validator {
             }
             // validate.
             const value = rule.property.name === null ? object : object[rule.property.name];
-            const promiseOrBoolean = rule.condition(value, object);
-            if (promiseOrBoolean instanceof Promise) {
-                promises.push(promiseOrBoolean.then(isValid => {
-                    if (!isValid) {
-                        addError(rule, value);
-                    }
-                }));
-                continue;
+            let promiseOrBoolean = rule.condition(value, object);
+            if (!(promiseOrBoolean instanceof Promise)) {
+                promiseOrBoolean = Promise.resolve(promiseOrBoolean);
             }
-            if (!promiseOrBoolean) {
-                addError(rule, value);
+            promises.push(promiseOrBoolean.then(isValid => {
+                if (!isValid) {
+                    const message = this.getMessage(rule, object, value);
+                    errors.push(new ValidationError(rule, message, object, rule.property.name));
+                }
+            }));
+        }
+        return Promise.all(promises)
+            .then(() => {
+            sequence++;
+            if (errors.length === 0 && sequence < ruleSequence.length) {
+                return this.validateRuleSequence(object, propertyName, ruleSequence, sequence);
             }
+            return errors;
+        });
+    }
+    validate(object, propertyName, rules) {
+        // rules specified?
+        if (!rules) {
+            // no. attempt to locate the rules.
+            rules = Rules.get(object);
         }
-        if (promises.length === 0) {
-            return Promise.resolve(errors);
+        // any rules?
+        if (!rules) {
+            return Promise.resolve([]);
         }
-        return Promise.all(promises).then(() => errors);
+        return this.validateRuleSequence(object, propertyName, rules, 0);
     }
     /**
      * Validates the specified property.

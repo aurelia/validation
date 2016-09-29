@@ -10,19 +10,23 @@ System.register([], function(exports_1, context_1) {
             */
             exports_1("validateTrigger", validateTrigger = {
                 /**
-                * Validate the binding when the binding's target element fires a DOM "blur" event.
-                */
-                blur: 'blur',
-                /**
-                * Validate the binding when it updates the model due to a change in the view.
-                * Not specific to DOM "change" events.
-                */
-                change: 'change',
-                /**
                 * Manual validation.  Use the controller's `validate()` and  `reset()` methods
                 * to validate all bindings.
                 */
-                manual: 'manual'
+                manual: 0,
+                /**
+                * Validate the binding when the binding's target element fires a DOM "blur" event.
+                */
+                blur: 1,
+                /**
+                * Validate the binding when it updates the model due to a change in the view.
+                */
+                change: 2,
+                /**
+                 * Validate the binding when the binding's target element fires a DOM "blur" event and
+                 * when it updates the model due to a change in the view.
+                 */
+                changeOrBlur: 3
             });
         }
     }

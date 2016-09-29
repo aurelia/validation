@@ -54,24 +54,12 @@ System.register(['aurelia-templating', '../validator', '../validation-error', '.
                     };
                     return expression.evaluate({ bindingContext: object, overrideContext: overrideContext }, this.lookupFunctions);
                 };
-                StandardValidator.prototype.validate = function (object, propertyName, rules) {
+                StandardValidator.prototype.validateRuleSequence = function (object, propertyName, ruleSequence, sequence) {
                     var _this = this;
-                    var errors = [];
-                    // rules specified?
-                    if (!rules) {
-                        // no. locate the rules via metadata.
-                        rules = rules_1.Rules.get(object);
-                    }
-                    // any rules?
-                    if (!rules) {
-                        return Promise.resolve(errors);
-                    }
                     // are we validating all properties or a single property?
                     var validateAllProperties = propertyName === null || propertyName === undefined;
-                    var addError = function (rule, value) {
-                        var message = _this.getMessage(rule, object, value);
-                        errors.push(new validation_error_1.ValidationError(rule, message, object, rule.property.name));
-                    };
+                    var rules = ruleSequence[sequence];
+                    var errors = [];
                     // validate each rule.
                     var promises = [];
                     var _loop_1 = function(i) {
@@ -87,25 +75,39 @@ System.register(['aurelia-templating', '../validator', '../validation-error', '.
                         // validate.
                         var value = rule.property.name === null ? object : object[rule.property.name];
                         var promiseOrBoolean = rule.condition(value, object);
-                        if (promiseOrBoolean instanceof Promise) {
-                            promises.push(promiseOrBoolean.then(function (isValid) {
-                                if (!isValid) {
-                                    addError(rule, value);
-                                }
-                            }));
-                            return "continue";
+                        if (!(promiseOrBoolean instanceof Promise)) {
+                            promiseOrBoolean = Promise.resolve(promiseOrBoolean);
                         }
-                        if (!promiseOrBoolean) {
-                            addError(rule, value);
-                        }
+                        promises.push(promiseOrBoolean.then(function (isValid) {
+                            if (!isValid) {
+                                var message = _this.getMessage(rule, object, value);
+                                errors.push(new validation_error_1.ValidationError(rule, message, object, rule.property.name));
+                            }
+                        }));
                     };
                     for (var i = 0; i < rules.length; i++) {
                         _loop_1(i);
                     }
-                    if (promises.length === 0) {
-                        return Promise.resolve(errors);
+                    return Promise.all(promises)
+                        .then(function () {
+                        sequence++;
+                        if (errors.length === 0 && sequence < ruleSequence.length) {
+                            return _this.validateRuleSequence(object, propertyName, ruleSequence, sequence);
+                        }
+                        return errors;
+                    });
+                };
+                StandardValidator.prototype.validate = function (object, propertyName, rules) {
+                    // rules specified?
+                    if (!rules) {
+                        // no. attempt to locate the rules.
+                        rules = rules_1.Rules.get(object);
                     }
-                    return Promise.all(promises).then(function () { return errors; });
+                    // any rules?
+                    if (!rules) {
+                        return Promise.resolve([]);
+                    }
+                    return this.validateRuleSequence(object, propertyName, rules, 0);
                 };
                 /**
                  * Validates the specified property.

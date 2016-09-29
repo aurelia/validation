@@ -41,13 +41,10 @@ export class ValidationParser {
         return this.parser.parse(match[1]);
     }
     parseProperty(property) {
-        let accessor;
         if (isString(property)) {
-            accessor = this.parser.parse(property);
+            return { name: property, displayName: null };
         }
-        else {
-            accessor = this.getAccessorExpression(property.toString());
-        }
+        const accessor = this.getAccessorExpression(property.toString());
         if (accessor instanceof AccessScope
             || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
             return {
