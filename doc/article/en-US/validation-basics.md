@@ -121,7 +121,7 @@ Another way to override messages on a case-by-case basis is to use the `.withMes
     validationMessages['invalidAirportCode'] = `\${$displayName} is not a valid airport code.`;
 
     ValidationRules
-      .ensure('airportCode)
+      .ensure('airportCode')
         .matches(/^[A-Z]{3}$/).withMessageKey('invalidAirportCode')...
   </source-code>
 </code-listing>
