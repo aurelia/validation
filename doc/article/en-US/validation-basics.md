@@ -281,7 +281,7 @@ Or with the `ValidationControllerFactory`:
   <source-code lang="ES 2015">
     import {ValidationControllerFactory} from 'aurelia-validation';
 
-    @inject(ValidationControllerFactory))
+    @inject(ValidationControllerFactory)
     export class RegistrationForm {
       controller = null;
 
