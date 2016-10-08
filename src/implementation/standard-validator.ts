@@ -124,4 +124,19 @@ export class StandardValidator extends Validator {
   validateObject(object: any, rules?: any): Promise<ValidationError[]> {
     return this.validate(object, null, rules || null);
   }  
+
+  /**
+   * Determines whether a rule exists in a set of rules.
+   * @param rules The rules to search.
+   * @parem rule The rule to find.
+   */
+  ruleExists(rules: Rule<any, any>[][], rule: Rule<any, any>): boolean {    
+    let i = rules.length;
+    while (i--) {
+      if (rules[i].indexOf(rule) !== -1) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

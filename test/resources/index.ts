@@ -4,6 +4,7 @@ export function configure(config: FrameworkConfiguration) {
   config.globalResources([
     './number-value',
     './registration-form',
-    './trigger-form'
+    './trigger-form',
+    './nullable-object-form'
   ]);
 }

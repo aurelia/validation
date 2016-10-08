@@ -21,4 +21,11 @@ export abstract class Validator {
    * specified object. This may not be possible for all implementations of this interface.
    */
   abstract validateObject(object: any, rules?: any): Promise<ValidationError[]>;
+
+  /**
+   * Determines whether a rule exists in a set of rules.
+   * @param rules The rules to search.
+   * @parem rule The rule to find.
+   */
+  abstract ruleExists(rules: any, rule: any): boolean;
 }

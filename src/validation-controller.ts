@@ -18,6 +18,11 @@ interface BindingInfo {
    * The rules associated with the binding via the validate binding behavior's rules parameter.
    */
   rules?: any;
+
+  /**
+   * The object and property associated with the binding.
+   */
+  propertyInfo: { object: any; propertyName: string; }|null;
 }
 
 export interface ValidateInstruction {
@@ -149,7 +154,7 @@ export class ValidationController {
    * @param rules (optional) rules associated with the binding. Validator implementation specific.
    */
   registerBinding(binding: Binding, target: Element, rules?: any) {
-    this.bindings.set(binding, { target, rules });
+    this.bindings.set(binding, { target, rules, propertyInfo: null });
   }
 
   /**
@@ -174,9 +179,8 @@ export class ValidationController {
       } else {
         predicate = x => x.object === object;
       }
-      // todo: move to Validator interface:
-      if (rules && rules.indexOf) {
-        return x => predicate(x) && rules.indexOf(x.rule) !== -1;
+      if (rules) {        
+        return x => predicate(x) && this.validator.ruleExists(rules, x.rule);
       }
       return predicate;
     } else {
@@ -211,11 +215,11 @@ export class ValidationController {
           promises.push(this.validator.validateObject(object, rules));
         }
         for (let [binding, { rules }] of Array.from(this.bindings)) {
-          const { object, propertyName } = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
-          if (this.objects.has(object)) {
+          const propertyInfo = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+          if (!propertyInfo || this.objects.has(propertyInfo.object)) {
             continue;
           }
-          promises.push(this.validator.validateProperty(object, propertyName, rules));        
+          promises.push(this.validator.validateProperty(propertyInfo.object, propertyInfo.propertyName, rules));        
         }
         return Promise.all(promises).then(errorSets => errorSets.reduce((a, b) => a.concat(b), []));
       };
@@ -263,8 +267,8 @@ export class ValidationController {
   private getAssociatedElements({ object, propertyName }: ValidationError): Element[] {
     const elements: Element[] = [];
     for (let [binding, { target }] of Array.from(this.bindings)) {
-      const { object: o, propertyName: p } = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
-      if (o === object && p === propertyName) {
+      const propertyInfo = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+      if (propertyInfo && propertyInfo.object === object && propertyInfo.propertyName === propertyName) {
         elements.push(target);
       }
     }
@@ -336,9 +340,17 @@ export class ValidationController {
     if (!binding.isBound) {
       return;
     }
-    const { object, propertyName } = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+    let propertyInfo = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+    let rules = undefined;
     const registeredBinding = this.bindings.get(binding);
-    const rules = registeredBinding ? registeredBinding.rules : undefined; 
+    if (registeredBinding) {
+      rules = registeredBinding.rules;
+      registeredBinding.propertyInfo = propertyInfo;
+    }
+    if (!propertyInfo) {
+      return;
+    }    
+    const { object, propertyName } = propertyInfo;
     this.validate({ object, propertyName, rules });
   }
 
@@ -346,7 +358,18 @@ export class ValidationController {
   * Resets the errors for a property associated with a binding.
   */
   resetBinding(binding: Binding) {
-    const { object, propertyName } = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+    const registeredBinding = this.bindings.get(binding);
+    let propertyInfo = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+    if (!propertyInfo && registeredBinding) {
+      propertyInfo = registeredBinding.propertyInfo;
+    }
+    if (registeredBinding) {
+      registeredBinding.propertyInfo = null;
+    }
+    if (!propertyInfo) {
+      return;
+    }
+    const { object, propertyName } = propertyInfo;
     this.reset({ object, propertyName });
   }
 }
