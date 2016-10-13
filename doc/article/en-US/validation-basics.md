@@ -321,7 +321,7 @@ Use the `manual` trigger to indicate the controller should not automatically val
   <source-code lang="ES 2015">
     import {ValidationControllerFactory, validateTrigger} from 'aurelia-validation';
 
-    @inject(ValidationControllerFactory))
+    @inject(ValidationControllerFactory)
     export class RegistrationForm {
       controller = null;
 
