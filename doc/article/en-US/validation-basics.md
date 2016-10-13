@@ -45,7 +45,7 @@ Aurelia Validation's standard rule engine uses a fluent syntax to define a set o
 
 ### ensure
 
-To begin defining a ruleset, use the `ValidationRules` class. Start by targetting a property using `ValidationRules.ensure(...)`. The `ensure` method accepts one argument representing the property name. The argument can be a string or a simple property access expression. If you're using TypeScript you'll probably want to use a property access expression because you'll get the benefit of intellisense, refactoring and avoid using "magic strings" that can be a maintenance issue.
+To begin defining a ruleset, use the `ValidationRules` class. Start by targeting a property using `ValidationRules.ensure(...)`. The `ensure` method accepts one argument representing the property name. The argument can be a string or a simple property access expression. If you're using TypeScript you'll probably want to use a property access expression because you'll get the benefit of intellisense, refactoring and avoid using "magic strings" that can be a maintenance issue.
 
 <code-listing heading="Ensure">
   <source-code lang="ES 2015">
@@ -77,7 +77,7 @@ Once you've targetted a property using `ensure` you can define the property's di
 
 ### Applying Rules
 
-After targetting a property with `ensure` and optionally setting its display name you can begin associating rules with the property using the built-in rule methods:
+After targeting a property with `ensure` and optionally setting its display name you can begin associating rules with the property using the built-in rule methods:
 
 * `required()` validates the property is not null, undefined or whitespace.
 * `matches(regex)` validates the property matches the specified regular expression.
