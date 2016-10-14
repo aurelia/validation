@@ -1,5 +1,5 @@
-import {ValidationController} from './validation-controller';
-import {ValidationRenderer} from './validation-renderer';
+import { ValidationController } from './validation-controller';
+import { ValidationRenderer } from './validation-renderer';
 
 export class ValidationRendererCustomAttribute {
   private container: any;
@@ -7,17 +7,17 @@ export class ValidationRendererCustomAttribute {
   private value: string;
   private renderer: ValidationRenderer;
 
-  created(view: any) {
+  public created(view: any) {
     this.container = view.container;
   }
 
-  bind() {
+  public bind() {
     this.controller = this.container.get(ValidationController);
     this.renderer = this.container.get(this.value);
     this.controller.addRenderer(this.renderer);
   }
 
-  unbind() {
+  public unbind() {
     this.controller.removeRenderer(this.renderer);
     this.controller = <any>null;
     this.renderer = <any>null;

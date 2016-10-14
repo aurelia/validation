@@ -3,7 +3,7 @@
  */
 export class ValidationError {
   private static nextId = 0;
-  
+
   /**
    * A number that uniquely identifies the error instance.
    */
@@ -17,14 +17,14 @@ export class ValidationError {
    */
   constructor(
     public rule: any,
-    public message: string, 
-    public object: any, 
-    public propertyName: string|null = null
+    public message: string,
+    public object: any,
+    public propertyName: string | null = null
   ) {
-      this.id = ValidationError.nextId++;
+    this.id = ValidationError.nextId++;
   }
 
-  toString() {
+  public toString() {
     return this.message;
   }
 }

@@ -20,6 +20,8 @@
     "url": "https://github.com/aurelia/validation"
   },
   "scripts": {
+    "lint": "cross-env ./node_modules/.bin/tslint --project tsconfig.json",
+    "pretest": "cross-env npm run lint",
     "test": "cross-env ./node_modules/.bin/tsc && cross-env ./node_modules/karma/bin/karma start --single-run",
     "test-watch": "concurrently \"./node_modules/.bin/tsc --watch\" \"./node_modules/karma/bin/karma start\"",
     "prebuild:compile": "rimraf 'dist/**'",
@@ -80,6 +82,7 @@
     "requirejs": "^2.2.0",
     "requirejs-text": "^2.0.12",
     "rimraf": "^2.5.4",
+    "tslint": "^3.15.1",
     "typedoc": "^0.5.0",
     "typescript": "^2.0.0"
   },

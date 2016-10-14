@@ -10,9 +10,9 @@ import {
   CallMember,
   Unparser
 } from 'aurelia-binding';
-import {BindingLanguage} from 'aurelia-templating';
-import {RuleProperty} from './rule';
-import {isString} from './util';
+import { BindingLanguage } from 'aurelia-templating';
+import { RuleProperty } from './rule';
+import { isString } from './util';
 
 import * as LogManager from 'aurelia-logging';
 
@@ -21,34 +21,21 @@ export interface PropertyAccessor<TObject, TValue> {
 }
 
 export class ValidationParser {
-  static inject = [Parser, BindingLanguage];
+  public static inject = [Parser, BindingLanguage];
 
   private emptyStringExpression = new LiteralString('');
   private nullExpression = new LiteralPrimitive(null);
   private undefinedExpression = new LiteralPrimitive(undefined);
   private cache: { [message: string]: Expression } = {};
 
-  constructor(private parser: Parser, private bindinqLanguage: BindingLanguage) {}
+  constructor(private parser: Parser, private bindinqLanguage: BindingLanguage) { }
 
-  private coalesce(part: Expression): Expression {
-    // part === null || part === undefined ? '' : part
-    return new Conditional(
-      new Binary(
-        '||',
-        new Binary('===', part, this.nullExpression),
-        new Binary('===', part, this.undefinedExpression)
-      ),
-      this.emptyStringExpression,
-      new CallMember(part, 'toString', [])
-    );
-  }
-
-  parseMessage(message: string): Expression {
+  public parseMessage(message: string): Expression {
     if (this.cache[message] !== undefined) {
       return this.cache[message];
     }
 
-    const parts: (Expression|string)[]|null = (<any>this.bindinqLanguage).parseInterpolation(null, message);
+    const parts: (Expression | string)[] | null = (<any>this.bindinqLanguage).parseInterpolation(null, message);
     if (parts === null) {
       return new LiteralString(message);
     }
@@ -64,12 +51,40 @@ export class ValidationParser {
         )
       );
     }
-    
+
     MessageExpressionValidator.validate(expression, message);
-    
+
     this.cache[message] = expression;
-    
+
     return expression;
+  }
+
+  public parseProperty<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): RuleProperty {
+    if (isString(property)) {
+      return { name: <string>property, displayName: null };
+    }
+    const accessor = this.getAccessorExpression(property.toString());
+    if (accessor instanceof AccessScope
+      || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
+      return {
+        name: accessor.name,
+        displayName: null
+      };
+    }
+    throw new Error(`Invalid subject: "${accessor}"`);
+  }
+
+  private coalesce(part: Expression): Expression {
+    // part === null || part === undefined ? '' : part
+    return new Conditional(
+      new Binary(
+        '||',
+        new Binary('===', part, this.nullExpression),
+        new Binary('===', part, this.undefinedExpression)
+      ),
+      this.emptyStringExpression,
+      new CallMember(part, 'toString', [])
+    );
   }
 
   private getAccessorExpression(fn: string): Expression {
@@ -81,25 +96,10 @@ export class ValidationParser {
     }
     return this.parser.parse(match[1]);
   }
-
-  parseProperty<TObject, TValue>(property: string|PropertyAccessor<TObject, TValue>): RuleProperty {
-    if (isString(property)) {
-      return { name: <string>property, displayName: null };  
-    } 
-    const accessor = this.getAccessorExpression(property.toString());  
-    if (accessor instanceof AccessScope
-      || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {      
-      return {
-        name: accessor.name,
-        displayName: null
-      };
-    }
-    throw new Error(`Invalid subject: "${accessor}"`);
-  }
 }
 
 export class MessageExpressionValidator extends Unparser {
-  static validate(expression: Expression, originalMessage: string) {
+  public static validate(expression: Expression, originalMessage: string) {
     const visitor = new MessageExpressionValidator(originalMessage);
     expression.accept(visitor);
   }
@@ -108,13 +108,15 @@ export class MessageExpressionValidator extends Unparser {
     super([]);
   }
 
-  visitAccessScope(access: AccessScope) {
+  public visitAccessScope(access: AccessScope) {
     if (access.ancestor !== 0) {
       throw new Error('$parent is not permitted in validation message expressions.');
     }
     if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
       LogManager.getLogger('aurelia-validation')
+        /* tslint:disable:max-line-length */
         .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
+        /* tslint:enable:max-line-length */
     }
   }
 }

@@ -1,5 +1,5 @@
-import {inject} from 'aurelia-dependency-injection';
-import {inlineView} from 'aurelia-templating';
+import { inject } from 'aurelia-dependency-injection';
+import { inlineView } from 'aurelia-templating';
 import {
   ValidationRules,
   ValidationControllerFactory,
@@ -20,15 +20,15 @@ import {
 </template>`)
 @inject(ValidationControllerFactory)
 export class RegistrationForm {
-  firstName = '';
-  lastName = '';
-  email = '';
-  number1 = 0;
-  number2 = 0;
-  password = '';
-  confirmPassword = '';
-  controller: ValidationController;
-  showForm = true;
+  public firstName = '';
+  public lastName = '';
+  public email = '';
+  public number1 = 0;
+  public number2 = 0;
+  public password = '';
+  public confirmPassword = '';
+  public controller: ValidationController;
+  public showForm = true;
 
   constructor(controllerFactory: ValidationControllerFactory) {
     this.controller = controllerFactory.createForCurrentScope();
@@ -37,7 +37,7 @@ export class RegistrationForm {
 
 ValidationRules.customRule(
   'matchesProperty',
-  (value, obj, otherPropertyName) => 
+  (value, obj, otherPropertyName) =>
     value === null
     || value === undefined
     || value === ''

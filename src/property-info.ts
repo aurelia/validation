@@ -7,12 +7,14 @@ import {
   ValueConverter
 } from 'aurelia-binding';
 
-function getObject(expression: Expression, objectExpression: Expression, source: any): null|undefined|Object {
+function getObject(expression: Expression, objectExpression: Expression, source: any): null | undefined | Object {
   let value = objectExpression.evaluate(source, <any>null);
   if (value === null || value === undefined || value instanceof Object) {
     return value;
   }
+  /* tslint:disable */
   throw new Error(`The '${objectExpression}' part of '${expression}' evaluates to ${value} instead of an object, null or undefined.`);
+  /* tslint:enable */
 }
 
 /**
@@ -20,13 +22,13 @@ function getObject(expression: Expression, objectExpression: Expression, source:
  * @param expression The expression
  * @param source The scope
  */
-export function getPropertyInfo(expression: Expression, source: any): { object: Object; propertyName: string; }|null {
+export function getPropertyInfo(expression: Expression, source: any): { object: Object; propertyName: string; } | null {
   const originalExpression = expression;
   while (expression instanceof BindingBehavior || expression instanceof ValueConverter) {
     expression = expression.expression;
   }
 
-  let object: null|undefined|Object;
+  let object: null | undefined | Object;
   let propertyName: string;
   if (expression instanceof AccessScope) {
     object = source.bindingContext;

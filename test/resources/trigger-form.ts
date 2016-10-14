@@ -1,5 +1,5 @@
-import {inject, NewInstance} from 'aurelia-dependency-injection';
-import {inlineView} from 'aurelia-templating';
+import { inject, NewInstance } from 'aurelia-dependency-injection';
+import { inlineView } from 'aurelia-templating';
 import {
   ValidationRules,
   ValidationController
@@ -17,20 +17,20 @@ import {
 </template>`)
 @inject(NewInstance.of(ValidationController))
 export class TriggerForm {
-  standardInput: HTMLInputElement;
-  blurInput: HTMLInputElement;
-  changeInput: HTMLInputElement;
-  changeOrBlurInput: HTMLInputElement;
-  manualInput: HTMLInputElement;
-  
-  standardProp = '';
-  blurProp = '';
-  changeProp = '';
-  changeOrBlurProp = '';
-  manualProp = '';
-  showForm = true;
+  public standardInput: HTMLInputElement;
+  public blurInput: HTMLInputElement;
+  public changeInput: HTMLInputElement;
+  public changeOrBlurInput: HTMLInputElement;
+  public manualInput: HTMLInputElement;
 
-  constructor(public controller: ValidationController) {}
+  public standardProp = '';
+  public blurProp = '';
+  public changeProp = '';
+  public changeOrBlurProp = '';
+  public manualProp = '';
+  public showForm = true;
+
+  constructor(public controller: ValidationController) { }
 }
 
 ValidationRules

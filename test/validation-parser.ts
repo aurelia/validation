@@ -1,8 +1,8 @@
-import {Expression, AccessScope} from 'aurelia-binding';
-import {Container} from 'aurelia-dependency-injection';
-import {BindingLanguage} from 'aurelia-templating'
-import {TemplatingBindingLanguage} from 'aurelia-templating-binding';
-import {ValidationParser} from '../src/aurelia-validation';
+import { Expression, AccessScope } from 'aurelia-binding';
+import { Container } from 'aurelia-dependency-injection';
+import { BindingLanguage } from 'aurelia-templating';
+import { TemplatingBindingLanguage } from 'aurelia-templating-binding';
+import { ValidationParser } from '../src/aurelia-validation';
 
 describe('Validator', () => {
   let parser: ValidationParser;

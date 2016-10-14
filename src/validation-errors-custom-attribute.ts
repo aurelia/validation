@@ -1,9 +1,9 @@
-import {bindingMode} from 'aurelia-binding';
-import {Lazy} from 'aurelia-dependency-injection';
-import {customAttribute} from 'aurelia-templating';
-import {ValidationController} from './validation-controller';
-import {ValidationError} from './validation-error';
-import {ValidationRenderer, RenderInstruction} from './validation-renderer';
+import { bindingMode } from 'aurelia-binding';
+import { Lazy } from 'aurelia-dependency-injection';
+import { customAttribute } from 'aurelia-templating';
+import { ValidationController } from './validation-controller';
+import { ValidationError } from './validation-error';
+import { ValidationRenderer, RenderInstruction } from './validation-renderer';
 
 export interface RenderedError {
   error: ValidationError;
@@ -12,28 +12,30 @@ export interface RenderedError {
 
 @customAttribute('validation-errors', bindingMode.twoWay)
 export class ValidationErrorsCustomAttribute implements ValidationRenderer {
-  static inject = [Element, Lazy.of(ValidationController)];
+  public static inject = [Element, Lazy.of(ValidationController)];
 
-  value: RenderedError[];
-  errors: RenderedError[] = [];
+  public value: RenderedError[];
+  public errors: RenderedError[] = [];
 
   constructor(private boundaryElement: Element, private controllerAccessor: { (): ValidationController; }) {
   }
 
-  sort() {
+  public sort() {
     this.errors.sort((a, b) => {
       if (a.targets[0] === b.targets[0]) {
         return 0;
       }
+      /* tslint:disable:no-bitwise */
       return a.targets[0].compareDocumentPosition(b.targets[0]) & 2 ? 1 : -1;
+      /* tslint:enable:no-bitwise */
     });
   }
 
-  interestingElements(elements: Element[]): Element[] {
+  public interestingElements(elements: Element[]): Element[] {
     return elements.filter(e => this.boundaryElement.contains(e));
   }
 
-  render(instruction: RenderInstruction) {    
+  public render(instruction: RenderInstruction) {
     for (let { error } of instruction.unrender) {
       const index = this.errors.findIndex(x => x.error === error);
       if (index !== -1) {
@@ -44,20 +46,20 @@ export class ValidationErrorsCustomAttribute implements ValidationRenderer {
     for (let { error, elements } of instruction.render) {
       const targets = this.interestingElements(elements);
       if (targets.length) {
-        this.errors.push({ error: error, targets });
-      }    
+        this.errors.push({ error, targets });
+      }
     }
 
     this.sort();
     this.value = this.errors;
   }
 
-  bind() {
+  public bind() {
     this.controllerAccessor().addRenderer(this);
     this.value = this.errors;
   }
 
-  unbind() {
+  public unbind() {
     this.controllerAccessor().removeRenderer(this);
   }
 }

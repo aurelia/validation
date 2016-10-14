@@ -1,4 +1,4 @@
-import {Container, Optional} from 'aurelia-dependency-injection';
+import { Container, Optional } from 'aurelia-dependency-injection';
 import {
   ValidationControllerFactory,
   ValidationController,

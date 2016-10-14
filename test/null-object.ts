@@ -1,7 +1,7 @@
-import {StageComponent, ComponentTester} from 'aurelia-testing';
-import {bootstrap} from 'aurelia-bootstrapper';
-import {NullableObjectForm} from './resources/nullable-object-form';
-import {configure, blur, change} from './shared';
+import { StageComponent, ComponentTester } from 'aurelia-testing';
+import { bootstrap } from 'aurelia-bootstrapper';
+import { NullableObjectForm } from './resources/nullable-object-form';
+import { configure, blur, change } from './shared';
 
 describe('ValidationController', () => {
   it('handles bindings with null objects', (done: () => void) => {
@@ -41,7 +41,7 @@ describe('ValidationController', () => {
         return new Promise(resolve => setTimeout(resolve, 500));
       })
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
-      
+
       // cleanup and finish.
       .then(() => component.dispose())
       .then(done);

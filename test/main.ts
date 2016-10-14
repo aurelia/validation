@@ -1,22 +1,22 @@
-var allTestFiles: string[] = []
-var TEST_REGEXP = /^\/base\/dist\/test\/test\/[^\/]+\.js$/i
+let allTestFiles: string[] = [];
+let TEST_REGEXP = /^\/base\/dist\/test\/test\/[^\/]+\.js$/i;
 
-declare var require: any;
+declare let require: any;
 
 interface Window {
   __karma__: any;
 }
 
 // Get a list of all the test files to include
-Object.keys(window.__karma__.files).forEach(function (file) {
+Object.keys(window.__karma__.files).forEach(file => {
   if (TEST_REGEXP.test(file) && file !== '/base/dist/test/test/main.js') {
     // Normalize paths to RequireJS module names.
     // If you require sub-dependencies of test files to be loaded as-is (requiring file extension)
     // then do not normalize the paths
-    var normalizedTestModule = file.replace(/^\/base\/|\.js$/g, '')
-    allTestFiles.push(normalizedTestModule)
+    let normalizedTestModule = file.replace(/^\/base\/|\.js$/g, '');
+    allTestFiles.push(normalizedTestModule);
   }
-})
+});
 
 let started = false;
 
@@ -35,8 +35,8 @@ require.config({
     pal.initialize();
     require(allTestFiles, () => window.__karma__.start());
   },
-
   paths: {
+    /* tslint:disable:max-line-length */
     'aurelia-binding': '/base/node_modules/aurelia-binding/dist/amd/aurelia-binding',
     'aurelia-bootstrapper': '/base/node_modules/aurelia-bootstrapper/dist/amd/aurelia-bootstrapper',
     'aurelia-dependency-injection': '/base/node_modules/aurelia-dependency-injection/dist/amd/aurelia-dependency-injection',
@@ -58,28 +58,31 @@ require.config({
     'aurelia-task-queue': '/base/node_modules/aurelia-task-queue/dist/amd/aurelia-task-queue',
     'aurelia-templating': '/base/node_modules/aurelia-templating/dist/amd/aurelia-templating',
     'aurelia-templating-binding': '/base/node_modules/aurelia-templating-binding/dist/amd/aurelia-templating-binding',
+    /* tslint:enable:max-line-length */
+    /* tslint:disable */
     'text': '/base/node_modules/requirejs-text/text',
+    /* tslint:enable */
   },
   packages: [
     {
       name: 'aurelia-templating-router',
       location: '/base/node_modules/aurelia-templating-router/dist/amd',
-      main : 'aurelia-templating-router'
+      main: 'aurelia-templating-router'
     },
     {
       name: 'aurelia-templating-resources',
       location: '/base/node_modules/aurelia-templating-resources/dist/amd',
-      main : 'aurelia-templating-resources'
+      main: 'aurelia-templating-resources'
     },
     {
       name: 'aurelia-testing',
       location: '/base/node_modules/aurelia-testing/dist/amd',
-      main : 'aurelia-testing'
+      main: 'aurelia-testing'
     },
     {
       name: 'dist/test/src/aurelia-validation',
       location: '/base/dist/test/src',
-      main : 'aurelia-validation'
+      main: 'aurelia-validation'
     }
   ]
-})
+});

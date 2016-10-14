@@ -1,4 +1,4 @@
-import {Expression} from 'aurelia-binding';
+import { Expression } from 'aurelia-binding';
 
 /**
  * Information related to a property that is the subject of validation.
@@ -7,12 +7,12 @@ export interface RuleProperty {
   /**
    * The property name. null indicates the rule targets the object itself.
    */
-  name: string|null;
+  name: string | null;
 
   /**
    * The displayName of the property (or object).
    */
-  displayName: string|null;
+  displayName: string | null;
 }
 
 /**
@@ -20,11 +20,11 @@ export interface RuleProperty {
  */
 export interface Rule<TObject, TValue> {
   property: RuleProperty;
-  condition: (value: TValue, object?: TObject) => boolean|Promise<boolean>;
+  condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>;
   config: Object;
-  when: { (object: TObject): boolean }|null;
+  when: { (object: TObject): boolean } | null;
   messageKey: string;
-  message: Expression|null;
+  message: Expression | null;
   sequence: number;
   tag?: string;
 }

@@ -1,6 +1,6 @@
-import {Container} from 'aurelia-dependency-injection';
-import {BindingLanguage} from 'aurelia-templating'
-import {TemplatingBindingLanguage} from 'aurelia-templating-binding';
+import { Container } from 'aurelia-dependency-injection';
+import { BindingLanguage } from 'aurelia-templating';
+import { TemplatingBindingLanguage } from 'aurelia-templating-binding';
 import {
   StandardValidator,
   ValidationRules,
@@ -16,10 +16,10 @@ describe('Validator', () => {
     container.registerInstance(BindingLanguage, container.get(TemplatingBindingLanguage));
     const parser = container.get(ValidationParser);
     ValidationRules.initialize(parser);
-    validator = container.get(StandardValidator);    
+    validator = container.get(StandardValidator);
   });
 
-  it('validates email', (done: () => void) => {    
+  it('validates email', (done: () => void) => {
     let obj = { prop: <any>'foo@bar.com' };
     let rules = ValidationRules.ensure('prop').email().rules;
     validator.validateProperty(obj, 'prop', rules)
@@ -27,7 +27,7 @@ describe('Validator', () => {
       .then(() => {
         obj = { prop: 'foo' };
         rules = ValidationRules.ensure('prop').email().rules;
-        return validator.validateProperty(obj, 'prop', rules);        
+        return validator.validateProperty(obj, 'prop', rules);
       })
       .then(errors => {
         const expected = [new ValidationError(rules[0][0], 'Prop is not a valid email.', obj, 'prop')];
@@ -43,7 +43,7 @@ describe('Validator', () => {
       .then(done);
   });
 
-  it('validates equals', (done: () => void) => {    
+  it('validates equals', (done: () => void) => {
     let obj = { prop: <any>'test' };
     let rules = ValidationRules.ensure('prop').equals('test').rules;
     validator.validateProperty(obj, 'prop', rules)
@@ -51,7 +51,7 @@ describe('Validator', () => {
       .then(() => {
         obj = { prop: 'foo' };
         rules = ValidationRules.ensure('prop').equals('test').rules;
-        return validator.validateProperty(obj, 'prop', rules);        
+        return validator.validateProperty(obj, 'prop', rules);
       })
       .then(errors => {
         const expected = [new ValidationError(rules[0][0], 'Prop must be test.', obj, 'prop')];
@@ -67,11 +67,11 @@ describe('Validator', () => {
       .then(done);
   });
 
-  it('bails', (done: () => void) => {    
+  it('bails', (done: () => void) => {
     let obj = { prop: <any>'invalid email' };
     let spy = jasmine.createSpy().and.returnValue(true);
     let rules = ValidationRules.ensure('prop').email().then().satisfies(spy).rules;
-    validator.validateProperty(obj, 'prop', rules)      
+    validator.validateProperty(obj, 'prop', rules)
       .then(errors => {
         const expected = [new ValidationError(rules[0][0], 'Prop is not a valid email.', obj, 'prop')];
         expected[0].id = errors[0].id;

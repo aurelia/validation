@@ -1,5 +1,5 @@
-import {Expression} from 'aurelia-binding';
-import {ValidationParser} from './validation-parser';
+import { Expression } from 'aurelia-binding';
+import { ValidationParser } from './validation-parser';
 
 export interface ValidationMessages {
   [key: string]: string;
@@ -21,21 +21,21 @@ export const validationMessages: ValidationMessages = {
   minItems: `\${$displayName} must contain at least \${$config.count} item\${$config.count === 1 ? '' : 's'}.`,
   maxItems: `\${$displayName} cannot contain more than \${$config.count} item\${$config.count === 1 ? '' : 's'}.`,
   equals: `\${$displayName} must be \${$config.expectedValue}.`,
-}
+};
 
 /**
  * Retrieves validation messages and property display names.
  */
 export class ValidationMessageProvider {
-  static inject = [ValidationParser];
+  public static inject = [ValidationParser];
 
-  constructor(private parser: ValidationParser) {}
+  constructor(private parser: ValidationParser) { }
 
   /**
    * Returns a message binding expression that corresponds to the key.
    * @param key The message key.
    */
-  getMessage(key: string): Expression {
+  public getMessage(key: string): Expression {
     let message: string;
     if (key in validationMessages) {
       message = validationMessages[key];
@@ -51,7 +51,7 @@ export class ValidationMessageProvider {
    * Override this with your own custom logic.
    * @param propertyName The property name.
    */
-  getDisplayName(propertyName: string): string {
+  public getDisplayName(propertyName: string): string {
     // split on upper-case letters.
     const words = propertyName.split(/(?=[A-Z])/).join(' ');
     // capitalize first letter.

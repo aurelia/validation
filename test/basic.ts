@@ -1,8 +1,8 @@
-import {StageComponent, ComponentTester} from 'aurelia-testing';
-import {bootstrap} from 'aurelia-bootstrapper';
-import {RegistrationForm} from './resources/registration-form';
-import {validateTrigger} from '../src/aurelia-validation';
-import {configure, blur, change} from './shared';
+import { StageComponent, ComponentTester } from 'aurelia-testing';
+import { bootstrap } from 'aurelia-bootstrapper';
+import { RegistrationForm } from './resources/registration-form';
+import { validateTrigger } from '../src/aurelia-validation';
+import { configure, blur, change } from './shared';
 
 describe('end to end', () => {
   it('basic scenarios', (done: () => void) => {
@@ -12,9 +12,12 @@ describe('end to end', () => {
       .boundTo({});
     component.bootstrap(configure);
 
-    let firstName: HTMLInputElement, lastName: HTMLInputElement,
-        number1: HTMLInputElement, number2: HTMLInputElement,
-        password: HTMLInputElement, confirmPassword: HTMLInputElement;
+    let firstName: HTMLInputElement;
+    let lastName: HTMLInputElement;
+    let number1: HTMLInputElement;
+    let number2: HTMLInputElement;
+    let password: HTMLInputElement;
+    let confirmPassword: HTMLInputElement;
 
     let viewModel: RegistrationForm;
 
@@ -24,7 +27,7 @@ describe('end to end', () => {
       // grab some references.
       .then(() => {
         viewModel = component.viewModel;
-        viewModel.controller.addRenderer(renderer);        
+        viewModel.controller.addRenderer(renderer);
         firstName = <HTMLInputElement>component.element.querySelector('#firstName');
         lastName = <HTMLInputElement>component.element.querySelector('#lastName');
         number1 = <HTMLInputElement>component.element.querySelector('#number1');
@@ -79,12 +82,12 @@ describe('end to end', () => {
       // this should reset the errors for the number2 field.
       .then(() => viewModel.number2 = 2)
       // confirm the error was reset.
-      .then(() => expect(viewModel.controller.errors.length).toBe(1))      
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))
       // change the numbers back to invalid values.
       .then(() => {
         viewModel.number1 = 0;
         viewModel.number2 = 0;
-      })     
+      })
 
       // hide the form and change the validateTrigger.
       .then(() => {
@@ -98,7 +101,7 @@ describe('end to end', () => {
       // change the firstName field- this should trigger validation.
       .then(() => change(firstName, 'test'))
       // confirm there's no error.
-      .then(() => expect(viewModel.controller.errors.length).toBe(0))      
+      .then(() => expect(viewModel.controller.errors.length).toBe(0))
       // change the firstName field- this should trigger validation.
       .then(() => change(firstName, ''))
       // confirm there's an error.

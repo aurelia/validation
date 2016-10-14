@@ -1,7 +1,7 @@
-import {StageComponent, ComponentTester} from 'aurelia-testing';
-import {bootstrap} from 'aurelia-bootstrapper';
-import {TriggerForm} from './resources/trigger-form';
-import {configure, blur, change} from './shared';
+import { StageComponent, ComponentTester } from 'aurelia-testing';
+import { bootstrap } from 'aurelia-bootstrapper';
+import { TriggerForm } from './resources/trigger-form';
+import { configure, blur, change } from './shared';
 
 describe('ValidateBindingBehavior', () => {
   it('sets validateTrigger', (done: () => void) => {

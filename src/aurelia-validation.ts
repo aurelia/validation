@@ -19,29 +19,29 @@ export * from './implementation/validation-rules';
 
 // Configuration
 
-import {Container} from 'aurelia-dependency-injection';
-import {Validator} from './validator';
-import {StandardValidator} from './implementation/standard-validator';
-import {ValidationParser} from './implementation/validation-parser';
-import {ValidationRules} from './implementation/validation-rules';
+import { Container } from 'aurelia-dependency-injection';
+import { Validator } from './validator';
+import { StandardValidator } from './implementation/standard-validator';
+import { ValidationParser } from './implementation/validation-parser';
+import { ValidationRules } from './implementation/validation-rules';
 
 /**
  * Aurelia Validation Configuration API
  */
 export class AureliaValidationConfiguration {
-  private validatorType: { new(...args: any[]): Validator } = StandardValidator;
+  private validatorType: { new (...args: any[]): Validator } = StandardValidator;
 
   /**
    * Use a custom Validator implementation.
    */
-  customValidator(type: { new(...args: any[]): Validator }) {
-    this.validatorType = type; 
+  public customValidator(type: { new (...args: any[]): Validator }) {
+    this.validatorType = type;
   }
 
   /**
    * Applies the configuration.
    */
-  apply(container: Container) {
+  public apply(container: Container) {
     const validator = container.get(this.validatorType);
     container.registerInstance(Validator, validator);
   }
@@ -52,7 +52,7 @@ export class AureliaValidationConfiguration {
  */
 export function configure(
   frameworkConfig: { container: Container, globalResources: (...resources: string[]) => any },
-  callback?: (config: AureliaValidationConfiguration) => void 
+  callback?: (config: AureliaValidationConfiguration) => void
 ) {
   // the fluent rule definition API needs the parser to translate messages
   // to interpolation expressions. 

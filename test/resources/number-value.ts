@@ -1,28 +1,30 @@
-import {DOM} from 'aurelia-pal';
-import {inject} from 'aurelia-dependency-injection'
-import {customAttribute, customElement, bindable, inlineView} from 'aurelia-templating';
-import {bindingMode} from 'aurelia-binding';
+import { DOM } from 'aurelia-pal';
+import { inject } from 'aurelia-dependency-injection';
+import { customAttribute, customElement, bindable, inlineView } from 'aurelia-templating';
+import { bindingMode } from 'aurelia-binding';
 
 export abstract class NumberBase {
-  public abstract value: number|null;
+  public abstract value: number | null;
+  /* tslint:disable */
   protected _input: HTMLInputElement;
+  /* tslint:enable */
 
-  constructor(protected input: HTMLInputElement) {}
+  constructor(protected input: HTMLInputElement) { }
 
-  valueChanged(newValue: number|null) {
+  public valueChanged(newValue: number | null) {
     this.input.value = newValue === null ? '' : newValue.toString(10);
   }
 
-  inputValueChanged = () => {
-    this.value = this.input.value === '' ? null : parseInt(this.input.value);
+  public inputValueChanged = () => {
+    this.value = this.input.value === '' ? null : parseInt(this.input.value, 10);
   };
 
-  bind() {
+  public bind() {
     this._input = this.input;
     this._input.addEventListener('change', this.inputValueChanged);
   }
 
-  unbind() {
+  public unbind() {
     this._input.removeEventListener('change', this.inputValueChanged);
     this._input = <any>null;
   }
@@ -31,30 +33,30 @@ export abstract class NumberBase {
 @customAttribute('number-value', bindingMode.twoWay)
 @inject(Element)
 export class NumberValueCustomAttribute extends NumberBase {
-  public value: number|null;
+  public value: number | null;
 }
 
 @customElement('number-input')
 @inject(Element)
 @inlineView(`<template><input ref="input"></template>`)
 export class NumberInputCustomElement extends NumberBase {
-  @bindable({ defaultBindingMode: bindingMode.twoWay }) value: number|null;
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) public value: number | null;
 
   constructor(private element: Element) {
     super(<any>null);
     (<any>this.element).focus = () => this.input.focus();
   }
 
-  inputBlurred = () => {
+  public inputBlurred = () => {
     this.element.dispatchEvent(DOM.createCustomEvent('blur', {}));
   };
 
-  bind() {
+  public bind() {
     super.bind();
-    this._input.addEventListener('blur', this.inputBlurred);    
+    this._input.addEventListener('blur', this.inputBlurred);
   }
 
-  unbind() {
+  public unbind() {
     this._input.removeEventListener('blur', this.inputBlurred);
     super.unbind();
   }

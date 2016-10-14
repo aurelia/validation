@@ -1,5 +1,5 @@
-import {inject, NewInstance} from 'aurelia-dependency-injection';
-import {inlineView} from 'aurelia-templating';
+import { inject, NewInstance } from 'aurelia-dependency-injection';
+import { inlineView } from 'aurelia-templating';
 import {
   ValidationRules,
   ValidationController
@@ -13,19 +13,23 @@ import {
 </template>`)
 @inject(NewInstance.of(ValidationController))
 export class NullableObjectForm {
-  input: HTMLInputElement;
-  
-  _obj: any = { prop: '' };
+  public input: HTMLInputElement;
+
+  /* tslint:disable */
+  public _obj: any = { prop: '' };
+  /* tslint:enable */
 
   get obj() {
     return this._obj;
   }
   set obj(value) {
     // setter is required due to https://github.com/aurelia/binding/issues/205
+    /* tslint:disable:no-console */
     console.log(value);
+    /* tslint:enable:no-console */
   }
 
-  rules = <any>ValidationRules.ensure('prop').required().rules;
+  public rules = <any>ValidationRules.ensure('prop').required().rules;
 
-  constructor(public controller: ValidationController) {}
+  constructor(public controller: ValidationController) { }
 }

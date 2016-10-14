@@ -1,4 +1,4 @@
-import {Rule} from './rule';
+import { Rule } from './rule';
 
 /**
  * Sets, unsets and retrieves rules on an object or constructor function.
@@ -7,12 +7,12 @@ export class Rules {
   /**
    * The name of the property that stores the rules.
    */
-  static key = '__rules__';
+  private static key = '__rules__';
 
   /**
    * Applies the rules to a target.
    */
-  static set(target: any, rules: Rule<any, any>[][]): void {
+  public static set(target: any, rules: Rule<any, any>[][]): void {
     if (target instanceof Function) {
       target = target.prototype;
     }
@@ -25,17 +25,17 @@ export class Rules {
   /**
    * Removes rules from a target.
    */
-  static unset(target: any): void {
+  public static unset(target: any): void {
     if (target instanceof Function) {
       target = target.prototype;
-    }    
+    }
     target[Rules.key] = null;
   }
 
   /**
    * Retrieves the target's rules.
    */
-  static get(target: any): Rule<any, any>[][]|null {
+  public static get(target: any): Rule<any, any>[][] | null {
     return target[Rules.key] || null;
   }
 }
