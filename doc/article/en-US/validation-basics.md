@@ -803,7 +803,7 @@ Last but not least, create translation files that include translations for each 
     "allGood": "Alles in Ordnung!",
     "latestValidationResult": "Aktuelles Validierungsergebnis",
 	  "errorMessages": {
-	    "required": "${$displayName} fehlt!",
+	    "required": "${$displayName} fehlt!"
 	  }
 	}
 
@@ -817,7 +817,7 @@ Last but not least, create translation files that include translations for each 
     "allGood": "All is good!",
     "latestValidationResult": "Latest validation result",
 	  "errorMessages": {
-	    "required": "${$displayName} is missing!",
+	    "required": "${$displayName} is missing!"
 	  }
 	}
   </source-code>
