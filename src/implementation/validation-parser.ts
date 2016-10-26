@@ -89,7 +89,7 @@ export class ValidationParser {
 
   private getAccessorExpression(fn: string): Expression {
     const classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
-    const arrow = /^[$_\w\d]+\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
+    const arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
     const match = classic.exec(fn) || arrow.exec(fn);
     if (match === null) {
       throw new Error(`Unable to parse accessor function:\n${fn}`);

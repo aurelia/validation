@@ -32,6 +32,7 @@ describe('Validator', () => {
     expect(parse('a => a.bcde')).toEqual(new AccessScope('bcde', 0));
     expect(parse('_ => _.b')).toEqual(new AccessScope('b', 0));
     expect(parse('$ => $.b')).toEqual(new AccessScope('b', 0));
+    expect(parse('(x) => x.name')).toEqual(new AccessScope('name', 0));
   });
 
   it('parses properties', () => {
