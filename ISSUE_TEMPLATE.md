@@ -63,8 +63,8 @@ all | TypeScript X.X | ESNext
 **Expected/desired behavior:**
 <!--
 If the current behavior is a bug, please provide the steps to reproduce and, if possible, a minimal demo of the
-problem along with a runnable gist, if possible.
-To create a runnable gist, go to https://gist.run/?id=7542e061bc940cde506b
+problem using a runnable Gist.
+To create a runnable gist, go to https://gist.run/?id=381fdb1a4b0865a4c25026187db865ce
 Then click "Fork to Public Gist".
 Create your gist, then finally click "Update Gist." Include a link to the gist.run below.
 -->

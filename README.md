@@ -13,6 +13,10 @@ This library is part of the [Aurelia](http://www.aurelia.io/) platform and conta
 
 Check out the [docs](http://aurelia.io/hub.html#/doc/article/aurelia/validation/latest/validation-basics) on the Aurelia Hub.
 
+## Reporting Issues
+
+Please refer to the [issue template](ISSUE_TEMPLATE.md). Accompany any bug report with a demo of the issue using a [runnable Gist](https://gist.run/?id=381fdb1a4b0865a4c25026187db865ce).
+
 ## Building
 
 ```shell
