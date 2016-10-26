@@ -428,7 +428,7 @@ The `validate` binding behavior obeys the associated controller's `validateTrigg
 
 * `& validateOnBlur`: the DOM blur event triggers validation.
 * `& validateOnChange`: data entry that changes the model triggers validation.
-* `& validateOnBlurOrChange`: DOM blur or data entry triggers validation.
+* `& validateOnChangeOrBlur`: DOM blur or data entry triggers validation.
 * `& validateManually`: the binding is not validated automatically when the associated element is blurred or changed by the user.
 
 ## [Displaying Errors](aurelia-doc://section/7/version/1.0.0)
