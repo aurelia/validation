@@ -311,7 +311,7 @@ If you'd like to be completely explicit when wiring up controllers with view mod
 
 ### Setting the Validate Trigger
 
-Once you've created a controller you can set its `validationTrigger` to either `blur`, `change`, `blurOrChange` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus). 
+Once you've created a controller you can set its `validationTrigger` to either `blur`, `change`, `changeOrBlur` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus). 
 
 When the trigger is `change`, each change the binding makes to the model property will trigger validation of the property. Use the `throttle`, `debounce` and `updateTrigger` binding behaviors in conjunction with the `change` validate trigger to customize the behavior. 
 
