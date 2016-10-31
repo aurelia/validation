@@ -486,7 +486,7 @@ To build more sophisticated error UIs you might need a list of errors specific t
 
 This first form-group div uses the `validation-errors` custom attribute to create a `firstNameErrors` property. When there are items in the array the bootstrap `has-error` class is applied to the form-group div. Each error message is displayed below the input using `help-block` spans. The same approach is used to display the lastName field's errors.
 
-The `validation-errors` custom attribute is implements the `ValidationRenderer` interface. Instead of doing direct DOM manipulation to display the errors it "renders" the errors to an array property to enable the data-binding and templating scenarios illustrated above. It also automatically adds itself to the controller using `addRender` when its "bind" lifecycle event occurs and removes itself from the controller using the `removeRenderer` method when its "unbind" composition lifecycle event occurs.
+The `validation-errors` custom attribute implements the `ValidationRenderer` interface. Instead of doing direct DOM manipulation to display the errors it "renders" the errors to an array property to enable the data-binding and templating scenarios illustrated above. It also automatically adds itself to the controller using `addRenderer` when its "bind" lifecycle event occurs and removes itself from the controller using the `removeRenderer` method when its "unbind" composition lifecycle event occurs.
 
 ## [Custom Renderers](aurelia-doc://section/8/version/1.0.0)
 
