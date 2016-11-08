@@ -16,10 +16,6 @@ export var ValidationParser = (function () {
         this.undefinedExpression = new LiteralPrimitive(undefined);
         this.cache = {};
     }
-    ValidationParser.prototype.coalesce = function (part) {
-        // part === null || part === undefined ? '' : part
-        return new Conditional(new Binary('||', new Binary('===', part, this.nullExpression), new Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new CallMember(part, 'toString', []));
-    };
     ValidationParser.prototype.parseMessage = function (message) {
         if (this.cache[message] !== undefined) {
             return this.cache[message];
@@ -36,15 +32,6 @@ export var ValidationParser = (function () {
         this.cache[message] = expression;
         return expression;
     };
-    ValidationParser.prototype.getAccessorExpression = function (fn) {
-        var classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
-        var arrow = /^[$_\w\d]+\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
-        var match = classic.exec(fn) || arrow.exec(fn);
-        if (match === null) {
-            throw new Error("Unable to parse accessor function:\n" + fn);
-        }
-        return this.parser.parse(match[1]);
-    };
     ValidationParser.prototype.parseProperty = function (property) {
         if (isString(property)) {
             return { name: property, displayName: null };
@@ -58,6 +45,19 @@ export var ValidationParser = (function () {
             };
         }
         throw new Error("Invalid subject: \"" + accessor + "\"");
+    };
+    ValidationParser.prototype.coalesce = function (part) {
+        // part === null || part === undefined ? '' : part
+        return new Conditional(new Binary('||', new Binary('===', part, this.nullExpression), new Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new CallMember(part, 'toString', []));
+    };
+    ValidationParser.prototype.getAccessorExpression = function (fn) {
+        var classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+        var arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
+        var match = classic.exec(fn) || arrow.exec(fn);
+        if (match === null) {
+            throw new Error("Unable to parse accessor function:\n" + fn);
+        }
+        return this.parser.parse(match[1]);
     };
     ValidationParser.inject = [Parser, BindingLanguage];
     return ValidationParser;

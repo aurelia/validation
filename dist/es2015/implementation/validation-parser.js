@@ -11,10 +11,6 @@ export class ValidationParser {
         this.undefinedExpression = new LiteralPrimitive(undefined);
         this.cache = {};
     }
-    coalesce(part) {
-        // part === null || part === undefined ? '' : part
-        return new Conditional(new Binary('||', new Binary('===', part, this.nullExpression), new Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new CallMember(part, 'toString', []));
-    }
     parseMessage(message) {
         if (this.cache[message] !== undefined) {
             return this.cache[message];
@@ -31,15 +27,6 @@ export class ValidationParser {
         this.cache[message] = expression;
         return expression;
     }
-    getAccessorExpression(fn) {
-        const classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
-        const arrow = /^[$_\w\d]+\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
-        const match = classic.exec(fn) || arrow.exec(fn);
-        if (match === null) {
-            throw new Error(`Unable to parse accessor function:\n${fn}`);
-        }
-        return this.parser.parse(match[1]);
-    }
     parseProperty(property) {
         if (isString(property)) {
             return { name: property, displayName: null };
@@ -53,6 +40,19 @@ export class ValidationParser {
             };
         }
         throw new Error(`Invalid subject: "${accessor}"`);
+    }
+    coalesce(part) {
+        // part === null || part === undefined ? '' : part
+        return new Conditional(new Binary('||', new Binary('===', part, this.nullExpression), new Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new CallMember(part, 'toString', []));
+    }
+    getAccessorExpression(fn) {
+        const classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+        const arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
+        const match = classic.exec(fn) || arrow.exec(fn);
+        if (match === null) {
+            throw new Error(`Unable to parse accessor function:\n${fn}`);
+        }
+        return this.parser.parse(match[1]);
     }
 }
 ValidationParser.inject = [Parser, BindingLanguage];

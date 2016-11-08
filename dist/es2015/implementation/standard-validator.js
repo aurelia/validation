@@ -14,6 +14,39 @@ export class StandardValidator extends Validator {
         this.lookupFunctions = resources.lookupFunctions;
         this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
     }
+    /**
+     * Validates the specified property.
+     * @param object The object to validate.
+     * @param propertyName The name of the property to validate.
+     * @param rules Optional. If unspecified, the rules will be looked up using the metadata
+     * for the object created by ValidationRules....on(class/object)
+     */
+    validateProperty(object, propertyName, rules) {
+        return this.validate(object, propertyName, rules || null);
+    }
+    /**
+     * Validates all rules for specified object and it's properties.
+     * @param object The object to validate.
+     * @param rules Optional. If unspecified, the rules will be looked up using the metadata
+     * for the object created by ValidationRules....on(class/object)
+     */
+    validateObject(object, rules) {
+        return this.validate(object, null, rules || null);
+    }
+    /**
+     * Determines whether a rule exists in a set of rules.
+     * @param rules The rules to search.
+     * @parem rule The rule to find.
+     */
+    ruleExists(rules, rule) {
+        let i = rules.length;
+        while (i--) {
+            if (rules[i].indexOf(rule) !== -1) {
+                return true;
+            }
+        }
+        return false;
+    }
     getMessage(rule, object, value) {
         const expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
         let { name: propertyName, displayName } = rule.property;
@@ -80,25 +113,6 @@ export class StandardValidator extends Validator {
             return Promise.resolve([]);
         }
         return this.validateRuleSequence(object, propertyName, rules, 0);
-    }
-    /**
-     * Validates the specified property.
-     * @param object The object to validate.
-     * @param propertyName The name of the property to validate.
-     * @param rules Optional. If unspecified, the rules will be looked up using the metadata
-     * for the object created by ValidationRules....on(class/object)
-     */
-    validateProperty(object, propertyName, rules) {
-        return this.validate(object, propertyName, rules || null);
-    }
-    /**
-     * Validates all rules for specified object and it's properties.
-     * @param object The object to validate.
-     * @param rules Optional. If unspecified, the rules will be looked up using the metadata
-     * for the object created by ValidationRules....on(class/object)
-     */
-    validateObject(object, rules) {
-        return this.validate(object, null, rules || null);
     }
 }
 StandardValidator.inject = [ValidationMessageProvider, ViewResources];

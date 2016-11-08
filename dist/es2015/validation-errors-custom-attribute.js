@@ -19,7 +19,9 @@ export let ValidationErrorsCustomAttribute = class ValidationErrorsCustomAttribu
             if (a.targets[0] === b.targets[0]) {
                 return 0;
             }
+            /* tslint:disable:no-bitwise */
             return a.targets[0].compareDocumentPosition(b.targets[0]) & 2 ? 1 : -1;
+            /* tslint:enable:no-bitwise */
         });
     }
     interestingElements(elements) {
@@ -35,7 +37,7 @@ export let ValidationErrorsCustomAttribute = class ValidationErrorsCustomAttribu
         for (let { error, elements } of instruction.render) {
             const targets = this.interestingElements(elements);
             if (targets.length) {
-                this.errors.push({ error: error, targets });
+                this.errors.push({ error, targets });
             }
         }
         this.sort();

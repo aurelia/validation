@@ -17,10 +17,6 @@ var ValidationParser = (function () {
         this.undefinedExpression = new aurelia_binding_1.LiteralPrimitive(undefined);
         this.cache = {};
     }
-    ValidationParser.prototype.coalesce = function (part) {
-        // part === null || part === undefined ? '' : part
-        return new aurelia_binding_1.Conditional(new aurelia_binding_1.Binary('||', new aurelia_binding_1.Binary('===', part, this.nullExpression), new aurelia_binding_1.Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new aurelia_binding_1.CallMember(part, 'toString', []));
-    };
     ValidationParser.prototype.parseMessage = function (message) {
         if (this.cache[message] !== undefined) {
             return this.cache[message];
@@ -37,15 +33,6 @@ var ValidationParser = (function () {
         this.cache[message] = expression;
         return expression;
     };
-    ValidationParser.prototype.getAccessorExpression = function (fn) {
-        var classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
-        var arrow = /^[$_\w\d]+\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
-        var match = classic.exec(fn) || arrow.exec(fn);
-        if (match === null) {
-            throw new Error("Unable to parse accessor function:\n" + fn);
-        }
-        return this.parser.parse(match[1]);
-    };
     ValidationParser.prototype.parseProperty = function (property) {
         if (util_1.isString(property)) {
             return { name: property, displayName: null };
@@ -59,6 +46,19 @@ var ValidationParser = (function () {
             };
         }
         throw new Error("Invalid subject: \"" + accessor + "\"");
+    };
+    ValidationParser.prototype.coalesce = function (part) {
+        // part === null || part === undefined ? '' : part
+        return new aurelia_binding_1.Conditional(new aurelia_binding_1.Binary('||', new aurelia_binding_1.Binary('===', part, this.nullExpression), new aurelia_binding_1.Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new aurelia_binding_1.CallMember(part, 'toString', []));
+    };
+    ValidationParser.prototype.getAccessorExpression = function (fn) {
+        var classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+        var arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
+        var match = classic.exec(fn) || arrow.exec(fn);
+        if (match === null) {
+            throw new Error("Unable to parse accessor function:\n" + fn);
+        }
+        return this.parser.parse(match[1]);
     };
     ValidationParser.inject = [aurelia_binding_1.Parser, aurelia_templating_1.BindingLanguage];
     return ValidationParser;

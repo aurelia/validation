@@ -4,16 +4,12 @@ System.register(['aurelia-binding'], function(exports_1, context_1) {
     var aurelia_binding_1;
     function getObject(expression, objectExpression, source) {
         var value = objectExpression.evaluate(source, null);
-        if (value !== null && (typeof value === 'object' || typeof value === 'function')) {
+        if (value === null || value === undefined || value instanceof Object) {
             return value;
         }
-        if (value === null) {
-            value = 'null';
-        }
-        else if (value === undefined) {
-            value = 'undefined';
-        }
-        throw new Error("The '" + objectExpression + "' part of '" + expression + "' evaluates to " + value + " instead of an object.");
+        /* tslint:disable */
+        throw new Error("The '" + objectExpression + "' part of '" + expression + "' evaluates to " + value + " instead of an object, null or undefined.");
+        /* tslint:enable */
     }
     /**
      * Retrieves the object and property name for the specified expression.
@@ -41,6 +37,9 @@ System.register(['aurelia-binding'], function(exports_1, context_1) {
         }
         else {
             throw new Error("Expression '" + originalExpression + "' is not compatible with the validate binding-behavior.");
+        }
+        if (object === null || object === undefined) {
+            return null;
         }
         return { object: object, propertyName: propertyName };
     }

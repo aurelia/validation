@@ -38,6 +38,39 @@ System.register(['aurelia-templating', '../validator', '../validation-error', '.
                     this.lookupFunctions = resources.lookupFunctions;
                     this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
                 }
+                /**
+                 * Validates the specified property.
+                 * @param object The object to validate.
+                 * @param propertyName The name of the property to validate.
+                 * @param rules Optional. If unspecified, the rules will be looked up using the metadata
+                 * for the object created by ValidationRules....on(class/object)
+                 */
+                StandardValidator.prototype.validateProperty = function (object, propertyName, rules) {
+                    return this.validate(object, propertyName, rules || null);
+                };
+                /**
+                 * Validates all rules for specified object and it's properties.
+                 * @param object The object to validate.
+                 * @param rules Optional. If unspecified, the rules will be looked up using the metadata
+                 * for the object created by ValidationRules....on(class/object)
+                 */
+                StandardValidator.prototype.validateObject = function (object, rules) {
+                    return this.validate(object, null, rules || null);
+                };
+                /**
+                 * Determines whether a rule exists in a set of rules.
+                 * @param rules The rules to search.
+                 * @parem rule The rule to find.
+                 */
+                StandardValidator.prototype.ruleExists = function (rules, rule) {
+                    var i = rules.length;
+                    while (i--) {
+                        if (rules[i].indexOf(rule) !== -1) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
                 StandardValidator.prototype.getMessage = function (rule, object, value) {
                     var expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
                     var _a = rule.property, propertyName = _a.name, displayName = _a.displayName;
@@ -108,25 +141,6 @@ System.register(['aurelia-templating', '../validator', '../validation-error', '.
                         return Promise.resolve([]);
                     }
                     return this.validateRuleSequence(object, propertyName, rules, 0);
-                };
-                /**
-                 * Validates the specified property.
-                 * @param object The object to validate.
-                 * @param propertyName The name of the property to validate.
-                 * @param rules Optional. If unspecified, the rules will be looked up using the metadata
-                 * for the object created by ValidationRules....on(class/object)
-                 */
-                StandardValidator.prototype.validateProperty = function (object, propertyName, rules) {
-                    return this.validate(object, propertyName, rules || null);
-                };
-                /**
-                 * Validates all rules for specified object and it's properties.
-                 * @param object The object to validate.
-                 * @param rules Optional. If unspecified, the rules will be looked up using the metadata
-                 * for the object created by ValidationRules....on(class/object)
-                 */
-                StandardValidator.prototype.validateObject = function (object, rules) {
-                    return this.validate(object, null, rules || null);
                 };
                 StandardValidator.inject = [validation_messages_1.ValidationMessageProvider, aurelia_templating_1.ViewResources];
                 return StandardValidator;

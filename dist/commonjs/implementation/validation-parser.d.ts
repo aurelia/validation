@@ -13,10 +13,10 @@ export declare class ValidationParser {
     private undefinedExpression;
     private cache;
     constructor(parser: Parser, bindinqLanguage: BindingLanguage);
-    private coalesce(part);
     parseMessage(message: string): Expression;
-    private getAccessorExpression(fn);
     parseProperty<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): RuleProperty;
+    private coalesce(part);
+    private getAccessorExpression(fn);
 }
 export declare class MessageExpressionValidator extends Unparser {
     private originalMessage;

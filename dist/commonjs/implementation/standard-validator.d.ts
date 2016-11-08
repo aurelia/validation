@@ -1,6 +1,7 @@
 import { ViewResources } from 'aurelia-templating';
 import { Validator } from '../validator';
 import { ValidationError } from '../validation-error';
+import { Rule } from './rule';
 import { ValidationMessageProvider } from './validation-messages';
 /**
  * Validates.
@@ -12,9 +13,6 @@ export declare class StandardValidator extends Validator {
     private lookupFunctions;
     private getDisplayName;
     constructor(messageProvider: ValidationMessageProvider, resources: ViewResources);
-    private getMessage(rule, object, value);
-    private validateRuleSequence(object, propertyName, ruleSequence, sequence);
-    private validate(object, propertyName, rules);
     /**
      * Validates the specified property.
      * @param object The object to validate.
@@ -30,4 +28,13 @@ export declare class StandardValidator extends Validator {
      * for the object created by ValidationRules....on(class/object)
      */
     validateObject(object: any, rules?: any): Promise<ValidationError[]>;
+    /**
+     * Determines whether a rule exists in a set of rules.
+     * @param rules The rules to search.
+     * @parem rule The rule to find.
+     */
+    ruleExists(rules: Rule<any, any>[][], rule: Rule<any, any>): boolean;
+    private getMessage(rule, object, value);
+    private validateRuleSequence(object, propertyName, ruleSequence, sequence);
+    private validate(object, propertyName, rules);
 }

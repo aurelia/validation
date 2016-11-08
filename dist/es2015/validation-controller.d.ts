@@ -90,7 +90,8 @@ export declare class ValidationController {
     private getInstructionPredicate(instruction?);
     /**
      * Validates and renders errors.
-     * @param instruction Optional. Instructions on what to validate. If undefined, all objects and bindings will be validated.
+     * @param instruction Optional. Instructions on what to validate. If undefined, all
+     * objects and bindings will be validated.
      */
     validate(instruction?: ValidateInstruction): Promise<ValidationError[]>;
     /**
@@ -104,11 +105,11 @@ export declare class ValidationController {
     private getAssociatedElements({object, propertyName});
     private processErrorDelta(kind, oldErrors, newErrors);
     /**
-    * Validates the property associated with a binding.
-    */
+     * Validates the property associated with a binding.
+     */
     validateBinding(binding: Binding): void;
     /**
-    * Resets the errors for a property associated with a binding.
-    */
+     * Resets the errors for a property associated with a binding.
+     */
     resetBinding(binding: Binding): void;
 }

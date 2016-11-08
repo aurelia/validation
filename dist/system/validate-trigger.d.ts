@@ -1,6 +1,6 @@
 /**
-* Validation triggers.
-*/
+ * Validation triggers.
+ */
 export declare const validateTrigger: {
     manual: number;
     blur: number;

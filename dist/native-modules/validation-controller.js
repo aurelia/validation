@@ -98,7 +98,7 @@ export var ValidationController = (function () {
      * @param rules (optional) rules associated with the binding. Validator implementation specific.
      */
     ValidationController.prototype.registerBinding = function (binding, target, rules) {
-        this.bindings.set(binding, { target: target, rules: rules });
+        this.bindings.set(binding, { target: target, rules: rules, propertyInfo: null });
     };
     /**
      * Unregisters a binding with the controller.
@@ -113,6 +113,7 @@ export var ValidationController = (function () {
      * relevant errors in the list of rendered errors.
      */
     ValidationController.prototype.getInstructionPredicate = function (instruction) {
+        var _this = this;
         if (instruction) {
             var object_1 = instruction.object, propertyName_1 = instruction.propertyName, rules_1 = instruction.rules;
             var predicate_1;
@@ -122,9 +123,8 @@ export var ValidationController = (function () {
             else {
                 predicate_1 = function (x) { return x.object === object_1; };
             }
-            // todo: move to Validator interface:
-            if (rules_1 && rules_1.indexOf) {
-                return function (x) { return predicate_1(x) && rules_1.indexOf(x.rule) !== -1; };
+            if (rules_1) {
+                return function (x) { return predicate_1(x) && _this.validator.ruleExists(rules_1, x.rule); };
             }
             return predicate_1;
         }
@@ -134,7 +134,8 @@ export var ValidationController = (function () {
     };
     /**
      * Validates and renders errors.
-     * @param instruction Optional. Instructions on what to validate. If undefined, all objects and bindings will be validated.
+     * @param instruction Optional. Instructions on what to validate. If undefined, all
+     * objects and bindings will be validated.
      */
     ValidationController.prototype.validate = function (instruction) {
         var _this = this;
@@ -164,11 +165,11 @@ export var ValidationController = (function () {
                 }
                 for (var _c = 0, _d = Array.from(_this.bindings); _c < _d.length; _c++) {
                     var _e = _d[_c], binding = _e[0], rules = _e[1].rules;
-                    var _f = getPropertyInfo(binding.sourceExpression, binding.source), object = _f.object, propertyName = _f.propertyName;
-                    if (_this.objects.has(object)) {
+                    var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+                    if (!propertyInfo || _this.objects.has(propertyInfo.object)) {
                         continue;
                     }
-                    promises.push(_this.validator.validateProperty(object, propertyName, rules));
+                    promises.push(_this.validator.validateProperty(propertyInfo.object, propertyInfo.propertyName, rules));
                 }
                 return Promise.all(promises).then(function (errorSets) { return errorSets.reduce(function (a, b) { return a.concat(b); }, []); });
             };
@@ -212,8 +213,8 @@ export var ValidationController = (function () {
         var elements = [];
         for (var _i = 0, _b = Array.from(this.bindings); _i < _b.length; _i++) {
             var _c = _b[_i], binding = _c[0], target = _c[1].target;
-            var _d = getPropertyInfo(binding.sourceExpression, binding.source), o = _d.object, p = _d.propertyName;
-            if (o === object && p === propertyName) {
+            var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+            if (propertyInfo && propertyInfo.object === object && propertyInfo.propertyName === propertyName) {
                 elements.push(target);
             }
         }
@@ -275,22 +276,41 @@ export var ValidationController = (function () {
         }
     };
     /**
-    * Validates the property associated with a binding.
-    */
+     * Validates the property associated with a binding.
+     */
     ValidationController.prototype.validateBinding = function (binding) {
         if (!binding.isBound) {
             return;
         }
-        var _a = getPropertyInfo(binding.sourceExpression, binding.source), object = _a.object, propertyName = _a.propertyName;
+        var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+        var rules = undefined;
         var registeredBinding = this.bindings.get(binding);
-        var rules = registeredBinding ? registeredBinding.rules : undefined;
+        if (registeredBinding) {
+            rules = registeredBinding.rules;
+            registeredBinding.propertyInfo = propertyInfo;
+        }
+        if (!propertyInfo) {
+            return;
+        }
+        var object = propertyInfo.object, propertyName = propertyInfo.propertyName;
         this.validate({ object: object, propertyName: propertyName, rules: rules });
     };
     /**
-    * Resets the errors for a property associated with a binding.
-    */
+     * Resets the errors for a property associated with a binding.
+     */
     ValidationController.prototype.resetBinding = function (binding) {
-        var _a = getPropertyInfo(binding.sourceExpression, binding.source), object = _a.object, propertyName = _a.propertyName;
+        var registeredBinding = this.bindings.get(binding);
+        var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+        if (!propertyInfo && registeredBinding) {
+            propertyInfo = registeredBinding.propertyInfo;
+        }
+        if (registeredBinding) {
+            registeredBinding.propertyInfo = null;
+        }
+        if (!propertyInfo) {
+            return;
+        }
+        var object = propertyInfo.object, propertyName = propertyInfo.propertyName;
         this.reset({ object: object, propertyName: propertyName });
     };
     ValidationController.inject = [Validator];

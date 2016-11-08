@@ -35,7 +35,9 @@ System.register(['aurelia-binding', 'aurelia-dependency-injection', 'aurelia-tem
                         if (a.targets[0] === b.targets[0]) {
                             return 0;
                         }
+                        /* tslint:disable:no-bitwise */
                         return a.targets[0].compareDocumentPosition(b.targets[0]) & 2 ? 1 : -1;
+                        /* tslint:enable:no-bitwise */
                     });
                 };
                 ValidationErrorsCustomAttribute.prototype.interestingElements = function (elements) {

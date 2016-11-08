@@ -195,7 +195,8 @@ export declare class FluentEnsure<TObject> {
     constructor(parser: ValidationParser);
     /**
      * Target a property with validation rules.
-     * @param property The property to target. Can be the property name or a property accessor function.
+     * @param property The property to target. Can be the property name or a property accessor
+     * function.
      */
     ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRules<TObject, TValue>;
     /**
@@ -233,7 +234,8 @@ export declare class ValidationRules {
      * @param name The name of the custom rule. Also serves as the message key.
      * @param condition The rule function.
      * @param message The message expression
-     * @param argsToConfig A function that maps the rule's arguments to a "config" object that can be used when evaluating the message expression.
+     * @param argsToConfig A function that maps the rule's arguments to a "config"
+     * object that can be used when evaluating the message expression.
      */
     static customRule(name: string, condition: (value: any, object?: any, ...args: any[]) => boolean | Promise<boolean>, message: string, argsToConfig?: (...args: any[]) => any): void;
     /**

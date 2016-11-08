@@ -250,7 +250,9 @@ export var FluentRules = (function () {
      * null, undefined and empty-string values are considered valid.
      */
     FluentRules.prototype.email = function () {
-        return this.matches(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i)
+        // regex from https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
+        /* tslint:disable:max-line-length */
+        return this.matches(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
             .withMessageKey('email');
     };
     /**
@@ -300,17 +302,20 @@ export var FluentRules = (function () {
  * Part of the fluent rule API. Enables targeting properties and objects with rules.
  */
 export var FluentEnsure = (function () {
+    /* tslint:enable */
     function FluentEnsure(parser) {
         this.parser = parser;
         /**
          * Rules that have been defined using the fluent API.
          */
         this.rules = [];
+        /* tslint:disable */
         this._sequence = 0;
     }
     /**
      * Target a property with validation rules.
-     * @param property The property to target. Can be the property name or a property accessor function.
+     * @param property The property to target. Can be the property name or a property accessor
+     * function.
      */
     FluentEnsure.prototype.ensure = function (property) {
         this.assertInitialized();
@@ -375,7 +380,8 @@ export var ValidationRules = (function () {
      * @param name The name of the custom rule. Also serves as the message key.
      * @param condition The rule function.
      * @param message The message expression
-     * @param argsToConfig A function that maps the rule's arguments to a "config" object that can be used when evaluating the message expression.
+     * @param argsToConfig A function that maps the rule's arguments to a "config"
+     * object that can be used when evaluating the message expression.
      */
     ValidationRules.customRule = function (name, condition, message, argsToConfig) {
         validationMessages[name] = message;

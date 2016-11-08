@@ -6,7 +6,7 @@ export declare class Rules {
     /**
      * The name of the property that stores the rules.
      */
-    static key: string;
+    private static key;
     /**
      * Applies the rules to a target.
      */

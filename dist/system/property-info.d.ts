@@ -5,6 +5,6 @@ import { Expression } from 'aurelia-binding';
  * @param source The scope
  */
 export declare function getPropertyInfo(expression: Expression, source: any): {
-    object: any;
+    object: Object;
     propertyName: string;
-};
+} | null;

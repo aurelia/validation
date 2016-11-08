@@ -10,11 +10,11 @@ export class ValidateBindingBehaviorBase {
         this.taskQueue = taskQueue;
     }
     /**
-    * Gets the DOM element associated with the data-binding. Most of the time it's
-    * the binding.target but sometimes binding.target is an aurelia custom element,
-    * or custom attribute which is a javascript "class" instance, so we need to use
-    * the controller's container to retrieve the actual DOM element.
-    */
+     * Gets the DOM element associated with the data-binding. Most of the time it's
+     * the binding.target but sometimes binding.target is an aurelia custom element,
+     * or custom attribute which is a javascript "class" instance, so we need to use
+     * the controller's container to retrieve the actual DOM element.
+     */
     getTarget(binding, view) {
         const target = binding.target;
         // DOM element
@@ -52,14 +52,20 @@ export class ValidateBindingBehaviorBase {
         controller.registerBinding(binding, target, rules);
         binding.validationController = controller;
         const trigger = this.getValidateTrigger(controller);
+        /* tslint:disable:no-bitwise */
         if (trigger & validateTrigger.change) {
+            /* tslint:enable:no-bitwise */
             binding.standardUpdateSource = binding.updateSource;
+            /* tslint:disable:only-arrow-functions */
             binding.updateSource = function (value) {
+                /* tslint:enable:only-arrow-functions */
                 this.standardUpdateSource(value);
                 this.validationController.validateBinding(this);
             };
         }
+        /* tslint:disable:no-bitwise */
         if (trigger & validateTrigger.blur) {
+            /* tslint:enable:no-bitwise */
             binding.validateBlurHandler = () => {
                 this.taskQueue.queueMicroTask(() => controller.validateBinding(binding));
             };
@@ -68,7 +74,9 @@ export class ValidateBindingBehaviorBase {
         }
         if (trigger !== validateTrigger.manual) {
             binding.standardUpdateTarget = binding.updateTarget;
+            /* tslint:disable:only-arrow-functions */
             binding.updateTarget = function (value) {
+                /* tslint:enable:only-arrow-functions */
                 this.standardUpdateTarget(value);
                 this.validationController.resetBinding(this);
             };
