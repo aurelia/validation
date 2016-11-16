@@ -799,9 +799,9 @@ Last but not least, create translation files that include translations for each 
 	  "lastName": "Nachname",
 	  "submit": "Abschicken",
 	  "switchLanguage": "Sprache wechseln", 
-    "youHaveErrors": "Es gibt Fehler!",
-    "allGood": "Alles in Ordnung!",
-    "latestValidationResult": "Aktuelles Validierungsergebnis",
+	  "youHaveErrors": "Es gibt Fehler!",
+	  "allGood": "Alles in Ordnung!",
+	  "latestValidationResult": "Aktuelles Validierungsergebnis",
 	  "errorMessages": {
 	    "required": "${$displayName} fehlt!"
 	  }
@@ -813,9 +813,9 @@ Last but not least, create translation files that include translations for each 
 	  "lastName": "Last name",
 	  "submit": "Submit",
 	  "switchLanguage": "Switch language",
-    "youHaveErrors": "You have errors!",
-    "allGood": "All is good!",
-    "latestValidationResult": "Latest validation result",
+	  "youHaveErrors": "You have errors!",
+	  "allGood": "All is good!",
+	  "latestValidationResult": "Latest validation result",
 	  "errorMessages": {
 	    "required": "${$displayName} is missing!"
 	  }
