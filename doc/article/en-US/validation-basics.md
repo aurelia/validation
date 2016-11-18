@@ -91,7 +91,7 @@ After targeting a property with `ensure` and optionally setting its display name
 
 ### withMessage
 
-All rules have a standard message that can be overriden on a case-by-case basis using `.withMessage(message)`. The `message` argument is a string that will be interpretted as an interpolation binding expression and evaluated against the validated object when a validation error occurs. The interpolation binding expression can access any of the object's properties as well as the contextual properties listed below:
+All rules have a standard message that can be overriden on a case-by-case basis using `.withMessage(message)`. The `message` argument is a string that will be interpreted as an interpolation binding expression and evaluated against the validated object when a validation error occurs. The interpolation binding expression can access any of the object's properties as well as the contextual properties listed below:
 
 * `$displayName`: the display name of the property.
 * `$propertyName`: the name of the property.
