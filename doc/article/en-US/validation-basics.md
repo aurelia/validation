@@ -370,18 +370,18 @@ The validation controller renders errors by sending them to classes that impleme
 
 ## [Validator](aurelia-doc://section/5/version/1.0.0)
 
-The `Validator` does the behind-the-scenes work of validating properties. It can be used in a similar manner as the `ValidationController`, but validation done by the `Validator` will not affect the UI or send errors to validation renderers.
+A `Validator` does the behind-the-scenes work of validating properties. The `StandardValidator` is an implamenatation of a `Validator`and is used as default `Validator`. It can be used in a similar manner as the `ValidationController`, but validation done by a `Validator` will not affect the UI or send errors to validation renderers.
 
-### Creating a Validator
+### Using a Validator
 
 Validators can be injected:
 
-<code-listing heading="Creating a Validator">
+<code-listing heading="Using a Validator">
   <source-code lang="ES 2015">
     import {inject} from 'aurelia-dependency-injection';
-    import {Validator} from 'aurelia-validation';
+    import {StandardValidator} from 'aurelia-validation';
 
-    @inject(Validator)
+    @inject(StandardValidator)
     export class RegistrationForm {
       validator = null;
 
