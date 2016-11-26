@@ -424,7 +424,7 @@ The `validate` binding behavior enables quick and easy validation for two-way da
   </source-code>
 </code-listing>
 
-The `validate` binding behavior obeys the associated controller's `validateTrigger` (`blur`, `change`, `blurOrChange`, `manual`). If you'd like to use a different `validateTrigger` in a particular binding use one of the following binding behaviors in place of `& validate`:
+The `validate` binding behavior obeys the associated controller's `validateTrigger` (`blur`, `change`, `changeOrBlur`, `manual`). If you'd like to use a different `validateTrigger` in a particular binding use one of the following binding behaviors in place of `& validate`:
 
 * `& validateOnBlur`: the DOM blur event triggers validation.
 * `& validateOnChange`: data entry that changes the model triggers validation.
