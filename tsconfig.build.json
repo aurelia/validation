@@ -1,28 +1,12 @@
 {
-  "compilerOptions": {
-    "module": "amd",
-    "moduleResolution": "node",
-    "target": "es5",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
-    "outDir": "dist/amd",
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "strictNullChecks": true,
-    "declaration": true,
-    "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-    "noEmitHelpers": false
-  },
+  "extends": "./tsconfig.json",
   "exclude": [
     ".vscode",
     "dist",
     "doc",
     "node_modules",
-    "test"
+    "test",
+    "build",
+    "karma.conf.js"
   ]
 }
