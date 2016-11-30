@@ -336,7 +336,7 @@ Use the `manual` trigger to indicate the controller should not automatically val
 
 ### validate & reset
 
-You can force the validation controller to run validation by invoking the `validate()` method. Validate will run the validation, render any resulting validation errors and return a `Promise` that resolves with an array of validation errors. *The promise will only reject when there is an unexpected application error. Be sure to catch these rejections like you would any other unexpected application error.*
+You can force the validation controller to run validation by invoking the `validate()` method. Validate will run the validation, render the results and return a `Promise` that resolves with a `ControllerValidateResult` instance. *The promise will only reject when there is an unexpected application error. Be sure to catch these rejections like you would any other unexpected application error.*
 
 Invoking the validate method with no arguments will validate all bindings and objects registered with the controller. You can supply a validate instruction to limit the validation to a specific object, property and ruleset:
 
@@ -346,31 +346,42 @@ Invoking the validate method with no arguments will validate all bindings and ob
     controller.validate({ object: person });
     controller.validate({ object: person, rules: myRules });
     controller.validate({ object: person, propertyName: 'firstName' });    
-    controller.validate({ object: person, propertyName: 'firstName', rules: myRules });    
+    controller.validate({ object: person, propertyName: 'firstName', rules: myRules });
+
+    controller.validate()
+      .then(result => {
+        if (result.valid) {
+          // validation succeeded
+        } else {
+          // validation failed
+        }
+      });
   </source-code>
 </code-listing>
 
-The opposite method to `validate` is `reset`. Calling reset with no arguments will unrender any previously rendered errors. You can supply a reset instruction to limit the validation to a specific object or property:
+Most of the time you will use the `ControllerValidateResult` instance's `valid` property to determine whether validation passed or failed. Use the `results` property to access the `ValidateResult` for every rule that was evaluated by the `controller.validate(...)` call. Each `ValidateResult` has it's own `rule` and `valid` properties that will tell you whether a particular rule passed or failed, along with `message`, `object` and `propertyName` properties. 
+
+The opposite of the `validate` method is `reset`. Calling reset with no arguments will unrender any previously rendered validation results. You can supply a reset instruction to limit the reset to a specific object or property:
 
 <code-listing heading="reset">
   <source-code lang="ES 2015">
     controller.reset();
     controller.reset({ object: person });
-    controller.reset({ object: person, propertyName: 'firstName' });    
+    controller.reset({ object: person, propertyName: 'firstName' });
   </source-code>
 </code-listing>
 
 ### addError & removeError
 
-You may need to surface validation errors from other sources. Perhaps while attempting to save a change the server returned a business rule error. You can display the server error using the controller's `addError(message: string, object: any, propertyName?: string): ValidationError` method. The method returns the resulting `ValidationError` instance which can be used to unrender the error using `removeError(validationError: ValidationError)`.
+You may need to surface validation errors from other sources. Perhaps while attempting to save a change the server returned a business rule error. You can display the server error using the controller's `addError(message: string, object: any, propertyName?: string): ValidateResult` method. The method returns a `ValidateResult` instance which can be used to unrender the error using `removeError(result: ValidateResult)`.
 
 ### addRenderer & removeRenderer
 
-The validation controller renders errors by sending them to classes that implement the `ValidationRenderer` interface. The library ships with a built-in renderer that "renders" the errors to an array property for data-binding/templating purposes. This is covered in the [displaying errors](aurelia-doc://section/11/version/1.0.0) section below. You can create you're own [custom renderer](aurelia-doc://section/12/version/1.0.0) and add it to the controller's set of renderers using the `addRenderer(renderer)` method.
+The validation controller renders errors by sending them to implementations of the `ValidationRenderer` interface. The library ships with a built-in renderer that "renders" the errors to an array property for data-binding/templating purposes. This is covered in the [displaying errors](aurelia-doc://section/11/version/1.0.0) section below. You can create your own [custom renderer](aurelia-doc://section/12/version/1.0.0) and add it to the controller's set of renderers using the `addRenderer(renderer)` method.
 
 ## [Validator](aurelia-doc://section/5/version/1.0.0)
 
-The `Validator` does the behind-the-scenes work of validating properties. It can be used in a similar manner as the `ValidationController`, but validation done by the `Validator` will not affect the UI or send errors to validation renderers.
+`Validator` is an interface used by the `ValidationController` to do the behind-the-scenes work of validating objects and properties. The `aurelia-validation` plugin ships with an implementation of this interface called the `StandardValidator`, which knows how to evaluate rules created by `aurelia-validation`'s fluent API. When you use a `Validator` directly to validate a particular object or property, there are no UI side-effects- the validation results are not sent to the the validation renderers.
 
 ### Creating a Validator
 
@@ -392,9 +403,7 @@ Validators can be injected:
   </source-code>
 </code-listing>
 
-### validate
-
-You can make the validator run validation by invoking the `validate()` method. As with the `ValidationController`, the method will return a `Promise` that resolves with an array of validation errors, but *no errors will be rendered*. The `validate` method behaves as described above.
+Use the Validator instance's `validateObject` and `validateProperty` methods to run validation without any render side-effects. These methods return a `Promise` that resolves with an array of `ValidateResults`.
 
 ## [Validate Binding Behavior](aurelia-doc://section/6/version/1.0.0)
 
@@ -433,9 +442,10 @@ The `validate` binding behavior obeys the associated controller's `validateTrigg
 
 ## [Displaying Errors](aurelia-doc://section/7/version/1.0.0)
 
-The controller exposes two properties that are useful for creating error UIs using standard Aurelia templating techniques:
+The controller exposes properties that are useful for creating error UIs using standard Aurelia templating techniques:
 
-* `errors`: An array of the current `ValidationError` instances.
+* `results`: An array of the current `ValidateResult` instances. These are the results of validating individual rules.
+* `errors`: An array of the current `ValidateResult` instances whose `valid` property is false.
 * `validating`: a boolean that indicates whether the controller is currently executing validation.
 
 Assuming your view-model had a controller property you could add a simple error summary to your form using a repeat:
@@ -492,61 +502,69 @@ The `validation-errors` custom attribute implements the `ValidationRenderer` int
 
 The templating approaches described in the previous section may require more markup than you wish to include in your templates. If you would prefer use direct DOM manipulation to render validation errors you can implement a custom renderer.
 
-Custom renderers implement a one-method interface: `render(instruction: RenderInstruction)`. The `RenderInstruction` is an object with two properties: the errors to render and the errors to unrender. Below is an example implementation for bootstrap forms:
+Custom renderers implement a one-method interface: `render(instruction: RenderInstruction)`. The `RenderInstruction` is an object with two properties: the results to render and the results to unrender. Below is an example implementation for bootstrap forms:
 
 <code-listing heading="bootstrap-form-renderer.ts">
   <source-code lang="TypeScript">
     import {
       ValidationRenderer,
       RenderInstruction,
-      ValidationError
+      ValidateResult
     } from 'aurelia-validation';
 
     export class BootstrapFormRenderer {
       render(instruction: RenderInstruction) {
-        for (let { error, elements } of instruction.unrender) {
+        for (let { result, elements } of instruction.unrender) {
           for (let element of elements) {
-            this.remove(element, error);
+            this.remove(element, result);
           }
         }
 
-        for (let { error, elements } of instruction.render) {
+        for (let { result, elements } of instruction.render) {
           for (let element of elements) {
-            this.add(element, error);
+            this.add(element, result);
           }
         }
       }
 
-      private add(element: Element, error: ValidationError) {
+      add(element: Element, result: ValidateResult) {
+        if (result.valid) {
+          return;
+        }
+
         const formGroup = element.closest('.form-group');
         if (!formGroup) {
           return;
         }
-        
+
         // add the has-error class to the enclosing form-group div
         formGroup.classList.add('has-error');
 
         // add help-block
         const message = document.createElement('span');
         message.className = 'help-block validation-message';
-        message.textContent = error.message;
-        message.id = `validation-message-${error.id}`;
+        message.textContent = result.message;
+        message.id = `validation-message-${result.id}`;
         formGroup.appendChild(message);
       }
 
-      private remove(element: Element, error: ValidationError) {
+      remove(element: Element, result: ValidateResult) {
+        if (result.valid) {
+          return;
+        }
+
         const formGroup = element.closest('.form-group');
         if (!formGroup) {
           return;
         }
 
         // remove help-block
-        const message = formGroup.querySelector(`#validation-message-${error.id}`);
+        const message = formGroup.querySelector(`#validation-message-${result.id}`);
         if (message) {
           formGroup.removeChild(message);
-          
+
           // remove the has-error class from the enclosing form-group div
-          if (formGroup.querySelectorAll('.help-block.validation-message').length === 0) {    
+          if (formGroup.querySelectorAll('.help-block.validation-message').length === 0) {
             formGroup.classList.remove('has-error');
           }
         }
@@ -555,11 +573,81 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
   </source-code>
 </code-listing>
 
-To use a custom renderer you'll need to instantiate it and pass it to your controller via the `addRenderer` method. Any of the controller's existing errors will be renderered immediately. You can remove a renderer using the `removeRenderer` method. Removing a renderer will unrender any errors that renderer had previously rendered.
+To use a custom renderer you'll need to instantiate it and pass it to your controller via the `addRenderer` method. Any of the controller's existing errors will be renderered immediately. You can remove a renderer using the `removeRenderer` method. Removing a renderer will unrender any errors that renderer had previously rendered. If you choose to call `addRenderer` in your view-model's `activate` or `bind` methods, make sure to call `removeRenderer` in the corresponding `deactivate` or `unbind` methods.
 
 
 > Warning
 > The renderer example uses `Element.closest`. You'll need to [polyfill](https://github.com/jonathantneal/closest) this method in Internet Explorer.
+
+Here's another renderer for bootstrap forms that demonstrates "success styling". When a property transitions from indeterminate validity to valid or from invalid to valid, the form control will highlight in green. When a property transitions from indeterminate validity to invalid or from valid to invalid, the form control will highlight in red, just like in the previous bootstrap form renderer example.
+
+<code-listing heading="bootstrap-form-renderer.ts">
+  <source-code lang="TypeScript">
+    export class BootstrapFormRenderer {
+      render(instruction: RenderInstruction) {
+        for (let { result, elements } of instruction.unrender) {
+          for (let element of elements) {
+            this.remove(element, result);
+          }
+        }
+
+        for (let { result, elements } of instruction.render) {
+          for (let element of elements) {
+            this.add(element, result);
+          }
+        }
+      }
+
+      add(element: Element, result: ValidateResult) {
+        const formGroup = element.closest('.form-group');
+        if (!formGroup) {
+          return;
+        }
+
+        if (result.valid) {
+          if (!formGroup.classList.contains('has-error')) {
+            formGroup.classList.add('has-success');
+          }
+        } else {
+          // add the has-error class to the enclosing form-group div
+          formGroup.classList.remove('has-success');
+          formGroup.classList.add('has-error');
+
+          // add help-block
+          const message = document.createElement('span');
+          message.className = 'help-block validation-message';
+          message.textContent = result.message;
+          message.id = `validation-message-${result.id}`;
+          formGroup.appendChild(message);
+        }
+      }
+
+      remove(element: Element, result: ValidateResult) {
+        const formGroup = element.closest('.form-group');
+        if (!formGroup) {
+          return;
+        }
+
+        if (result.valid) {
+          if (formGroup.classList.contains('has-success')) {
+            formGroup.classList.remove('has-success');
+          }
+        } else {
+          // remove help-block
+          const message = formGroup.querySelector(`#validation-message-${result.id}`);
+          if (message) {
+            formGroup.removeChild(message);
+
+            // remove the has-error class from the enclosing form-group div
+            if (formGroup.querySelectorAll('.help-block.validation-message').length === 0) {
+              formGroup.classList.remove('has-error');
+            }
+          }
+        }
+      }
+    }
+  </source-code>
+</code-listing>
 
 ## [Entity Validation](aurelia-doc://section/9/version/1.0.0)
 
@@ -634,7 +722,7 @@ In `aurelia-validation` the object and property validation work is handled by th
 
  <code-listing heading="breeze-validator">
   <source-code lang="ES 2015">
-    import {ValidationError} from 'aurelia-validation';
+    import {ValidateResult} from 'aurelia-validation';
 
     export class BreezeValidator {
       validateObject(object) {
@@ -643,7 +731,7 @@ In `aurelia-validation` the object and property validation work is handled by th
         }
         return object.entityAspect
           .getValidationErrors()
-          .map(({ errorMessage, propertyName, key }) => new ValidationError(key, errorMessage, object, propertyName));
+          .map(({ errorMessage, propertyName, key }) => new ValidateResult(key, object, propertyName, false, errorMessage));
       }
 
       validateProperty(object, propertyName) {
@@ -652,7 +740,7 @@ In `aurelia-validation` the object and property validation work is handled by th
         }
         return object.entityAspect
           .getValidationErrors(propertyName)
-          .map(({ errorMessage, propertyName, key }) => new ValidationError(key, errorMessage, object, propertyName));
+          .map(({ errorMessage, propertyName, key }) => new ValidateResult(key, object, propertyName, false, errorMessage));
       }
     }
   </source-code>

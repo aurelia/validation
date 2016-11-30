@@ -2,11 +2,11 @@ import { bindingMode } from 'aurelia-binding';
 import { Lazy } from 'aurelia-dependency-injection';
 import { customAttribute } from 'aurelia-templating';
 import { ValidationController } from './validation-controller';
-import { ValidationError } from './validation-error';
+import { ValidateResult } from './validate-result';
 import { ValidationRenderer, RenderInstruction } from './validation-renderer';
 
 export interface RenderedError {
-  error: ValidationError;
+  error: ValidateResult;
   targets: Element[];
 }
 
@@ -36,17 +36,20 @@ export class ValidationErrorsCustomAttribute implements ValidationRenderer {
   }
 
   public render(instruction: RenderInstruction) {
-    for (let { error } of instruction.unrender) {
-      const index = this.errors.findIndex(x => x.error === error);
+    for (let { result } of instruction.unrender) {
+      const index = this.errors.findIndex(x => x.error === result);
       if (index !== -1) {
         this.errors.splice(index, 1);
       }
     }
 
-    for (let { error, elements } of instruction.render) {
+    for (let { result, elements } of instruction.render) {
+      if (result.valid) {
+        continue;
+      }
       const targets = this.interestingElements(elements);
       if (targets.length) {
-        this.errors.push({ error, targets });
+        this.errors.push({ error: result, targets });
       }
     }
 

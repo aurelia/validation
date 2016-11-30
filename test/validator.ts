@@ -5,7 +5,7 @@ import {
   StandardValidator,
   ValidationRules,
   ValidationParser,
-  ValidationError
+  ValidateResult
 } from '../src/aurelia-validation';
 
 describe('Validator', () => {
@@ -23,23 +23,31 @@ describe('Validator', () => {
     let obj = { prop: <any>'foo@bar.com' };
     let rules = ValidationRules.ensure('prop').email().rules;
     validator.validateProperty(obj, 'prop', rules)
-      .then(errors => expect(errors).toEqual([]))
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'prop', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
       .then(() => {
         obj = { prop: 'foo' };
         rules = ValidationRules.ensure('prop').email().rules;
         return validator.validateProperty(obj, 'prop', rules);
       })
-      .then(errors => {
-        const expected = [new ValidationError(rules[0][0], 'Prop is not a valid email.', obj, 'prop')];
-        expected[0].id = errors[0].id;
-        expect(errors).toEqual(expected);
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'prop', false, 'Prop is not a valid email.')];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
       })
       .then(() => {
         obj = { prop: null };
         rules = ValidationRules.ensure('prop').email().rules;
         return validator.validateProperty(obj, 'prop', rules);
       })
-      .then(errors => expect(errors).toEqual([]))
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'prop', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
       .then(done);
   });
 
@@ -47,23 +55,31 @@ describe('Validator', () => {
     let obj = { prop: <any>'test' };
     let rules = ValidationRules.ensure('prop').equals('test').rules;
     validator.validateProperty(obj, 'prop', rules)
-      .then(errors => expect(errors).toEqual([]))
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'prop', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
       .then(() => {
         obj = { prop: 'foo' };
         rules = ValidationRules.ensure('prop').equals('test').rules;
         return validator.validateProperty(obj, 'prop', rules);
       })
-      .then(errors => {
-        const expected = [new ValidationError(rules[0][0], 'Prop must be test.', obj, 'prop')];
-        expected[0].id = errors[0].id;
-        expect(errors).toEqual(expected);
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'prop', false, 'Prop must be test.')];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
       })
       .then(() => {
         obj = { prop: null };
         rules = ValidationRules.ensure('prop').equals('test').rules;
         return validator.validateProperty(obj, 'prop', rules);
       })
-      .then(errors => expect(errors).toEqual([]))
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'prop', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
       .then(done);
   });
 
@@ -72,18 +88,24 @@ describe('Validator', () => {
     let spy = jasmine.createSpy().and.returnValue(true);
     let rules = ValidationRules.ensure('prop').email().then().satisfies(spy).rules;
     validator.validateProperty(obj, 'prop', rules)
-      .then(errors => {
-        const expected = [new ValidationError(rules[0][0], 'Prop is not a valid email.', obj, 'prop')];
-        expected[0].id = errors[0].id;
-        expect(errors).toEqual(expected);
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'prop', false, 'Prop is not a valid email.')];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
         expect(spy.calls.count()).toBe(0);
       })
       .then(() => {
         obj = { prop: 'foo@bar.com' };
         return validator.validateProperty(obj, 'prop', rules);
       })
-      .then(errors => {
-        expect(errors).toEqual([]);
+      .then(results => {
+        const expected = [
+          new ValidateResult(rules[0][0], obj, 'prop', true),
+          new ValidateResult(rules[1][0], obj, 'prop', true),
+        ];
+        expected[0].id = results[0].id;
+        expected[1].id = results[1].id;
+        expect(results).toEqual(expected);
         expect(spy.calls.count()).toBe(1);
       })
       .then(done);

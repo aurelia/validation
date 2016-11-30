@@ -1,10 +1,13 @@
 // Exports
 
+export * from './controller-validate-result';
+export * from './property-info';
 export * from './validate-binding-behavior';
+export * from './validate-instruction';
+export * from './validate-result';
 export * from './validate-trigger';
 export * from './validation-controller';
 export * from './validation-controller-factory';
-export * from './validation-error';
 export * from './validation-errors-custom-attribute';
 export * from './validation-renderer-custom-attribute';
 export * from './validation-renderer';

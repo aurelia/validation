@@ -1,10 +1,9 @@
 let allTestFiles: string[] = [];
 let TEST_REGEXP = /^\/base\/dist\/test\/test\/[^\/]+\.js$/i;
 
-declare let require: any;
-
 interface Window {
   __karma__: any;
+  require: any;
 }
 
 // Get a list of all the test files to include
@@ -20,7 +19,7 @@ Object.keys(window.__karma__.files).forEach(file => {
 
 let started = false;
 
-require.config({
+window.require.config({
   // Karma serves files under /base, which is the basePath from your config file
   baseUrl: '/base',
 
@@ -33,7 +32,7 @@ require.config({
     }
     started = true;
     pal.initialize();
-    require(allTestFiles, () => window.__karma__.start());
+    window.require(allTestFiles, () => window.__karma__.start());
   },
   paths: {
     /* tslint:disable:max-line-length */

@@ -1,7 +1,7 @@
 import { Expression, LookupFunctions } from 'aurelia-binding';
 import { ViewResources } from 'aurelia-templating';
 import { Validator } from '../validator';
-import { ValidationError } from '../validation-error';
+import { ValidateResult } from '../validate-result';
 import { Rule } from './rule';
 import { Rules } from './rules';
 import { ValidationMessageProvider } from './validation-messages';
@@ -31,7 +31,7 @@ export class StandardValidator extends Validator {
    * @param rules Optional. If unspecified, the rules will be looked up using the metadata 
    * for the object created by ValidationRules....on(class/object)
    */
-  public validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidationError[]> {
+  public validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidateResult[]> {
     return this.validate(object, propertyName, rules || null);
   }
 
@@ -41,7 +41,7 @@ export class StandardValidator extends Validator {
    * @param rules Optional. If unspecified, the rules will be looked up using the metadata 
    * for the object created by ValidationRules....on(class/object)
    */
-  public validateObject(object: any, rules?: any): Promise<ValidationError[]> {
+  public validateObject(object: any, rules?: any): Promise<ValidateResult[]> {
     return this.validate(object, null, rules || null);
   }
 
@@ -80,14 +80,17 @@ export class StandardValidator extends Validator {
   }
 
   private validateRuleSequence(
-    object: any, propertyName: string | null,
-    ruleSequence: Rule<any, any>[][], sequence: number
-  ): Promise<ValidationError[]> {
+    object: any,
+    propertyName: string | null,
+    ruleSequence: Rule<any, any>[][],
+    sequence: number,
+    results: ValidateResult[]
+  ): Promise<ValidateResult[]> {
     // are we validating all properties or a single property?
     const validateAllProperties = propertyName === null || propertyName === undefined;
 
     const rules = ruleSequence[sequence];
-    const errors: ValidationError[] = [];
+    let allValid = true;
 
     // validate each rule.
     const promises: Promise<boolean>[] = [];
@@ -110,21 +113,21 @@ export class StandardValidator extends Validator {
       if (!(promiseOrBoolean instanceof Promise)) {
         promiseOrBoolean = Promise.resolve(promiseOrBoolean);
       }
-      promises.push(promiseOrBoolean.then(isValid => {
-        if (!isValid) {
-          const message = this.getMessage(rule, object, value);
-          errors.push(new ValidationError(rule, message, object, rule.property.name));
-        }
+      promises.push(promiseOrBoolean.then(valid => {
+        const message = valid ? null : this.getMessage(rule, object, value);
+        results.push(new ValidateResult(rule, object, rule.property.name, valid, message));
+        allValid = allValid && valid;
+        return valid;
       }));
     }
 
     return Promise.all(promises)
       .then(() => {
         sequence++;
-        if (errors.length === 0 && sequence < ruleSequence.length) {
-          return this.validateRuleSequence(object, propertyName, ruleSequence, sequence);
+        if (allValid && sequence < ruleSequence.length) {
+          return this.validateRuleSequence(object, propertyName, ruleSequence, sequence, results);
         }
-        return errors;
+        return results;
       });
   }
 
@@ -132,7 +135,7 @@ export class StandardValidator extends Validator {
     object: any,
     propertyName: string | null,
     rules: Rule<any, any>[][] | null
-  ): Promise<ValidationError[]> {
+  ): Promise<ValidateResult[]> {
     // rules specified?
     if (!rules) {
       // no. attempt to locate the rules.
@@ -144,6 +147,6 @@ export class StandardValidator extends Validator {
       return Promise.resolve([]);
     }
 
-    return this.validateRuleSequence(object, propertyName, rules, 0);
+    return this.validateRuleSequence(object, propertyName, rules, 0, []);
   }
 }

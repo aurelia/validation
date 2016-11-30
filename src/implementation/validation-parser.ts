@@ -116,7 +116,7 @@ export class MessageExpressionValidator extends Unparser {
       LogManager.getLogger('aurelia-validation')
         /* tslint:disable:max-line-length */
         .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
-        /* tslint:enable:max-line-length */
+      /* tslint:enable:max-line-length */
     }
   }
 }
