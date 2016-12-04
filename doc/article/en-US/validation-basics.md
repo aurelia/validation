@@ -239,13 +239,16 @@ You can override the `ValidationMessageProvider`'s `getMessage(key: string): Exp
   </source-code>
 </code-listing>
 
-You can also override the `ValidationMessageProvider`'s `getDisplayName(propertyName: string): string` method:
+You can also override the `ValidationMessageProvider`'s `getDisplayName(propertyName: string, displayName: string): string` method:
 
 <code-listing heading="Overriding getDisplayName">
   <source-code lang="ES 2015">
     import {ValidationMessageProvider} from 'aurelia-validation';
 
-    ValidationMessageProvider.prototype.getDisplayName = function(propertyName) {
+    ValidationMessageProvider.prototype.getDisplayName = function(propertyName, displayName) {
+      if (displayName !== null && displayName !== undefined) {
+        return displayName;
+      }
       return i18next.t(propertyName);
     };
   </source-code>
@@ -764,7 +767,7 @@ In `aurelia-validation` the object and property validation work is handled by th
 
 `aurelia-i18n` is Aurelia's official I18N plugin. Check out the project's [readme](https://github.com/aurelia/i18n/blob/master/README.md) for information on how to use `aurelia-i18n` in your application.
 
-Integrating `aurelia-i18n` with `aurelia-validation` is easy. All standard validation messages are supplied by the `ValidationMessageProvider` class. To translate the messages, override the `getMessage(key)` and `getDisplayName(propertyName)` methods with implementations that use `aurelia-i18n` to fetch translated versions of the messages/property-names.
+Integrating `aurelia-i18n` with `aurelia-validation` is easy. All standard validation messages are supplied by the `ValidationMessageProvider` class. To translate the messages, override the `getMessage(key)` and `getDisplayName(propertyName, displayName)` methods with implementations that use `aurelia-i18n` to fetch translated versions of the messages/property-names.
 
 Here's how to override the methods, in your main.js, during application startup:
 
@@ -783,7 +786,10 @@ Here's how to override the methods, in your main.js, during application startup:
         return this.parser.parseMessage(translation);
       };
 
-      ValidationMessageProvider.prototype.getDisplayName = function(propertyName) {
+      ValidationMessageProvider.prototype.getDisplayName = function(propertyName, displayName) {
+        if (displayName !== null && displayName !== undefined) {
+          return displayName;
+        }
         return i18n.tr(propertyName);
       };
 
