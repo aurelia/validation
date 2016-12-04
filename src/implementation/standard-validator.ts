@@ -63,8 +63,8 @@ export class StandardValidator extends Validator {
   private getMessage(rule: Rule<any, any>, object: any, value: any): string {
     const expression: Expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
     let { name: propertyName, displayName } = rule.property;
-    if (displayName === null && propertyName !== null) {
-      displayName = this.messageProvider.getDisplayName(propertyName);
+    if (propertyName !== null) {
+      displayName = this.messageProvider.getDisplayName(propertyName, displayName);
     }
     const overrideContext: any = {
       $displayName: displayName,

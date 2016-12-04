@@ -46,12 +46,16 @@ export class ValidationMessageProvider {
   }
 
   /**
-   * When a display name is not provided, this method is used to formulate
-   * a display name using the property name.
+   * Formulates a property display name using the property name and the configured
+   * displayName (if provided).
    * Override this with your own custom logic.
    * @param propertyName The property name.
    */
-  public getDisplayName(propertyName: string): string {
+  public getDisplayName(propertyName: string, displayName: string|null|undefined): string {
+    if (displayName !== null && displayName !== undefined) {
+      return displayName;
+    }
+
     // split on upper-case letters.
     const words = propertyName.split(/(?=[A-Z])/).join(' ');
     // capitalize first letter.
