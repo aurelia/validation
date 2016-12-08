@@ -84,18 +84,33 @@ describe('Validator', () => {
   });
 
   it('bails', (done: () => void) => {
-    let obj = { prop: <any>'invalid email' };
-    let spy = jasmine.createSpy().and.returnValue(true);
-    let rules = ValidationRules.ensure('prop').email().then().satisfies(spy).rules;
+    let obj = { prop: <any>'invalid email', prop2: '' };
+    let spy1 = jasmine.createSpy().and.returnValue(true);
+    let spy2 = jasmine.createSpy().and.returnValue(true);
+    let rules = ValidationRules
+      .ensure('prop').email().then().satisfies(spy1)
+      .ensure('prop2').satisfies(spy2)
+      .rules;
     validator.validateProperty(obj, 'prop', rules)
       .then(results => {
         const expected = [new ValidateResult(rules[0][0], obj, 'prop', false, 'Prop is not a valid email.')];
         expected[0].id = results[0].id;
         expect(results).toEqual(expected);
-        expect(spy.calls.count()).toBe(0);
+        expect(spy1.calls.count()).toBe(0);
+      })
+      .then(() => validator.validateObject(obj, rules))
+      .then(results => {
+        const expected = [
+          new ValidateResult(rules[0][0], obj, 'prop', false, 'Prop is not a valid email.'),
+          new ValidateResult(rules[0][1], obj, 'prop2', true, null)];
+        expected[0].id = results[0].id;
+        expected[1].id = results[1].id;
+        expect(results).toEqual(expected);
+        expect(spy1.calls.count()).toBe(0);
+        expect(spy2.calls.count()).toBe(1);
       })
       .then(() => {
-        obj = { prop: 'foo@bar.com' };
+        obj = { prop: 'foo@bar.com', prop2: '' };
         return validator.validateProperty(obj, 'prop', rules);
       })
       .then(results => {
@@ -106,7 +121,7 @@ describe('Validator', () => {
         expected[0].id = results[0].id;
         expected[1].id = results[1].id;
         expect(results).toEqual(expected);
-        expect(spy.calls.count()).toBe(1);
+        expect(spy1.calls.count()).toBe(1);
       })
       .then(done);
   });

@@ -25,7 +25,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
       when: null,
       messageKey: 'default',
       message: null,
-      sequence: fluentEnsure._sequence
+      sequence: fluentRules.sequence
     };
     this.fluentEnsure._addRule(this.rule);
   }
@@ -36,7 +36,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * rules until less expensive rules pass validation. 
    */
   public then() {
-    this.fluentEnsure._sequence++;
+    this.fluentRules.sequence++;
     return this;
   }
 
@@ -207,6 +207,13 @@ export class FluentRules<TObject, TValue> {
     }
   } = {};
 
+  /**
+   * Current rule sequence number. Used to postpone evaluation of rules until rules
+   * with lower sequence number have successfully validated. The "then" fluent API method
+   * manages this property, there's usually no need to set it directly.
+   */
+  public sequence = 0;
+
   constructor(
     private fluentEnsure: FluentEnsure<TObject>,
     private parser: ValidationParser,
@@ -348,10 +355,6 @@ export class FluentEnsure<TObject> {
    * Rules that have been defined using the fluent API.
    */
   public rules: Rule<TObject, any>[][] = [];
-
-  /* tslint:disable */
-  public _sequence = 0;
-  /* tslint:enable */
 
   constructor(private parser: ValidationParser) { }
 
