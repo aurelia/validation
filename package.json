@@ -35,15 +35,19 @@
     "postbuild:commonjs": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/commonjs",
 
     "prebuild:es2015": "cross-env rimraf dist/es2015",
-    "build:es2015": "cross-env tsc --project tsconfig.build.json --outDir dist/es2015 --module es2015",
+    "build:es2015": "cross-env tsc --project tsconfig.build.json --outDir dist/es2015 --module es2015 --target es2015",
     "postbuild:es2015": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/es2015",
+
+    "prebuild:native-modules": "cross-env rimraf dist/native-modules",
+    "build:native-modules": "cross-env tsc --project tsconfig.build.json --outDir dist/native-modules --module es2015",
+    "postbuild:native-modules": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/native-modules",
 
     "prebuild:system": "cross-env rimraf dist/system",
     "build:system": "cross-env tsc --project tsconfig.build.json --outDir dist/system --module system",
     "postbuild:system": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/system",
 
     "prebuild": "cross-env rimraf dist",
-    "build": "concurrently \"npm run build:amd\" \"npm run build:commonjs\" \"npm run build:es2015\" \"npm run build:system\"",
+    "build": "concurrently \"npm run build:amd\" \"npm run build:commonjs\" \"npm run build:es2015\" \"npm run build:native-modules\" \"npm run build:system\"",
     "postbuild": "npm run build:doc",
 
     "prebuild:doc": "cross-env rimraf doc/api.json && rimraf dist/doc-temp && tsc --project tsconfig.build.json --outFile dist/doc-temp/index.js && node doc/shape-defs",
