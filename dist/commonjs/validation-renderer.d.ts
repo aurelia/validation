@@ -1,19 +1,19 @@
-import { ValidationError } from './validation-error';
+import { ValidateResult } from './validate-result';
 /**
- * An error to render (or unrender) and the associated elements (if any)
+ * A result to render (or unrender) and the associated elements (if any)
  */
-export interface RenderErrorInstruction {
+export interface ResultInstruction {
     /**
-     * The validation error.
+     * The validation result.
      */
-    error: ValidationError;
+    result: ValidateResult;
     /**
      * The associated elements (if any).
      */
     elements: Element[];
 }
 /**
- * Defines which errors to render and which errors to unrender.
+ * Defines which validation results to render and which validation results to unrender.
  */
 export interface RenderInstruction {
     /**
@@ -21,22 +21,22 @@ export interface RenderInstruction {
      */
     kind: 'validate' | 'reset';
     /**
-     * The errors to render.
+     * The results to render.
      */
-    render: RenderErrorInstruction[];
+    render: ResultInstruction[];
     /**
-     * The errors to unrender.
+     * The results to unrender.
      */
-    unrender: RenderErrorInstruction[];
+    unrender: ResultInstruction[];
 }
 /**
- * Renders validation errors.
+ * Renders validation results.
  */
 export interface ValidationRenderer {
     /**
-     * Render the errors.
-     * @param instruction The render instruction. Defines which errors to render and which
-     * errors to unrender.
+     * Render the validation results.
+     * @param instruction The render instruction. Defines which results to render and which
+     * results to unrender.
      */
     render(instruction: RenderInstruction): void;
 }

@@ -122,6 +122,12 @@ export declare class FluentRules<TObject, TValue> {
             argsToConfig?: (...args: any[]) => any;
         };
     };
+    /**
+     * Current rule sequence number. Used to postpone evaluation of rules until rules
+     * with lower sequence number have successfully validated. The "then" fluent API method
+     * manages this property, there's usually no need to set it directly.
+     */
+    sequence: number;
     constructor(fluentEnsure: FluentEnsure<TObject>, parser: ValidationParser, property: RuleProperty);
     /**
      * Sets the display name of the ensured property.
@@ -191,7 +197,6 @@ export declare class FluentEnsure<TObject> {
      * Rules that have been defined using the fluent API.
      */
     rules: Rule<TObject, any>[][];
-    _sequence: number;
     constructor(parser: ValidationParser);
     /**
      * Target a property with validation rules.

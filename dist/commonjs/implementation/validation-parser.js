@@ -4,10 +4,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var aurelia_binding_1 = require('aurelia-binding');
-var aurelia_templating_1 = require('aurelia-templating');
-var util_1 = require('./util');
-var LogManager = require('aurelia-logging');
+var aurelia_binding_1 = require("aurelia-binding");
+var aurelia_templating_1 = require("aurelia-templating");
+var util_1 = require("./util");
+var LogManager = require("aurelia-logging");
 var ValidationParser = (function () {
     function ValidationParser(parser, bindinqLanguage) {
         this.parser = parser;
@@ -60,15 +60,16 @@ var ValidationParser = (function () {
         }
         return this.parser.parse(match[1]);
     };
-    ValidationParser.inject = [aurelia_binding_1.Parser, aurelia_templating_1.BindingLanguage];
     return ValidationParser;
 }());
+ValidationParser.inject = [aurelia_binding_1.Parser, aurelia_templating_1.BindingLanguage];
 exports.ValidationParser = ValidationParser;
 var MessageExpressionValidator = (function (_super) {
     __extends(MessageExpressionValidator, _super);
     function MessageExpressionValidator(originalMessage) {
-        _super.call(this, []);
-        this.originalMessage = originalMessage;
+        var _this = _super.call(this, []) || this;
+        _this.originalMessage = originalMessage;
+        return _this;
     }
     MessageExpressionValidator.validate = function (expression, originalMessage) {
         var visitor = new MessageExpressionValidator(originalMessage);

@@ -1,9 +1,7 @@
 // Exports
-System.register(['./validate-binding-behavior', './validate-trigger', './validation-controller', './validation-controller-factory', './validation-error', './validation-errors-custom-attribute', './validation-renderer-custom-attribute', './validator', './implementation/rules', './implementation/standard-validator', './implementation/validation-messages', './implementation/validation-parser', './implementation/validation-rules'], function(exports_1, context_1) {
+System.register(["./property-info", "./validate-binding-behavior", "./validate-result", "./validate-trigger", "./validation-controller", "./validation-controller-factory", "./validation-errors-custom-attribute", "./validation-renderer-custom-attribute", "./validator", "./implementation/rules", "./implementation/standard-validator", "./implementation/validation-messages", "./implementation/validation-parser", "./implementation/validation-rules"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var validator_1, standard_validator_1, validation_parser_1, validation_rules_1;
-    var AureliaValidationConfiguration;
     /**
      * Configures the plugin.
      */
@@ -22,21 +20,29 @@ System.register(['./validate-binding-behavior', './validate-trigger', './validat
         frameworkConfig.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
     }
     exports_1("configure", configure);
+    var validator_1, standard_validator_1, validation_parser_1, validation_rules_1, AureliaValidationConfiguration;
     var exportedNames_1 = {
-        'AureliaValidationConfiguration': true,
-        'configure': true
+        "AureliaValidationConfiguration": true,
+        "configure": true
     };
     function exportStar_1(m) {
         var exports = {};
-        for(var n in m) {
-            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+        for (var n in m) {
+            if (n !== "default" && !exportedNames_1.hasOwnProperty(n))
+                exports[n] = m[n];
         }
         exports_1(exports);
     }
     return {
-        setters:[
+        setters: [
+            function (property_info_1_1) {
+                exportStar_1(property_info_1_1);
+            },
             function (validate_binding_behavior_1_1) {
                 exportStar_1(validate_binding_behavior_1_1);
+            },
+            function (validate_result_1_1) {
+                exportStar_1(validate_result_1_1);
             },
             function (validate_trigger_1_1) {
                 exportStar_1(validate_trigger_1_1);
@@ -46,9 +52,6 @@ System.register(['./validate-binding-behavior', './validate-trigger', './validat
             },
             function (validation_controller_factory_1_1) {
                 exportStar_1(validation_controller_factory_1_1);
-            },
-            function (validation_error_1_1) {
-                exportStar_1(validation_error_1_1);
             },
             function (validation_errors_custom_attribute_1_1) {
                 exportStar_1(validation_errors_custom_attribute_1_1);
@@ -77,8 +80,9 @@ System.register(['./validate-binding-behavior', './validate-trigger', './validat
             function (validation_rules_2_1) {
                 exportStar_1(validation_rules_2_1);
                 validation_rules_1 = validation_rules_2_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {// Exports
             /**
              * Aurelia Validation Configuration API
              */
@@ -103,5 +107,5 @@ System.register(['./validate-binding-behavior', './validate-trigger', './validat
             }());
             exports_1("AureliaValidationConfiguration", AureliaValidationConfiguration);
         }
-    }
+    };
 });

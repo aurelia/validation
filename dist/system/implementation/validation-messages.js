@@ -1,14 +1,14 @@
-System.register(['./validation-parser'], function(exports_1, context_1) {
+System.register(["./validation-parser"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var validation_parser_1;
-    var validationMessages, ValidationMessageProvider;
+    var validation_parser_1, validationMessages, ValidationMessageProvider;
     return {
-        setters:[
+        setters: [
             function (validation_parser_1_1) {
                 validation_parser_1 = validation_parser_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             /**
              * Dictionary of validation messages. [messageKey]: messageExpression
              */
@@ -48,21 +48,24 @@ System.register(['./validation-parser'], function(exports_1, context_1) {
                     return this.parser.parseMessage(message);
                 };
                 /**
-                 * When a display name is not provided, this method is used to formulate
-                 * a display name using the property name.
+                 * Formulates a property display name using the property name and the configured
+                 * displayName (if provided).
                  * Override this with your own custom logic.
                  * @param propertyName The property name.
                  */
-                ValidationMessageProvider.prototype.getDisplayName = function (propertyName) {
+                ValidationMessageProvider.prototype.getDisplayName = function (propertyName, displayName) {
+                    if (displayName !== null && displayName !== undefined) {
+                        return displayName;
+                    }
                     // split on upper-case letters.
                     var words = propertyName.split(/(?=[A-Z])/).join(' ');
                     // capitalize first letter.
                     return words.charAt(0).toUpperCase() + words.slice(1);
                 };
-                ValidationMessageProvider.inject = [validation_parser_1.ValidationParser];
                 return ValidationMessageProvider;
             }());
+            ValidationMessageProvider.inject = [validation_parser_1.ValidationParser];
             exports_1("ValidationMessageProvider", ValidationMessageProvider);
         }
-    }
+    };
 });

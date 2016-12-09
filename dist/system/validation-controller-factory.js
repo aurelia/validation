@@ -1,17 +1,17 @@
-System.register(['./validation-controller', './validator'], function(exports_1, context_1) {
+System.register(["./validation-controller", "./validator"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var validation_controller_1, validator_1;
-    var ValidationControllerFactory;
+    var validation_controller_1, validator_1, ValidationControllerFactory;
     return {
-        setters:[
+        setters: [
             function (validation_controller_1_1) {
                 validation_controller_1 = validation_controller_1_1;
             },
             function (validator_1_1) {
                 validator_1 = validator_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             /**
              * Creates ValidationController instances.
              */
@@ -45,5 +45,5 @@ System.register(['./validation-controller', './validator'], function(exports_1, 
             exports_1("ValidationControllerFactory", ValidationControllerFactory);
             ValidationControllerFactory['protocol:aurelia:resolver'] = true;
         }
-    }
+    };
 });

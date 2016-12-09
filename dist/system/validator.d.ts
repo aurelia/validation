@@ -1,7 +1,6 @@
-import { ValidationError } from './validation-error';
+import { ValidateResult } from './validate-result';
 /**
- * Validates.
- * Responsible for validating objects and properties.
+ * Validates objects and properties.
  */
 export declare abstract class Validator {
     /**
@@ -11,14 +10,14 @@ export declare abstract class Validator {
      * @param rules Optional. If unspecified, the implementation should lookup the rules for the
      * specified object. This may not be possible for all implementations of this interface.
      */
-    abstract validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidationError[]>;
+    abstract validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidateResult[]>;
     /**
      * Validates all rules for specified object and it's properties.
      * @param object The object to validate.
      * @param rules Optional. If unspecified, the implementation should lookup the rules for the
      * specified object. This may not be possible for all implementations of this interface.
      */
-    abstract validateObject(object: any, rules?: any): Promise<ValidationError[]>;
+    abstract validateObject(object: any, rules?: any): Promise<ValidateResult[]>;
     /**
      * Determines whether a rule exists in a set of rules.
      * @param rules The rules to search.

@@ -1,8 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     /**
-     * Validates.
-     * Responsible for validating objects and properties.
+     * Validates objects and properties.
      */
     var Validator = (function () {
         function Validator() {

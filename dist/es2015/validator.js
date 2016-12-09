@@ -1,6 +1,9 @@
 /**
- * Validates.
- * Responsible for validating objects and properties.
+ * Validates objects and properties.
  */
-export class Validator {
-}
+var Validator = (function () {
+    function Validator() {
+    }
+    return Validator;
+}());
+export { Validator };

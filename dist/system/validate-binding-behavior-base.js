@@ -1,10 +1,9 @@
-System.register(['aurelia-dependency-injection', 'aurelia-pal', './validation-controller', './validate-trigger'], function(exports_1, context_1) {
+System.register(["aurelia-dependency-injection", "aurelia-pal", "./validation-controller", "./validate-trigger"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var aurelia_dependency_injection_1, aurelia_pal_1, validation_controller_1, validate_trigger_1;
-    var ValidateBindingBehaviorBase;
+    var aurelia_dependency_injection_1, aurelia_pal_1, validation_controller_1, validate_trigger_1, ValidateBindingBehaviorBase;
     return {
-        setters:[
+        setters: [
             function (aurelia_dependency_injection_1_1) {
                 aurelia_dependency_injection_1 = aurelia_dependency_injection_1_1;
             },
@@ -16,8 +15,9 @@ System.register(['aurelia-dependency-injection', 'aurelia-pal', './validation-co
             },
             function (validate_trigger_1_1) {
                 validate_trigger_1 = validate_trigger_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             /**
              * Binding behavior. Indicates the bound property should be validated.
              */
@@ -121,5 +121,5 @@ System.register(['aurelia-dependency-injection', 'aurelia-pal', './validation-co
             }());
             exports_1("ValidateBindingBehaviorBase", ValidateBindingBehaviorBase);
         }
-    }
+    };
 });

@@ -1,13 +1,12 @@
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var Validator;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             /**
-             * Validates.
-             * Responsible for validating objects and properties.
+             * Validates objects and properties.
              */
             Validator = (function () {
                 function Validator() {
@@ -16,5 +15,5 @@ System.register([], function(exports_1, context_1) {
             }());
             exports_1("Validator", Validator);
         }
-    }
+    };
 });

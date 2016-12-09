@@ -1,7 +1,9 @@
 /**
  * Validation triggers.
  */
-export const validateTrigger = {
+/**
+ * Validation triggers.
+ */ export var validateTrigger = {
     /**
      * Manual validation.  Use the controller's `validate()` and  `reset()` methods
      * to validate all bindings.

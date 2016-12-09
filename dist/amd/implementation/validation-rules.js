@@ -1,4 +1,4 @@
-define(["require", "exports", './util', './rules', './validation-messages'], function (require, exports, util_1, rules_1, validation_messages_1) {
+define(["require", "exports", "./util", "./rules", "./validation-messages"], function (require, exports, util_1, rules_1, validation_messages_1) {
     "use strict";
     /**
      * Part of the fluent rule API. Enables customizing property rules.
@@ -16,7 +16,7 @@ define(["require", "exports", './util', './rules', './validation-messages'], fun
                 when: null,
                 messageKey: 'default',
                 message: null,
-                sequence: fluentEnsure._sequence
+                sequence: fluentRules.sequence
             };
             this.fluentEnsure._addRule(this.rule);
         }
@@ -26,7 +26,7 @@ define(["require", "exports", './util', './rules', './validation-messages'], fun
          * rules until less expensive rules pass validation.
          */
         FluentRuleCustomizer.prototype.then = function () {
-            this.fluentEnsure._sequence++;
+            this.fluentRules.sequence++;
             return this;
         };
         /**
@@ -184,6 +184,12 @@ define(["require", "exports", './util', './rules', './validation-messages'], fun
             this.fluentEnsure = fluentEnsure;
             this.parser = parser;
             this.property = property;
+            /**
+             * Current rule sequence number. Used to postpone evaluation of rules until rules
+             * with lower sequence number have successfully validated. The "then" fluent API method
+             * manages this property, there's usually no need to set it directly.
+             */
+            this.sequence = 0;
         }
         /**
          * Sets the display name of the ensured property.
@@ -222,7 +228,10 @@ define(["require", "exports", './util', './rules', './validation-messages'], fun
                 throw new Error("Rule with name \"" + name + "\" does not exist.");
             }
             var config = rule.argsToConfig ? rule.argsToConfig.apply(rule, args) : undefined;
-            return this.satisfies(function (value, obj) { return (_a = rule.condition).call.apply(_a, [_this, value, obj].concat(args)); var _a; }, config)
+            return this.satisfies(function (value, obj) {
+                return (_a = rule.condition).call.apply(_a, [_this, value, obj].concat(args));
+                var _a;
+            }, config)
                 .withMessageKey(name);
         };
         /**
@@ -295,23 +304,20 @@ define(["require", "exports", './util', './rules', './validation-messages'], fun
             return this.satisfies(function (value) { return value === null || value === undefined || value === '' || value === expectedValue; }, { expectedValue: expectedValue })
                 .withMessageKey('equals');
         };
-        FluentRules.customRules = {};
         return FluentRules;
     }());
+    FluentRules.customRules = {};
     exports.FluentRules = FluentRules;
     /**
      * Part of the fluent rule API. Enables targeting properties and objects with rules.
      */
     var FluentEnsure = (function () {
-        /* tslint:enable */
         function FluentEnsure(parser) {
             this.parser = parser;
             /**
              * Rules that have been defined using the fluent API.
              */
             this.rules = [];
-            /* tslint:disable */
-            this._sequence = 0;
         }
         /**
          * Target a property with validation rules.

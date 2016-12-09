@@ -5,8 +5,8 @@ import { validateTrigger } from './validate-trigger';
 /**
  * Binding behavior. Indicates the bound property should be validated.
  */
-export class ValidateBindingBehaviorBase {
-    constructor(taskQueue) {
+var ValidateBindingBehaviorBase = (function () {
+    function ValidateBindingBehaviorBase(taskQueue) {
         this.taskQueue = taskQueue;
     }
     /**
@@ -15,30 +15,31 @@ export class ValidateBindingBehaviorBase {
      * or custom attribute which is a javascript "class" instance, so we need to use
      * the controller's container to retrieve the actual DOM element.
      */
-    getTarget(binding, view) {
-        const target = binding.target;
+    ValidateBindingBehaviorBase.prototype.getTarget = function (binding, view) {
+        var target = binding.target;
         // DOM element
         if (target instanceof Element) {
             return target;
         }
         // custom element or custom attribute
-        for (let i = 0, ii = view.controllers.length; i < ii; i++) {
-            let controller = view.controllers[i];
+        for (var i = 0, ii = view.controllers.length; i < ii; i++) {
+            var controller = view.controllers[i];
             if (controller.viewModel === target) {
-                const element = controller.container.get(DOM.Element);
+                var element = controller.container.get(DOM.Element);
                 if (element) {
                     return element;
                 }
-                throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
+                throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
             }
         }
-        throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
-    }
-    bind(binding, source, rulesOrController, rules) {
+        throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
+    };
+    ValidateBindingBehaviorBase.prototype.bind = function (binding, source, rulesOrController, rules) {
+        var _this = this;
         // identify the target element.
-        const target = this.getTarget(binding, source);
+        var target = this.getTarget(binding, source);
         // locate the controller.
-        let controller;
+        var controller;
         if (rulesOrController instanceof ValidationController) {
             controller = rulesOrController;
         }
@@ -47,11 +48,11 @@ export class ValidateBindingBehaviorBase {
             rules = rulesOrController;
         }
         if (controller === null) {
-            throw new Error(`A ValidationController has not been registered.`);
+            throw new Error("A ValidationController has not been registered.");
         }
         controller.registerBinding(binding, target, rules);
         binding.validationController = controller;
-        const trigger = this.getValidateTrigger(controller);
+        var trigger = this.getValidateTrigger(controller);
         /* tslint:disable:no-bitwise */
         if (trigger & validateTrigger.change) {
             /* tslint:enable:no-bitwise */
@@ -66,8 +67,8 @@ export class ValidateBindingBehaviorBase {
         /* tslint:disable:no-bitwise */
         if (trigger & validateTrigger.blur) {
             /* tslint:enable:no-bitwise */
-            binding.validateBlurHandler = () => {
-                this.taskQueue.queueMicroTask(() => controller.validateBinding(binding));
+            binding.validateBlurHandler = function () {
+                _this.taskQueue.queueMicroTask(function () { return controller.validateBinding(binding); });
             };
             binding.validateTarget = target;
             target.addEventListener('blur', binding.validateBlurHandler);
@@ -81,8 +82,8 @@ export class ValidateBindingBehaviorBase {
                 this.validationController.resetBinding(this);
             };
         }
-    }
-    unbind(binding) {
+    };
+    ValidateBindingBehaviorBase.prototype.unbind = function (binding) {
         // reset the binding to it's original state.
         if (binding.standardUpdateSource) {
             binding.updateSource = binding.standardUpdateSource;
@@ -99,5 +100,7 @@ export class ValidateBindingBehaviorBase {
         }
         binding.validationController.unregisterBinding(binding);
         binding.validationController = null;
-    }
-}
+    };
+    return ValidateBindingBehaviorBase;
+}());
+export { ValidateBindingBehaviorBase };

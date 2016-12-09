@@ -1,5 +1,5 @@
 "use strict";
-var validation_controller_1 = require('./validation-controller');
+var validation_controller_1 = require("./validation-controller");
 var ValidationRendererCustomAttribute = (function () {
     function ValidationRendererCustomAttribute() {
     }

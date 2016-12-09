@@ -1,7 +1,6 @@
-System.register(['aurelia-binding'], function(exports_1, context_1) {
+System.register(["aurelia-binding"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var aurelia_binding_1;
     function getObject(expression, objectExpression, source) {
         var value = objectExpression.evaluate(source, null);
         if (value === null || value === undefined || value instanceof Object) {
@@ -44,12 +43,14 @@ System.register(['aurelia-binding'], function(exports_1, context_1) {
         return { object: object, propertyName: propertyName };
     }
     exports_1("getPropertyInfo", getPropertyInfo);
+    var aurelia_binding_1;
     return {
-        setters:[
+        setters: [
             function (aurelia_binding_1_1) {
                 aurelia_binding_1 = aurelia_binding_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
         }
-    }
+    };
 });

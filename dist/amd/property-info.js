@@ -1,4 +1,4 @@
-define(["require", "exports", 'aurelia-binding'], function (require, exports, aurelia_binding_1) {
+define(["require", "exports", "aurelia-binding"], function (require, exports, aurelia_binding_1) {
     "use strict";
     function getObject(expression, objectExpression, source) {
         var value = objectExpression.evaluate(source, null);

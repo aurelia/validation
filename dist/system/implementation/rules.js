@@ -1,10 +1,10 @@
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var Rules;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             /**
              * Sets, unsets and retrieves rules on an object or constructor function.
              */
@@ -35,13 +35,13 @@ System.register([], function(exports_1, context_1) {
                 Rules.get = function (target) {
                     return target[Rules.key] || null;
                 };
-                /**
-                 * The name of the property that stores the rules.
-                 */
-                Rules.key = '__rules__';
                 return Rules;
             }());
+            /**
+             * The name of the property that stores the rules.
+             */
+            Rules.key = '__rules__';
             exports_1("Rules", Rules);
         }
-    }
+    };
 });

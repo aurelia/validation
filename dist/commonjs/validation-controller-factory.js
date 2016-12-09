@@ -1,6 +1,6 @@
 "use strict";
-var validation_controller_1 = require('./validation-controller');
-var validator_1 = require('./validator');
+var validation_controller_1 = require("./validation-controller");
+var validator_1 = require("./validator");
 /**
  * Creates ValidationController instances.
  */

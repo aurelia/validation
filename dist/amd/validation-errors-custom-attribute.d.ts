@@ -1,9 +1,9 @@
 import { Lazy } from 'aurelia-dependency-injection';
 import { ValidationController } from './validation-controller';
-import { ValidationError } from './validation-error';
+import { ValidateResult } from './validate-result';
 import { ValidationRenderer, RenderInstruction } from './validation-renderer';
 export interface RenderedError {
-    error: ValidationError;
+    error: ValidateResult;
     targets: Element[];
 }
 export declare class ValidationErrorsCustomAttribute implements ValidationRenderer {

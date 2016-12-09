@@ -1,5 +1,5 @@
 "use strict";
-var validation_parser_1 = require('./validation-parser');
+var validation_parser_1 = require("./validation-parser");
 /**
  * Dictionary of validation messages. [messageKey]: messageExpression
  */
@@ -39,18 +39,21 @@ var ValidationMessageProvider = (function () {
         return this.parser.parseMessage(message);
     };
     /**
-     * When a display name is not provided, this method is used to formulate
-     * a display name using the property name.
+     * Formulates a property display name using the property name and the configured
+     * displayName (if provided).
      * Override this with your own custom logic.
      * @param propertyName The property name.
      */
-    ValidationMessageProvider.prototype.getDisplayName = function (propertyName) {
+    ValidationMessageProvider.prototype.getDisplayName = function (propertyName, displayName) {
+        if (displayName !== null && displayName !== undefined) {
+            return displayName;
+        }
         // split on upper-case letters.
         var words = propertyName.split(/(?=[A-Z])/).join(' ');
         // capitalize first letter.
         return words.charAt(0).toUpperCase() + words.slice(1);
     };
-    ValidationMessageProvider.inject = [validation_parser_1.ValidationParser];
     return ValidationMessageProvider;
 }());
+ValidationMessageProvider.inject = [validation_parser_1.ValidationParser];
 exports.ValidationMessageProvider = ValidationMessageProvider;

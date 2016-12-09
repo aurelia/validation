@@ -1,14 +1,14 @@
-System.register(['./validation-controller'], function(exports_1, context_1) {
+System.register(["./validation-controller"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var validation_controller_1;
-    var ValidationRendererCustomAttribute;
+    var validation_controller_1, ValidationRendererCustomAttribute;
     return {
-        setters:[
+        setters: [
             function (validation_controller_1_1) {
                 validation_controller_1 = validation_controller_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             ValidationRendererCustomAttribute = (function () {
                 function ValidationRendererCustomAttribute() {
                 }
@@ -29,5 +29,5 @@ System.register(['./validation-controller'], function(exports_1, context_1) {
             }());
             exports_1("ValidationRendererCustomAttribute", ValidationRendererCustomAttribute);
         }
-    }
+    };
 });

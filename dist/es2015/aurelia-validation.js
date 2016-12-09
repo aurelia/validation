@@ -1,14 +1,13 @@
 // Exports
+export * from './property-info';
 export * from './validate-binding-behavior';
+export * from './validate-result';
 export * from './validate-trigger';
 export * from './validation-controller';
 export * from './validation-controller-factory';
-export * from './validation-error';
 export * from './validation-errors-custom-attribute';
 export * from './validation-renderer-custom-attribute';
-export * from './validation-renderer';
 export * from './validator';
-export * from './implementation/rule';
 export * from './implementation/rules';
 export * from './implementation/standard-validator';
 export * from './implementation/validation-messages';
@@ -21,34 +20,36 @@ import { ValidationRules } from './implementation/validation-rules';
 /**
  * Aurelia Validation Configuration API
  */
-export class AureliaValidationConfiguration {
-    constructor() {
+var AureliaValidationConfiguration = (function () {
+    function AureliaValidationConfiguration() {
         this.validatorType = StandardValidator;
     }
     /**
      * Use a custom Validator implementation.
      */
-    customValidator(type) {
+    AureliaValidationConfiguration.prototype.customValidator = function (type) {
         this.validatorType = type;
-    }
+    };
     /**
      * Applies the configuration.
      */
-    apply(container) {
-        const validator = container.get(this.validatorType);
+    AureliaValidationConfiguration.prototype.apply = function (container) {
+        var validator = container.get(this.validatorType);
         container.registerInstance(Validator, validator);
-    }
-}
+    };
+    return AureliaValidationConfiguration;
+}());
+export { AureliaValidationConfiguration };
 /**
  * Configures the plugin.
  */
 export function configure(frameworkConfig, callback) {
     // the fluent rule definition API needs the parser to translate messages
     // to interpolation expressions. 
-    const parser = frameworkConfig.container.get(ValidationParser);
+    var parser = frameworkConfig.container.get(ValidationParser);
     ValidationRules.initialize(parser);
     // configure...
-    const config = new AureliaValidationConfiguration();
+    var config = new AureliaValidationConfiguration();
     if (callback instanceof Function) {
         callback(config);
     }

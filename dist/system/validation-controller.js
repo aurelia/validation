@@ -1,10 +1,9 @@
-System.register(['./validator', './validate-trigger', './property-info', './validation-error'], function(exports_1, context_1) {
+System.register(["./validator", "./validate-trigger", "./property-info", "./validate-result"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var validator_1, validate_trigger_1, property_info_1, validation_error_1;
-    var ValidationController;
+    var validator_1, validate_trigger_1, property_info_1, validate_result_1, ValidationController;
     return {
-        setters:[
+        setters: [
             function (validator_1_1) {
                 validator_1 = validator_1_1;
             },
@@ -14,14 +13,15 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
             function (property_info_1_1) {
                 property_info_1 = property_info_1_1;
             },
-            function (validation_error_1_1) {
-                validation_error_1 = validation_error_1_1;
-            }],
-        execute: function() {
+            function (validate_result_1_1) {
+                validate_result_1 = validate_result_1_1;
+            }
+        ],
+        execute: function () {
             /**
              * Orchestrates validation.
              * Manages a set of bindings, renderers and objects.
-             * Exposes the current list of validation errors for binding purposes.
+             * Exposes the current list of validation results for binding purposes.
              */
             ValidationController = (function () {
                 function ValidationController(validator) {
@@ -31,14 +31,18 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     // Renderers that have been added to the controller instance.
                     this.renderers = [];
                     /**
-                     * Errors that have been rendered by the controller.
+                     * Validation results that have been rendered by the controller.
+                     */
+                    this.results = [];
+                    /**
+                     * Validation errors that have been rendered by the controller.
                      */
                     this.errors = [];
                     /**
                      *  Whether the controller is currently validating.
                      */
                     this.validating = false;
-                    // Elements related to errors that have been rendered.
+                    // Elements related to validation results that have been rendered.
                     this.elements = new Map();
                     // Objects that have been added to the controller instance (entity-style validation).
                     this.objects = new Map();
@@ -63,22 +67,23 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                  */
                 ValidationController.prototype.removeObject = function (object) {
                     this.objects.delete(object);
-                    this.processErrorDelta('reset', this.errors.filter(function (error) { return error.object === object; }), []);
+                    this.processResultDelta('reset', this.results.filter(function (result) { return result.object === object; }), []);
                 };
                 /**
-                 * Adds and renders a ValidationError.
+                 * Adds and renders an error.
                  */
                 ValidationController.prototype.addError = function (message, object, propertyName) {
-                    var error = new validation_error_1.ValidationError({}, message, object, propertyName);
-                    this.processErrorDelta('validate', [], [error]);
-                    return error;
+                    if (propertyName === void 0) { propertyName = null; }
+                    var result = new validate_result_1.ValidateResult({}, object, propertyName, false, message);
+                    this.processResultDelta('validate', [], [result]);
+                    return result;
                 };
                 /**
-                 * Removes and unrenders a ValidationError.
+                 * Removes and unrenders an error.
                  */
-                ValidationController.prototype.removeError = function (error) {
-                    if (this.errors.indexOf(error) !== -1) {
-                        this.processErrorDelta('reset', [error], []);
+                ValidationController.prototype.removeError = function (result) {
+                    if (this.results.indexOf(result) !== -1) {
+                        this.processResultDelta('reset', [result], []);
                     }
                 };
                 /**
@@ -90,7 +95,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     this.renderers.push(renderer);
                     renderer.render({
                         kind: 'validate',
-                        render: this.errors.map(function (error) { return ({ error: error, elements: _this.elements.get(error) }); }),
+                        render: this.results.map(function (result) { return ({ result: result, elements: _this.elements.get(result) }); }),
                         unrender: []
                     });
                 };
@@ -104,7 +109,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     renderer.render({
                         kind: 'reset',
                         render: [],
-                        unrender: this.errors.map(function (error) { return ({ error: error, elements: _this.elements.get(error) }); })
+                        unrender: this.results.map(function (result) { return ({ result: result, elements: _this.elements.get(result) }); })
                     });
                 };
                 /**
@@ -126,7 +131,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                 };
                 /**
                  * Interprets the instruction and returns a predicate that will identify
-                 * relevant errors in the list of rendered errors.
+                 * relevant results in the list of rendered validation results.
                  */
                 ValidationController.prototype.getInstructionPredicate = function (instruction) {
                     var _this = this;
@@ -149,7 +154,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     }
                 };
                 /**
-                 * Validates and renders errors.
+                 * Validates and renders results.
                  * @param instruction Optional. Instructions on what to validate. If undefined, all
                  * objects and bindings will be validated.
                  */
@@ -187,39 +192,45 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                                 }
                                 promises.push(_this.validator.validateProperty(propertyInfo.object, propertyInfo.propertyName, rules));
                             }
-                            return Promise.all(promises).then(function (errorSets) { return errorSets.reduce(function (a, b) { return a.concat(b); }, []); });
+                            return Promise.all(promises).then(function (resultSets) { return resultSets.reduce(function (a, b) { return a.concat(b); }, []); });
                         };
                     }
-                    // Wait for any existing validation to finish, execute the instruction, render the errors.
+                    // Wait for any existing validation to finish, execute the instruction, render the results.
                     this.validating = true;
-                    var result = this.finishValidating
+                    var returnPromise = this.finishValidating
                         .then(execute)
-                        .then(function (newErrors) {
+                        .then(function (newResults) {
                         var predicate = _this.getInstructionPredicate(instruction);
-                        var oldErrors = _this.errors.filter(predicate);
-                        _this.processErrorDelta('validate', oldErrors, newErrors);
-                        if (result === _this.finishValidating) {
+                        var oldResults = _this.results.filter(predicate);
+                        _this.processResultDelta('validate', oldResults, newResults);
+                        if (returnPromise === _this.finishValidating) {
                             _this.validating = false;
                         }
-                        return newErrors;
+                        var result = {
+                            instruction: instruction,
+                            valid: newResults.find(function (x) { return !x.valid; }) === undefined,
+                            results: newResults
+                        };
+                        return result;
                     })
-                        .catch(function (error) {
+                        .catch(function (exception) {
                         // recover, to enable subsequent calls to validate()
                         _this.validating = false;
                         _this.finishValidating = Promise.resolve();
-                        return Promise.reject(error);
+                        return Promise.reject(exception);
                     });
-                    this.finishValidating = result;
-                    return result;
+                    this.finishValidating = returnPromise;
+                    return returnPromise;
                 };
                 /**
-                 * Resets any rendered errors (unrenders).
-                 * @param instruction Optional. Instructions on what to reset. If unspecified all rendered errors will be unrendered.
+                 * Resets any rendered validation results (unrenders).
+                 * @param instruction Optional. Instructions on what to reset. If unspecified all rendered results
+                 * will be unrendered.
                  */
                 ValidationController.prototype.reset = function (instruction) {
                     var predicate = this.getInstructionPredicate(instruction);
-                    var oldErrors = this.errors.filter(predicate);
-                    this.processErrorDelta('reset', oldErrors, []);
+                    var oldResults = this.results.filter(predicate);
+                    this.processResultDelta('reset', oldResults, []);
                 };
                 /**
                  * Gets the elements associated with an object and propertyName (if any).
@@ -236,54 +247,66 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     }
                     return elements;
                 };
-                ValidationController.prototype.processErrorDelta = function (kind, oldErrors, newErrors) {
+                ValidationController.prototype.processResultDelta = function (kind, oldResults, newResults) {
                     // prepare the instruction.
                     var instruction = {
                         kind: kind,
                         render: [],
                         unrender: []
                     };
-                    // create a shallow copy of newErrors so we can mutate it without causing side-effects.
-                    newErrors = newErrors.slice(0);
-                    // create unrender instructions from the old errors.
-                    var _loop_1 = function(oldError) {
-                        // get the elements associated with the old error.
-                        var elements = this_1.elements.get(oldError);
-                        // remove the old error from the element map.
-                        this_1.elements.delete(oldError);
+                    // create a shallow copy of newResults so we can mutate it without causing side-effects.
+                    newResults = newResults.slice(0);
+                    var _loop_1 = function (oldResult) {
+                        // get the elements associated with the old result.
+                        var elements = this_1.elements.get(oldResult);
+                        // remove the old result from the element map.
+                        this_1.elements.delete(oldResult);
                         // create the unrender instruction.
-                        instruction.unrender.push({ error: oldError, elements: elements });
-                        // determine if there's a corresponding new error for the old error we are unrendering.
-                        var newErrorIndex = newErrors.findIndex(function (x) { return x.rule === oldError.rule && x.object === oldError.object && x.propertyName === oldError.propertyName; });
-                        if (newErrorIndex === -1) {
-                            // no corresponding new error... simple remove.
-                            this_1.errors.splice(this_1.errors.indexOf(oldError), 1);
+                        instruction.unrender.push({ result: oldResult, elements: elements });
+                        // determine if there's a corresponding new result for the old result we are unrendering.
+                        var newResultIndex = newResults.findIndex(function (x) { return x.rule === oldResult.rule && x.object === oldResult.object && x.propertyName === oldResult.propertyName; });
+                        if (newResultIndex === -1) {
+                            // no corresponding new result... simple remove.
+                            this_1.results.splice(this_1.results.indexOf(oldResult), 1);
+                            if (!oldResult.valid) {
+                                this_1.errors.splice(this_1.errors.indexOf(oldResult), 1);
+                            }
                         }
                         else {
-                            // there is a corresponding new error...        
-                            var newError = newErrors.splice(newErrorIndex, 1)[0];
-                            // get the elements that are associated with the new error.
-                            var elements_1 = this_1.getAssociatedElements(newError);
-                            this_1.elements.set(newError, elements_1);
-                            // create a render instruction for the new error.
-                            instruction.render.push({ error: newError, elements: elements_1 });
-                            // do an in-place replacement of the old error with the new error.
-                            // this ensures any repeats bound to this.errors will not thrash.
-                            this_1.errors.splice(this_1.errors.indexOf(oldError), 1, newError);
+                            // there is a corresponding new result...        
+                            var newResult = newResults.splice(newResultIndex, 1)[0];
+                            // get the elements that are associated with the new result.
+                            var elements_1 = this_1.getAssociatedElements(newResult);
+                            this_1.elements.set(newResult, elements_1);
+                            // create a render instruction for the new result.
+                            instruction.render.push({ result: newResult, elements: elements_1 });
+                            // do an in-place replacement of the old result with the new result.
+                            // this ensures any repeats bound to this.results will not thrash.
+                            this_1.results.splice(this_1.results.indexOf(oldResult), 1, newResult);
+                            if (newResult.valid) {
+                                this_1.errors.splice(this_1.errors.indexOf(oldResult), 1);
+                            }
+                            else {
+                                this_1.errors.splice(this_1.errors.indexOf(oldResult), 1, newResult);
+                            }
                         }
                     };
                     var this_1 = this;
-                    for (var _i = 0, oldErrors_1 = oldErrors; _i < oldErrors_1.length; _i++) {
-                        var oldError = oldErrors_1[_i];
-                        _loop_1(oldError);
+                    // create unrender instructions from the old results.
+                    for (var _i = 0, oldResults_1 = oldResults; _i < oldResults_1.length; _i++) {
+                        var oldResult = oldResults_1[_i];
+                        _loop_1(oldResult);
                     }
-                    // create render instructions from the remaining new errors.
-                    for (var _a = 0, newErrors_1 = newErrors; _a < newErrors_1.length; _a++) {
-                        var error = newErrors_1[_a];
-                        var elements = this.getAssociatedElements(error);
-                        instruction.render.push({ error: error, elements: elements });
-                        this.elements.set(error, elements);
-                        this.errors.push(error);
+                    // create render instructions from the remaining new results.
+                    for (var _a = 0, newResults_1 = newResults; _a < newResults_1.length; _a++) {
+                        var result = newResults_1[_a];
+                        var elements = this.getAssociatedElements(result);
+                        instruction.render.push({ result: result, elements: elements });
+                        this.elements.set(result, elements);
+                        this.results.push(result);
+                        if (!result.valid) {
+                            this.errors.push(result);
+                        }
                     }
                     // render.
                     for (var _b = 0, _c = this.renderers; _b < _c.length; _b++) {
@@ -312,7 +335,7 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     this.validate({ object: object, propertyName: propertyName, rules: rules });
                 };
                 /**
-                 * Resets the errors for a property associated with a binding.
+                 * Resets the results for a property associated with a binding.
                  */
                 ValidationController.prototype.resetBinding = function (binding) {
                     var registeredBinding = this.bindings.get(binding);
@@ -329,10 +352,10 @@ System.register(['./validator', './validate-trigger', './property-info', './vali
                     var object = propertyInfo.object, propertyName = propertyInfo.propertyName;
                     this.reset({ object: object, propertyName: propertyName });
                 };
-                ValidationController.inject = [validator_1.Validator];
                 return ValidationController;
             }());
+            ValidationController.inject = [validator_1.Validator];
             exports_1("ValidationController", ValidationController);
         }
-    }
+    };
 });

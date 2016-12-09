@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'aurelia-templating', '../validator', '../validation-error', './rules', './validation-messages'], function (require, exports, aurelia_templating_1, validator_1, validation_error_1, rules_1, validation_messages_1) {
+define(["require", "exports", "aurelia-templating", "../validator", "../validate-result", "./rules", "./validation-messages"], function (require, exports, aurelia_templating_1, validator_1, validate_result_1, rules_1, validation_messages_1) {
     "use strict";
     /**
      * Validates.
@@ -12,10 +12,11 @@ define(["require", "exports", 'aurelia-templating', '../validator', '../validati
     var StandardValidator = (function (_super) {
         __extends(StandardValidator, _super);
         function StandardValidator(messageProvider, resources) {
-            _super.call(this);
-            this.messageProvider = messageProvider;
-            this.lookupFunctions = resources.lookupFunctions;
-            this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
+            var _this = _super.call(this) || this;
+            _this.messageProvider = messageProvider;
+            _this.lookupFunctions = resources.lookupFunctions;
+            _this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
+            return _this;
         }
         /**
          * Validates the specified property.
@@ -53,8 +54,8 @@ define(["require", "exports", 'aurelia-templating', '../validator', '../validati
         StandardValidator.prototype.getMessage = function (rule, object, value) {
             var expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
             var _a = rule.property, propertyName = _a.name, displayName = _a.displayName;
-            if (displayName === null && propertyName !== null) {
-                displayName = this.messageProvider.getDisplayName(propertyName);
+            if (propertyName !== null) {
+                displayName = this.messageProvider.getDisplayName(propertyName, displayName);
             }
             var overrideContext = {
                 $displayName: displayName,
@@ -66,15 +67,15 @@ define(["require", "exports", 'aurelia-templating', '../validator', '../validati
             };
             return expression.evaluate({ bindingContext: object, overrideContext: overrideContext }, this.lookupFunctions);
         };
-        StandardValidator.prototype.validateRuleSequence = function (object, propertyName, ruleSequence, sequence) {
+        StandardValidator.prototype.validateRuleSequence = function (object, propertyName, ruleSequence, sequence, results) {
             var _this = this;
             // are we validating all properties or a single property?
             var validateAllProperties = propertyName === null || propertyName === undefined;
             var rules = ruleSequence[sequence];
-            var errors = [];
+            var allValid = true;
             // validate each rule.
             var promises = [];
-            var _loop_1 = function(i) {
+            var _loop_1 = function (i) {
                 var rule = rules[i];
                 // is the rule related to the property we're validating.
                 if (!validateAllProperties && rule.property.name !== propertyName) {
@@ -90,11 +91,11 @@ define(["require", "exports", 'aurelia-templating', '../validator', '../validati
                 if (!(promiseOrBoolean instanceof Promise)) {
                     promiseOrBoolean = Promise.resolve(promiseOrBoolean);
                 }
-                promises.push(promiseOrBoolean.then(function (isValid) {
-                    if (!isValid) {
-                        var message = _this.getMessage(rule, object, value);
-                        errors.push(new validation_error_1.ValidationError(rule, message, object, rule.property.name));
-                    }
+                promises.push(promiseOrBoolean.then(function (valid) {
+                    var message = valid ? null : _this.getMessage(rule, object, value);
+                    results.push(new validate_result_1.ValidateResult(rule, object, rule.property.name, valid, message));
+                    allValid = allValid && valid;
+                    return valid;
                 }));
             };
             for (var i = 0; i < rules.length; i++) {
@@ -103,10 +104,10 @@ define(["require", "exports", 'aurelia-templating', '../validator', '../validati
             return Promise.all(promises)
                 .then(function () {
                 sequence++;
-                if (errors.length === 0 && sequence < ruleSequence.length) {
-                    return _this.validateRuleSequence(object, propertyName, ruleSequence, sequence);
+                if (allValid && sequence < ruleSequence.length) {
+                    return _this.validateRuleSequence(object, propertyName, ruleSequence, sequence, results);
                 }
-                return errors;
+                return results;
             });
         };
         StandardValidator.prototype.validate = function (object, propertyName, rules) {
@@ -119,10 +120,10 @@ define(["require", "exports", 'aurelia-templating', '../validator', '../validati
             if (!rules) {
                 return Promise.resolve([]);
             }
-            return this.validateRuleSequence(object, propertyName, rules, 0);
+            return this.validateRuleSequence(object, propertyName, rules, 0, []);
         };
-        StandardValidator.inject = [validation_messages_1.ValidationMessageProvider, aurelia_templating_1.ViewResources];
         return StandardValidator;
     }(validator_1.Validator));
+    StandardValidator.inject = [validation_messages_1.ValidationMessageProvider, aurelia_templating_1.ViewResources];
     exports.StandardValidator = StandardValidator;
 });

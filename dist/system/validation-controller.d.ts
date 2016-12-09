@@ -1,25 +1,13 @@
 import { Binding } from 'aurelia-binding';
 import { Validator } from './validator';
 import { ValidationRenderer } from './validation-renderer';
-import { ValidationError } from './validation-error';
-export interface ValidateInstruction {
-    /**
-     * The object to validate.
-     */
-    object: any;
-    /**
-     * The property to validate. Optional.
-     */
-    propertyName?: any;
-    /**
-     * The rules to validate. Optional.
-     */
-    rules?: any;
-}
+import { ValidateResult } from './validate-result';
+import { ValidateInstruction } from './validate-instruction';
+import { ControllerValidateResult } from './controller-validate-result';
 /**
  * Orchestrates validation.
  * Manages a set of bindings, renderers and objects.
- * Exposes the current list of validation errors for binding purposes.
+ * Exposes the current list of validation results for binding purposes.
  */
 export declare class ValidationController {
     private validator;
@@ -27,9 +15,13 @@ export declare class ValidationController {
     private bindings;
     private renderers;
     /**
-     * Errors that have been rendered by the controller.
+     * Validation results that have been rendered by the controller.
      */
-    errors: ValidationError[];
+    private results;
+    /**
+     * Validation errors that have been rendered by the controller.
+     */
+    errors: ValidateResult[];
     /**
      *  Whether the controller is currently validating.
      */
@@ -54,13 +46,13 @@ export declare class ValidationController {
      */
     removeObject(object: any): void;
     /**
-     * Adds and renders a ValidationError.
+     * Adds and renders an error.
      */
-    addError(message: string, object: any, propertyName?: string): ValidationError;
+    addError(message: string, object: any, propertyName?: string | null): ValidateResult;
     /**
-     * Removes and unrenders a ValidationError.
+     * Removes and unrenders an error.
      */
-    removeError(error: ValidationError): void;
+    removeError(result: ValidateResult): void;
     /**
      * Adds a renderer.
      * @param renderer The renderer.
@@ -85,31 +77,32 @@ export declare class ValidationController {
     unregisterBinding(binding: Binding): void;
     /**
      * Interprets the instruction and returns a predicate that will identify
-     * relevant errors in the list of rendered errors.
+     * relevant results in the list of rendered validation results.
      */
     private getInstructionPredicate(instruction?);
     /**
-     * Validates and renders errors.
+     * Validates and renders results.
      * @param instruction Optional. Instructions on what to validate. If undefined, all
      * objects and bindings will be validated.
      */
-    validate(instruction?: ValidateInstruction): Promise<ValidationError[]>;
+    validate(instruction?: ValidateInstruction): Promise<ControllerValidateResult>;
     /**
-     * Resets any rendered errors (unrenders).
-     * @param instruction Optional. Instructions on what to reset. If unspecified all rendered errors will be unrendered.
+     * Resets any rendered validation results (unrenders).
+     * @param instruction Optional. Instructions on what to reset. If unspecified all rendered results
+     * will be unrendered.
      */
     reset(instruction?: ValidateInstruction): void;
     /**
      * Gets the elements associated with an object and propertyName (if any).
      */
     private getAssociatedElements({object, propertyName});
-    private processErrorDelta(kind, oldErrors, newErrors);
+    private processResultDelta(kind, oldResults, newResults);
     /**
      * Validates the property associated with a binding.
      */
     validateBinding(binding: Binding): void;
     /**
-     * Resets the errors for a property associated with a binding.
+     * Resets the results for a property associated with a binding.
      */
     resetBinding(binding: Binding): void;
 }

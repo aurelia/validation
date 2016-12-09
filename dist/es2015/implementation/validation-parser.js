@@ -1,9 +1,14 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 import { Parser, AccessMember, AccessScope, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, Unparser } from 'aurelia-binding';
 import { BindingLanguage } from 'aurelia-templating';
 import { isString } from './util';
 import * as LogManager from 'aurelia-logging';
-export class ValidationParser {
-    constructor(parser, bindinqLanguage) {
+var ValidationParser = (function () {
+    function ValidationParser(parser, bindinqLanguage) {
         this.parser = parser;
         this.bindinqLanguage = bindinqLanguage;
         this.emptyStringExpression = new LiteralString('');
@@ -11,27 +16,27 @@ export class ValidationParser {
         this.undefinedExpression = new LiteralPrimitive(undefined);
         this.cache = {};
     }
-    parseMessage(message) {
+    ValidationParser.prototype.parseMessage = function (message) {
         if (this.cache[message] !== undefined) {
             return this.cache[message];
         }
-        const parts = this.bindinqLanguage.parseInterpolation(null, message);
+        var parts = this.bindinqLanguage.parseInterpolation(null, message);
         if (parts === null) {
             return new LiteralString(message);
         }
-        let expression = new LiteralString(parts[0]);
-        for (let i = 1; i < parts.length; i += 2) {
+        var expression = new LiteralString(parts[0]);
+        for (var i = 1; i < parts.length; i += 2) {
             expression = new Binary('+', expression, new Binary('+', this.coalesce(parts[i]), new LiteralString(parts[i + 1])));
         }
         MessageExpressionValidator.validate(expression, message);
         this.cache[message] = expression;
         return expression;
-    }
-    parseProperty(property) {
+    };
+    ValidationParser.prototype.parseProperty = function (property) {
         if (isString(property)) {
             return { name: property, displayName: null };
         }
-        const accessor = this.getAccessorExpression(property.toString());
+        var accessor = this.getAccessorExpression(property.toString());
         if (accessor instanceof AccessScope
             || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
             return {
@@ -39,39 +44,45 @@ export class ValidationParser {
                 displayName: null
             };
         }
-        throw new Error(`Invalid subject: "${accessor}"`);
-    }
-    coalesce(part) {
+        throw new Error("Invalid subject: \"" + accessor + "\"");
+    };
+    ValidationParser.prototype.coalesce = function (part) {
         // part === null || part === undefined ? '' : part
         return new Conditional(new Binary('||', new Binary('===', part, this.nullExpression), new Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new CallMember(part, 'toString', []));
-    }
-    getAccessorExpression(fn) {
-        const classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
-        const arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
-        const match = classic.exec(fn) || arrow.exec(fn);
+    };
+    ValidationParser.prototype.getAccessorExpression = function (fn) {
+        var classic = /^function\s*\([$_\w\d]+\)\s*\{\s*(?:"use strict";)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+        var arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
+        var match = classic.exec(fn) || arrow.exec(fn);
         if (match === null) {
-            throw new Error(`Unable to parse accessor function:\n${fn}`);
+            throw new Error("Unable to parse accessor function:\n" + fn);
         }
         return this.parser.parse(match[1]);
-    }
-}
+    };
+    return ValidationParser;
+}());
+export { ValidationParser };
 ValidationParser.inject = [Parser, BindingLanguage];
-export class MessageExpressionValidator extends Unparser {
-    constructor(originalMessage) {
-        super([]);
-        this.originalMessage = originalMessage;
+var MessageExpressionValidator = (function (_super) {
+    __extends(MessageExpressionValidator, _super);
+    function MessageExpressionValidator(originalMessage) {
+        var _this = _super.call(this, []) || this;
+        _this.originalMessage = originalMessage;
+        return _this;
     }
-    static validate(expression, originalMessage) {
-        const visitor = new MessageExpressionValidator(originalMessage);
+    MessageExpressionValidator.validate = function (expression, originalMessage) {
+        var visitor = new MessageExpressionValidator(originalMessage);
         expression.accept(visitor);
-    }
-    visitAccessScope(access) {
+    };
+    MessageExpressionValidator.prototype.visitAccessScope = function (access) {
         if (access.ancestor !== 0) {
             throw new Error('$parent is not permitted in validation message expressions.');
         }
         if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
             LogManager.getLogger('aurelia-validation')
-                .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
+                .warn("Did you mean to use \"$" + access.name + "\" instead of \"" + access.name + "\" in this validation message template: \"" + this.originalMessage + "\"?");
         }
-    }
-}
+    };
+    return MessageExpressionValidator;
+}(Unparser));
+export { MessageExpressionValidator };

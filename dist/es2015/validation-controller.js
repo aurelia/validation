@@ -1,28 +1,32 @@
 import { Validator } from './validator';
 import { validateTrigger } from './validate-trigger';
 import { getPropertyInfo } from './property-info';
-import { ValidationError } from './validation-error';
+import { ValidateResult } from './validate-result';
 /**
  * Orchestrates validation.
  * Manages a set of bindings, renderers and objects.
- * Exposes the current list of validation errors for binding purposes.
+ * Exposes the current list of validation results for binding purposes.
  */
-export class ValidationController {
-    constructor(validator) {
+var ValidationController = (function () {
+    function ValidationController(validator) {
         this.validator = validator;
         // Registered bindings (via the validate binding behavior)
         this.bindings = new Map();
         // Renderers that have been added to the controller instance.
         this.renderers = [];
         /**
-         * Errors that have been rendered by the controller.
+         * Validation results that have been rendered by the controller.
+         */
+        this.results = [];
+        /**
+         * Validation errors that have been rendered by the controller.
          */
         this.errors = [];
         /**
          *  Whether the controller is currently validating.
          */
         this.validating = false;
-        // Elements related to errors that have been rendered.
+        // Elements related to validation results that have been rendered.
         this.elements = new Map();
         // Objects that have been added to the controller instance (entity-style validation).
         this.objects = new Map();
@@ -38,238 +42,272 @@ export class ValidationController {
      * @param object The object.
      * @param rules Optional. The rules. If rules aren't supplied the Validator implementation will lookup the rules.
      */
-    addObject(object, rules) {
+    ValidationController.prototype.addObject = function (object, rules) {
         this.objects.set(object, rules);
-    }
+    };
     /**
      * Removes an object from the set of objects that should be validated when validate is called.
      * @param object The object.
      */
-    removeObject(object) {
+    ValidationController.prototype.removeObject = function (object) {
         this.objects.delete(object);
-        this.processErrorDelta('reset', this.errors.filter(error => error.object === object), []);
-    }
+        this.processResultDelta('reset', this.results.filter(function (result) { return result.object === object; }), []);
+    };
     /**
-     * Adds and renders a ValidationError.
+     * Adds and renders an error.
      */
-    addError(message, object, propertyName) {
-        const error = new ValidationError({}, message, object, propertyName);
-        this.processErrorDelta('validate', [], [error]);
-        return error;
-    }
+    ValidationController.prototype.addError = function (message, object, propertyName) {
+        if (propertyName === void 0) { propertyName = null; }
+        var result = new ValidateResult({}, object, propertyName, false, message);
+        this.processResultDelta('validate', [], [result]);
+        return result;
+    };
     /**
-     * Removes and unrenders a ValidationError.
+     * Removes and unrenders an error.
      */
-    removeError(error) {
-        if (this.errors.indexOf(error) !== -1) {
-            this.processErrorDelta('reset', [error], []);
+    ValidationController.prototype.removeError = function (result) {
+        if (this.results.indexOf(result) !== -1) {
+            this.processResultDelta('reset', [result], []);
         }
-    }
+    };
     /**
      * Adds a renderer.
      * @param renderer The renderer.
      */
-    addRenderer(renderer) {
+    ValidationController.prototype.addRenderer = function (renderer) {
+        var _this = this;
         this.renderers.push(renderer);
         renderer.render({
             kind: 'validate',
-            render: this.errors.map(error => ({ error, elements: this.elements.get(error) })),
+            render: this.results.map(function (result) { return ({ result: result, elements: _this.elements.get(result) }); }),
             unrender: []
         });
-    }
+    };
     /**
      * Removes a renderer.
      * @param renderer The renderer.
      */
-    removeRenderer(renderer) {
+    ValidationController.prototype.removeRenderer = function (renderer) {
+        var _this = this;
         this.renderers.splice(this.renderers.indexOf(renderer), 1);
         renderer.render({
             kind: 'reset',
             render: [],
-            unrender: this.errors.map(error => ({ error, elements: this.elements.get(error) }))
+            unrender: this.results.map(function (result) { return ({ result: result, elements: _this.elements.get(result) }); })
         });
-    }
+    };
     /**
      * Registers a binding with the controller.
      * @param binding The binding instance.
      * @param target The DOM element.
      * @param rules (optional) rules associated with the binding. Validator implementation specific.
      */
-    registerBinding(binding, target, rules) {
-        this.bindings.set(binding, { target, rules, propertyInfo: null });
-    }
+    ValidationController.prototype.registerBinding = function (binding, target, rules) {
+        this.bindings.set(binding, { target: target, rules: rules, propertyInfo: null });
+    };
     /**
      * Unregisters a binding with the controller.
      * @param binding The binding instance.
      */
-    unregisterBinding(binding) {
+    ValidationController.prototype.unregisterBinding = function (binding) {
         this.resetBinding(binding);
         this.bindings.delete(binding);
-    }
+    };
     /**
      * Interprets the instruction and returns a predicate that will identify
-     * relevant errors in the list of rendered errors.
+     * relevant results in the list of rendered validation results.
      */
-    getInstructionPredicate(instruction) {
+    ValidationController.prototype.getInstructionPredicate = function (instruction) {
+        var _this = this;
         if (instruction) {
-            const { object, propertyName, rules } = instruction;
-            let predicate;
+            var object_1 = instruction.object, propertyName_1 = instruction.propertyName, rules_1 = instruction.rules;
+            var predicate_1;
             if (instruction.propertyName) {
-                predicate = x => x.object === object && x.propertyName === propertyName;
+                predicate_1 = function (x) { return x.object === object_1 && x.propertyName === propertyName_1; };
             }
             else {
-                predicate = x => x.object === object;
+                predicate_1 = function (x) { return x.object === object_1; };
             }
-            if (rules) {
-                return x => predicate(x) && this.validator.ruleExists(rules, x.rule);
+            if (rules_1) {
+                return function (x) { return predicate_1(x) && _this.validator.ruleExists(rules_1, x.rule); };
             }
-            return predicate;
+            return predicate_1;
         }
         else {
-            return () => true;
+            return function () { return true; };
         }
-    }
+    };
     /**
-     * Validates and renders errors.
+     * Validates and renders results.
      * @param instruction Optional. Instructions on what to validate. If undefined, all
      * objects and bindings will be validated.
      */
-    validate(instruction) {
+    ValidationController.prototype.validate = function (instruction) {
+        var _this = this;
         // Get a function that will process the validation instruction.
-        let execute;
+        var execute;
         if (instruction) {
-            let { object, propertyName, rules } = instruction;
+            var object_2 = instruction.object, propertyName_2 = instruction.propertyName, rules_2 = instruction.rules;
             // if rules were not specified, check the object map.
-            rules = rules || this.objects.get(object);
+            rules_2 = rules_2 || this.objects.get(object_2);
             // property specified?
             if (instruction.propertyName === undefined) {
                 // validate the specified object.
-                execute = () => this.validator.validateObject(object, rules);
+                execute = function () { return _this.validator.validateObject(object_2, rules_2); };
             }
             else {
                 // validate the specified property.
-                execute = () => this.validator.validateProperty(object, propertyName, rules);
+                execute = function () { return _this.validator.validateProperty(object_2, propertyName_2, rules_2); };
             }
         }
         else {
             // validate all objects and bindings.
-            execute = () => {
-                const promises = [];
-                for (let [object, rules] of Array.from(this.objects)) {
-                    promises.push(this.validator.validateObject(object, rules));
+            execute = function () {
+                var promises = [];
+                for (var _i = 0, _a = Array.from(_this.objects); _i < _a.length; _i++) {
+                    var _b = _a[_i], object = _b[0], rules = _b[1];
+                    promises.push(_this.validator.validateObject(object, rules));
                 }
-                for (let [binding, { rules }] of Array.from(this.bindings)) {
-                    const propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
-                    if (!propertyInfo || this.objects.has(propertyInfo.object)) {
+                for (var _c = 0, _d = Array.from(_this.bindings); _c < _d.length; _c++) {
+                    var _e = _d[_c], binding = _e[0], rules = _e[1].rules;
+                    var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+                    if (!propertyInfo || _this.objects.has(propertyInfo.object)) {
                         continue;
                     }
-                    promises.push(this.validator.validateProperty(propertyInfo.object, propertyInfo.propertyName, rules));
+                    promises.push(_this.validator.validateProperty(propertyInfo.object, propertyInfo.propertyName, rules));
                 }
-                return Promise.all(promises).then(errorSets => errorSets.reduce((a, b) => a.concat(b), []));
+                return Promise.all(promises).then(function (resultSets) { return resultSets.reduce(function (a, b) { return a.concat(b); }, []); });
             };
         }
-        // Wait for any existing validation to finish, execute the instruction, render the errors.
+        // Wait for any existing validation to finish, execute the instruction, render the results.
         this.validating = true;
-        let result = this.finishValidating
+        var returnPromise = this.finishValidating
             .then(execute)
-            .then(newErrors => {
-            const predicate = this.getInstructionPredicate(instruction);
-            const oldErrors = this.errors.filter(predicate);
-            this.processErrorDelta('validate', oldErrors, newErrors);
-            if (result === this.finishValidating) {
-                this.validating = false;
+            .then(function (newResults) {
+            var predicate = _this.getInstructionPredicate(instruction);
+            var oldResults = _this.results.filter(predicate);
+            _this.processResultDelta('validate', oldResults, newResults);
+            if (returnPromise === _this.finishValidating) {
+                _this.validating = false;
             }
-            return newErrors;
+            var result = {
+                instruction: instruction,
+                valid: newResults.find(function (x) { return !x.valid; }) === undefined,
+                results: newResults
+            };
+            return result;
         })
-            .catch(error => {
+            .catch(function (exception) {
             // recover, to enable subsequent calls to validate()
-            this.validating = false;
-            this.finishValidating = Promise.resolve();
-            return Promise.reject(error);
+            _this.validating = false;
+            _this.finishValidating = Promise.resolve();
+            return Promise.reject(exception);
         });
-        this.finishValidating = result;
-        return result;
-    }
+        this.finishValidating = returnPromise;
+        return returnPromise;
+    };
     /**
-     * Resets any rendered errors (unrenders).
-     * @param instruction Optional. Instructions on what to reset. If unspecified all rendered errors will be unrendered.
+     * Resets any rendered validation results (unrenders).
+     * @param instruction Optional. Instructions on what to reset. If unspecified all rendered results
+     * will be unrendered.
      */
-    reset(instruction) {
-        const predicate = this.getInstructionPredicate(instruction);
-        const oldErrors = this.errors.filter(predicate);
-        this.processErrorDelta('reset', oldErrors, []);
-    }
+    ValidationController.prototype.reset = function (instruction) {
+        var predicate = this.getInstructionPredicate(instruction);
+        var oldResults = this.results.filter(predicate);
+        this.processResultDelta('reset', oldResults, []);
+    };
     /**
      * Gets the elements associated with an object and propertyName (if any).
      */
-    getAssociatedElements({ object, propertyName }) {
-        const elements = [];
-        for (let [binding, { target }] of Array.from(this.bindings)) {
-            const propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+    ValidationController.prototype.getAssociatedElements = function (_a) {
+        var object = _a.object, propertyName = _a.propertyName;
+        var elements = [];
+        for (var _i = 0, _b = Array.from(this.bindings); _i < _b.length; _i++) {
+            var _c = _b[_i], binding = _c[0], target = _c[1].target;
+            var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
             if (propertyInfo && propertyInfo.object === object && propertyInfo.propertyName === propertyName) {
                 elements.push(target);
             }
         }
         return elements;
-    }
-    processErrorDelta(kind, oldErrors, newErrors) {
+    };
+    ValidationController.prototype.processResultDelta = function (kind, oldResults, newResults) {
         // prepare the instruction.
-        const instruction = {
-            kind,
+        var instruction = {
+            kind: kind,
             render: [],
             unrender: []
         };
-        // create a shallow copy of newErrors so we can mutate it without causing side-effects.
-        newErrors = newErrors.slice(0);
-        // create unrender instructions from the old errors.
-        for (let oldError of oldErrors) {
-            // get the elements associated with the old error.
-            const elements = this.elements.get(oldError);
-            // remove the old error from the element map.
-            this.elements.delete(oldError);
+        // create a shallow copy of newResults so we can mutate it without causing side-effects.
+        newResults = newResults.slice(0);
+        var _loop_1 = function (oldResult) {
+            // get the elements associated with the old result.
+            var elements = this_1.elements.get(oldResult);
+            // remove the old result from the element map.
+            this_1.elements.delete(oldResult);
             // create the unrender instruction.
-            instruction.unrender.push({ error: oldError, elements });
-            // determine if there's a corresponding new error for the old error we are unrendering.
-            const newErrorIndex = newErrors.findIndex(x => x.rule === oldError.rule && x.object === oldError.object && x.propertyName === oldError.propertyName);
-            if (newErrorIndex === -1) {
-                // no corresponding new error... simple remove.
-                this.errors.splice(this.errors.indexOf(oldError), 1);
+            instruction.unrender.push({ result: oldResult, elements: elements });
+            // determine if there's a corresponding new result for the old result we are unrendering.
+            var newResultIndex = newResults.findIndex(function (x) { return x.rule === oldResult.rule && x.object === oldResult.object && x.propertyName === oldResult.propertyName; });
+            if (newResultIndex === -1) {
+                // no corresponding new result... simple remove.
+                this_1.results.splice(this_1.results.indexOf(oldResult), 1);
+                if (!oldResult.valid) {
+                    this_1.errors.splice(this_1.errors.indexOf(oldResult), 1);
+                }
             }
             else {
-                // there is a corresponding new error...        
-                const newError = newErrors.splice(newErrorIndex, 1)[0];
-                // get the elements that are associated with the new error.
-                const elements = this.getAssociatedElements(newError);
-                this.elements.set(newError, elements);
-                // create a render instruction for the new error.
-                instruction.render.push({ error: newError, elements });
-                // do an in-place replacement of the old error with the new error.
-                // this ensures any repeats bound to this.errors will not thrash.
-                this.errors.splice(this.errors.indexOf(oldError), 1, newError);
+                // there is a corresponding new result...        
+                var newResult = newResults.splice(newResultIndex, 1)[0];
+                // get the elements that are associated with the new result.
+                var elements_1 = this_1.getAssociatedElements(newResult);
+                this_1.elements.set(newResult, elements_1);
+                // create a render instruction for the new result.
+                instruction.render.push({ result: newResult, elements: elements_1 });
+                // do an in-place replacement of the old result with the new result.
+                // this ensures any repeats bound to this.results will not thrash.
+                this_1.results.splice(this_1.results.indexOf(oldResult), 1, newResult);
+                if (newResult.valid) {
+                    this_1.errors.splice(this_1.errors.indexOf(oldResult), 1);
+                }
+                else {
+                    this_1.errors.splice(this_1.errors.indexOf(oldResult), 1, newResult);
+                }
+            }
+        };
+        var this_1 = this;
+        // create unrender instructions from the old results.
+        for (var _i = 0, oldResults_1 = oldResults; _i < oldResults_1.length; _i++) {
+            var oldResult = oldResults_1[_i];
+            _loop_1(oldResult);
+        }
+        // create render instructions from the remaining new results.
+        for (var _a = 0, newResults_1 = newResults; _a < newResults_1.length; _a++) {
+            var result = newResults_1[_a];
+            var elements = this.getAssociatedElements(result);
+            instruction.render.push({ result: result, elements: elements });
+            this.elements.set(result, elements);
+            this.results.push(result);
+            if (!result.valid) {
+                this.errors.push(result);
             }
         }
-        // create render instructions from the remaining new errors.
-        for (let error of newErrors) {
-            const elements = this.getAssociatedElements(error);
-            instruction.render.push({ error, elements });
-            this.elements.set(error, elements);
-            this.errors.push(error);
-        }
         // render.
-        for (let renderer of this.renderers) {
+        for (var _b = 0, _c = this.renderers; _b < _c.length; _b++) {
+            var renderer = _c[_b];
             renderer.render(instruction);
         }
-    }
+    };
     /**
      * Validates the property associated with a binding.
      */
-    validateBinding(binding) {
+    ValidationController.prototype.validateBinding = function (binding) {
         if (!binding.isBound) {
             return;
         }
-        let propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
-        let rules = undefined;
-        const registeredBinding = this.bindings.get(binding);
+        var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+        var rules = undefined;
+        var registeredBinding = this.bindings.get(binding);
         if (registeredBinding) {
             rules = registeredBinding.rules;
             registeredBinding.propertyInfo = propertyInfo;
@@ -277,15 +315,15 @@ export class ValidationController {
         if (!propertyInfo) {
             return;
         }
-        const { object, propertyName } = propertyInfo;
-        this.validate({ object, propertyName, rules });
-    }
+        var object = propertyInfo.object, propertyName = propertyInfo.propertyName;
+        this.validate({ object: object, propertyName: propertyName, rules: rules });
+    };
     /**
-     * Resets the errors for a property associated with a binding.
+     * Resets the results for a property associated with a binding.
      */
-    resetBinding(binding) {
-        const registeredBinding = this.bindings.get(binding);
-        let propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+    ValidationController.prototype.resetBinding = function (binding) {
+        var registeredBinding = this.bindings.get(binding);
+        var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
         if (!propertyInfo && registeredBinding) {
             propertyInfo = registeredBinding.propertyInfo;
         }
@@ -295,8 +333,10 @@ export class ValidationController {
         if (!propertyInfo) {
             return;
         }
-        const { object, propertyName } = propertyInfo;
-        this.reset({ object, propertyName });
-    }
-}
+        var object = propertyInfo.object, propertyName = propertyInfo.propertyName;
+        this.reset({ object: object, propertyName: propertyName });
+    };
+    return ValidationController;
+}());
+export { ValidationController };
 ValidationController.inject = [Validator];

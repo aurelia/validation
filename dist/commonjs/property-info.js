@@ -1,5 +1,5 @@
 "use strict";
-var aurelia_binding_1 = require('aurelia-binding');
+var aurelia_binding_1 = require("aurelia-binding");
 function getObject(expression, objectExpression, source) {
     var value = objectExpression.evaluate(source, null);
     if (value === null || value === undefined || value instanceof Object) {

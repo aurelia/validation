@@ -1,4 +1,4 @@
-define(["require", "exports", './validation-controller', './validator'], function (require, exports, validation_controller_1, validator_1) {
+define(["require", "exports", "./validation-controller", "./validator"], function (require, exports, validation_controller_1, validator_1) {
     "use strict";
     /**
      * Creates ValidationController instances.

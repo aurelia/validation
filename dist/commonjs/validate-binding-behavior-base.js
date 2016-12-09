@@ -1,8 +1,8 @@
 "use strict";
-var aurelia_dependency_injection_1 = require('aurelia-dependency-injection');
-var aurelia_pal_1 = require('aurelia-pal');
-var validation_controller_1 = require('./validation-controller');
-var validate_trigger_1 = require('./validate-trigger');
+var aurelia_dependency_injection_1 = require("aurelia-dependency-injection");
+var aurelia_pal_1 = require("aurelia-pal");
+var validation_controller_1 = require("./validation-controller");
+var validate_trigger_1 = require("./validate-trigger");
 /**
  * Binding behavior. Indicates the bound property should be validated.
  */

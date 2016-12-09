@@ -30,11 +30,11 @@ define(["require", "exports"], function (require, exports) {
         Rules.get = function (target) {
             return target[Rules.key] || null;
         };
-        /**
-         * The name of the property that stores the rules.
-         */
-        Rules.key = '__rules__';
         return Rules;
     }());
+    /**
+     * The name of the property that stores the rules.
+     */
+    Rules.key = '__rules__';
     exports.Rules = Rules;
 });

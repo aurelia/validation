@@ -20,10 +20,10 @@ export declare class ValidationMessageProvider {
      */
     getMessage(key: string): Expression;
     /**
-     * When a display name is not provided, this method is used to formulate
-     * a display name using the property name.
+     * Formulates a property display name using the property name and the configured
+     * displayName (if provided).
      * Override this with your own custom logic.
      * @param propertyName The property name.
      */
-    getDisplayName(propertyName: string): string;
+    getDisplayName(propertyName: string, displayName: string | null | undefined): string;
 }

@@ -1,7 +1,7 @@
 "use strict";
-var util_1 = require('./util');
-var rules_1 = require('./rules');
-var validation_messages_1 = require('./validation-messages');
+var util_1 = require("./util");
+var rules_1 = require("./rules");
+var validation_messages_1 = require("./validation-messages");
 /**
  * Part of the fluent rule API. Enables customizing property rules.
  */
@@ -18,7 +18,7 @@ var FluentRuleCustomizer = (function () {
             when: null,
             messageKey: 'default',
             message: null,
-            sequence: fluentEnsure._sequence
+            sequence: fluentRules.sequence
         };
         this.fluentEnsure._addRule(this.rule);
     }
@@ -28,7 +28,7 @@ var FluentRuleCustomizer = (function () {
      * rules until less expensive rules pass validation.
      */
     FluentRuleCustomizer.prototype.then = function () {
-        this.fluentEnsure._sequence++;
+        this.fluentRules.sequence++;
         return this;
     };
     /**
@@ -186,6 +186,12 @@ var FluentRules = (function () {
         this.fluentEnsure = fluentEnsure;
         this.parser = parser;
         this.property = property;
+        /**
+         * Current rule sequence number. Used to postpone evaluation of rules until rules
+         * with lower sequence number have successfully validated. The "then" fluent API method
+         * manages this property, there's usually no need to set it directly.
+         */
+        this.sequence = 0;
     }
     /**
      * Sets the display name of the ensured property.
@@ -224,7 +230,10 @@ var FluentRules = (function () {
             throw new Error("Rule with name \"" + name + "\" does not exist.");
         }
         var config = rule.argsToConfig ? rule.argsToConfig.apply(rule, args) : undefined;
-        return this.satisfies(function (value, obj) { return (_a = rule.condition).call.apply(_a, [_this, value, obj].concat(args)); var _a; }, config)
+        return this.satisfies(function (value, obj) {
+            return (_a = rule.condition).call.apply(_a, [_this, value, obj].concat(args));
+            var _a;
+        }, config)
             .withMessageKey(name);
     };
     /**
@@ -297,23 +306,20 @@ var FluentRules = (function () {
         return this.satisfies(function (value) { return value === null || value === undefined || value === '' || value === expectedValue; }, { expectedValue: expectedValue })
             .withMessageKey('equals');
     };
-    FluentRules.customRules = {};
     return FluentRules;
 }());
+FluentRules.customRules = {};
 exports.FluentRules = FluentRules;
 /**
  * Part of the fluent rule API. Enables targeting properties and objects with rules.
  */
 var FluentEnsure = (function () {
-    /* tslint:enable */
     function FluentEnsure(parser) {
         this.parser = parser;
         /**
          * Rules that have been defined using the fluent API.
          */
         this.rules = [];
-        /* tslint:disable */
-        this._sequence = 0;
     }
     /**
      * Target a property with validation rules.

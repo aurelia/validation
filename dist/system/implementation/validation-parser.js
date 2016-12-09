@@ -1,15 +1,14 @@
-System.register(['aurelia-binding', 'aurelia-templating', './util', 'aurelia-logging'], function(exports_1, context_1) {
+System.register(["aurelia-binding", "aurelia-templating", "./util", "aurelia-logging"], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var aurelia_binding_1, aurelia_templating_1, util_1, LogManager;
-    var ValidationParser, MessageExpressionValidator;
+    var __moduleName = context_1 && context_1.id;
+    var aurelia_binding_1, aurelia_templating_1, util_1, LogManager, ValidationParser, MessageExpressionValidator;
     return {
-        setters:[
+        setters: [
             function (aurelia_binding_1_1) {
                 aurelia_binding_1 = aurelia_binding_1_1;
             },
@@ -21,8 +20,9 @@ System.register(['aurelia-binding', 'aurelia-templating', './util', 'aurelia-log
             },
             function (LogManager_1) {
                 LogManager = LogManager_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             ValidationParser = (function () {
                 function ValidationParser(parser, bindinqLanguage) {
                     this.parser = parser;
@@ -75,15 +75,16 @@ System.register(['aurelia-binding', 'aurelia-templating', './util', 'aurelia-log
                     }
                     return this.parser.parse(match[1]);
                 };
-                ValidationParser.inject = [aurelia_binding_1.Parser, aurelia_templating_1.BindingLanguage];
                 return ValidationParser;
             }());
+            ValidationParser.inject = [aurelia_binding_1.Parser, aurelia_templating_1.BindingLanguage];
             exports_1("ValidationParser", ValidationParser);
             MessageExpressionValidator = (function (_super) {
                 __extends(MessageExpressionValidator, _super);
                 function MessageExpressionValidator(originalMessage) {
-                    _super.call(this, []);
-                    this.originalMessage = originalMessage;
+                    var _this = _super.call(this, []) || this;
+                    _this.originalMessage = originalMessage;
+                    return _this;
                 }
                 MessageExpressionValidator.validate = function (expression, originalMessage) {
                     var visitor = new MessageExpressionValidator(originalMessage);
@@ -102,5 +103,5 @@ System.register(['aurelia-binding', 'aurelia-templating', './util', 'aurelia-log
             }(aurelia_binding_1.Unparser));
             exports_1("MessageExpressionValidator", MessageExpressionValidator);
         }
-    }
+    };
 });

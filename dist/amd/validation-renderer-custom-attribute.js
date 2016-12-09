@@ -1,4 +1,4 @@
-define(["require", "exports", './validation-controller'], function (require, exports, validation_controller_1) {
+define(["require", "exports", "./validation-controller"], function (require, exports, validation_controller_1) {
     "use strict";
     var ValidationRendererCustomAttribute = (function () {
         function ValidationRendererCustomAttribute() {
