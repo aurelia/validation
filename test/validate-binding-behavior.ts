@@ -51,23 +51,26 @@ describe('ValidateBindingBehavior', () => {
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
 
       // validateOnChangeOrBlur binding behavior
-      .then(() => expect(viewModel.controller.errors.length).toBe(0))
+      .then(() => change(viewModel.changeInput, '')) // make one error
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))
       .then(() => blur(viewModel.changeOrBlurInput))
-      .then(() => expect(viewModel.controller.errors.length).toBe(1))
+      .then(() => expect(viewModel.controller.errors.length).toBe(2))
       .then(() => change(viewModel.changeOrBlurInput, 'test'))
-      .then(() => expect(viewModel.controller.errors.length).toBe(0))
-      .then(() => change(viewModel.changeOrBlurInput, ''))
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
+      .then(() => change(viewModel.changeOrBlurInput, ''))
+      .then(() => expect(viewModel.controller.errors.length).toBe(2))
       .then(() => change(viewModel.changeOrBlurInput, 'test2'))
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))
+      .then(() => change(viewModel.changeInput, 'adsf')) // clear the one error 
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
 
       // validateManually binding behavior
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
-      .then(() => blur(viewModel.blurInput))
+      .then(() => blur(viewModel.manualInput))
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
-      .then(() => change(viewModel.blurInput, 'test'))
+      .then(() => change(viewModel.manualInput, 'test'))
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
-      .then(() => change(viewModel.blurInput, ''))
+      .then(() => change(viewModel.manualInput, ''))
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
 
       // cleanup and finish.

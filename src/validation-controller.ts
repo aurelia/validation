@@ -300,10 +300,12 @@ export class ValidationController {
         // do an in-place replacement of the old result with the new result.
         // this ensures any repeats bound to this.results will not thrash.
         this.results.splice(this.results.indexOf(oldResult), 1, newResult);
-        if (newResult.valid) {
+        if (!oldResult.valid && newResult.valid) {
           this.errors.splice(this.errors.indexOf(oldResult), 1);
-        } else {
+        } else if (!oldResult.valid && !newResult.valid) {
           this.errors.splice(this.errors.indexOf(oldResult), 1, newResult);
+        } else if (!newResult.valid) {
+          this.errors.push(newResult);
         }
       }
     }
