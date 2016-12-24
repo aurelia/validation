@@ -1,3 +1,15 @@
+<a name="1.0.0-beta.1.0.1"></a>
+# [1.0.0-beta.1.0.1](https://github.com/aurelia/validation/compare/1.0.0-beta.1.0.0...v1.0.0-beta.1.0.1) (2016-12-24)
+
+
+### Bug Fixes
+
+* **build:** correct es2015 and native-modules builds ([d749cf5](https://github.com/aurelia/validation/commit/d749cf5))
+* **package:** fix doc build ([9e79087](https://github.com/aurelia/validation/commit/9e79087))
+* **ValidationController:** keep errors property in sync ([658ab0f](https://github.com/aurelia/validation/commit/658ab0f)), closes [#396](https://github.com/aurelia/validation/issues/396)
+
+
+
 <a name="1.0.0-beta.1.0.0"></a>
 # [1.0.0-beta.1.0.0](https://github.com/aurelia/validation/compare/0.14.0...1.0.0-beta.1.0.0) (2016-12-09)
 

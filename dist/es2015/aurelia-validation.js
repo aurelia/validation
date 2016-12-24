@@ -20,36 +20,34 @@ import { ValidationRules } from './implementation/validation-rules';
 /**
  * Aurelia Validation Configuration API
  */
-var AureliaValidationConfiguration = (function () {
-    function AureliaValidationConfiguration() {
+export class AureliaValidationConfiguration {
+    constructor() {
         this.validatorType = StandardValidator;
     }
     /**
      * Use a custom Validator implementation.
      */
-    AureliaValidationConfiguration.prototype.customValidator = function (type) {
+    customValidator(type) {
         this.validatorType = type;
-    };
+    }
     /**
      * Applies the configuration.
      */
-    AureliaValidationConfiguration.prototype.apply = function (container) {
-        var validator = container.get(this.validatorType);
+    apply(container) {
+        const validator = container.get(this.validatorType);
         container.registerInstance(Validator, validator);
-    };
-    return AureliaValidationConfiguration;
-}());
-export { AureliaValidationConfiguration };
+    }
+}
 /**
  * Configures the plugin.
  */
 export function configure(frameworkConfig, callback) {
     // the fluent rule definition API needs the parser to translate messages
     // to interpolation expressions. 
-    var parser = frameworkConfig.container.get(ValidationParser);
+    const parser = frameworkConfig.container.get(ValidationParser);
     ValidationRules.initialize(parser);
     // configure...
-    var config = new AureliaValidationConfiguration();
+    const config = new AureliaValidationConfiguration();
     if (callback instanceof Function) {
         callback(config);
     }

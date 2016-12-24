@@ -1,11 +1,11 @@
 import { AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter } from 'aurelia-binding';
 function getObject(expression, objectExpression, source) {
-    var value = objectExpression.evaluate(source, null);
+    let value = objectExpression.evaluate(source, null);
     if (value === null || value === undefined || value instanceof Object) {
         return value;
     }
     /* tslint:disable */
-    throw new Error("The '" + objectExpression + "' part of '" + expression + "' evaluates to " + value + " instead of an object, null or undefined.");
+    throw new Error(`The '${objectExpression}' part of '${expression}' evaluates to ${value} instead of an object, null or undefined.`);
     /* tslint:enable */
 }
 /**
@@ -14,12 +14,12 @@ function getObject(expression, objectExpression, source) {
  * @param source The scope
  */
 export function getPropertyInfo(expression, source) {
-    var originalExpression = expression;
+    const originalExpression = expression;
     while (expression instanceof BindingBehavior || expression instanceof ValueConverter) {
         expression = expression.expression;
     }
-    var object;
-    var propertyName;
+    let object;
+    let propertyName;
     if (expression instanceof AccessScope) {
         object = source.bindingContext;
         propertyName = expression.name;
@@ -33,10 +33,10 @@ export function getPropertyInfo(expression, source) {
         propertyName = expression.key.evaluate(source);
     }
     else {
-        throw new Error("Expression '" + originalExpression + "' is not compatible with the validate binding-behavior.");
+        throw new Error(`Expression '${originalExpression}' is not compatible with the validate binding-behavior.`);
     }
     if (object === null || object === undefined) {
         return null;
     }
-    return { object: object, propertyName: propertyName };
+    return { object, propertyName };
 }

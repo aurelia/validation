@@ -8,14 +8,14 @@ import { bindingMode } from 'aurelia-binding';
 import { Lazy } from 'aurelia-dependency-injection';
 import { customAttribute } from 'aurelia-templating';
 import { ValidationController } from './validation-controller';
-var ValidationErrorsCustomAttribute = (function () {
-    function ValidationErrorsCustomAttribute(boundaryElement, controllerAccessor) {
+let ValidationErrorsCustomAttribute = class ValidationErrorsCustomAttribute {
+    constructor(boundaryElement, controllerAccessor) {
         this.boundaryElement = boundaryElement;
         this.controllerAccessor = controllerAccessor;
         this.errors = [];
     }
-    ValidationErrorsCustomAttribute.prototype.sort = function () {
-        this.errors.sort(function (a, b) {
+    sort() {
+        this.errors.sort((a, b) => {
             if (a.targets[0] === b.targets[0]) {
                 return 0;
             }
@@ -23,45 +23,37 @@ var ValidationErrorsCustomAttribute = (function () {
             return a.targets[0].compareDocumentPosition(b.targets[0]) & 2 ? 1 : -1;
             /* tslint:enable:no-bitwise */
         });
-    };
-    ValidationErrorsCustomAttribute.prototype.interestingElements = function (elements) {
-        var _this = this;
-        return elements.filter(function (e) { return _this.boundaryElement.contains(e); });
-    };
-    ValidationErrorsCustomAttribute.prototype.render = function (instruction) {
-        var _loop_1 = function (result) {
-            var index = this_1.errors.findIndex(function (x) { return x.error === result; });
+    }
+    interestingElements(elements) {
+        return elements.filter(e => this.boundaryElement.contains(e));
+    }
+    render(instruction) {
+        for (let { result } of instruction.unrender) {
+            const index = this.errors.findIndex(x => x.error === result);
             if (index !== -1) {
-                this_1.errors.splice(index, 1);
+                this.errors.splice(index, 1);
             }
-        };
-        var this_1 = this;
-        for (var _i = 0, _a = instruction.unrender; _i < _a.length; _i++) {
-            var result = _a[_i].result;
-            _loop_1(result);
         }
-        for (var _b = 0, _c = instruction.render; _b < _c.length; _b++) {
-            var _d = _c[_b], result = _d.result, elements = _d.elements;
+        for (let { result, elements } of instruction.render) {
             if (result.valid) {
                 continue;
             }
-            var targets = this.interestingElements(elements);
+            const targets = this.interestingElements(elements);
             if (targets.length) {
-                this.errors.push({ error: result, targets: targets });
+                this.errors.push({ error: result, targets });
             }
         }
         this.sort();
         this.value = this.errors;
-    };
-    ValidationErrorsCustomAttribute.prototype.bind = function () {
+    }
+    bind() {
         this.controllerAccessor().addRenderer(this);
         this.value = this.errors;
-    };
-    ValidationErrorsCustomAttribute.prototype.unbind = function () {
+    }
+    unbind() {
         this.controllerAccessor().removeRenderer(this);
-    };
-    return ValidationErrorsCustomAttribute;
-}());
+    }
+};
 ValidationErrorsCustomAttribute.inject = [Element, Lazy.of(ValidationController)];
 ValidationErrorsCustomAttribute = __decorate([
     customAttribute('validation-errors', bindingMode.twoWay)

@@ -1,36 +1,32 @@
 /**
  * Sets, unsets and retrieves rules on an object or constructor function.
  */
-var Rules = (function () {
-    function Rules() {
-    }
+export class Rules {
     /**
      * Applies the rules to a target.
      */
-    Rules.set = function (target, rules) {
+    static set(target, rules) {
         if (target instanceof Function) {
             target = target.prototype;
         }
         Object.defineProperty(target, Rules.key, { enumerable: false, configurable: false, writable: true, value: rules });
-    };
+    }
     /**
      * Removes rules from a target.
      */
-    Rules.unset = function (target) {
+    static unset(target) {
         if (target instanceof Function) {
             target = target.prototype;
         }
         target[Rules.key] = null;
-    };
+    }
     /**
      * Retrieves the target's rules.
      */
-    Rules.get = function (target) {
+    static get(target) {
         return target[Rules.key] || null;
-    };
-    return Rules;
-}());
-export { Rules };
+    }
+}
 /**
  * The name of the property that stores the rules.
  */
