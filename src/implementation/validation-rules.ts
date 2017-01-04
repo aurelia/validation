@@ -400,7 +400,7 @@ export class FluentEnsure<TObject> {
     if (this.parser) {
       return;
     }
-    throw new Error(`Did you forget to add ".plugin('aurelia-validation)" to your main.js?`);
+    throw new Error(`Did you forget to add ".plugin('aurelia-validation')" to your main.js?`);
   }
 }
 
