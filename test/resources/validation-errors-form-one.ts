@@ -30,12 +30,6 @@ export class ValidationErrorsFormOne {
     this.controller = controller ? controller : this.controllerFactory.createForCurrentScope();
   }
 
-  // public bind() {
-  //   /* tslint:disable:no-console */
-  //   console.log('hi there!');
-  //   /* tslint:enable:no-console */
-  // }
-
   public getViewStrategy() {
     return new InlineViewStrategy(this.form);
   }
