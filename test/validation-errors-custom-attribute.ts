@@ -117,6 +117,40 @@ describe('ValidationErrorsCustomAttribute', () => {
       /* tslint:enable:no-console */
   });
 
+  it('does nothing when given only a controller', (done: () => void) => {
+
+    stageTest(`validation-errors='controller.bind:controller'`, true)
+      .then(() => expect(viewModel).not.toBeNull())
+      .then(() => expect(parentViewModel.controller).not.toBeNull())
+      .then(() => expect(viewModel.myErrors).toBeUndefined())
+      .then(() => {
+        blur(viewModel.standardInput);
+        return new Promise<void>((resolve) => { setTimeout(() => { resolve(); }, 0); });
+      })
+      .then(() => expect(viewModel.myErrors).toBeUndefined())
+      .then(done)
+      /* tslint:disable:no-console */
+      .catch(e => { console.log(e.toString()); done(); });
+      /* tslint:enable:no-console */
+  });
+
+  it('does nothing when given nothing', (done: () => void) => {
+
+    stageTest(`validation-errors=''`, true)
+      .then(() => expect(viewModel).not.toBeNull())
+      .then(() => expect(parentViewModel.controller).not.toBeNull())
+      .then(() => expect(viewModel.myErrors).toBeUndefined())
+      .then(() => {
+        blur(viewModel.standardInput);
+        return new Promise<void>((resolve) => { setTimeout(() => { resolve(); }, 0); });
+      })
+      .then(() => expect(viewModel.myErrors).toBeUndefined())
+      .then(done)
+      /* tslint:disable:no-console */
+      .catch(e => { console.log(e.toString()); done(); });
+      /* tslint:enable:no-console */
+  });
+
   afterEach(() => {
     if (component) {
       component.dispose();
