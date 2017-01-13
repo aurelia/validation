@@ -12,9 +12,8 @@ function getObject(expression: Expression, objectExpression: Expression, source:
   if (value === null || value === undefined || value instanceof Object) {
     return value;
   }
-  /* tslint:disable */
+  // tslint:disable-next-line:max-line-length
   throw new Error(`The '${objectExpression}' part of '${expression}' evaluates to ${value} instead of an object, null or undefined.`);
-  /* tslint:enable */
 }
 
 /**

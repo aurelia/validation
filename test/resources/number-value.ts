@@ -5,9 +5,8 @@ import { bindingMode } from 'aurelia-binding';
 
 export abstract class NumberBase {
   public abstract value: number | null;
-  /* tslint:disable */
+  // tslint:disable-next-line:variable-name
   protected _input: HTMLInputElement;
-  /* tslint:enable */
 
   constructor(protected input: HTMLInputElement) { }
 
@@ -17,7 +16,7 @@ export abstract class NumberBase {
 
   public inputValueChanged = () => {
     this.value = this.input.value === '' ? null : parseInt(this.input.value, 10);
-  };
+  }
 
   public bind() {
     this._input = this.input;
@@ -49,7 +48,7 @@ export class NumberInputCustomElement extends NumberBase {
 
   public inputBlurred = () => {
     this.element.dispatchEvent(DOM.createCustomEvent('blur', {}));
-  };
+  }
 
   public bind() {
     super.bind();

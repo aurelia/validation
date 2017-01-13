@@ -15,18 +15,16 @@ import {
 export class NullableObjectForm {
   public input: HTMLInputElement;
 
-  /* tslint:disable */
+  // tslint:disable-next-line:variable-name
   public _obj: any = { prop: '' };
-  /* tslint:enable */
 
   get obj() {
     return this._obj;
   }
   set obj(value) {
     // setter is required due to https://github.com/aurelia/binding/issues/205
-    /* tslint:disable:no-console */
+    // tslint:disable-next-line:no-console
     console.log(value);
-    /* tslint:enable:no-console */
   }
 
   public rules = <any>ValidationRules.ensure('prop').required().rules;
