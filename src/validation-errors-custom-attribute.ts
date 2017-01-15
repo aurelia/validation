@@ -1,6 +1,6 @@
 import { bindingMode } from 'aurelia-binding';
 import { Lazy } from 'aurelia-dependency-injection';
-import { customAttribute } from 'aurelia-templating';
+import { customAttribute, bindable } from 'aurelia-templating';
 import { ValidationController } from './validation-controller';
 import { ValidateResult } from './validate-result';
 import { ValidationRenderer, RenderInstruction } from './validation-renderer';
@@ -10,18 +10,23 @@ export interface RenderedError {
   targets: Element[];
 }
 
-@customAttribute('validation-errors', bindingMode.twoWay)
+@customAttribute('validation-errors')
 export class ValidationErrorsCustomAttribute implements ValidationRenderer {
   public static inject = [Element, Lazy.of(ValidationController)];
 
-  public value: RenderedError[];
+  @bindable({ defaultBindingMode: bindingMode.oneWay })
+  public controller: ValidationController | null = null;
+
+  @bindable({ primaryProperty: true, defaultBindingMode: bindingMode.twoWay })
   public errors: RenderedError[] = [];
+
+  private errorsInternal: RenderedError[] = [];
 
   constructor(private boundaryElement: Element, private controllerAccessor: { (): ValidationController; }) {
   }
 
   public sort() {
-    this.errors.sort((a, b) => {
+    this.errorsInternal.sort((a, b) => {
       if (a.targets[0] === b.targets[0]) {
         return 0;
       }
@@ -36,9 +41,9 @@ export class ValidationErrorsCustomAttribute implements ValidationRenderer {
 
   public render(instruction: RenderInstruction) {
     for (let { result } of instruction.unrender) {
-      const index = this.errors.findIndex(x => x.error === result);
+      const index = this.errorsInternal.findIndex(x => x.error === result);
       if (index !== -1) {
-        this.errors.splice(index, 1);
+        this.errorsInternal.splice(index, 1);
       }
     }
 
@@ -48,20 +53,25 @@ export class ValidationErrorsCustomAttribute implements ValidationRenderer {
       }
       const targets = this.interestingElements(elements);
       if (targets.length) {
-        this.errors.push({ error: result, targets });
+        this.errorsInternal.push({ error: result, targets });
       }
     }
 
     this.sort();
-    this.value = this.errors;
+    this.errors = this.errorsInternal;
   }
 
   public bind() {
-    this.controllerAccessor().addRenderer(this);
-    this.value = this.errors;
+    if (!this.controller) {
+      this.controller = this.controllerAccessor();
+    }
+    // this will call render() with the side-effect of updating this.errors
+    this.controller.addRenderer(this);
   }
 
   public unbind() {
-    this.controllerAccessor().removeRenderer(this);
+    if (this.controller) {
+      this.controller.removeRenderer(this);
+    }
   }
 }

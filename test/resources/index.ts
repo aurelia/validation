@@ -5,6 +5,7 @@ export function configure(config: FrameworkConfiguration) {
     './number-value',
     './registration-form',
     './trigger-form',
+    './validation-errors-form-one',
     './nullable-object-form'
   ]);
 }
