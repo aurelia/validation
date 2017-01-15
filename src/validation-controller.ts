@@ -99,7 +99,7 @@ export class ValidationController {
     this.renderers.push(renderer);
     renderer.render({
       kind: 'validate',
-      render: this.results.map(result => ({ result, elements: <Element[]>this.elements.get(result) })),
+      render: this.results.map(result => ({ result, elements: this.elements.get(result) as Element[] })),
       unrender: []
     });
   }
@@ -113,7 +113,7 @@ export class ValidationController {
     renderer.render({
       kind: 'reset',
       render: [],
-      unrender: this.results.map(result => ({ result, elements: <Element[]>this.elements.get(result) }))
+      unrender: this.results.map(result => ({ result, elements: this.elements.get(result) as Element[] }))
     });
   }
 
@@ -167,6 +167,7 @@ export class ValidationController {
     // Get a function that will process the validation instruction.
     let execute: () => Promise<ValidateResult[]>;
     if (instruction) {
+      // tslint:disable-next-line:prefer-const
       let { object, propertyName, rules } = instruction;
       // if rules were not specified, check the object map.
       rules = rules || this.objects.get(object);
@@ -182,11 +183,11 @@ export class ValidationController {
       // validate all objects and bindings.
       execute = () => {
         const promises: Promise<ValidateResult[]>[] = [];
-        for (let [object, rules] of Array.from(this.objects)) {
+        for (const [object, rules] of Array.from(this.objects)) {
           promises.push(this.validator.validateObject(object, rules));
         }
-        for (let [binding, { rules }] of Array.from(this.bindings)) {
-          const propertyInfo = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+        for (const [binding, { rules }] of Array.from(this.bindings)) {
+          const propertyInfo = getPropertyInfo(binding.sourceExpression as Expression, binding.source);
           if (!propertyInfo || this.objects.has(propertyInfo.object)) {
             continue;
           }
@@ -198,7 +199,7 @@ export class ValidationController {
 
     // Wait for any existing validation to finish, execute the instruction, render the results.
     this.validating = true;
-    let returnPromise: Promise<ControllerValidateResult> = this.finishValidating
+    const returnPromise: Promise<ControllerValidateResult> = this.finishValidating
       .then(execute)
       .then((newResults: ValidateResult[]) => {
         const predicate = this.getInstructionPredicate(instruction);
@@ -243,8 +244,8 @@ export class ValidationController {
    */
   private getAssociatedElements({ object, propertyName }: ValidateResult): Element[] {
     const elements: Element[] = [];
-    for (let [binding, { target }] of Array.from(this.bindings)) {
-      const propertyInfo = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+    for (const [binding, { target }] of Array.from(this.bindings)) {
+      const propertyInfo = getPropertyInfo(binding.sourceExpression as Expression, binding.source);
       if (propertyInfo && propertyInfo.object === object && propertyInfo.propertyName === propertyName) {
         elements.push(target);
       }
@@ -267,9 +268,9 @@ export class ValidationController {
     newResults = newResults.slice(0);
 
     // create unrender instructions from the old results.
-    for (let oldResult of oldResults) {
+    for (const oldResult of oldResults) {
       // get the elements associated with the old result.
-      const elements = <Element[]>this.elements.get(oldResult);
+      const elements = this.elements.get(oldResult) as Element[];
 
       // remove the old result from the element map.
       this.elements.delete(oldResult);
@@ -311,7 +312,7 @@ export class ValidationController {
     }
 
     // create render instructions from the remaining new results.
-    for (let result of newResults) {
+    for (const result of newResults) {
       const elements = this.getAssociatedElements(result);
       instruction.render.push({ result, elements });
       this.elements.set(result, elements);
@@ -322,7 +323,7 @@ export class ValidationController {
     }
 
     // render.
-    for (let renderer of this.renderers) {
+    for (const renderer of this.renderers) {
       renderer.render(instruction);
     }
   }
@@ -334,7 +335,7 @@ export class ValidationController {
     if (!binding.isBound) {
       return;
     }
-    let propertyInfo = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+    const propertyInfo = getPropertyInfo(binding.sourceExpression as Expression, binding.source);
     let rules = undefined;
     const registeredBinding = this.bindings.get(binding);
     if (registeredBinding) {
@@ -353,7 +354,7 @@ export class ValidationController {
    */
   public resetBinding(binding: Binding) {
     const registeredBinding = this.bindings.get(binding);
-    let propertyInfo = getPropertyInfo(<Expression>binding.sourceExpression, (<any>binding).source);
+    let propertyInfo = getPropertyInfo(binding.sourceExpression as Expression, binding.source);
     if (!propertyInfo && registeredBinding) {
       propertyInfo = registeredBinding.propertyInfo;
     }

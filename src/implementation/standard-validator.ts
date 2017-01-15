@@ -20,7 +20,7 @@ export class StandardValidator extends Validator {
   constructor(messageProvider: ValidationMessageProvider, resources: ViewResources) {
     super();
     this.messageProvider = messageProvider;
-    this.lookupFunctions = (<any>resources).lookupFunctions;
+    this.lookupFunctions = (resources as any).lookupFunctions;
     this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
   }
 
@@ -62,6 +62,7 @@ export class StandardValidator extends Validator {
 
   private getMessage(rule: Rule<any, any>, object: any, value: any): string {
     const expression: Expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
+    // tslint:disable-next-line:prefer-const
     let { name: propertyName, displayName } = rule.property;
     if (propertyName !== null) {
       displayName = this.messageProvider.getDisplayName(propertyName, displayName);

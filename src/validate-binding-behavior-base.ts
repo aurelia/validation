@@ -25,8 +25,9 @@ export abstract class ValidateBindingBehaviorBase {
       return target;
     }
     // custom element or custom attribute
+    // tslint:disable-next-line:prefer-const
     for (let i = 0, ii = view.controllers.length; i < ii; i++) {
-      let controller: any = view.controllers[i];
+      const controller: any = view.controllers[i];
       if (controller.viewModel === target) {
         const element = controller.container.get(DOM.Element);
         if (element) {
@@ -61,7 +62,7 @@ export abstract class ValidateBindingBehaviorBase {
     if (trigger & validateTrigger.change) {
       binding.standardUpdateSource = binding.updateSource;
       // tslint:disable-next-line:only-arrow-functions
-      binding.updateSource = function (value: any) {
+      binding.updateSource = function(value: any) {
         this.standardUpdateSource(value);
         this.validationController.validateBinding(this);
       };
@@ -79,7 +80,7 @@ export abstract class ValidateBindingBehaviorBase {
     if (trigger !== validateTrigger.manual) {
       binding.standardUpdateTarget = binding.updateTarget;
       // tslint:disable-next-line:only-arrow-functions
-      binding.updateTarget = function (value: any) {
+      binding.updateTarget = function(value: any) {
         this.standardUpdateTarget(value);
         this.validationController.resetBinding(this);
       };

@@ -11,15 +11,16 @@ describe('ValidationErrorsCustomAttribute', () => {
 
   let component: ComponentTester;
   let viewModel: any;
-  let parentViewModel = { form: '', controller: () => { return null; }, theController: null };
+  const parentViewModel = { form: '', controller: () => { return null; }, theController: null };
   let container: Container;
 
-  let stageTest = (validationErrors: string, supplyControllerToViewModel?: boolean) => {
-    let form: string =  `<template>
-            <form novalidate autocomplete='off' ${validationErrors}>
-              <input ref='standardInput' type='text' value.bind='standardProp & validateOnBlur'>
-            </form>
-          </template>`;
+  const stageTest = (validationErrors: string, supplyControllerToViewModel?: boolean) => {
+    const form: string =  `
+      <template>
+        <form novalidate autocomplete='off' ${validationErrors}>
+          <input ref='standardInput' type='text' value.bind='standardProp & validateOnBlur'>
+        </form>
+      </template>`;
 
     parentViewModel.form = form;
 
@@ -30,7 +31,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       // tslint:enable-next-line:max-line-length
       .boundTo( parentViewModel );
 
-    let myConfigure = (aurelia: Aurelia)  => {
+    const myConfigure = (aurelia: Aurelia)  => {
       configure(aurelia);
       container = aurelia.container;
     };
@@ -48,17 +49,15 @@ describe('ValidationErrorsCustomAttribute', () => {
       */
       parentViewModel.controller = () => {
         const factory = container.get(ValidationControllerFactory);
-        let controller = factory.createForCurrentScope();
+        const controller = factory.createForCurrentScope();
         parentViewModel.theController = controller;
         return controller;
       };
     }
 
-    return <Promise<void>>component.create(<any>bootstrap)
+    return component.create(bootstrap as any)
       .then(() => {
-        /*
-          we get here after the viewmodel's bind().
-        */
+        // we get here after the viewmodel's bind().
         viewModel = component.viewModel.currentViewModel;
       });
   };
@@ -110,11 +109,10 @@ describe('ValidationErrorsCustomAttribute', () => {
       })
       .then(() => expect(viewModel.myErrors.length).toBe(1))
       // this shows that myErrors is being written from the controller that we gave to validation-errors
-      .then(() => expect(viewModel.myErrors[0].error).toEqual((<any>parentViewModel).theController.errors[0]))
+      .then(() => expect(viewModel.myErrors[0].error).toEqual((parentViewModel as any).theController.errors[0]))
       .then(done)
-      /* tslint:disable:no-console */
+      // tslint:disable-next-line:no-console
       .catch(e => { console.log(e.toString()); done(); });
-      /* tslint:enable:no-console */
   });
 
   it('does nothing when given only a controller', (done: () => void) => {
@@ -129,9 +127,8 @@ describe('ValidationErrorsCustomAttribute', () => {
       })
       .then(() => expect(viewModel.myErrors).toBeUndefined())
       .then(done)
-      /* tslint:disable:no-console */
+      // tslint:disable-next-line:no-console
       .catch(e => { console.log(e.toString()); done(); });
-      /* tslint:enable:no-console */
   });
 
   it('does nothing when given nothing', (done: () => void) => {
@@ -146,14 +143,13 @@ describe('ValidationErrorsCustomAttribute', () => {
       })
       .then(() => expect(viewModel.myErrors).toBeUndefined())
       .then(done)
-      /* tslint:disable:no-console */
+      // tslint:disable-next-line:no-console
       .catch(e => { console.log(e.toString()); done(); });
-      /* tslint:enable:no-console */
   });
 
   afterEach(() => {
     if (component) {
       component.dispose();
     }
-    });
+  });
 });

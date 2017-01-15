@@ -17,7 +17,7 @@ export class ValidationControllerFactory {
    */
   public create(validator?: Validator) {
     if (!validator) {
-      validator = <Validator>this.container.get(Validator);
+      validator = this.container.get(Validator) as Validator;
     }
     return new ValidationController(validator);
   }
@@ -33,4 +33,4 @@ export class ValidationControllerFactory {
   }
 }
 
-(<any>ValidationControllerFactory)['protocol:aurelia:resolver'] = true;
+(ValidationControllerFactory as any)['protocol:aurelia:resolver'] = true;

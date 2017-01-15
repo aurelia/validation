@@ -26,7 +26,7 @@ export class ValidationErrorsFormOne {
   }
 
   public created() {
-    let controller = this.model.controller();
+    const controller = this.model.controller();
     this.controller = controller ? controller : this.controllerFactory.createForCurrentScope();
   }
 

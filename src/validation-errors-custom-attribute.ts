@@ -22,7 +22,7 @@ export class ValidationErrorsCustomAttribute implements ValidationRenderer {
 
   private errorsInternal: RenderedError[] = [];
 
-  constructor(private boundaryElement: Element, private controllerAccessor: { (): ValidationController; }) {
+  constructor(private boundaryElement: Element, private controllerAccessor: () => ValidationController) {
   }
 
   public sort() {
@@ -40,14 +40,14 @@ export class ValidationErrorsCustomAttribute implements ValidationRenderer {
   }
 
   public render(instruction: RenderInstruction) {
-    for (let { result } of instruction.unrender) {
+    for (const { result } of instruction.unrender) {
       const index = this.errorsInternal.findIndex(x => x.error === result);
       if (index !== -1) {
         this.errorsInternal.splice(index, 1);
       }
     }
 
-    for (let { result, elements } of instruction.render) {
+    for (const { result, elements } of instruction.render) {
       if (result.valid) {
         continue;
       }

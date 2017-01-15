@@ -8,7 +8,7 @@ import {
 } from 'aurelia-binding';
 
 function getObject(expression: Expression, objectExpression: Expression, source: any): null | undefined | Object {
-  let value = objectExpression.evaluate(source, <any>null);
+  const value = objectExpression.evaluate(source, null as any);
   if (value === null || value === undefined || value instanceof Object) {
     return value;
   }
