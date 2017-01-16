@@ -21,19 +21,19 @@ describe('end to end', () => {
 
     let viewModel: RegistrationForm;
 
-    let renderer = { render: jasmine.createSpy() };
+    const renderer = { render: jasmine.createSpy() };
 
-    (<Promise<any>>component.create(<any>bootstrap))
+    component.create(bootstrap as any)
       // grab some references.
       .then(() => {
         viewModel = component.viewModel;
         viewModel.controller.addRenderer(renderer);
-        firstName = <HTMLInputElement>component.element.querySelector('#firstName');
-        lastName = <HTMLInputElement>component.element.querySelector('#lastName');
-        number1 = <HTMLInputElement>component.element.querySelector('#number1');
-        number2 = <HTMLInputElement>component.element.querySelector('#number2');
-        password = <HTMLInputElement>component.element.querySelector('#password');
-        confirmPassword = <HTMLInputElement>component.element.querySelector('#confirmPassword');
+        firstName = component.element.querySelector('#firstName') as HTMLInputElement;
+        lastName = component.element.querySelector('#lastName') as HTMLInputElement;
+        number1 = component.element.querySelector('#number1') as HTMLInputElement;
+        number2 = component.element.querySelector('#number2') as HTMLInputElement;
+        password = component.element.querySelector('#password') as HTMLInputElement;
+        confirmPassword = component.element.querySelector('#confirmPassword') as HTMLInputElement;
       })
       // initially there should not be any errors
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
@@ -111,7 +111,7 @@ describe('end to end', () => {
       // confirm there's an error.
       .then(() => expect(viewModel.controller.errors.length).toBe(2))
       // change the number2 field- this should trigger validation.
-      .then(() => change(<HTMLInputElement>number2.firstElementChild, '-1'))
+      .then(() => change(number2.firstElementChild as HTMLInputElement, '-1'))
       // confirm there's an error.
       .then(() => expect(viewModel.controller.errors.length).toBe(3))
       // change the number1 field- this should trigger validation.
@@ -119,7 +119,7 @@ describe('end to end', () => {
       // confirm the error was reset.
       .then(() => expect(viewModel.controller.errors.length).toBe(2))
       // change the number2 field- this should trigger validation.
-      .then(() => change(<HTMLInputElement>number2.firstElementChild, '23'))
+      .then(() => change(number2.firstElementChild as HTMLInputElement, '23'))
       // confirm the error was reset.
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
       // change the numbers back to invalid values.

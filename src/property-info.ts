@@ -8,13 +8,12 @@ import {
 } from 'aurelia-binding';
 
 function getObject(expression: Expression, objectExpression: Expression, source: any): null | undefined | Object {
-  let value = objectExpression.evaluate(source, <any>null);
+  const value = objectExpression.evaluate(source, null as any);
   if (value === null || value === undefined || value instanceof Object) {
     return value;
   }
-  /* tslint:disable */
+  // tslint:disable-next-line:max-line-length
   throw new Error(`The '${objectExpression}' part of '${expression}' evaluates to ${value} instead of an object, null or undefined.`);
-  /* tslint:enable */
 }
 
 /**

@@ -20,7 +20,7 @@ describe('Validator', () => {
   });
 
   it('validates email', (done: () => void) => {
-    let obj = { prop: <any>'foo@bar.com' };
+    let obj = { prop: 'foo@bar.com' as any };
     let rules = ValidationRules.ensure('prop').email().rules;
     validator.validateProperty(obj, 'prop', rules)
       .then(results => {
@@ -52,7 +52,7 @@ describe('Validator', () => {
   });
 
   it('validates equals', (done: () => void) => {
-    let obj = { prop: <any>'test' };
+    let obj = { prop: 'test' as any };
     let rules = ValidationRules.ensure('prop').equals('test').rules;
     validator.validateProperty(obj, 'prop', rules)
       .then(results => {
@@ -84,10 +84,10 @@ describe('Validator', () => {
   });
 
   it('bails', (done: () => void) => {
-    let obj = { prop: <any>'invalid email', prop2: '' };
-    let spy1 = jasmine.createSpy().and.returnValue(true);
-    let spy2 = jasmine.createSpy().and.returnValue(true);
-    let rules = ValidationRules
+    let obj = { prop: 'invalid email', prop2: '' };
+    const spy1 = jasmine.createSpy().and.returnValue(true);
+    const spy2 = jasmine.createSpy().and.returnValue(true);
+    const rules = ValidationRules
       .ensure('prop').email().then().satisfies(spy1)
       .ensure('prop2').satisfies(spy2)
       .rules;

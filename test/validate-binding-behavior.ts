@@ -13,9 +13,9 @@ describe('ValidateBindingBehavior', () => {
 
     let viewModel: TriggerForm;
 
-    let renderer = { render: jasmine.createSpy() };
+    const renderer = { render: jasmine.createSpy() };
 
-    (<Promise<any>>component.create(<any>bootstrap))
+    component.create(bootstrap as any)
       // grab some references.
       .then(() => {
         viewModel = component.viewModel;

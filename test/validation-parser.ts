@@ -14,7 +14,7 @@ describe('Validator', () => {
   });
 
   it('parses function bodies', () => {
-    const parse: (fn: string) => Expression = (<any>parser).getAccessorExpression.bind(parser);
+    const parse: (fn: string) => Expression = (parser as any).getAccessorExpression.bind(parser);
     expect(parse('function(a){return a.b}')).toEqual(new AccessScope('b', 0));
     expect(parse('function(a){return a.b;}')).toEqual(new AccessScope('b', 0));
     expect(parse('function (a){return a.b;}')).toEqual(new AccessScope('b', 0));

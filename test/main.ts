@@ -12,7 +12,7 @@ Object.keys(window.__karma__.files).forEach(file => {
     // Normalize paths to RequireJS module names.
     // If you require sub-dependencies of test files to be loaded as-is (requiring file extension)
     // then do not normalize the paths
-    let normalizedTestModule = file.replace(/^\/base\/|\.js$/g, '');
+    const normalizedTestModule = file.replace(/^\/base\/|\.js$/g, '');
     allTestFiles.push(normalizedTestModule);
   }
 });

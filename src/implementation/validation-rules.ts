@@ -83,7 +83,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
    */
-  public ensure<TValue2>(subject: string | { (model: TObject): TValue2; }) {
+  public ensure<TValue2>(subject: string | ((model: TObject) => TValue2)) {
     return this.fluentEnsure.ensure<TValue2>(subject);
   }
 
@@ -248,9 +248,9 @@ export class FluentRules<TObject, TValue> {
     let rule = FluentRules.customRules[name];
     if (!rule) {
       // standard rule?
-      rule = (<any>this)[name];
+      rule = (this as any)[name];
       if (rule instanceof Function) {
-        return <FluentRuleCustomizer<TObject, TValue>>rule.call(this, ...args);
+        return rule.call(this, ...args);
       }
       throw new Error(`Rule with name "${name}" does not exist.`);
     }
@@ -268,7 +268,7 @@ export class FluentRules<TObject, TValue> {
       value =>
         value !== null
         && value !== undefined
-        && !(isString(value) && !/\S/.test(<any>value))
+        && !(isString(value) && !/\S/.test(value as any))
     ).withMessageKey('required');
   }
 
@@ -279,7 +279,7 @@ export class FluentRules<TObject, TValue> {
    */
   public matches(regex: RegExp) {
     return this.satisfies(
-      value => value === null || value === undefined || (<any>value).length === 0 || regex.test(<any>value))
+      value => value === null || value === undefined || (value as any).length === 0 || regex.test(value as any))
       .withMessageKey('matches');
   }
 
@@ -341,7 +341,7 @@ export class FluentRules<TObject, TValue> {
    */
   public equals(expectedValue: TValue) {
     return this.satisfies(
-      value => value === null || value === undefined || <any>value === '' || value === expectedValue,
+      value => value === null || value === undefined || value as any === '' || value === expectedValue,
       { expectedValue })
       .withMessageKey('equals');
   }

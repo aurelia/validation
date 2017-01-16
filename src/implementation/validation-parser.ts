@@ -16,9 +16,7 @@ import { isString } from './util';
 
 import * as LogManager from 'aurelia-logging';
 
-export interface PropertyAccessor<TObject, TValue> {
-  (object: TObject): TValue;
-}
+export type PropertyAccessor<TObject, TValue> = (object: TObject) => TValue;
 
 export class ValidationParser {
   public static inject = [Parser, BindingLanguage];
@@ -35,19 +33,19 @@ export class ValidationParser {
       return this.cache[message];
     }
 
-    const parts: (Expression | string)[] | null = (<any>this.bindinqLanguage).parseInterpolation(null, message);
+    const parts: (Expression | string)[] | null = (this.bindinqLanguage as any).parseInterpolation(null, message);
     if (parts === null) {
       return new LiteralString(message);
     }
-    let expression: Expression = new LiteralString(<string>parts[0]);
+    let expression: Expression = new LiteralString(parts[0] as string);
     for (let i = 1; i < parts.length; i += 2) {
       expression = new Binary(
         '+',
         expression,
         new Binary(
           '+',
-          this.coalesce(<Expression>parts[i]),
-          new LiteralString(<string>parts[i + 1])
+          this.coalesce(parts[i] as Expression),
+          new LiteralString(parts[i + 1] as string)
         )
       );
     }
@@ -61,7 +59,7 @@ export class ValidationParser {
 
   public parseProperty<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): RuleProperty {
     if (isString(property)) {
-      return { name: <string>property, displayName: null };
+      return { name: property as string, displayName: null };
     }
     const accessor = this.getAccessorExpression(property.toString());
     if (accessor instanceof AccessScope
@@ -114,9 +112,8 @@ export class MessageExpressionValidator extends Unparser {
     }
     if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
       LogManager.getLogger('aurelia-validation')
-        /* tslint:disable:max-line-length */
+        // tslint:disable-next-line:max-line-length
         .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
-      /* tslint:enable:max-line-length */
     }
   }
 }

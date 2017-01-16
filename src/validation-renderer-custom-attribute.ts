@@ -19,7 +19,7 @@ export class ValidationRendererCustomAttribute {
 
   public unbind() {
     this.controller.removeRenderer(this.renderer);
-    this.controller = <any>null;
-    this.renderer = <any>null;
+    this.controller = null as any;
+    this.renderer = null as any;
   }
 }
