@@ -127,19 +127,55 @@ describe('Validator', () => {
       .then(done);
   });
 
-  it('handles multiple ensures on a property', (/*done: () => void */) => {
-    const obj = { prop: 'value', prop2: '' };
+  it('handles multiple ensures on a property', (done: () => void) => {
+    const obj = { name: 'value' };
     const displayName = 'product name';
+    const message = `${displayName} is required`;
+    const propertyName = 'name';
     // const message = parser.parseMessage('${displayName}');
 
     // jasmine.createSpyObj(message, ['evaluate']).and.returnValue(displayName);
 
-    ValidationRules
-      .ensure('name')
-      .displayName('product name')
-      .ensure('name')
+    const rules = ValidationRules
+      .ensure(propertyName)
+      .displayName(displayName)
+      .ensure(propertyName)
       .required()
-      .withMessage(displayName)
-      .on(obj);
+      .withMessage('\${$displayName} is required')
+      .on(obj)
+      .rules;
+
+    validator.validateProperty(obj, propertyName, rules)
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length === 0);
+
+        (obj as any).name = null;
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length === 1);
+        expect(results[0].message).toEqual(message);
+      })
+      // .then(() => {
+      //   obj = { prop: 'foo' };
+      //   rules = ValidationRules.ensure('prop').equals('test').rules;
+      //   return validator.validateProperty(obj, 'prop', rules);
+      // })
+      // .then(results => {
+      //   const expected = [new ValidateResult(rules[0][0], obj, 'prop', false, 'Prop must be test.')];
+      //   expected[0].id = results[0].id;
+      //   expect(results).toEqual(expected);
+      // })
+      // .then(() => {
+      //   obj = { prop: null };
+      //   rules = ValidationRules.ensure('prop').equals('test').rules;
+      //   return validator.validateProperty(obj, 'prop', rules);
+      // })
+      // .then(results => {
+      //   const expected = [new ValidateResult(rules[0][0], obj, 'prop', true, null)];
+      //   expected[0].id = results[0].id;
+      //   expect(results).toEqual(expected);
+      // })
+      .then(done);
   });
 });

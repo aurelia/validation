@@ -9,9 +9,7 @@ export class FluentRulesGenerator<TObject> {
   private fluentCustomizer: FluentRuleCustomizer<TObject, any> | null = null;
   private fluentRules: FluentRules<TObject, any> | null = null;
 
-  constructor(
-    private fluentEnsure: FluentEnsure<TObject>) {
-
+  constructor(private fluentEnsure: FluentEnsure<TObject>) {
     if (!fluentEnsure) {
       throw new Error(`FluentRuleGenerator requires an instance of FluentEnsure`);
     }
@@ -182,7 +180,7 @@ export class FluentRulesGenerator<TObject> {
   /**
    * Rules that have been defined using the fluent API.
    */
-  public get rules(): Rule<TObject, any>[][] {
+  public get rules(): Array<Array<Rule<TObject, any>>> {
     return this.fluentEnsure!.rules;
   }
 
@@ -425,7 +423,9 @@ export class FluentEnsure<TObject> {
   /**
    * Rules that have been defined using the fluent API.
    */
-  public rules: Rule<TObject, any>[][] = [];
+  public rules: Array<Array<Rule<TObject, any>>> = [];
+  private properties: Map<string, RuleProperty> = new Map<string, RuleProperty>();
+  private objectPropertyKey = '__objectProp__';
 
   constructor(private parser: ValidationParser) { }
 
@@ -440,7 +440,12 @@ export class FluentEnsure<TObject> {
     const ruleProperty = this.parser.parseProperty(property);
 
     // if this property has been previously-ensured then we want to use that RuleProperty object
-    const preExistingProperty: RuleProperty | null = this._getPreExistingEnsured(ruleProperty);
+    const preExistingProperty: RuleProperty | undefined =
+      this.properties.get(ruleProperty.name as string);
+
+    if (!preExistingProperty) {
+      this.properties.set(ruleProperty.name as string, ruleProperty);
+    }
 
     return new FluentRules<TObject, TValue>(this, this.parser,
       preExistingProperty ? preExistingProperty : ruleProperty);
@@ -455,7 +460,12 @@ export class FluentEnsure<TObject> {
     const ruleProperty: RuleProperty = { name: null, displayName: null };
 
     // if this property has been previously-ensured then we want to use that RuleProperty object
-    const preExistingProperty: RuleProperty | null = this._getPreExistingEnsured(ruleProperty);
+    const preExistingProperty: RuleProperty | undefined =
+      this.properties.get(this.objectPropertyKey);
+
+    if (!preExistingProperty) {
+      this.properties.set(this.objectPropertyKey, ruleProperty);
+    }
 
     return new FluentRules<TObject, TObject>(this, this.parser,
       preExistingProperty ? preExistingProperty : ruleProperty);
@@ -479,26 +489,6 @@ export class FluentEnsure<TObject> {
     }
 
     this.rules[rule.sequence].push(rule);
-  }
-
-  /**
-   * try to find a RuleProperty by the same given name
-   */
-  private _getPreExistingEnsured<TValue>(property?: RuleProperty): RuleProperty | null {
-
-    let existingRule: Rule<TObject, TValue> | undefined = undefined;
-
-    const name = property ? property.name : null;
-
-    // note that if name === null then we're looking for the ensured object
-    for (const sequence of this.rules) {
-      existingRule = sequence.find(r => r.property.name === name);
-      if (existingRule) {
-        break;
-      }
-    }
-
-    return existingRule ? existingRule.property : null;
   }
 
   private assertInitialized() {
