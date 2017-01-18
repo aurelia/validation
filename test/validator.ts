@@ -251,6 +251,27 @@ describe('Validator', () => {
         expect(results.length).toEqual(2);
         expect(results[0].valid).toEqual(true);
         expect(results[1].message).toEqual(messageMinLengthConfirm);
+
+        rules = ValidationRules
+                .ensure(propertyName)
+                .required()
+                .displayName(displayName) // <= not the usual position for this call
+                .withMessage(messageRequired)
+                .ensureObject()
+                .displayName(displayName)
+                .ensureObject()
+                .maxLength(5)
+                .withMessage(messageMinLength)
+                .on(obj)
+                .rules;
+
+        obj.name = 'abc';
+        return validator.validateObject(obj, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length).toEqual(2);
+        expect(results[0].valid).toEqual(true);
+        expect(results[1].message).toEqual(messageMinLengthConfirm);
       })
       .then(done);
   });
