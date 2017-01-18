@@ -440,8 +440,7 @@ export class FluentEnsure<TObject> {
     const ruleProperty = this.parser.parseProperty(property);
 
     // if this property has been previously-ensured then we want to use that RuleProperty object
-    const preExistingProperty: RuleProperty | undefined =
-      this.properties.get(ruleProperty.name as string);
+    const preExistingProperty: RuleProperty | undefined = this.properties.get(ruleProperty.name as string);
 
     if (!preExistingProperty) {
       this.properties.set(ruleProperty.name as string, ruleProperty);
@@ -460,8 +459,7 @@ export class FluentEnsure<TObject> {
     const ruleProperty: RuleProperty = { name: null, displayName: null };
 
     // if this property has been previously-ensured then we want to use that RuleProperty object
-    const preExistingProperty: RuleProperty | undefined =
-      this.properties.get(this.objectPropertyKey);
+    const preExistingProperty: RuleProperty | undefined = this.properties.get(this.objectPropertyKey);
 
     if (!preExistingProperty) {
       this.properties.set(this.objectPropertyKey, ruleProperty);
