@@ -425,7 +425,6 @@ export class FluentEnsure<TObject> {
    */
   public rules: Array<Array<Rule<TObject, any>>> = [];
   private properties: Map<string, RuleProperty> = new Map<string, RuleProperty>();
-  private objectPropertyKey = '__objectProp__';
 
   constructor(private parser: ValidationParser) { }
 
@@ -456,13 +455,14 @@ export class FluentEnsure<TObject> {
   public ensureObject() {
     this.assertInitialized();
 
+    const objectPropertyKey = '__objectProp__';
     const ruleProperty: RuleProperty = { name: null, displayName: null };
 
     // if this property has been previously-ensured then we want to use that RuleProperty object
-    const preExistingProperty: RuleProperty | undefined = this.properties.get(this.objectPropertyKey);
+    const preExistingProperty: RuleProperty | undefined = this.properties.get(objectPropertyKey);
 
     if (!preExistingProperty) {
-      this.properties.set(this.objectPropertyKey, ruleProperty);
+      this.properties.set(objectPropertyKey, ruleProperty);
     }
 
     return new FluentRules<TObject, TObject>(this, this.parser,
