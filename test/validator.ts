@@ -10,12 +10,11 @@ import {
 
 describe('Validator', () => {
   let validator: StandardValidator;
-  let parser: ValidationParser;
 
   beforeAll(() => {
     const container = new Container();
     container.registerInstance(BindingLanguage, container.get(TemplatingBindingLanguage));
-    parser = container.get(ValidationParser);
+    const parser = container.get(ValidationParser);
     ValidationRules.initialize(parser);
     validator = container.get(StandardValidator);
   });
@@ -135,9 +134,6 @@ describe('Validator', () => {
     const messageMinLengthConfirm = `${displayName} has fewer than 5 characters`;
     const messageRequired = '\${$displayName} is missing';
     const messageRequiredConfirm = `${displayName} is missing`;
-    // const message = parser.parseMessage('${displayName}');
-
-    // jasmine.createSpyObj(message, ['evaluate']).and.returnValue(displayName);
 
     let rules = ValidationRules
       .ensure(propertyName)
@@ -222,7 +218,7 @@ describe('Validator', () => {
                 .then()
                 .ensure(propertyName)
                 .minLength(5)
-                .withMessage(messageMinLengthConfirm)
+                .withMessage(messageMinLength)
                 .on(obj)
                 .rules;
 
@@ -232,6 +228,24 @@ describe('Validator', () => {
       .then((results: Array<ValidateResult>) => {
         expect(results.length === 1);
         expect(results[0].message).toEqual(messageRequiredConfirm);
+
+        rules = ValidationRules
+                .ensure(propertyName)
+                .required()
+                .displayName(displayName) // <= not the usual position for this call
+                .withMessage(messageRequired)
+                .ensure(propertyName)
+                .minLength(5)
+                .withMessage(messageMinLength)
+                .on(obj)
+                .rules;
+
+        obj.name = 'abc';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length === 2);
+        expect(results[1].message).toEqual(messageMinLengthConfirm);
       })
       .then(done);
   });
