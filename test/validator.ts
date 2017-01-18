@@ -10,11 +10,12 @@ import {
 
 describe('Validator', () => {
   let validator: StandardValidator;
+  let parser: ValidationParser;
 
   beforeAll(() => {
     const container = new Container();
     container.registerInstance(BindingLanguage, container.get(TemplatingBindingLanguage));
-    const parser = container.get(ValidationParser);
+    parser = container.get(ValidationParser);
     ValidationRules.initialize(parser);
     validator = container.get(StandardValidator);
   });
@@ -124,5 +125,21 @@ describe('Validator', () => {
         expect(spy1.calls.count()).toBe(1);
       })
       .then(done);
+  });
+
+  it('handles multiple ensures on a property', (/*done: () => void */) => {
+    const obj = { prop: 'value', prop2: '' };
+    const displayName = 'product name';
+    // const message = parser.parseMessage('${displayName}');
+
+    // jasmine.createSpyObj(message, ['evaluate']).and.returnValue(displayName);
+
+    ValidationRules
+      .ensure('name')
+      .displayName('product name')
+      .ensure('name')
+      .required()
+      .withMessage(displayName)
+      .on(obj);
   });
 });
