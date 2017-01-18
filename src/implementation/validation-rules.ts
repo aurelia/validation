@@ -439,7 +439,7 @@ export class FluentEnsure<TObject> {
 
     const ruleProperty = this.parser.parseProperty(property);
 
-    // if this property has been previously-ensured we want to use the same RuleProperty object
+    // if this property has been previously-ensured then we want to use that RuleProperty object
     const preExistingProperty: RuleProperty | null = this._getPreExistingEnsured(ruleProperty);
 
     return new FluentRules<TObject, TValue>(this, this.parser,
@@ -454,7 +454,7 @@ export class FluentEnsure<TObject> {
 
     const ruleProperty: RuleProperty = { name: null, displayName: null };
 
-    // in case this property has been previously-ensured we want to retain any property information
+    // if this property has been previously-ensured then we want to use that RuleProperty object
     const preExistingProperty: RuleProperty | null = this._getPreExistingEnsured(ruleProperty);
 
     return new FluentRules<TObject, TObject>(this, this.parser,
