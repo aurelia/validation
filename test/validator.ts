@@ -130,18 +130,21 @@ describe('Validator', () => {
   it('handles multiple ensures on a property', (done: () => void) => {
     const obj = { name: 'value' };
     const displayName = 'product name';
-    const message = `${displayName} is required`;
     const propertyName = 'name';
+    const messageMinLength = '\${$displayName} has fewer than 5 characters';
+    const messageMinLengthConfirm = `${displayName} has fewer than 5 characters`;
+    const messageRequired = '\${$displayName} is missing';
+    const messageRequiredConfirm = `${displayName} is missing`;
     // const message = parser.parseMessage('${displayName}');
 
     // jasmine.createSpyObj(message, ['evaluate']).and.returnValue(displayName);
 
-    const rules = ValidationRules
+    let rules = ValidationRules
       .ensure(propertyName)
       .displayName(displayName)
       .ensure(propertyName)
       .required()
-      .withMessage('\${$displayName} is required')
+      .withMessage(messageRequired)
       .on(obj)
       .rules;
 
@@ -154,28 +157,82 @@ describe('Validator', () => {
       })
       .then((results: Array<ValidateResult>) => {
         expect(results.length === 1);
-        expect(results[0].message).toEqual(message);
+        expect(results[0].message).toEqual(messageRequiredConfirm);
+
+        rules = ValidationRules
+                .ensure(propertyName)
+                .minLength(5)
+                .withMessage(messageMinLength)
+                .ensure(propertyName)
+                .displayName(displayName)
+                .required()
+                .withMessage(messageRequired)
+                .on(obj)
+                .rules;
+
+        obj.name = 'abc';
+        return validator.validateProperty(obj, propertyName, rules);
       })
-      // .then(() => {
-      //   obj = { prop: 'foo' };
-      //   rules = ValidationRules.ensure('prop').equals('test').rules;
-      //   return validator.validateProperty(obj, 'prop', rules);
-      // })
-      // .then(results => {
-      //   const expected = [new ValidateResult(rules[0][0], obj, 'prop', false, 'Prop must be test.')];
-      //   expected[0].id = results[0].id;
-      //   expect(results).toEqual(expected);
-      // })
-      // .then(() => {
-      //   obj = { prop: null };
-      //   rules = ValidationRules.ensure('prop').equals('test').rules;
-      //   return validator.validateProperty(obj, 'prop', rules);
-      // })
-      // .then(results => {
-      //   const expected = [new ValidateResult(rules[0][0], obj, 'prop', true, null)];
-      //   expected[0].id = results[0].id;
-      //   expect(results).toEqual(expected);
-      // })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length === 1);
+        expect(results[0].message).toEqual(messageMinLengthConfirm);
+
+        rules = ValidationRules
+                .ensure(propertyName)
+                .displayName(displayName)
+                .minLength(5)
+                .withMessage(messageMinLength)
+                .ensure(propertyName)
+                .required()
+                .withMessage(messageRequired)
+                .on(obj)
+                .rules;
+
+        obj.name = 'abc';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length === 1);
+        expect(results[0].message).toEqual(messageMinLengthConfirm);
+
+        rules = ValidationRules
+                .ensure(propertyName)
+                .displayName(displayName)
+                .required()
+                .withMessage(messageRequired)
+                .ensure(propertyName)
+                .minLength(5)
+                .withMessage(messageMinLength)
+                .on(obj)
+                .rules;
+
+        obj.name = 'abc';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length === 2);
+        expect(results[0].valid).toEqual(true);
+        expect(results[1].message).toEqual(messageMinLengthConfirm);
+
+        rules = ValidationRules
+                .ensure(propertyName)
+                .displayName(displayName)
+                .required()
+                .withMessage(messageRequired)
+                .then()
+                .ensure(propertyName)
+                .minLength(5)
+                .withMessage(messageMinLengthConfirm)
+                .on(obj)
+                .rules;
+
+        obj.name = '';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length === 1);
+        expect(results[0].message).toEqual(messageRequiredConfirm);
+      })
       .then(done);
   });
 });
