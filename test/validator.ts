@@ -146,13 +146,14 @@ describe('Validator', () => {
 
     validator.validateProperty(obj, propertyName, rules)
       .then((results: Array<ValidateResult>) => {
-        expect(results.length === 0);
+        expect(results.length).toEqual(1);
+        expect(results[0].valid).toEqual(true);
 
         (obj as any).name = null;
         return validator.validateProperty(obj, propertyName, rules);
       })
       .then((results: Array<ValidateResult>) => {
-        expect(results.length === 1);
+        expect(results.length).toEqual(1);
         expect(results[0].message).toEqual(messageRequiredConfirm);
 
         rules = ValidationRules
@@ -170,8 +171,9 @@ describe('Validator', () => {
         return validator.validateProperty(obj, propertyName, rules);
       })
       .then((results: Array<ValidateResult>) => {
-        expect(results.length === 1);
+        expect(results.length).toEqual(2);
         expect(results[0].message).toEqual(messageMinLengthConfirm);
+        expect(results[1].valid).toEqual(true);
 
         rules = ValidationRules
                 .ensure(propertyName)
@@ -188,8 +190,8 @@ describe('Validator', () => {
         return validator.validateProperty(obj, propertyName, rules);
       })
       .then((results: Array<ValidateResult>) => {
-        expect(results.length === 1);
         expect(results[0].message).toEqual(messageMinLengthConfirm);
+        expect(results[1].valid).toEqual(true);
 
         rules = ValidationRules
                 .ensure(propertyName)
@@ -206,7 +208,7 @@ describe('Validator', () => {
         return validator.validateProperty(obj, propertyName, rules);
       })
       .then((results: Array<ValidateResult>) => {
-        expect(results.length === 2);
+        expect(results.length).toEqual(2);
         expect(results[0].valid).toEqual(true);
         expect(results[1].message).toEqual(messageMinLengthConfirm);
 
@@ -226,8 +228,10 @@ describe('Validator', () => {
         return validator.validateProperty(obj, propertyName, rules);
       })
       .then((results: Array<ValidateResult>) => {
-        expect(results.length === 1);
+        expect(results.length).toEqual(2);
         expect(results[0].message).toEqual(messageRequiredConfirm);
+        // a little weird since it actually isn't valid, it just hasn't been tested
+        expect(results[1].valid).toEqual(true);
 
         rules = ValidationRules
                 .ensure(propertyName)
@@ -244,7 +248,8 @@ describe('Validator', () => {
         return validator.validateProperty(obj, propertyName, rules);
       })
       .then((results: Array<ValidateResult>) => {
-        expect(results.length === 2);
+        expect(results.length).toEqual(2);
+        expect(results[0].valid).toEqual(true);
         expect(results[1].message).toEqual(messageMinLengthConfirm);
       })
       .then(done);
