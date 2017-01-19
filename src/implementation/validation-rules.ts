@@ -130,8 +130,7 @@ export class FluentRulesGenerator<TObject> {
    * rules until less expensive rules pass validation. 
    */
   public then(): FluentRulesGenerator<TObject> {
-    this.assertFluentCustomizer();
-    this.fluentCustomizer!.then();
+    this.fluentRules!.sequence++;
     return this;
   }
   /**
@@ -237,16 +236,6 @@ export class FluentRuleCustomizer<TObject, TValue> {
   }
 
   /**
-   * Validate subsequent rules after previously declared rules have
-   * been validated successfully. Use to postpone validation of costly
-   * rules until less expensive rules pass validation. 
-   */
-  public then(): FluentRuleCustomizer<TObject, TValue> {
-    this.fluentRules.sequence++;
-    return this;
-  }
-
-  /**
    * Specifies the key to use when looking up the rule's validation message.
    */
   public withMessageKey(key: string): FluentRuleCustomizer<TObject, TValue> {
@@ -322,6 +311,15 @@ export class FluentRuleCustomizer<TObject, TValue> {
 
   ///////// FluentRules APIs /////////
 
+  /**
+   * Validate subsequent rules after previously declared rules have
+   * been validated successfully. Use to postpone validation of costly
+   * rules until less expensive rules pass validation. 
+   */
+  public then(): FluentRuleCustomizer<TObject, TValue> {
+    this.fluentRules.sequence++;
+    return this;
+  }
   /**
    * Applies an ad-hoc rule function to the ensured property or object.
    * @param condition The function to validate the rule.
@@ -504,9 +502,8 @@ export class FluentRules<TObject, TValue> {
    */
   public email() {
     // regex from https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
-    /* tslint:disable:max-line-length */
+    // tslint:disable-next-line:max-line-length
     return this.matches(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
-      /* tslint:enable:max-line-length */
       .withMessageKey('email');
   }
 
