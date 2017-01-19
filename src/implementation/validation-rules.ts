@@ -183,6 +183,23 @@ export class FluentRulesGenerator<TObject> {
   public get rules(): Array<Array<Rule<TObject, any>>> {
     return this.fluentEnsure!.rules;
   }
+  /**
+   * Current rule sequence number. Used to postpone evaluation of rules until rules
+   * with lower sequence number have successfully validated. The "then" fluent API method
+   * manages this property, there's usually no need to set it directly.
+   */
+  public get sequence(): number {
+    return this.fluentRules!.sequence;
+  }
+
+  public get customRules(): {
+    [name: string]: {
+      condition: (value: any, object?: any, ...fluentArgs: any[]) => boolean | Promise<boolean>;
+      argsToConfig?: (...args: any[]) => any;
+    }
+  } {
+    return FluentRules.customRules;
+  }
 
   private assertFluentCustomizer(): void | never {
     if (!this.fluentCustomizer) {
@@ -192,9 +209,11 @@ export class FluentRulesGenerator<TObject> {
 }
 
 /**
+ * @Deprecated.  FluentRulesGenerator has taken its place.
  * Part of the fluent rule API. Enables customizing property rules.
  */
 export class FluentRuleCustomizer<TObject, TValue> {
+
   private rule: Rule<TObject, TValue>;
 
   constructor(
@@ -222,7 +241,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * been validated successfully. Use to postpone validation of costly
    * rules until less expensive rules pass validation. 
    */
-  public then() {
+  public then(): FluentRuleCustomizer<TObject, TValue> {
     this.fluentRules.sequence++;
     return this;
   }
@@ -230,7 +249,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
   /**
    * Specifies the key to use when looking up the rule's validation message.
    */
-  public withMessageKey(key: string) {
+  public withMessageKey(key: string): FluentRuleCustomizer<TObject, TValue> {
     this.rule.messageKey = key;
     this.rule.message = null;
     return this;
@@ -239,7 +258,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
   /**
    * Specifies rule's validation message.
    */
-  public withMessage(message: string) {
+  public withMessage(message: string): FluentRuleCustomizer<TObject, TValue> {
     this.rule.messageKey = 'custom';
     this.rule.message = this.parser.parseMessage(message);
     return this;
@@ -250,7 +269,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * @param condition A function that accepts the object as a parameter and returns true
    * or false whether the rule should be evaluated.
    */
-  public when(condition: (object: TObject) => boolean) {
+  public when(condition: (object: TObject) => boolean): FluentRuleCustomizer<TObject, TValue> {
     this.rule.when = condition;
     return this;
   }
@@ -259,16 +278,142 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Tags the rule instance, enabling the rule to be found easily 
    * using ValidationRules.taggedRules(rules, tag)
    */
-  public tag(tag: string) {
+  public tag(tag: string): FluentRuleCustomizer<TObject, TValue> {
     this.rule.tag = tag;
     return this;
+  }
+
+  /*****************************************************************
+    The rest is deprecated,  only here to 
+    implement the FluentRuleCustomizer interface for backward compatibility.
+   *****************************************************************/
+
+  ///// FluentEnsure APIs /////
+
+  /**
+   * Target a property with validation rules.
+   * @param property The property to target. Can be the property name or a property accessor function.
+   */
+  public ensure<TValue2>(subject: string | ((model: TObject) => TValue2)): FluentRules<TObject, TValue2> {
+    return this.fluentEnsure.ensure<TValue2>(subject);
+  }
+
+  /**
+   * Targets an object with validation rules.
+   */
+  public ensureObject(): FluentRules<TObject, TObject> {
+    return this.fluentEnsure.ensureObject();
+  }
+
+  /**
+   * Rules that have been defined using the fluent API.
+   */
+  public get rules(): Array<Array<Rule<TObject, any>>> {
+    return this.fluentEnsure.rules;
+  }
+
+  /**
+   * Applies the rules to a class or object, making them discoverable by the StandardValidator.
+   * @param target A class or object.
+   */
+  public on(target: any): FluentEnsure<TObject> {
+    return this.fluentEnsure.on(target);
+  }
+
+  ///////// FluentRules APIs /////////
+
+  /**
+   * Applies an ad-hoc rule function to the ensured property or object.
+   * @param condition The function to validate the rule.
+   * Will be called with two arguments, the property value and the object.
+   * Should return a boolean or a Promise that resolves to a boolean. 
+   */
+  // tslint:disable-next-line:max-line-length
+  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: Object): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.satisfies(condition, config);
+  }
+
+  /**
+   * Applies a rule by name.
+   * @param name The name of the custom or standard rule.
+   * @param args The rule's arguments.
+   */
+  public satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.satisfiesRule(name, ...args);
+  }
+
+  /**
+   * Applies the "required" rule to the property. 
+   * The value cannot be null, undefined or whitespace.
+   */
+  public required(): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.required();
+  }
+
+  /**
+   * Applies the "matches" rule to the property.
+   * Value must match the specified regular expression.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public matches(regex: RegExp): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.matches(regex);
+  }
+
+  /**
+   * Applies the "email" rule to the property.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public email(): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.email();
+  }
+
+  /**
+   * Applies the "minLength" STRING validation rule to the property.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public minLength(length: number): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.minLength(length);
+  }
+
+  /**
+   * Applies the "maxLength" STRING validation rule to the property.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public maxLength(length: number): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.maxLength(length);
+  }
+
+  /**
+   * Applies the "minItems" ARRAY validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public minItems(count: number): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.minItems(count);
+  }
+
+  /**
+   * Applies the "maxItems" ARRAY validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public maxItems(count: number): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.maxItems(count);
+  }
+
+  /**
+   * Applies the "equals" validation rule to the property.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public equals(expectedValue: TValue): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.equals(expectedValue);
   }
 }
 
 /**
+ * @Deprecated.  FluentRulesGenerator has taken its place.
  * Part of the fluent rule API. Enables applying rules to properties and objects.
  */
 export class FluentRules<TObject, TValue> {
+
   public static customRules: {
     [name: string]: {
       condition: (value: any, object?: any, ...fluentArgs: any[]) => boolean | Promise<boolean>;
@@ -303,7 +448,8 @@ export class FluentRules<TObject, TValue> {
    * Will be called with two arguments, the property value and the object.
    * Should return a boolean or a Promise that resolves to a boolean. 
    */
-  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: Object) {
+  // tslint:disable-next-line:max-line-length
+  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: Object): FluentRuleCustomizer<TObject, TValue> {
     return new FluentRuleCustomizer<TObject, TValue>(
       this.property, condition, config, this.fluentEnsure, this, this.parser);
   }
@@ -417,6 +563,7 @@ export class FluentRules<TObject, TValue> {
 }
 
 /**
+ * @Deprecated.  FluentRulesGenerator has taken its place.
  * Part of the fluent rule API. Enables targeting properties and objects with rules.
  */
 export class FluentEnsure<TObject> {
@@ -433,7 +580,7 @@ export class FluentEnsure<TObject> {
    * @param property The property to target. Can be the property name or a property accessor 
    * function.
    */
-  public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>) {
+  public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRules<TObject, TValue> {
     this.assertInitialized();
 
     const ruleProperty = this.parser.parseProperty(property);
@@ -452,7 +599,7 @@ export class FluentEnsure<TObject> {
   /**
    * Targets an object with validation rules.
    */
-  public ensureObject() {
+  public ensureObject(): FluentRules<TObject, TObject> {
     this.assertInitialized();
 
     const objectPropertyKey = '__objectProp__';
@@ -511,14 +658,15 @@ export class ValidationRules {
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
    */
-  public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>) {
+  // tslint:disable-next-line:max-line-length
+  public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRulesGenerator<TObject> {
     return new FluentRulesGenerator<TObject>(new FluentEnsure<TObject>(ValidationRules.parser)).ensure(property);
   }
 
   /**
    * Targets an object with validation rules.
    */
-  public static ensureObject<TObject>() {
+  public static ensureObject<TObject>(): FluentRulesGenerator<TObject> {
     return new FluentRulesGenerator<TObject>(new FluentEnsure<TObject>(ValidationRules.parser)).ensureObject();
   }
 
