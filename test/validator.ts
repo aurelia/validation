@@ -272,6 +272,15 @@ describe('Validator', () => {
         expect(results.length).toEqual(2);
         expect(results[0].valid).toEqual(true);
         expect(results[1].message).toEqual(messageMinLengthConfirm);
+        rules = ValidationRules
+                .ensure(propertyName)
+                .ensure(propertyName)
+                .on(obj)
+                .rules;
+
+        obj.name = 'abc';
+        // should not crash
+        return validator.validateProperty(obj, propertyName, rules);
       })
       .then(done);
   });
