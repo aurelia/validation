@@ -24,6 +24,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
+      'dist/test/test/server.js',
     ],
 
 

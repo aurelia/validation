@@ -54,7 +54,7 @@ export class AureliaValidationConfiguration {
  * Configures the plugin.
  */
 export function configure(
-  frameworkConfig: { container: Container, globalResources: (...resources: string[]) => any },
+  frameworkConfig: { container: Container, globalResources?: (...resources: string[]) => any },
   callback?: (config: AureliaValidationConfiguration) => void
 ) {
   // the fluent rule definition API needs the parser to translate messages
@@ -70,8 +70,10 @@ export function configure(
   config.apply(frameworkConfig.container);
 
   // globalize the behaviors.
-  frameworkConfig.globalResources(
-    './validate-binding-behavior',
-    './validation-errors-custom-attribute',
-    './validation-renderer-custom-attribute');
+  if (frameworkConfig.globalResources) {
+    frameworkConfig.globalResources(
+      './validate-binding-behavior',
+      './validation-errors-custom-attribute',
+      './validation-renderer-custom-attribute');
+  }
 }
