@@ -66,7 +66,7 @@ To begin defining a ruleset, use the `ValidationRules` class. Start by targeting
 
 ### displayName
 
-Once you've targetted a property using `ensure` you can define the property's display name using `.displayName(name: string)`. Display names are used in validation messages. Specifying a display name is optional. If you do not explicitly set the display name the validation engine will attempt to compute the display name for you by splitting the property name on upper-case letters. A `firstName` property's display name would be `First Name`.
+Once you've targetted a property using `ensure` you can define the property's display name using `.displayName(name: string|ValidationDisplayNameCallback)`. Display names are used in validation messages. Specifying a display name is optional. If you do not explicitly set the display name the validation engine will attempt to compute the display name for you by splitting the property name on upper-case letters. A `firstName` property's display name would be `First Name`.
 
 <code-listing heading="displayName">
   <source-code lang="ES 2015">
