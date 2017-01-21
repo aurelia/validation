@@ -678,7 +678,7 @@ You may have rules that are not associated with a single property. The fluent ru
 
 The fluent API's `satisfies` method enables quick custom rules. If you have a custom rule that you need to use multiple times you can define it using the `customRule` method. Once defined, you can apply the rule using `satisfiesRule`.  Here's how you could define and use a simple date validation rule:
 
-<code-listing heading="addRule">
+<code-listing heading="customRule">
   <source-code lang="ES 2015">
     ValidationRules.customRule(
       'date',
@@ -695,7 +695,7 @@ The fluent API's `satisfies` method enables quick custom rules. If you have a cu
 
 You will often need to pass arguments to your custom rule. Below is an example of an "integer range" rule that accepts "min" and "max" arguments. Notice the last parameter to the `customRule` method packages up the expected parameters into a "config" object. The config object is used when computing the validation message when an error occurs, enabling the message expression to access the rule's configuration.
 
-<code-listing heading="addRule">
+<code-listing heading="customRule">
   <source-code lang="ES 2015">
     ValidationRules.customRule(
       'integerRange',
@@ -718,6 +718,50 @@ You may have noticed the custom rule examples above consider `null` and `undefin
 2. Messages Relevance- if our "integerRange" rule also does "required" checks the user will get "range" error messages when we they should have gotten "required" error messages.
 
 When you write a custom rule, the function should return `true` when the rule is "satisfied" / "valid" and `false` when the rule is "broken" / "invalid". Optionally you can return a `Promise` that resolves to `true` or `false`. The promise should not reject unless there's an unexpected exception. Promise rejection is not used for control flow or to represent "invalid" status.
+
+A common application of a custom rule is to confirm that two password entries match.  Here is a example showing how you can do that:
+
+<code-listing heading="confirm password entries match">
+  <source-code lang="ES 2015">
+      ValidationRules.customRule(
+        'matchesProperty',
+        (value, obj, otherPropertyName) => 
+          value === null
+          || value === undefined
+          || value === ''
+          || obj[otherPropertyName] === null
+          || obj[otherPropertyName] === undefined
+          || obj[otherPropertyName] === ''
+          || value === obj[otherPropertyName],
+        '${$displayName} must match ${$getDisplayName($config.otherPropertyName)}', otherPropertyName => ({ otherPropertyName })
+      );
+
+      ValidationRules
+        .ensure(a => a.password)
+          .required()
+        .ensure(a => a.confirmPassword)
+          .required()
+          .satisfiesRule('matchesProperty', 'password');
+  </source-code>
+</code-listing>
+
+<code-listing heading="confirm password entries match">
+  <source-code lang="HTML">
+    <div class="form-group">
+      <label class="control-label" for="password">Password</label>
+      <input type="password" class="form-control" id="password" placeholder="Password"
+             value.bind="password & validate"
+             change.delegate="confirmPassword = ''">
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" for="confirmPassword">Confirm Password</label>
+      <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password"
+             value.bind="confirmPassword & validate">
+    </div>
+  </source-code>
+</code-listing>
+
 
 ## [Integration With Other Libraries](aurelia-doc://section/11/version/1.0.0)
 
