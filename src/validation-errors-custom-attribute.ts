@@ -4,6 +4,7 @@ import { customAttribute, bindable } from 'aurelia-templating';
 import { ValidationController } from './validation-controller';
 import { ValidateResult } from './validate-result';
 import { ValidationRenderer, RenderInstruction } from './validation-renderer';
+import { DOM } from 'aurelia-pal';
 
 export interface RenderedError {
   error: ValidateResult;
@@ -12,7 +13,7 @@ export interface RenderedError {
 
 @customAttribute('validation-errors')
 export class ValidationErrorsCustomAttribute implements ValidationRenderer {
-  public static inject = [Element, Lazy.of(ValidationController)];
+  public static inject = [DOM.Element, Lazy.of(ValidationController)];
 
   @bindable({ defaultBindingMode: bindingMode.oneWay })
   public controller: ValidationController | null = null;
