@@ -51,9 +51,9 @@ export class ValidationMessageProvider {
    * Override this with your own custom logic.
    * @param propertyName The property name.
    */
-  public getDisplayName(propertyName: string, displayName: string|null|undefined): string {
+  public getDisplayName(propertyName: string, displayName?: string|null|Function): string {
     if (displayName !== null && displayName !== undefined) {
-      return displayName;
+      return (displayName instanceof Function) ? displayName() : displayName as string;
     }
 
     // split on upper-case letters.

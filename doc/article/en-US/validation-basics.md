@@ -98,6 +98,7 @@ All rules have a standard message that can be overriden on a case-by-case basis 
 * `$value`: the property value (at the moment the validation rule was executed).
 * `$object`: the object that owns the property.
 * `$config`: an object containing the rule's configuration. For example, the config for a `minLength` rule will have a `length` property.
+* `$getDisplayName`:  returns a displayable name of a property given the property name (irrespective of the property's displayName), split on capital letters, first letter ensured to be capitalized.
 
 Here's an example:
 

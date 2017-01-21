@@ -1,5 +1,7 @@
 import { Expression } from 'aurelia-binding';
 
+export type ValidationDisplayNameCallback = () => string;
+
 /**
  * Information related to a property that is the subject of validation.
  */
@@ -12,7 +14,7 @@ export interface RuleProperty {
   /**
    * The displayName of the property (or object).
    */
-  displayName: string | null;
+  displayName: string | ValidationDisplayNameCallback | null;
 }
 
 /**
