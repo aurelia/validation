@@ -3,7 +3,7 @@ import { ValidationParser, PropertyAccessor } from './validation-parser';
 import { isString } from './util';
 import { Rules } from './rules';
 import { validationMessages } from './validation-messages';
-import { ValidationDisplayNameCallback } from './rule';
+import { ValidationDisplayNameAccessor } from './rule';
 
 /**
  * Part of the fluent rule API. Enables customizing property rules.
@@ -224,7 +224,7 @@ export class FluentRules<TObject, TValue> {
   /**
    * Sets the display name of the ensured property.
    */
-  public displayName(name: string | ValidationDisplayNameCallback | null) {
+  public displayName(name: string | ValidationDisplayNameAccessor | null) {
     this.property.displayName = name;
     return this;
   }
