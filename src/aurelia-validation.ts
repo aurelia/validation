@@ -19,6 +19,7 @@ export * from './implementation/standard-validator';
 export * from './implementation/validation-messages';
 export * from './implementation/validation-parser';
 export * from './implementation/validation-rules';
+export * from './implementation/decorators';
 
 // Configuration
 
