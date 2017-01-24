@@ -53,7 +53,7 @@ export class FluentRulesGenerator<TObject> {
    */
   public satisfies<TValue>(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>,
                            config?: Object,
-                           propertyDependencies?: Array<string | PropertyAccessor<TObject, TValue>>
+                           propertyDependencies?: Array<string | PropertyAccessor<TObject, TValue>> | null | undefined
                            ): FluentRulesGenerator<TObject> {
     this.fluentCustomizer = this.fluentRules!.satisfies(condition, config, propertyDependencies);
     return this;
@@ -61,10 +61,16 @@ export class FluentRulesGenerator<TObject> {
   /**
    * Applies a rule by name.
    * @param name The name of the custom or standard rule.
+   * @param propertyDependencies An optional array of strings or PropertyAccessors identifying 
+   * object properties upon which the given rule depends.  These are used 
+   *   1) by the `validate` binding filter to trigger validation when the given properties are modified in the GUI, and 
+   *   2) to notify ValidationRenderers about elements associated with the given properties.
    * @param args The rule's arguments.
    */
-  public satisfiesRule(name: string, ...args: any[]): FluentRulesGenerator<TObject> {
-    this.fluentCustomizer = this.fluentRules!.satisfiesRule(name, ...args);
+  public satisfiesRule(name: string,
+                       propertyDependencies?: Array<string | PropertyAccessor<TObject, any>> | null | undefined,
+                       ...args: any[]): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.satisfiesRule(name, propertyDependencies, ...args);
     return this;
   }
   /**
@@ -230,7 +236,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
     private fluentEnsure: FluentEnsure<TObject>,
     private fluentRules: FluentRules<TObject, TValue>,
     private parser: ValidationParser,
-    propertyDependencies?: Array<string | PropertyAccessor<any, any>>
+    propertyDependencies?: Array<string | PropertyAccessor<any, any>> | null | undefined
   ) {
     this.rule = {
       property,
@@ -344,7 +350,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    */
   public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>,
                    config?: Object,
-                   propertyDependencies?: Array<string | PropertyAccessor<TObject, TValue>>
+                   propertyDependencies?: Array<string | PropertyAccessor<TObject, TValue>> | null | undefined
                   ): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.satisfies(condition, config, propertyDependencies);
   }
@@ -352,10 +358,16 @@ export class FluentRuleCustomizer<TObject, TValue> {
   /**
    * Applies a rule by name.
    * @param name The name of the custom or standard rule.
+   * @param propertyDependencies An optional array of strings or PropertyAccessors identifying 
+   * object properties upon which the given rule depends.  These are used 
+   *   1) by the `validate` binding filter to trigger validation when the given properties are modified in the GUI, and 
+   *   2) to notify ValidationRenderers about elements associated with the given properties.
    * @param args The rule's arguments.
    */
-  public satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
-    return this.fluentRules.satisfiesRule(name, ...args);
+  public satisfiesRule(name: string,
+                       propertyDependencies?: Array<string | PropertyAccessor<TObject, any>> | null | undefined,
+                       ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.satisfiesRule(name, propertyDependencies, ...args);
   }
 
   /**
@@ -434,7 +446,7 @@ export class FluentRules<TObject, TValue> {
     [name: string]: {
       condition: (value: any, object?: any, ...fluentArgs: any[]) => boolean | Promise<boolean>;
       argsToConfig?: (...args: any[]) => any;
-      propertyDependencies?: Array<string | PropertyAccessor<any, any>>
+      propertyDependencies?: Array<string | PropertyAccessor<any, any>> | null | undefined
     }
   } = {};
 
@@ -473,7 +485,7 @@ export class FluentRules<TObject, TValue> {
    */
   public satisfies(condition: (value: any, object?: TObject) => boolean | Promise<boolean>,
                    config?: Object,
-                   propertyDependencies?: Array<string | PropertyAccessor<any, any>>
+                   propertyDependencies?: Array<string | PropertyAccessor<any, any>> | null | undefined
                   ): FluentRuleCustomizer<TObject, TValue> {
     return new FluentRuleCustomizer<TObject, TValue>(
       this.property, condition, config, this.fluentEnsure, this, this.parser, propertyDependencies);
@@ -482,9 +494,15 @@ export class FluentRules<TObject, TValue> {
   /**
    * Applies a rule by name.
    * @param name The name of the custom or standard rule.
+   * @param propertyDependencies An optional array of strings or PropertyAccessors identifying 
+   * object properties upon which the given rule depends.  These are used 
+   *   1) by the `validate` binding filter to trigger validation when the given properties are modified in the GUI, and 
+   *   2) to notify ValidationRenderers about elements associated with the given properties.
    * @param args The rule's arguments.
    */
-  public satisfiesRule(name: string, ...args: any[]) {
+  public satisfiesRule(name: string,
+                       propertyDependencies?: Array<string | PropertyAccessor<TObject, TValue>> | null | undefined,
+                       ...args: any[]) {
     let rule = FluentRules.customRules[name];
     if (!rule) {
       // standard rule?
@@ -495,7 +513,7 @@ export class FluentRules<TObject, TValue> {
       throw new Error(`Rule with name "${name}" does not exist.`);
     }
     const config = rule.argsToConfig ? rule.argsToConfig(...args) : undefined;
-    return this.satisfies((value, obj) => rule.condition.call(this, value, obj, ...args), config)
+    return this.satisfies((value, obj) => rule.condition.call(this, value, obj, ...args), config, propertyDependencies)
       .withMessageKey(name);
   }
 
@@ -701,20 +719,15 @@ export class ValidationRules {
    * @param message The message expression
    * @param argsToConfig A function that maps the rule's arguments to a "config" 
    * object that can be used when evaluating the message expression.
-   * @param propertyDependencies An optional array of strings or PropertyAccessors identifying 
-   * object properties upon which the given rule depends.  These are used 
-   *   1) by the `validate` binding filter to trigger validation when the given properties are modified in the GUI, and 
-   *   2) to notify ValidationRenderers about elements associated with the given properties.
    */
-  public static customRule<TObject, TValue>(
+  public static customRule(
     name: string,
     condition: (value: any, object?: any, ...args: any[]) => boolean | Promise<boolean>,
     message: string,
-    argsToConfig?: (...args: any[]) => any,
-    propertyDependencies?: Array<string | PropertyAccessor<TObject, TValue>>
+    argsToConfig?: (...args: any[]) => any
   ) {
     validationMessages[name] = message;
-    FluentRules.customRules[name] = { condition, argsToConfig, propertyDependencies };
+    FluentRules.customRules[name] = { condition, argsToConfig };
   }
 
   /**
