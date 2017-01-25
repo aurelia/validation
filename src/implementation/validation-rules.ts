@@ -394,16 +394,10 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * @Deprecated
    * Applies a rule by name.
    * @param name The name of the custom or standard rule.
-   * @param propertyDependencies An optional array of strings or PropertyAccessors identifying 
-   * object properties upon which the given rule depends.  These are used 
-   *   1) by the `validate` binding filter to trigger validation when the given properties are modified in the GUI, and 
-   *   2) to notify ValidationRenderers about elements associated with the given properties.
    * @param args The rule's arguments.
    */
-  public satisfiesRule(name: string,
-                       propertyDependencies?: Array<string | PropertyAccessor<TObject, any>> | null,
-                       ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
-    return this.fluentRules.satisfiesRule(name, propertyDependencies, ...args);
+  public satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
+    return this.fluentRules.satisfiesRule(name, ...args);
   }
 
   /**
