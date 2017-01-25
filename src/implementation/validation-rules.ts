@@ -385,7 +385,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * enabling the message expression to access the rule's configuration.
    */
   public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>,
-                   config?: Object,
+                   config?: Object
                   ): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.satisfies(condition, config);
   }
