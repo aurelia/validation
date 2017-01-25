@@ -28,5 +28,5 @@ export interface Rule<TObject, TValue> {
   message: Expression | null;
   sequence: number;
   tag?: string;
-  propertyDependencies?: Array<string | PropertyAccessor<any, any>>;
+  propertyDependencies?: Array<string | PropertyAccessor<any, any>> | null | undefined;
 }

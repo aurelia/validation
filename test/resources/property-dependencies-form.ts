@@ -5,7 +5,6 @@ import {
   ValidationControllerFactory,
   ValidationController
 } from '../../src/aurelia-validation';
-import { isString } from '../../src/implementation/util';
 
 @inlineView(`
 <template>
@@ -24,8 +23,8 @@ export class PropertyDependenciesForm {
   public firstName = '';
   public lastName = '';
   public email = '';
-  public number1 = 0;
-  public number2 = 0;
+  public number1: number = 0;
+  public number2: number = 0;
   public password = '';
   public confirmPassword = '';
   public controller: ValidationController;
@@ -51,16 +50,24 @@ ValidationRules.customRule(
 );
 
 ValidationRules
-  // .ensure((f: PropertyDependenciesForm) => f.firstName).required()
-  // .ensure(f => f.lastName).required()
-  // .ensure('email').required().email()
-  // .ensure(f => f.number1).satisfies(value => value > 0)
-  // .ensure(f => f.number2).satisfies(value => value > 0).withMessage('${displayName} gots to be greater than zero.')
-  .ensure((f: PropertyDependenciesForm) => f.password).required()
-  .ensure((f) => f.confirmPassword).required().satisfiesRule('matchesProperty', null, 'password')
-  .ensureObject().satisfies((f: PropertyDependenciesForm) => {
-    return f.email !== null
-        && f.email !== undefined
-        && !(isString(f.email) && !/\S/.test(f.email as any));
-  })
+  .ensure((f: PropertyDependenciesForm) => f.confirmPassword)
+    .required()
+    .satisfiesCondition({
+                          name: 'matchesProperty',
+                          args: ['password'],
+                          propertyDependencies: ['password']
+                        })
+  .ensureObject()
+    .satisfiesCondition({
+      condition: (f: PropertyDependenciesForm) => {
+                                          return f.number1 !== null
+                                              && f.number1 !== undefined
+                                              && f.number1 === 1
+                                              && f.number2 !== null
+                                              && f.number2 !== undefined
+                                              && f.number2 === 2;
+                                        },
+      propertyDependencies: [ 'number1', 'number2' ]
+    })
+    .withMessage('numbers must be equal to 1 and 2')
   .on(PropertyDependenciesForm);
