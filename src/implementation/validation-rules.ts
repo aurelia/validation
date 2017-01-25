@@ -103,6 +103,7 @@ export class FluentRulesGenerator<TObject> {
   }
 
   /**
+   * @Deprecated
    * Applies a rule by name.
    * @param name The name of the custom or standard rule.
    * @param args The rule's arguments.
@@ -375,6 +376,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
     return this;
   }
   /**
+   * @Deprecated
    * Applies an ad-hoc rule function to the ensured property or object.
    * @param condition The function to validate the rule.
    * Will be called with two arguments, the property value and the object.
@@ -389,6 +391,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
   }
 
   /**
+   * @Deprecated
    * Applies a rule by name.
    * @param name The name of the custom or standard rule.
    * @param propertyDependencies An optional array of strings or PropertyAccessors identifying 
@@ -540,6 +543,7 @@ export class FluentRules<TObject, TValue> {
   }
 
   /**
+   * @Deprecated
    * Applies an ad-hoc rule function to the ensured property or object.
    * @param condition The function to validate the rule.
    * Will be called with two arguments, the property value and the object.
@@ -554,6 +558,7 @@ export class FluentRules<TObject, TValue> {
   }
 
   /**
+   * @Deprecated
    * Applies a rule by name.
    * @param name The name of the custom or standard rule.
    * @param args The rule's arguments.
