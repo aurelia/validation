@@ -30,7 +30,7 @@ export interface SatisfiesRuleParameters {
   /**
    * Name of a custom or standard rule.
    */
-  name: string;
+  ruleName: string;
   /**
    * Optional rule arguments.
    */
@@ -512,10 +512,10 @@ export class FluentRules<TObject, TValue> {
       params = params as SatisfiesConditionParameters;
       condition = params.condition;
       config = params.config;
-    } else if ((params as SatisfiesRuleParameters).name !== undefined) {
+    } else if ((params as SatisfiesRuleParameters).ruleName !== undefined) {
       isRule = true;
       params = params as SatisfiesRuleParameters;
-      name = params.name;
+      name = params.ruleName;
       const args = params.args || [];
       let rule = FluentRules.customRules[name];
       if (!rule) {
@@ -566,7 +566,7 @@ export class FluentRules<TObject, TValue> {
    * @param args The rule's arguments.
    */
   public satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
-    return this.satisfiesCondition({name, args: Array.prototype.slice.call(args)});
+    return this.satisfiesCondition({ruleName: name, args: Array.prototype.slice.call(args)});
   }
 
   /**

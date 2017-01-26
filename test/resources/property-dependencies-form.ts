@@ -58,7 +58,7 @@ ValidationRules
   .ensure((f: PropertyDependenciesForm) => f.confirmPassword)
     .required()
     .satisfiesCondition({
-                          name: 'matchesProperty',
+                          ruleName: 'matchesProperty',
                           args: ['password'],
                           propertyDependencies: ['password']
                         })
