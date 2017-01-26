@@ -3,7 +3,8 @@ import { inlineView } from 'aurelia-templating';
 import {
   ValidationRules,
   ValidationControllerFactory,
-  ValidationController
+  ValidationController,
+  validateTrigger
 } from '../../src/aurelia-validation';
 
 @inlineView(`
@@ -32,6 +33,8 @@ export class PropertyDependenciesForm {
 
   constructor(controllerFactory: ValidationControllerFactory) {
     this.controller = controllerFactory.createForCurrentScope();
+    this.controller.validateTrigger = validateTrigger.change;
+
   }
 }
 
@@ -50,6 +53,8 @@ ValidationRules.customRule(
 );
 
 ValidationRules
+  .ensure((f: PropertyDependenciesForm) => f.password)
+    .required()
   .ensure((f: PropertyDependenciesForm) => f.confirmPassword)
     .required()
     .satisfiesCondition({
@@ -60,12 +65,11 @@ ValidationRules
   .ensureObject()
     .satisfiesCondition({
       condition: (f: PropertyDependenciesForm) => {
-                                          return f.number1 !== null
-                                              && f.number1 !== undefined
-                                              && f.number1 === 1
-                                              && f.number2 !== null
-                                              && f.number2 !== undefined
-                                              && f.number2 === 2;
+                                          return (f.number1 === null ||
+                                                  f.number1 === undefined ||
+                                                  f.number2 === null ||
+                                                  f.number2 === undefined
+                                          || (f.number1 === 1 && f.number2 === 2));
                                         },
       propertyDependencies: [ 'number1', 'number2' ]
     })

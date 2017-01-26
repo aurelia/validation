@@ -132,6 +132,7 @@ describe('end to end', () => {
       })
       // make the passwords mismatch.
       .then(() => change(confirmPassword, 'b'))
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))
       // confirm the custom validator worked
       .then(() => expect(viewModel.controller.errors[0].message).toBe('Confirm Password must match Password'))
 

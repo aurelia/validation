@@ -68,10 +68,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       .then(() => expect(viewModel).not.toBeNull())
       .then(() => expect(viewModel.myErrors instanceof Array).toBe(true))
       .then(() => expect(viewModel.myErrors.length).toBe(0))
-      .then(() => {
-        blur(viewModel.standardInput);
-        return new Promise<void>((resolve) => { setTimeout(() => { resolve(); }, 0); });
-      })
+      .then(() => blur(viewModel.standardInput))
       .then(() => expect(viewModel.myErrors.length).toBe(1))
       .then(done)
       /* tslint:disable:no-console */
@@ -85,10 +82,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       .then(() => expect(viewModel).not.toBeNull())
       .then(() => expect(viewModel.myErrors instanceof Array).toBe(true))
       .then(() => expect(viewModel.myErrors.length).toBe(0))
-      .then(() => {
-        blur(viewModel.standardInput);
-        return new Promise<void>((resolve) => { setTimeout(() => { resolve(); }, 0); });
-      })
+      .then(() => blur(viewModel.standardInput))
       .then(() => expect(viewModel.myErrors.length).toBe(1))
       .then(done)
       /* tslint:disable:no-console */
@@ -103,10 +97,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       .then(() => expect(parentViewModel.controller).not.toBeNull())
       .then(() => expect(viewModel.myErrors instanceof Array).toBe(true))
       .then(() => expect(viewModel.myErrors.length).toBe(0))
-      .then(() => {
-        blur(viewModel.standardInput);
-        return new Promise<void>((resolve) => { setTimeout(() => { resolve(); }, 0); });
-      })
+      .then(() => blur(viewModel.standardInput))
       .then(() => expect(viewModel.myErrors.length).toBe(1))
       // this shows that myErrors is being written from the controller that we gave to validation-errors
       .then(() => expect(viewModel.myErrors[0].error).toEqual((parentViewModel as any).theController.errors[0]))
@@ -121,10 +112,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       .then(() => expect(viewModel).not.toBeNull())
       .then(() => expect(parentViewModel.controller).not.toBeNull())
       .then(() => expect(viewModel.myErrors).toBeUndefined())
-      .then(() => {
-        blur(viewModel.standardInput);
-        return new Promise<void>((resolve) => { setTimeout(() => { resolve(); }, 0); });
-      })
+      .then(() => blur(viewModel.standardInput))
       .then(() => expect(viewModel.myErrors).toBeUndefined())
       .then(done)
       // tslint:disable-next-line:no-console
@@ -137,10 +125,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       .then(() => expect(viewModel).not.toBeNull())
       .then(() => expect(parentViewModel.controller).not.toBeNull())
       .then(() => expect(viewModel.myErrors).toBeUndefined())
-      .then(() => {
-        blur(viewModel.standardInput);
-        return new Promise<void>((resolve) => { setTimeout(() => { resolve(); }, 0); });
-      })
+      .then(() => blur(viewModel.standardInput))
       .then(() => expect(viewModel.myErrors).toBeUndefined())
       .then(done)
       // tslint:disable-next-line:no-console

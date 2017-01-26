@@ -1,11 +1,10 @@
 import { StageComponent, ComponentTester } from 'aurelia-testing';
 import { bootstrap } from 'aurelia-bootstrapper';
 import { PropertyDependenciesForm } from './resources/property-dependencies-form';
-import { validateTrigger } from '../src/aurelia-validation';
-import { configure, change } from './shared';
+import { configure, change, timeout } from './shared';
 
-describe('end to end', () => {
-  it('basic scenarios', (done: () => void) => {
+describe('use of propertyDependencies', () => {
+  it('new API is backwards compatible', (done: () => void) => {
     const component: ComponentTester = StageComponent
       .withResources()
       .inView('<property-dependencies-form></property-dependencies-form>')
@@ -28,41 +27,40 @@ describe('end to end', () => {
       .then(() => {
         viewModel = component.viewModel;
         viewModel.controller.addRenderer(renderer);
-        viewModel.controller.validateTrigger = validateTrigger.change;
         firstName = component.element.querySelector('#firstName') as HTMLInputElement;
         lastName = component.element.querySelector('#lastName') as HTMLInputElement;
         number1 = component.element.querySelector('#number1') as HTMLInputElement;
         number2 = component.element.querySelector('#number2') as HTMLInputElement;
         password = component.element.querySelector('#password') as HTMLInputElement;
         confirmPassword = component.element.querySelector('#confirmPassword') as HTMLInputElement;
+        viewModel.password = 'a';
       })
       // initially there should not be any errors
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
+      .then(() => change(password, ''))
+      .then(() => {
+        expect(viewModel.controller.errors.length).toBe(1);
+      })
+      .then(() => {
+        expect(viewModel.controller.errors[0].message).toBe('Password is required.');
+      })
       .then(() => change(password, 'b'))
-      .then(() => expect(viewModel.controller.errors.length).toBe(1))
-      .then(() => expect(viewModel.controller.errors[0].message).toBe('Confirm Password must match Password'))
+      .then(() => change(confirmPassword, 'b'))
       .then(() => change(confirmPassword, 'b'))
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
       .then(() => change(confirmPassword, 'a'))
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
       .then(() => expect(viewModel.controller.errors[0].message).toBe('Confirm Password must match Password'))
-      .then(() => change(confirmPassword, 'b'))
-      .then(() => viewModel.number1 = 1)
-      // confirm the error was reset.
-      .then(() => expect(viewModel.controller.errors.length).toBe(2))
-      // make a model change to the number2 field. 
-      // this should reset the errors for the number2 field.
-      .then(() => viewModel.number2 = 2)
-      // confirm the error was reset.
+      .then(() => change(number1, '1'))
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
-      // .then(() => {
-      //   viewModel.number1 = 0;
-      //   viewModel.number2 = 0;
-      //   viewModel.password = 'a';
-      //   viewModel.confirmPassword = 'a';
-      //   viewModel.controller.reset();
-      // })
-      // make the passwords mismatch.
+      .then(() => change(confirmPassword, 'b'))
+      .then(() => change(number2, '2'))
+      .then(() => {
+        viewModel.controller.validate({ object: viewModel });
+        return timeout();
+      })
+      .then(() => expect(viewModel.controller.errors.length).toBe(1))
+      .then(() => expect(viewModel.controller.errors[0].message).toBe('numbers must be equal to 1 and 2'))
 
       // cleanup and finish.
       .then(() => component.dispose())

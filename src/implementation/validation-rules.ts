@@ -505,15 +505,18 @@ export class FluentRules<TObject, TValue> {
 
     let condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>;
     let config: any | undefined;
+    let isRule = false;
+    let name: string = '';
 
     if ((params as SatisfiesConditionParameters).condition !== undefined) {
       params = params as SatisfiesConditionParameters;
       condition = params.condition;
       config = params.config;
     } else if ((params as SatisfiesRuleParameters).name !== undefined) {
+      isRule = true;
       params = params as SatisfiesRuleParameters;
-      const name = params.name;
-      const args = params.args;
+      name = params.name;
+      const args = params.args || [];
       let rule = FluentRules.customRules[name];
       if (!rule) {
         // standard rule?
@@ -524,16 +527,21 @@ export class FluentRules<TObject, TValue> {
         throw new Error(`Rule with name "${name}" does not exist.`);
       }
 
-      config = rule.argsToConfig ? rule.argsToConfig(args) : undefined;
-      condition = (value, obj) => rule.condition.call(this, value, obj, args);
+      config = rule.argsToConfig ? rule.argsToConfig(...args) : undefined;
+      condition = (value, obj) => rule.condition.call(this, value, obj, ...args);
     } else {
         throw new Error(`Unknown parameters interface for satisfiesCondition`);
     }
 
-    return new FluentRuleCustomizer<TObject, TValue>(
+    const customizer = new FluentRuleCustomizer<TObject, TValue>(
         this.property, condition, config, this.fluentEnsure,
-        this, this.parser, params.propertyDependencies)
-      .withMessageKey(name);
+        this, this.parser, params.propertyDependencies);
+
+    if (isRule) {
+      customizer.withMessageKey(name);
+    }
+
+    return customizer;
   }
 
   /**
@@ -558,7 +566,7 @@ export class FluentRules<TObject, TValue> {
    * @param args The rule's arguments.
    */
   public satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
-    return this.satisfiesCondition({name, args});
+    return this.satisfiesCondition({name, args: Array.prototype.slice.call(args)});
   }
 
   /**
@@ -769,7 +777,7 @@ export class ValidationRules {
     condition: (value: any, object?: any, ...args: any[]) => boolean | Promise<boolean>,
     message: string,
     argsToConfig?: (...args: any[]) => any
-  ) {
+  ): void {
     validationMessages[name] = message;
     FluentRules.customRules[name] = { condition, argsToConfig };
   }
