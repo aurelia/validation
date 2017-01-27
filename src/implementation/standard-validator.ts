@@ -108,7 +108,6 @@ export class StandardValidator extends Validator {
       if (rule.when && !rule.when(object)) {
         continue;
       }
-
       // does this rule simply execute other rules, by tag 
       if (rule.tags) {
         for (const tag of rule.tags) {
