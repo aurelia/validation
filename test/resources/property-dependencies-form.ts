@@ -55,12 +55,17 @@ ValidationRules.customRule(
 ValidationRules
   .ensure((f: PropertyDependenciesForm) => f.password)
     .required()
+    .satisfiesCondition({
+                          ruleName: 'matchesProperty',
+                          args: ['confirmPassword']
+                        })
   .ensure((f: PropertyDependenciesForm) => f.confirmPassword)
     .required()
     .satisfiesCondition({
                           ruleName: 'matchesProperty',
                           args: ['password']
                         })
+
   .ensureObject()
     .satisfiesCondition({
       condition: (f: PropertyDependenciesForm) => {
@@ -71,5 +76,19 @@ ValidationRules
                                           || (f.number1 === 1 && f.number2 === 2));
                                         }
     })
+    .tag('numberMatch')
     .withMessage('numbers must be equal to 1 and 2')
+
+  .ensure(f => f.number1)
+    .satisfiesCondition({
+      tags: ['numberMatch']
+    })
+    // .withMessage('numbers must be equal to 1 and 2')
+
+  .ensure(f => f.number2)
+    .satisfiesCondition({
+      tags: ['numberMatch']
+    })
+    // .withMessage('numbers must be equal to 1 and 2')
+
   .on(PropertyDependenciesForm);

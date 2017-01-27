@@ -115,7 +115,7 @@ export class StandardValidator extends Validator {
           const taggedRules = ValidationRules.taggedRules(ruleSequence, tag);
 
           const promise: Promise<boolean> =
-            this.validateRuleSequence(object, propertyName, taggedRules, 0, results)
+            this.validateRuleSequence(object, null, taggedRules, 0, results)
               .then((results: ValidateResult[]) => {
                 const valid = results.length === 0;
                 allValid = allValid && valid;
