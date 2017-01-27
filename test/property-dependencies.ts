@@ -3,7 +3,7 @@ import { bootstrap } from 'aurelia-bootstrapper';
 import { PropertyDependenciesForm } from './resources/property-dependencies-form';
 import { configure, change, timeout } from './shared';
 
-describe('use of propertyDependencies', () => {
+describe('use of satisfies tagged rule', () => {
   it('new API is backwards compatible', (done: () => void) => {
     const component: ComponentTester = StageComponent
       .withResources()

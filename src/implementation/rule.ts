@@ -1,5 +1,4 @@
 import { Expression } from 'aurelia-binding';
-import { PropertyAccessor } from './validation-parser';
 
 /**
  * Information related to a property that is the subject of validation.
@@ -21,12 +20,12 @@ export interface RuleProperty {
  */
 export interface Rule<TObject, TValue> {
   property: RuleProperty;
-  condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>;
+  condition: ((value: TValue, object?: TObject) => boolean | Promise<boolean>) | null;
   config: Object;
   when: ((object: TObject) => boolean) | null;
   messageKey: string;
   message: Expression | null;
   sequence: number;
   tag?: string;
-  propertyDependencies?: Array<string | PropertyAccessor<any, any>> | null | undefined;
+  tags?: Array<string>; // set when the rule does no more than reference other rules
 }

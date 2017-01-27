@@ -5,6 +5,7 @@ import { ValidateResult } from '../validate-result';
 import { Rule } from './rule';
 import { Rules } from './rules';
 import { ValidationMessageProvider } from './validation-messages';
+import { ValidationRules } from './validation-rules';
 
 /**
  * Validates.
@@ -92,9 +93,9 @@ export class StandardValidator extends Validator {
 
     const rules = ruleSequence[sequence];
     let allValid = true;
+    const promises: Promise<boolean>[] = [];
 
     // validate each rule.
-    const promises: Promise<boolean>[] = [];
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
 
@@ -108,18 +109,35 @@ export class StandardValidator extends Validator {
         continue;
       }
 
-      // validate.
-      const value = rule.property.name === null ? object : object[rule.property.name];
-      let promiseOrBoolean = rule.condition(value, object);
-      if (!(promiseOrBoolean instanceof Promise)) {
-        promiseOrBoolean = Promise.resolve(promiseOrBoolean);
+      // does this rule simply execute other rules, by tag 
+      if (rule.tags) {
+        for (const tag of rule.tags) {
+          const taggedRules = ValidationRules.taggedRules(ruleSequence, tag);
+
+          const promise: Promise<boolean> =
+            this.validateRuleSequence(object, propertyName, taggedRules, 0, results)
+              .then((results: ValidateResult[]) => {
+                const valid = results.length === 0;
+                allValid = allValid && valid;
+                return valid;
+              });
+
+          promises.push(promise);
+        }
+      } else {
+        // validate.
+        const value = rule.property.name === null ? object : object[rule.property.name];
+        let promiseOrBoolean = (rule.condition as any)(value, object);
+        if (!(promiseOrBoolean instanceof Promise)) {
+          promiseOrBoolean = Promise.resolve(promiseOrBoolean);
+        }
+        promises.push(promiseOrBoolean.then((valid: boolean) => {
+          const message = valid ? null : this.getMessage(rule, object, value);
+          results.push(new ValidateResult(rule, object, rule.property.name, valid, message));
+          allValid = allValid && valid;
+          return valid;
+        }));
       }
-      promises.push(promiseOrBoolean.then(valid => {
-        const message = valid ? null : this.getMessage(rule, object, value);
-        results.push(new ValidateResult(rule, object, rule.property.name, valid, message));
-        allValid = allValid && valid;
-        return valid;
-      }));
     }
 
     return Promise.all(promises)

@@ -59,8 +59,7 @@ ValidationRules
     .required()
     .satisfiesCondition({
                           ruleName: 'matchesProperty',
-                          args: ['password'],
-                          propertyDependencies: ['password']
+                          args: ['password']
                         })
   .ensureObject()
     .satisfiesCondition({
@@ -70,8 +69,7 @@ ValidationRules
                                                   f.number2 === null ||
                                                   f.number2 === undefined
                                           || (f.number1 === 1 && f.number2 === 2));
-                                        },
-      propertyDependencies: [ 'number1', 'number2' ]
+                                        }
     })
     .withMessage('numbers must be equal to 1 and 2')
   .on(PropertyDependenciesForm);

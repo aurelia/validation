@@ -16,13 +16,6 @@ export interface SatisfiesConditionParameters {
    * enabling the message expression to access the rule's configuration.
    */
   config?: Object;
-  /**
-   * An optional array of strings or PropertyAccessors identifying 
-   * object properties upon which the given rule depends.  These are used 
-   *   1) by the `validate` binding filter to trigger validation when the given properties are modified in the GUI, and 
-   *   2) to notify ValidationRenderers about elements associated with the given properties.
-   */
-  propertyDependencies?: Array<string | PropertyAccessor<any, any>>;
 
 }
 
@@ -35,16 +28,17 @@ export interface SatisfiesRuleParameters {
    * Optional rule arguments.
    */
   args?: Array<any>;
-  /**
-   * An optional array of strings or PropertyAccessors identifying 
-   * object properties upon which the given rule depends.  These are used 
-   *   1) by the `validate` binding filter to trigger validation when the given properties are modified in the GUI, and 
-   *   2) to notify ValidationRenderers about elements associated with the given properties.
-   */
-  propertyDependencies?: Array<string | PropertyAccessor<any, any>>;
 }
 
-export type SatisfiesConditionArguments = SatisfiesConditionParameters | SatisfiesRuleParameters;
+export interface SatisfiesTaggedRuleParameters {
+  /**
+   * One or more tags assigned to one or more rules.
+   */
+  tags: Array<string>;
+}
+
+export type SatisfiesConditionArguments =
+  SatisfiesConditionParameters | SatisfiesRuleParameters | SatisfiesTaggedRuleParameters;
 
 export class FluentRulesGenerator<TObject> {
 
@@ -81,6 +75,11 @@ export class FluentRulesGenerator<TObject> {
     this.fluentRules!.displayName(name);
     return this;
   }
+  /**
+   * Applies a named or ad hoc rule to an ensured property or object.
+   * @param SatisfiesConditionArguments Configuration for the rule. Can be either a SatisfiesConditionParameters, 
+   * for ad hoc rules, or SatisfiesRuleParameters, for named rules, SatisfiesTaggedRuleParameters for named rules.
+   */
   public satisfiesCondition(params: SatisfiesConditionArguments):
     FluentRulesGenerator<TObject> {
     this.fluentCustomizer = this.fluentRules!.satisfiesCondition(params);
@@ -270,12 +269,12 @@ export class FluentRuleCustomizer<TObject, TValue> {
 
   constructor(
     property: RuleProperty,
-    condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>,
+    condition: ((value: TValue, object?: TObject) => boolean | Promise<boolean>) | null,
     config: Object = {},
     private fluentEnsure: FluentEnsure<TObject>,
     private fluentRules: FluentRules<TObject, TValue>,
     private parser: ValidationParser,
-    propertyDependencies?: Array<string | PropertyAccessor<any, any>> | null
+    otherRuleTags?: Array<string>
   ) {
     this.rule = {
       property,
@@ -285,7 +284,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
       messageKey: 'default',
       message: null,
       sequence: fluentRules.sequence,
-      propertyDependencies
+      tags: otherRuleTags
     };
     this.fluentEnsure._addRule(this.rule);
   }
@@ -476,7 +475,6 @@ export class FluentRules<TObject, TValue> {
     [name: string]: {
       condition: (value: any, object?: any, ...fluentArgs: any[]) => boolean | Promise<boolean>;
       argsToConfig?: (...args: any[]) => any;
-      propertyDependencies?: Array<string | PropertyAccessor<any, any>> | null
     }
   } = {};
 
@@ -503,16 +501,20 @@ export class FluentRules<TObject, TValue> {
 
   public satisfiesCondition(params: SatisfiesConditionArguments): FluentRuleCustomizer<TObject, TValue> {
 
-    let condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>;
+    let condition: ((value: TValue, object?: TObject) => boolean | Promise<boolean>) | null = null;
     let config: any | undefined;
+    let otherRuleTags: Array<string> | undefined;
     let isRule = false;
     let name: string = '';
 
     if ((params as SatisfiesConditionParameters).condition !== undefined) {
+
       params = params as SatisfiesConditionParameters;
       condition = params.condition;
       config = params.config;
+
     } else if ((params as SatisfiesRuleParameters).ruleName !== undefined) {
+
       isRule = true;
       params = params as SatisfiesRuleParameters;
       name = params.ruleName;
@@ -529,13 +531,19 @@ export class FluentRules<TObject, TValue> {
 
       config = rule.argsToConfig ? rule.argsToConfig(...args) : undefined;
       condition = (value, obj) => rule.condition.call(this, value, obj, ...args);
+
+    } else if ((params as SatisfiesTaggedRuleParameters).tags !== undefined) {
+
+      params = params as SatisfiesTaggedRuleParameters;
+      otherRuleTags = params.tags;
+
     } else {
         throw new Error(`Unknown parameters interface for satisfiesCondition`);
     }
 
     const customizer = new FluentRuleCustomizer<TObject, TValue>(
         this.property, condition, config, this.fluentEnsure,
-        this, this.parser, params.propertyDependencies);
+        this, this.parser, otherRuleTags);
 
     if (isRule) {
       customizer.withMessageKey(name);
