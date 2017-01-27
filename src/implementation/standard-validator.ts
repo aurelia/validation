@@ -93,9 +93,9 @@ export class StandardValidator extends Validator {
 
     const rules = ruleSequence[sequence];
     let allValid = true;
-    const promises: Promise<boolean>[] = [];
 
     // validate each rule.
+    const promises: Promise<boolean>[] = [];
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
 
