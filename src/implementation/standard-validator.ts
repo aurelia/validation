@@ -86,7 +86,8 @@ export class StandardValidator extends Validator {
     propertyName: string | null,
     ruleSequence: Rule<any, any>[][],
     sequence: number,
-    results: ValidateResult[]
+    results: ValidateResult[],
+    propertyNameOverride?: string | null
   ): Promise<ValidateResult[]> {
     // are we validating all properties or a single property?
     const validateAllProperties = propertyName === null || propertyName === undefined;
@@ -111,10 +112,10 @@ export class StandardValidator extends Validator {
       // does this rule simply execute other rules, by tag 
       if (rule.tags) {
         for (const tag of rule.tags) {
-          const taggedRules = ValidationRules.taggedRules(ruleSequence, tag);
+          const taggedRules: Array<Array<Rule<any, any>>> = ValidationRules.taggedRules(ruleSequence, tag);
 
           const promise: Promise<boolean> =
-            this.validateRuleSequence(object, null, taggedRules, 0, results)
+            this.validateRuleSequence(object, null, taggedRules, 0, results, propertyName)
               .then((results: ValidateResult[]) => {
                 const valid = results.length === 0;
                 allValid = allValid && valid;
@@ -125,14 +126,15 @@ export class StandardValidator extends Validator {
         }
       } else {
         // validate.
-        const value = rule.property.name === null ? object : object[rule.property.name];
+        const usePropertyName = propertyNameOverride || rule.property.name;
+        const value = usePropertyName === null ? object : object[usePropertyName];
         let promiseOrBoolean = (rule.condition as any)(value, object);
         if (!(promiseOrBoolean instanceof Promise)) {
           promiseOrBoolean = Promise.resolve(promiseOrBoolean);
         }
         promises.push(promiseOrBoolean.then((valid: boolean) => {
           const message = valid ? null : this.getMessage(rule, object, value);
-          results.push(new ValidateResult(rule, object, rule.property.name, valid, message));
+          results.push(new ValidateResult(rule, object, usePropertyName, valid, message));
           allValid = allValid && valid;
           return valid;
         }));
