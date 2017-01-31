@@ -20,5 +20,6 @@ describe('ValidationMessageProvider', () => {
     expect(messageProvider.getDisplayName('fooBar', undefined)).toBe('Foo Bar');
     expect(messageProvider.getDisplayName('foo bar', undefined)).toBe('Foo bar');
     expect(messageProvider.getDisplayName('foo', 'hello')).toBe('hello');
+    expect(messageProvider.getDisplayName('foo', () => 'hello')).toBe('hello');
   });
 });

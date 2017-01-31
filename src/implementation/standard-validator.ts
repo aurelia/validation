@@ -73,6 +73,8 @@ export class StandardValidator extends Validator {
       $value: value,
       $object: object,
       $config: rule.config,
+      // returns the name of a given property, given just the property name (irrespective of the property's displayName)
+      // split on capital letters, first letter ensured to be capitalized
       $getDisplayName: this.getDisplayName
     };
     return expression.evaluate(
