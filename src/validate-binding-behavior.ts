@@ -5,7 +5,7 @@ import { ValidateBindingBehaviorBase } from './validate-binding-behavior-base';
 
 /**
  * Binding behavior. Indicates the bound property should be validated
- * when the validate trigger specified by the associated controller's 
+ * when the validate trigger specified by the associated controller's
  * validateTrigger property occurs.
  */
 export class ValidateBindingBehavior extends ValidateBindingBehaviorBase {
@@ -56,7 +56,7 @@ export class ValidateOnChangeBindingBehavior extends ValidateBindingBehaviorBase
 
 /**
  * Binding behavior. Indicates the bound property should be validated
- * when the associated element blurs or is changed by the user, causing 
+ * when the associated element blurs or is changed by the user, causing
  * a change to the model.
  */
 export class ValidateOnChangeOrBlurBindingBehavior extends ValidateBindingBehaviorBase {

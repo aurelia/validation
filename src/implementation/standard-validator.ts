@@ -28,7 +28,7 @@ export class StandardValidator extends Validator {
    * Validates the specified property.
    * @param object The object to validate.
    * @param propertyName The name of the property to validate.
-   * @param rules Optional. If unspecified, the rules will be looked up using the metadata 
+   * @param rules Optional. If unspecified, the rules will be looked up using the metadata
    * for the object created by ValidationRules....on(class/object)
    */
   public validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidateResult[]> {
@@ -38,7 +38,7 @@ export class StandardValidator extends Validator {
   /**
    * Validates all rules for specified object and it's properties.
    * @param object The object to validate.
-   * @param rules Optional. If unspecified, the rules will be looked up using the metadata 
+   * @param rules Optional. If unspecified, the rules will be looked up using the metadata
    * for the object created by ValidationRules....on(class/object)
    */
   public validateObject(object: any, rules?: any): Promise<ValidateResult[]> {

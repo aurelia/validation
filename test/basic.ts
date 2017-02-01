@@ -41,7 +41,7 @@ describe('end to end', () => {
       .then(() => blur(firstName))
       // confirm there's an error.
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
-      // make a model change to the firstName field. 
+      // make a model change to the firstName field.
       // this should reset the errors for the firstName field.
       .then(() => viewModel.firstName = 'test')
       // confirm the errors were reset.
@@ -73,12 +73,12 @@ describe('end to end', () => {
         const renderInstruction = calls.argsFor(calls.count() - 1)[0];
         expect(renderInstruction.render[0].elements[0]).toBe(number2);
       })
-      // make a model change to the number1 field. 
+      // make a model change to the number1 field.
       // this should reset the errors for the number1 field.
       .then(() => viewModel.number1 = 1)
       // confirm the error was reset.
       .then(() => expect(viewModel.controller.errors.length).toBe(2))
-      // make a model change to the number2 field. 
+      // make a model change to the number2 field.
       // this should reset the errors for the number2 field.
       .then(() => viewModel.number2 = 2)
       // confirm the error was reset.
@@ -166,7 +166,7 @@ describe('end to end', () => {
       .then(() => blur(firstName))
       // confirm there's an error.
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
-      // make a model change to the firstName field. 
+      // make a model change to the firstName field.
       // this should reset the errors for the firstName field.
       .then(() => viewModel.firstName = 'test')
       // confirm the errors were reset.

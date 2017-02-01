@@ -160,7 +160,7 @@ export class ValidationController {
 
   /**
    * Validates and renders results.
-   * @param instruction Optional. Instructions on what to validate. If undefined, all 
+   * @param instruction Optional. Instructions on what to validate. If undefined, all
    * objects and bindings will be validated.
    */
   public validate(instruction?: ValidateInstruction): Promise<ControllerValidateResult> {
@@ -288,7 +288,7 @@ export class ValidationController {
           this.errors.splice(this.errors.indexOf(oldResult), 1);
         }
       } else {
-        // there is a corresponding new result...        
+        // there is a corresponding new result...
         const newResult = newResults.splice(newResultIndex, 1)[0];
 
         // get the elements that are associated with the new result.
@@ -336,7 +336,7 @@ export class ValidationController {
       return;
     }
     const propertyInfo = getPropertyInfo(binding.sourceExpression as Expression, binding.source);
-    let rules = undefined;
+    let rules;
     const registeredBinding = this.bindings.get(binding);
     if (registeredBinding) {
       rules = registeredBinding.rules;
