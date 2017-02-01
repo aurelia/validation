@@ -34,7 +34,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
   /**
    * Validate subsequent rules after previously declared rules have
    * been validated successfully. Use to postpone validation of costly
-   * rules until less expensive rules pass validation. 
+   * rules until less expensive rules pass validation.
    */
   public then() {
     this.fluentRules.sequence++;
@@ -70,7 +70,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
   }
 
   /**
-   * Tags the rule instance, enabling the rule to be found easily 
+   * Tags the rule instance, enabling the rule to be found easily
    * using ValidationRules.taggedRules(rules, tag)
    */
   public tag(tag: string) {
@@ -116,7 +116,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies an ad-hoc rule function to the ensured property or object.
    * @param condition The function to validate the rule.
    * Will be called with two arguments, the property value and the object.
-   * Should return a boolean or a Promise that resolves to a boolean. 
+   * Should return a boolean or a Promise that resolves to a boolean.
    */
   public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: Object) {
     return this.fluentRules.satisfies(condition, config);
@@ -132,7 +132,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
   }
 
   /**
-   * Applies the "required" rule to the property. 
+   * Applies the "required" rule to the property.
    * The value cannot be null, undefined or whitespace.
    */
   public required() {
@@ -233,7 +233,7 @@ export class FluentRules<TObject, TValue> {
    * Applies an ad-hoc rule function to the ensured property or object.
    * @param condition The function to validate the rule.
    * Will be called with two arguments, the property value and the object.
-   * Should return a boolean or a Promise that resolves to a boolean. 
+   * Should return a boolean or a Promise that resolves to a boolean.
    */
   public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: Object) {
     return new FluentRuleCustomizer<TObject, TValue>(
@@ -261,7 +261,7 @@ export class FluentRules<TObject, TValue> {
   }
 
   /**
-   * Applies the "required" rule to the property. 
+   * Applies the "required" rule to the property.
    * The value cannot be null, undefined or whitespace.
    */
   public required() {
@@ -361,7 +361,7 @@ export class FluentEnsure<TObject> {
 
   /**
    * Target a property with validation rules.
-   * @param property The property to target. Can be the property name or a property accessor 
+   * @param property The property to target. Can be the property name or a property accessor
    * function.
    */
   public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>) {
@@ -435,7 +435,7 @@ export class ValidationRules {
    * @param name The name of the custom rule. Also serves as the message key.
    * @param condition The rule function.
    * @param message The message expression
-   * @param argsToConfig A function that maps the rule's arguments to a "config" 
+   * @param argsToConfig A function that maps the rule's arguments to a "config"
    * object that can be used when evaluating the message expression.
    */
   public static customRule(

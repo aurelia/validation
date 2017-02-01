@@ -58,7 +58,7 @@ export function configure(
   callback?: (config: AureliaValidationConfiguration) => void
 ) {
   // the fluent rule definition API needs the parser to translate messages
-  // to interpolation expressions. 
+  // to interpolation expressions.
   const parser = frameworkConfig.container.get(ValidationParser);
   ValidationRules.initialize(parser);
 

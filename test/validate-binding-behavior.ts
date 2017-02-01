@@ -61,7 +61,7 @@ describe('ValidateBindingBehavior', () => {
       .then(() => expect(viewModel.controller.errors.length).toBe(2))
       .then(() => change(viewModel.changeOrBlurInput, 'test2'))
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
-      .then(() => change(viewModel.changeInput, 'adsf')) // clear the one error 
+      .then(() => change(viewModel.changeInput, 'adsf')) // clear the one error
       .then(() => expect(viewModel.controller.errors.length).toBe(0))
 
       // validateManually binding behavior

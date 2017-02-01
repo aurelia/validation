@@ -11,7 +11,7 @@ describe('ValidationErrorsCustomAttribute', () => {
 
   let component: ComponentTester;
   let viewModel: any;
-  const parentViewModel = { form: '', controller: () => { return null; }, theController: null };
+  const parentViewModel = { form: '', controller: () => null, theController: null };
   let container: Container;
 
   const stageTest = (validationErrors: string, supplyControllerToViewModel?: boolean) => {

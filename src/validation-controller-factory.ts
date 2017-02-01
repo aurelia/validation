@@ -23,7 +23,7 @@ export class ValidationControllerFactory {
   }
 
   /**
-   * Creates a new controller and registers it in the current element's container so that it's 
+   * Creates a new controller and registers it in the current element's container so that it's
    * available to the validate binding behavior and renderers.
    */
   public createForCurrentScope(validator?: Validator) {

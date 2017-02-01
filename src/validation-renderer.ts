@@ -20,7 +20,7 @@ export interface ResultInstruction {
  */
 export interface RenderInstruction {
   /**
-   * The "kind" of render instruction. Either 'validate' or 'reset'. 
+   * The "kind" of render instruction. Either 'validate' or 'reset'.
    */
   kind: 'validate' | 'reset';
 
