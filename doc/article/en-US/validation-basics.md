@@ -825,7 +825,7 @@ Here's how to override the methods, in your main.js, during application startup:
       ...
       ...
 
-      const i18n = aurelia.container.get(i18n);
+      const i18n = aurelia.container.get(I18N);
       ValidationMessageProvider.prototype.getMessage = function(key) {
         const translation = i18n.tr(`errorMessages.${key}`);
         return this.parser.parseMessage(translation);
