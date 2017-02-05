@@ -35,6 +35,14 @@ describe('Validator', () => {
     expect(parse('(x) => x.name')).toEqual(new AccessScope('name', 0));
   });
 
+  it('parses generated function bodies', () => {
+    const parse: (fn: string) => Expression = (parser as any).getAccessorExpression.bind(parser);
+    expect(parse('function(a){__gen$field.f[\'10\']++;__aGen$field.g[\'10\']++;return a.b;}'))
+      .toEqual(new AccessScope('b', 0));
+    expect(parse('function(a){"use strict";_gen$field.f[\'10\']++;_aGen$field.g[\'10\']++;return a.b;}'))
+      .toEqual(new AccessScope('b', 0));
+  });
+
   it('parses properties', () => {
     expect(parser.parseProperty('firstName')).toEqual({ name: 'firstName', displayName: null });
     expect(parser.parseProperty('3_letter_id')).toEqual({ name: '3_letter_id', displayName: null });
