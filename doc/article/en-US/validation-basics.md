@@ -481,7 +481,7 @@ To build more sophisticated error UIs you might need a list of errors specific t
                value.bind="firstName & validate">
         <span class="help-block" repeat.for="errorInfo of firstNameErrors">
           ${errorInfo.error.message}
-        <span>
+        </span>
       </div>
 
       <div class="form-group" validation-errors.bind="lastNameErrors"
@@ -492,7 +492,7 @@ To build more sophisticated error UIs you might need a list of errors specific t
               value.bind="lastName & validate">
         <span class="help-block" repeat.for="errorInfo of lastNameErrors">
           ${errorInfo.error.message}
-        <span>
+        </span>
       </div>
     </form>
   </source-code>
