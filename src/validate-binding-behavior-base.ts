@@ -29,7 +29,8 @@ export abstract class ValidateBindingBehaviorBase {
     for (let i = 0, ii = view.controllers.length; i < ii; i++) {
       const controller: any = view.controllers[i];
       if (controller.viewModel === target) {
-        const element = controller.container.get(DOM.Element);
+        let container = controller.container || controller.view.container || controller.viewModel.container;
+        const element = container.get(DOM.Element);
         if (element) {
           return element;
         }
