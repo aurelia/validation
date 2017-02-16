@@ -329,8 +329,8 @@ Use the `manual` trigger to indicate the controller should not automatically val
     export class RegistrationForm {
       controller = null;
 
-      constructor(controller) {
-        this.controller = ValidationControllerFactory.createForCurrentScope();
+      constructor(validationControllerFactory) {
+        this.controller = validationControllerFactory.createForCurrentScope();
 
         this.controller.validateTrigger = validateTrigger.manual;
       }
