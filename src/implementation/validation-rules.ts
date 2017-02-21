@@ -389,6 +389,7 @@ export class FluentEnsure<TObject> {
 
   /**
    * Adds a rule definition to the sequenced ruleset.
+   * @internal
    */
   public _addRule(rule: Rule<TObject, any>) {
     while (this.rules.length < rule.sequence + 1) {
