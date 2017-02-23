@@ -22,6 +22,7 @@ export * from './implementation/validation-rules';
 
 // Configuration
 
+import { PLATFORM } from 'aurelia-pal';
 import { Container } from 'aurelia-dependency-injection';
 import { Validator } from './validator';
 import { StandardValidator } from './implementation/standard-validator';
@@ -72,8 +73,8 @@ export function configure(
   // globalize the behaviors.
   if (frameworkConfig.globalResources) {
     frameworkConfig.globalResources(
-      './validate-binding-behavior',
-      './validation-errors-custom-attribute',
-      './validation-renderer-custom-attribute');
+      PLATFORM.moduleName('./validate-binding-behavior'),
+      PLATFORM.moduleName('./validation-errors-custom-attribute'),
+      PLATFORM.moduleName('./validation-renderer-custom-attribute'));
   }
 }
