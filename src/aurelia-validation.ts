@@ -20,11 +20,6 @@ export * from './implementation/validation-messages';
 export * from './implementation/validation-parser';
 export * from './implementation/validation-rules';
 
-/* tslint:disable:variable-name */
-/** @internal */
-export const __esModule = true;
-/* tslint:enable:variable-name */
-
 // Configuration
 
 import { Container } from 'aurelia-dependency-injection';

@@ -39,7 +39,7 @@
     "prebuild:system": "cross-env rimraf dist/system",
     "build:system": "cross-env tsc --project tsconfig.build.json --outDir dist/system --module system",
     "postbuild:system": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/system",
-    "prebuild": "cross-env rimraf dist",
+    "prebuild": "cross-env rimraf dist && rimraf node_modules/@types/!node",
     "build": "concurrently \"npm run build:amd\" \"npm run build:commonjs\" \"npm run build:es2015\" \"npm run build:native-modules\" \"npm run build:system\"",
     "predoc": "cross-env rimraf doc/api.json && rimraf dist/doc-temp && tsc --project tsconfig.build.json --outFile dist/doc-temp/aurelia-validation.js && node doc/shape-defs && copyfiles tsconfig.json dist/doc-temp",
     "doc": "cross-env typedoc --json doc/api.json --excludeExternals --includeDeclarations --mode modules --target ES6 --name aurelia-validation-docs dist/doc-temp/",
@@ -81,9 +81,11 @@
     "aurelia-logging": "^1.3.0",
     "aurelia-pal": "^1.3.0",
     "aurelia-task-queue": "^1.2.0",
-    "aurelia-templating": "^1.2.0"
+    "aurelia-templating": "^1.2.0",
+    "typedoc": "^0.5.7"
   },
   "devDependencies": {
+    "@types/node": "^7.0.5",
     "aurelia-bootstrapper": "^2.0.1",
     "aurelia-pal-browser": "^1.1.0",
     "aurelia-pal-nodejs": "^1.0.0-beta.1.0.0",
@@ -104,7 +106,7 @@
     "rimraf": "^2.6.0",
     "tslint": "^4.4.2",
     "typedoc": "^0.5.7",
-    "typescript": "^2.1.6"
+    "typescript": "^2.2.1"
   },
   "aurelia": {
     "build": {
