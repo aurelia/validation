@@ -10,7 +10,7 @@ import { validateTrigger } from './validate-trigger';
 export abstract class ValidateBindingBehaviorBase {
   constructor(private taskQueue: TaskQueue) { }
 
-  protected abstract getValidateTrigger(controller: ValidationController): number;
+  protected abstract getValidateTrigger(controller: ValidationController): validateTrigger;
 
   /**
    * Gets the DOM element associated with the data-binding. Most of the time it's
