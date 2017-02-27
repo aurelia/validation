@@ -1,6 +1,7 @@
 // Exports
 
 export * from './controller-validate-result';
+export * from './get-target-dom-element';
 export * from './property-info';
 export * from './validate-binding-behavior';
 export * from './validate-instruction';

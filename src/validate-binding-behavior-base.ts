@@ -1,8 +1,8 @@
 import { Optional } from 'aurelia-dependency-injection';
-import { DOM } from 'aurelia-pal';
 import { TaskQueue } from 'aurelia-task-queue';
 import { ValidationController } from './validation-controller';
 import { validateTrigger } from './validate-trigger';
+import { getTargetDOMElement } from './get-target-dom-element';
 
 /**
  * Binding behavior. Indicates the bound property should be validated.
@@ -12,36 +12,9 @@ export abstract class ValidateBindingBehaviorBase {
 
   protected abstract getValidateTrigger(controller: ValidationController): validateTrigger;
 
-  /**
-   * Gets the DOM element associated with the data-binding. Most of the time it's
-   * the binding.target but sometimes binding.target is an aurelia custom element,
-   * or custom attribute which is a javascript "class" instance, so we need to use
-   * the controller's container to retrieve the actual DOM element.
-   */
-  public getTarget(binding: any, view: any) {
-    const target = binding.target;
-    // DOM element
-    if (target instanceof Element) {
-      return target;
-    }
-    // custom element or custom attribute
-    // tslint:disable-next-line:prefer-const
-    for (let i = 0, ii = view.controllers.length; i < ii; i++) {
-      const controller: any = view.controllers[i];
-      if (controller.viewModel === target) {
-        const element = controller.container.get(DOM.Element);
-        if (element) {
-          return element;
-        }
-        throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
-      }
-    }
-    throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
-  }
-
   public bind(binding: any, source: any, rulesOrController?: ValidationController | any, rules?: any) {
     // identify the target element.
-    const target = this.getTarget(binding, source);
+    const target = getTargetDOMElement(binding, source);
 
     // locate the controller.
     let controller: ValidationController;
