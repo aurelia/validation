@@ -1,5 +1,6 @@
 define(["require", "exports", "./util", "./rules", "./validation-messages"], function (require, exports, util_1, rules_1, validation_messages_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * Part of the fluent rule API. Enables customizing property rules.
      */
@@ -345,6 +346,7 @@ define(["require", "exports", "./util", "./rules", "./validation-messages"], fun
         };
         /**
          * Adds a rule definition to the sequenced ruleset.
+         * @internal
          */
         FluentEnsure.prototype._addRule = function (rule) {
             while (this.rules.length < rule.sequence + 1) {
@@ -356,7 +358,7 @@ define(["require", "exports", "./util", "./rules", "./validation-messages"], fun
             if (this.parser) {
                 return;
             }
-            throw new Error("Did you forget to add \".plugin('aurelia-validation)\" to your main.js?");
+            throw new Error("Did you forget to add \".plugin('aurelia-validation')\" to your main.js?");
         };
         return FluentEnsure;
     }());

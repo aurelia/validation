@@ -1,5 +1,6 @@
 import { Rule, RuleProperty } from './rule';
 import { ValidationParser, PropertyAccessor } from './validation-parser';
+import { ValidationDisplayNameAccessor } from './rule';
 /**
  * Part of the fluent rule API. Enables customizing property rules.
  */
@@ -8,7 +9,7 @@ export declare class FluentRuleCustomizer<TObject, TValue> {
     private fluentRules;
     private parser;
     private rule;
-    constructor(property: RuleProperty, condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config: Object, fluentEnsure: FluentEnsure<TObject>, fluentRules: FluentRules<TObject, TValue>, parser: ValidationParser);
+    constructor(property: RuleProperty, condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config: Object | undefined, fluentEnsure: FluentEnsure<TObject>, fluentRules: FluentRules<TObject, TValue>, parser: ValidationParser);
     /**
      * Validate subsequent rules after previously declared rules have
      * been validated successfully. Use to postpone validation of costly
@@ -38,9 +39,7 @@ export declare class FluentRuleCustomizer<TObject, TValue> {
      * Target a property with validation rules.
      * @param property The property to target. Can be the property name or a property accessor function.
      */
-    ensure<TValue2>(subject: string | {
-        (model: TObject): TValue2;
-    }): FluentRules<TObject, TValue2>;
+    ensure<TValue2>(subject: string | ((model: TObject) => TValue2)): FluentRules<TObject, TValue2>;
     /**
      * Targets an object with validation rules.
      */
@@ -66,7 +65,7 @@ export declare class FluentRuleCustomizer<TObject, TValue> {
      * @param name The name of the custom or standard rule.
      * @param args The rule's arguments.
      */
-    satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue>;
+    satisfiesRule(name: string, ...args: any[]): any;
     /**
      * Applies the "required" rule to the property.
      * The value cannot be null, undefined or whitespace.
@@ -132,7 +131,7 @@ export declare class FluentRules<TObject, TValue> {
     /**
      * Sets the display name of the ensured property.
      */
-    displayName(name: string): this;
+    displayName(name: string | ValidationDisplayNameAccessor | null): this;
     /**
      * Applies an ad-hoc rule function to the ensured property or object.
      * @param condition The function to validate the rule.
@@ -145,7 +144,7 @@ export declare class FluentRules<TObject, TValue> {
      * @param name The name of the custom or standard rule.
      * @param args The rule's arguments.
      */
-    satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue>;
+    satisfiesRule(name: string, ...args: any[]): any;
     /**
      * Applies the "required" rule to the property.
      * The value cannot be null, undefined or whitespace.
@@ -213,10 +212,6 @@ export declare class FluentEnsure<TObject> {
      * @param target A class or object.
      */
     on(target: any): this;
-    /**
-     * Adds a rule definition to the sequenced ruleset.
-     */
-    _addRule(rule: Rule<TObject, any>): void;
     private assertInitialized();
 }
 /**

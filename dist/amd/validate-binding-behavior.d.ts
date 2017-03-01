@@ -1,5 +1,6 @@
 import { TaskQueue } from 'aurelia-task-queue';
 import { ValidationController } from './validation-controller';
+import { validateTrigger } from './validate-trigger';
 import { ValidateBindingBehaviorBase } from './validate-binding-behavior-base';
 /**
  * Binding behavior. Indicates the bound property should be validated
@@ -8,7 +9,7 @@ import { ValidateBindingBehaviorBase } from './validate-binding-behavior-base';
  */
 export declare class ValidateBindingBehavior extends ValidateBindingBehaviorBase {
     static inject: typeof TaskQueue[];
-    getValidateTrigger(controller: ValidationController): number;
+    getValidateTrigger(controller: ValidationController): validateTrigger;
 }
 /**
  * Binding behavior. Indicates the bound property will be validated
@@ -17,7 +18,7 @@ export declare class ValidateBindingBehavior extends ValidateBindingBehaviorBase
  */
 export declare class ValidateManuallyBindingBehavior extends ValidateBindingBehaviorBase {
     static inject: typeof TaskQueue[];
-    getValidateTrigger(): number;
+    getValidateTrigger(): validateTrigger;
 }
 /**
  * Binding behavior. Indicates the bound property should be validated
@@ -25,7 +26,7 @@ export declare class ValidateManuallyBindingBehavior extends ValidateBindingBeha
  */
 export declare class ValidateOnBlurBindingBehavior extends ValidateBindingBehaviorBase {
     static inject: typeof TaskQueue[];
-    getValidateTrigger(): number;
+    getValidateTrigger(): validateTrigger;
 }
 /**
  * Binding behavior. Indicates the bound property should be validated
@@ -34,7 +35,7 @@ export declare class ValidateOnBlurBindingBehavior extends ValidateBindingBehavi
  */
 export declare class ValidateOnChangeBindingBehavior extends ValidateBindingBehaviorBase {
     static inject: typeof TaskQueue[];
-    getValidateTrigger(): number;
+    getValidateTrigger(): validateTrigger;
 }
 /**
  * Binding behavior. Indicates the bound property should be validated
@@ -43,5 +44,5 @@ export declare class ValidateOnChangeBindingBehavior extends ValidateBindingBeha
  */
 export declare class ValidateOnChangeOrBlurBindingBehavior extends ValidateBindingBehaviorBase {
     static inject: typeof TaskQueue[];
-    getValidateTrigger(): number;
+    getValidateTrigger(): validateTrigger;
 }

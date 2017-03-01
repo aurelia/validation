@@ -147,6 +147,7 @@ var ValidationController = (function () {
         // Get a function that will process the validation instruction.
         var execute;
         if (instruction) {
+            // tslint:disable-next-line:prefer-const
             var object_2 = instruction.object, propertyName_2 = instruction.propertyName, rules_2 = instruction.rules;
             // if rules were not specified, check the object map.
             rules_2 = rules_2 || this.objects.get(object_2);
@@ -257,7 +258,7 @@ var ValidationController = (function () {
                 }
             }
             else {
-                // there is a corresponding new result...        
+                // there is a corresponding new result...
                 var newResult = newResults.splice(newResultIndex, 1)[0];
                 // get the elements that are associated with the new result.
                 var elements_1 = this_1.getAssociatedElements(newResult);
@@ -309,7 +310,7 @@ var ValidationController = (function () {
             return;
         }
         var propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
-        var rules = undefined;
+        var rules;
         var registeredBinding = this.bindings.get(binding);
         if (registeredBinding) {
             rules = registeredBinding.rules;

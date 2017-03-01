@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var validation_controller_1 = require("./validation-controller");
 var validator_1 = require("./validator");
 /**

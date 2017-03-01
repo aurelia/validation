@@ -45,7 +45,7 @@ var ValidationMessageProvider = (function () {
      */
     ValidationMessageProvider.prototype.getDisplayName = function (propertyName, displayName) {
         if (displayName !== null && displayName !== undefined) {
-            return displayName;
+            return (displayName instanceof Function) ? displayName() : displayName;
         }
         // split on upper-case letters.
         var words = propertyName.split(/(?=[A-Z])/).join(' ');

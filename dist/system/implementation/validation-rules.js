@@ -360,6 +360,7 @@ System.register(["./util", "./rules", "./validation-messages"], function (export
                 };
                 /**
                  * Adds a rule definition to the sequenced ruleset.
+                 * @internal
                  */
                 FluentEnsure.prototype._addRule = function (rule) {
                     while (this.rules.length < rule.sequence + 1) {
@@ -371,7 +372,7 @@ System.register(["./util", "./rules", "./validation-messages"], function (export
                     if (this.parser) {
                         return;
                     }
-                    throw new Error("Did you forget to add \".plugin('aurelia-validation)\" to your main.js?");
+                    throw new Error("Did you forget to add \".plugin('aurelia-validation')\" to your main.js?");
                 };
                 return FluentEnsure;
             }());

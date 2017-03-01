@@ -322,6 +322,7 @@ export class FluentEnsure {
     }
     /**
      * Adds a rule definition to the sequenced ruleset.
+     * @internal
      */
     _addRule(rule) {
         while (this.rules.length < rule.sequence + 1) {
@@ -333,7 +334,7 @@ export class FluentEnsure {
         if (this.parser) {
             return;
         }
-        throw new Error(`Did you forget to add ".plugin('aurelia-validation)" to your main.js?`);
+        throw new Error(`Did you forget to add ".plugin('aurelia-validation')" to your main.js?`);
     }
 }
 /**

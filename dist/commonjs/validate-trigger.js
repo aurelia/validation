@@ -1,24 +1,27 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Validation triggers.
  */
-exports.validateTrigger = {
+var validateTrigger;
+(function (validateTrigger) {
     /**
      * Manual validation.  Use the controller's `validate()` and  `reset()` methods
      * to validate all bindings.
      */
-    manual: 0,
+    validateTrigger[validateTrigger["manual"] = 0] = "manual";
     /**
      * Validate the binding when the binding's target element fires a DOM "blur" event.
      */
-    blur: 1,
+    validateTrigger[validateTrigger["blur"] = 1] = "blur";
     /**
      * Validate the binding when it updates the model due to a change in the view.
      */
-    change: 2,
+    validateTrigger[validateTrigger["change"] = 2] = "change";
     /**
      * Validate the binding when the binding's target element fires a DOM "blur" event and
      * when it updates the model due to a change in the view.
      */
-    changeOrBlur: 3
-};
+    validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
+})(validateTrigger = exports.validateTrigger || (exports.validateTrigger = {}));
+;

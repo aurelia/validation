@@ -1,5 +1,5 @@
 // Exports
-System.register(["./property-info", "./validate-binding-behavior", "./validate-result", "./validate-trigger", "./validation-controller", "./validation-controller-factory", "./validation-errors-custom-attribute", "./validation-renderer-custom-attribute", "./validator", "./implementation/rules", "./implementation/standard-validator", "./implementation/validation-messages", "./implementation/validation-parser", "./implementation/validation-rules"], function (exports_1, context_1) {
+System.register(["./get-target-dom-element", "./property-info", "./validate-binding-behavior", "./validate-result", "./validate-trigger", "./validation-controller", "./validation-controller-factory", "./validation-errors-custom-attribute", "./validation-renderer-custom-attribute", "./validator", "./implementation/rules", "./implementation/standard-validator", "./implementation/validation-messages", "./implementation/validation-parser", "./implementation/validation-rules", "aurelia-pal"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     /**
@@ -7,7 +7,7 @@ System.register(["./property-info", "./validate-binding-behavior", "./validate-r
      */
     function configure(frameworkConfig, callback) {
         // the fluent rule definition API needs the parser to translate messages
-        // to interpolation expressions. 
+        // to interpolation expressions.
         var parser = frameworkConfig.container.get(validation_parser_1.ValidationParser);
         validation_rules_1.ValidationRules.initialize(parser);
         // configure...
@@ -17,10 +17,12 @@ System.register(["./property-info", "./validate-binding-behavior", "./validate-r
         }
         config.apply(frameworkConfig.container);
         // globalize the behaviors.
-        frameworkConfig.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
+        if (frameworkConfig.globalResources) {
+            frameworkConfig.globalResources(aurelia_pal_1.PLATFORM.moduleName('./validate-binding-behavior'), aurelia_pal_1.PLATFORM.moduleName('./validation-errors-custom-attribute'), aurelia_pal_1.PLATFORM.moduleName('./validation-renderer-custom-attribute'));
+        }
     }
     exports_1("configure", configure);
-    var validator_1, standard_validator_1, validation_parser_1, validation_rules_1, AureliaValidationConfiguration;
+    var aurelia_pal_1, validator_1, standard_validator_1, validation_parser_1, validation_rules_1, AureliaValidationConfiguration;
     var exportedNames_1 = {
         "AureliaValidationConfiguration": true,
         "configure": true
@@ -28,13 +30,15 @@ System.register(["./property-info", "./validate-binding-behavior", "./validate-r
     function exportStar_1(m) {
         var exports = {};
         for (var n in m) {
-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n))
-                exports[n] = m[n];
+            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
         exports_1(exports);
     }
     return {
         setters: [
+            function (get_target_dom_element_1_1) {
+                exportStar_1(get_target_dom_element_1_1);
+            },
             function (property_info_1_1) {
                 exportStar_1(property_info_1_1);
             },
@@ -80,6 +84,9 @@ System.register(["./property-info", "./validate-binding-behavior", "./validate-r
             function (validation_rules_2_1) {
                 exportStar_1(validation_rules_2_1);
                 validation_rules_1 = validation_rules_2_1;
+            },
+            function (aurelia_pal_1_1) {
+                aurelia_pal_1 = aurelia_pal_1_1;
             }
         ],
         execute: function () {// Exports

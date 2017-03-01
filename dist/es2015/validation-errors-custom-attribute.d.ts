@@ -13,11 +13,10 @@ export declare class ValidationErrorsCustomAttribute implements ValidationRender
         new (): Element;
         prototype: Element;
     } | Lazy)[];
-    value: RenderedError[];
+    controller: ValidationController | null;
     errors: RenderedError[];
-    constructor(boundaryElement: Element, controllerAccessor: {
-        (): ValidationController;
-    });
+    private errorsInternal;
+    constructor(boundaryElement: Element, controllerAccessor: () => ValidationController);
     sort(): void;
     interestingElements(elements: Element[]): Element[];
     render(instruction: RenderInstruction): void;

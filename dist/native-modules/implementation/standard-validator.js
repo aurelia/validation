@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { ViewResources } from 'aurelia-templating';
 import { Validator } from '../validator';
 import { ValidateResult } from '../validate-result';
@@ -56,6 +61,7 @@ var StandardValidator = (function (_super) {
     };
     StandardValidator.prototype.getMessage = function (rule, object, value) {
         var expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
+        // tslint:disable-next-line:prefer-const
         var _a = rule.property, propertyName = _a.name, displayName = _a.displayName;
         if (propertyName !== null) {
             displayName = this.messageProvider.getDisplayName(propertyName, displayName);
@@ -66,6 +72,8 @@ var StandardValidator = (function (_super) {
             $value: value,
             $object: object,
             $config: rule.config,
+            // returns the name of a given property, given just the property name (irrespective of the property's displayName)
+            // split on capital letters, first letter ensured to be capitalized
             $getDisplayName: this.getDisplayName
         };
         return expression.evaluate({ bindingContext: object, overrideContext: overrideContext }, this.lookupFunctions);

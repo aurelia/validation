@@ -1,5 +1,6 @@
 define(["require", "exports", "./validation-controller"], function (require, exports, validation_controller_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var ValidationRendererCustomAttribute = (function () {
         function ValidationRendererCustomAttribute() {
         }

@@ -1,7 +1,7 @@
 import { Optional } from 'aurelia-dependency-injection';
-import { DOM } from 'aurelia-pal';
 import { ValidationController } from './validation-controller';
 import { validateTrigger } from './validate-trigger';
+import { getTargetDOMElement } from './get-target-dom-element';
 /**
  * Binding behavior. Indicates the bound property should be validated.
  */
@@ -9,34 +9,9 @@ export class ValidateBindingBehaviorBase {
     constructor(taskQueue) {
         this.taskQueue = taskQueue;
     }
-    /**
-     * Gets the DOM element associated with the data-binding. Most of the time it's
-     * the binding.target but sometimes binding.target is an aurelia custom element,
-     * or custom attribute which is a javascript "class" instance, so we need to use
-     * the controller's container to retrieve the actual DOM element.
-     */
-    getTarget(binding, view) {
-        const target = binding.target;
-        // DOM element
-        if (target instanceof Element) {
-            return target;
-        }
-        // custom element or custom attribute
-        for (let i = 0, ii = view.controllers.length; i < ii; i++) {
-            let controller = view.controllers[i];
-            if (controller.viewModel === target) {
-                const element = controller.container.get(DOM.Element);
-                if (element) {
-                    return element;
-                }
-                throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
-            }
-        }
-        throw new Error(`Unable to locate target element for "${binding.sourceExpression}".`);
-    }
     bind(binding, source, rulesOrController, rules) {
         // identify the target element.
-        const target = this.getTarget(binding, source);
+        const target = getTargetDOMElement(binding, source);
         // locate the controller.
         let controller;
         if (rulesOrController instanceof ValidationController) {
@@ -52,20 +27,17 @@ export class ValidateBindingBehaviorBase {
         controller.registerBinding(binding, target, rules);
         binding.validationController = controller;
         const trigger = this.getValidateTrigger(controller);
-        /* tslint:disable:no-bitwise */
+        // tslint:disable-next-line:no-bitwise
         if (trigger & validateTrigger.change) {
-            /* tslint:enable:no-bitwise */
             binding.standardUpdateSource = binding.updateSource;
-            /* tslint:disable:only-arrow-functions */
+            // tslint:disable-next-line:only-arrow-functions
             binding.updateSource = function (value) {
-                /* tslint:enable:only-arrow-functions */
                 this.standardUpdateSource(value);
                 this.validationController.validateBinding(this);
             };
         }
-        /* tslint:disable:no-bitwise */
+        // tslint:disable-next-line:no-bitwise
         if (trigger & validateTrigger.blur) {
-            /* tslint:enable:no-bitwise */
             binding.validateBlurHandler = () => {
                 this.taskQueue.queueMicroTask(() => controller.validateBinding(binding));
             };
@@ -74,9 +46,8 @@ export class ValidateBindingBehaviorBase {
         }
         if (trigger !== validateTrigger.manual) {
             binding.standardUpdateTarget = binding.updateTarget;
-            /* tslint:disable:only-arrow-functions */
+            // tslint:disable-next-line:only-arrow-functions
             binding.updateTarget = function (value) {
-                /* tslint:enable:only-arrow-functions */
                 this.standardUpdateTarget(value);
                 this.validationController.resetBinding(this);
             };

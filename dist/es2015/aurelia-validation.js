@@ -1,4 +1,5 @@
 // Exports
+export * from './get-target-dom-element';
 export * from './property-info';
 export * from './validate-binding-behavior';
 export * from './validate-result';
@@ -13,6 +14,8 @@ export * from './implementation/standard-validator';
 export * from './implementation/validation-messages';
 export * from './implementation/validation-parser';
 export * from './implementation/validation-rules';
+// Configuration
+import { PLATFORM } from 'aurelia-pal';
 import { Validator } from './validator';
 import { StandardValidator } from './implementation/standard-validator';
 import { ValidationParser } from './implementation/validation-parser';
@@ -43,7 +46,7 @@ export class AureliaValidationConfiguration {
  */
 export function configure(frameworkConfig, callback) {
     // the fluent rule definition API needs the parser to translate messages
-    // to interpolation expressions. 
+    // to interpolation expressions.
     const parser = frameworkConfig.container.get(ValidationParser);
     ValidationRules.initialize(parser);
     // configure...
@@ -53,5 +56,7 @@ export function configure(frameworkConfig, callback) {
     }
     config.apply(frameworkConfig.container);
     // globalize the behaviors.
-    frameworkConfig.globalResources('./validate-binding-behavior', './validation-errors-custom-attribute', './validation-renderer-custom-attribute');
+    if (frameworkConfig.globalResources) {
+        frameworkConfig.globalResources(PLATFORM.moduleName('./validate-binding-behavior'), PLATFORM.moduleName('./validation-errors-custom-attribute'), PLATFORM.moduleName('./validation-renderer-custom-attribute'));
+    }
 }

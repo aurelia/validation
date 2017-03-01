@@ -142,6 +142,7 @@ export class ValidationController {
         // Get a function that will process the validation instruction.
         let execute;
         if (instruction) {
+            // tslint:disable-next-line:prefer-const
             let { object, propertyName, rules } = instruction;
             // if rules were not specified, check the object map.
             rules = rules || this.objects.get(object);
@@ -159,10 +160,10 @@ export class ValidationController {
             // validate all objects and bindings.
             execute = () => {
                 const promises = [];
-                for (let [object, rules] of Array.from(this.objects)) {
+                for (const [object, rules] of Array.from(this.objects)) {
                     promises.push(this.validator.validateObject(object, rules));
                 }
-                for (let [binding, { rules }] of Array.from(this.bindings)) {
+                for (const [binding, { rules }] of Array.from(this.bindings)) {
                     const propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
                     if (!propertyInfo || this.objects.has(propertyInfo.object)) {
                         continue;
@@ -174,7 +175,7 @@ export class ValidationController {
         }
         // Wait for any existing validation to finish, execute the instruction, render the results.
         this.validating = true;
-        let returnPromise = this.finishValidating
+        const returnPromise = this.finishValidating
             .then(execute)
             .then((newResults) => {
             const predicate = this.getInstructionPredicate(instruction);
@@ -214,7 +215,7 @@ export class ValidationController {
      */
     getAssociatedElements({ object, propertyName }) {
         const elements = [];
-        for (let [binding, { target }] of Array.from(this.bindings)) {
+        for (const [binding, { target }] of Array.from(this.bindings)) {
             const propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
             if (propertyInfo && propertyInfo.object === object && propertyInfo.propertyName === propertyName) {
                 elements.push(target);
@@ -232,7 +233,7 @@ export class ValidationController {
         // create a shallow copy of newResults so we can mutate it without causing side-effects.
         newResults = newResults.slice(0);
         // create unrender instructions from the old results.
-        for (let oldResult of oldResults) {
+        for (const oldResult of oldResults) {
             // get the elements associated with the old result.
             const elements = this.elements.get(oldResult);
             // remove the old result from the element map.
@@ -249,7 +250,7 @@ export class ValidationController {
                 }
             }
             else {
-                // there is a corresponding new result...        
+                // there is a corresponding new result...
                 const newResult = newResults.splice(newResultIndex, 1)[0];
                 // get the elements that are associated with the new result.
                 const elements = this.getAssociatedElements(newResult);
@@ -271,7 +272,7 @@ export class ValidationController {
             }
         }
         // create render instructions from the remaining new results.
-        for (let result of newResults) {
+        for (const result of newResults) {
             const elements = this.getAssociatedElements(result);
             instruction.render.push({ result, elements });
             this.elements.set(result, elements);
@@ -281,7 +282,7 @@ export class ValidationController {
             }
         }
         // render.
-        for (let renderer of this.renderers) {
+        for (const renderer of this.renderers) {
             renderer.render(instruction);
         }
     }
@@ -292,8 +293,8 @@ export class ValidationController {
         if (!binding.isBound) {
             return;
         }
-        let propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
-        let rules = undefined;
+        const propertyInfo = getPropertyInfo(binding.sourceExpression, binding.source);
+        let rules;
         const registeredBinding = this.bindings.get(binding);
         if (registeredBinding) {
             rules = registeredBinding.rules;

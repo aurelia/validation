@@ -49,6 +49,7 @@ export class StandardValidator extends Validator {
     }
     getMessage(rule, object, value) {
         const expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
+        // tslint:disable-next-line:prefer-const
         let { name: propertyName, displayName } = rule.property;
         if (propertyName !== null) {
             displayName = this.messageProvider.getDisplayName(propertyName, displayName);
@@ -59,6 +60,8 @@ export class StandardValidator extends Validator {
             $value: value,
             $object: object,
             $config: rule.config,
+            // returns the name of a given property, given just the property name (irrespective of the property's displayName)
+            // split on capital letters, first letter ensured to be capitalized
             $getDisplayName: this.getDisplayName
         };
         return expression.evaluate({ bindingContext: object, overrideContext }, this.lookupFunctions);

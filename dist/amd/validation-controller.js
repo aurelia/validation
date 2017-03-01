@@ -1,5 +1,6 @@
 define(["require", "exports", "./validator", "./validate-trigger", "./property-info", "./validate-result"], function (require, exports, validator_1, validate_trigger_1, property_info_1, validate_result_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * Orchestrates validation.
      * Manages a set of bindings, renderers and objects.
@@ -145,6 +146,7 @@ define(["require", "exports", "./validator", "./validate-trigger", "./property-i
             // Get a function that will process the validation instruction.
             var execute;
             if (instruction) {
+                // tslint:disable-next-line:prefer-const
                 var object_2 = instruction.object, propertyName_2 = instruction.propertyName, rules_2 = instruction.rules;
                 // if rules were not specified, check the object map.
                 rules_2 = rules_2 || this.objects.get(object_2);
@@ -255,7 +257,7 @@ define(["require", "exports", "./validator", "./validate-trigger", "./property-i
                     }
                 }
                 else {
-                    // there is a corresponding new result...        
+                    // there is a corresponding new result...
                     var newResult = newResults.splice(newResultIndex, 1)[0];
                     // get the elements that are associated with the new result.
                     var elements_1 = this_1.getAssociatedElements(newResult);
@@ -307,7 +309,7 @@ define(["require", "exports", "./validator", "./validate-trigger", "./property-i
                 return;
             }
             var propertyInfo = property_info_1.getPropertyInfo(binding.sourceExpression, binding.source);
-            var rules = undefined;
+            var rules;
             var registeredBinding = this.bindings.get(binding);
             if (registeredBinding) {
                 rules = registeredBinding.rules;

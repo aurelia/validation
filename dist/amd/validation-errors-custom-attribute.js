@@ -4,22 +4,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "aurelia-binding", "aurelia-dependency-injection", "aurelia-templating", "./validation-controller"], function (require, exports, aurelia_binding_1, aurelia_dependency_injection_1, aurelia_templating_1, validation_controller_1) {
+define(["require", "exports", "aurelia-binding", "aurelia-dependency-injection", "aurelia-templating", "./validation-controller", "aurelia-pal"], function (require, exports, aurelia_binding_1, aurelia_dependency_injection_1, aurelia_templating_1, validation_controller_1, aurelia_pal_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var ValidationErrorsCustomAttribute = (function () {
         function ValidationErrorsCustomAttribute(boundaryElement, controllerAccessor) {
             this.boundaryElement = boundaryElement;
             this.controllerAccessor = controllerAccessor;
+            this.controller = null;
             this.errors = [];
+            this.errorsInternal = [];
         }
         ValidationErrorsCustomAttribute.prototype.sort = function () {
-            this.errors.sort(function (a, b) {
+            this.errorsInternal.sort(function (a, b) {
                 if (a.targets[0] === b.targets[0]) {
                     return 0;
                 }
-                /* tslint:disable:no-bitwise */
+                // tslint:disable-next-line:no-bitwise
                 return a.targets[0].compareDocumentPosition(b.targets[0]) & 2 ? 1 : -1;
-                /* tslint:enable:no-bitwise */
             });
         };
         ValidationErrorsCustomAttribute.prototype.interestingElements = function (elements) {
@@ -28,9 +30,9 @@ define(["require", "exports", "aurelia-binding", "aurelia-dependency-injection",
         };
         ValidationErrorsCustomAttribute.prototype.render = function (instruction) {
             var _loop_1 = function (result) {
-                var index = this_1.errors.findIndex(function (x) { return x.error === result; });
+                var index = this_1.errorsInternal.findIndex(function (x) { return x.error === result; });
                 if (index !== -1) {
-                    this_1.errors.splice(index, 1);
+                    this_1.errorsInternal.splice(index, 1);
                 }
             };
             var this_1 = this;
@@ -45,24 +47,35 @@ define(["require", "exports", "aurelia-binding", "aurelia-dependency-injection",
                 }
                 var targets = this.interestingElements(elements);
                 if (targets.length) {
-                    this.errors.push({ error: result, targets: targets });
+                    this.errorsInternal.push({ error: result, targets: targets });
                 }
             }
             this.sort();
-            this.value = this.errors;
+            this.errors = this.errorsInternal;
         };
         ValidationErrorsCustomAttribute.prototype.bind = function () {
-            this.controllerAccessor().addRenderer(this);
-            this.value = this.errors;
+            if (!this.controller) {
+                this.controller = this.controllerAccessor();
+            }
+            // this will call render() with the side-effect of updating this.errors
+            this.controller.addRenderer(this);
         };
         ValidationErrorsCustomAttribute.prototype.unbind = function () {
-            this.controllerAccessor().removeRenderer(this);
+            if (this.controller) {
+                this.controller.removeRenderer(this);
+            }
         };
         return ValidationErrorsCustomAttribute;
     }());
-    ValidationErrorsCustomAttribute.inject = [Element, aurelia_dependency_injection_1.Lazy.of(validation_controller_1.ValidationController)];
+    ValidationErrorsCustomAttribute.inject = [aurelia_pal_1.DOM.Element, aurelia_dependency_injection_1.Lazy.of(validation_controller_1.ValidationController)];
+    __decorate([
+        aurelia_templating_1.bindable({ defaultBindingMode: aurelia_binding_1.bindingMode.oneWay })
+    ], ValidationErrorsCustomAttribute.prototype, "controller", void 0);
+    __decorate([
+        aurelia_templating_1.bindable({ primaryProperty: true, defaultBindingMode: aurelia_binding_1.bindingMode.twoWay })
+    ], ValidationErrorsCustomAttribute.prototype, "errors", void 0);
     ValidationErrorsCustomAttribute = __decorate([
-        aurelia_templating_1.customAttribute('validation-errors', aurelia_binding_1.bindingMode.twoWay)
+        aurelia_templating_1.customAttribute('validation-errors')
     ], ValidationErrorsCustomAttribute);
     exports.ValidationErrorsCustomAttribute = ValidationErrorsCustomAttribute;
 });

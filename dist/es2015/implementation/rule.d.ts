@@ -1,4 +1,5 @@
 import { Expression } from 'aurelia-binding';
+export declare type ValidationDisplayNameAccessor = () => string;
 /**
  * Information related to a property that is the subject of validation.
  */
@@ -10,7 +11,7 @@ export interface RuleProperty {
     /**
      * The displayName of the property (or object).
      */
-    displayName: string | null;
+    displayName: string | ValidationDisplayNameAccessor | null;
 }
 /**
  * A rule definition. Associations a rule with a property or object.
@@ -19,9 +20,7 @@ export interface Rule<TObject, TValue> {
     property: RuleProperty;
     condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>;
     config: Object;
-    when: {
-        (object: TObject): boolean;
-    } | null;
+    when: ((object: TObject) => boolean) | null;
     messageKey: string;
     message: Expression | null;
     sequence: number;

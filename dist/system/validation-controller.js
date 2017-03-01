@@ -163,6 +163,7 @@ System.register(["./validator", "./validate-trigger", "./property-info", "./vali
                     // Get a function that will process the validation instruction.
                     var execute;
                     if (instruction) {
+                        // tslint:disable-next-line:prefer-const
                         var object_2 = instruction.object, propertyName_2 = instruction.propertyName, rules_2 = instruction.rules;
                         // if rules were not specified, check the object map.
                         rules_2 = rules_2 || this.objects.get(object_2);
@@ -273,7 +274,7 @@ System.register(["./validator", "./validate-trigger", "./property-info", "./vali
                             }
                         }
                         else {
-                            // there is a corresponding new result...        
+                            // there is a corresponding new result...
                             var newResult = newResults.splice(newResultIndex, 1)[0];
                             // get the elements that are associated with the new result.
                             var elements_1 = this_1.getAssociatedElements(newResult);
@@ -325,7 +326,7 @@ System.register(["./validator", "./validate-trigger", "./property-info", "./vali
                         return;
                     }
                     var propertyInfo = property_info_1.getPropertyInfo(binding.sourceExpression, binding.source);
-                    var rules = undefined;
+                    var rules;
                     var registeredBinding = this.bindings.get(binding);
                     if (registeredBinding) {
                         rules = registeredBinding.rules;

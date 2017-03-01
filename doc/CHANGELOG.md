@@ -1,3 +1,23 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/aurelia/validation/compare/1.0.0-beta.1.0.1...v1.0.0) (2017-03-01)
+
+
+### Bug Fixes
+
+* **build:** add __esModule flag ([0f20d7c](https://github.com/aurelia/validation/commit/0f20d7c)), closes [#417](https://github.com/aurelia/validation/issues/417)
+* **package:** delete unnecessary [@types](https://github.com/types) packages ([f9ec842](https://github.com/aurelia/validation/commit/f9ec842))
+* **package:** update to typescript 2.2 ([65759b4](https://github.com/aurelia/validation/commit/65759b4)), closes [#417](https://github.com/aurelia/validation/issues/417)
+* **ValidationParser:** improve function regex ([5e32142](https://github.com/aurelia/validation/commit/5e32142))
+
+
+### Features
+
+* **validation-errors:** enable explicit controller binding ([4fbf24e](https://github.com/aurelia/validation/commit/4fbf24e))
+* **validation-messages:** displayName function ([233fbbc](https://github.com/aurelia/validation/commit/233fbbc))
+* **Validator:** server-side validation ([1b701ab](https://github.com/aurelia/validation/commit/1b701ab)), closes [#398](https://github.com/aurelia/validation/issues/398)
+
+
+
 <a name="1.0.0-beta.1.0.1"></a>
 # [1.0.0-beta.1.0.1](https://github.com/aurelia/validation/compare/1.0.0-beta.1.0.0...v1.0.0-beta.1.0.1) (2016-12-24)
 

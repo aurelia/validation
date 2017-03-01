@@ -1,4 +1,5 @@
 export * from './controller-validate-result';
+export * from './get-target-dom-element';
 export * from './property-info';
 export * from './validate-binding-behavior';
 export * from './validate-instruction';
@@ -39,5 +40,5 @@ export declare class AureliaValidationConfiguration {
  */
 export declare function configure(frameworkConfig: {
     container: Container;
-    globalResources: (...resources: string[]) => any;
+    globalResources?: (...resources: string[]) => any;
 }, callback?: (config: AureliaValidationConfiguration) => void): void;

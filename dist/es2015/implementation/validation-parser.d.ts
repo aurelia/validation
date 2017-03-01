@@ -1,9 +1,7 @@
 import { Parser, Expression, AccessScope, Unparser } from 'aurelia-binding';
 import { BindingLanguage } from 'aurelia-templating';
 import { RuleProperty } from './rule';
-export interface PropertyAccessor<TObject, TValue> {
-    (object: TObject): TValue;
-}
+export declare type PropertyAccessor<TObject, TValue> = (object: TObject) => TValue;
 export declare class ValidationParser {
     private parser;
     private bindinqLanguage;

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var util_1 = require("./util");
 var rules_1 = require("./rules");
 var validation_messages_1 = require("./validation-messages");
@@ -347,6 +348,7 @@ var FluentEnsure = (function () {
     };
     /**
      * Adds a rule definition to the sequenced ruleset.
+     * @internal
      */
     FluentEnsure.prototype._addRule = function (rule) {
         while (this.rules.length < rule.sequence + 1) {
@@ -358,7 +360,7 @@ var FluentEnsure = (function () {
         if (this.parser) {
             return;
         }
-        throw new Error("Did you forget to add \".plugin('aurelia-validation)\" to your main.js?");
+        throw new Error("Did you forget to add \".plugin('aurelia-validation')\" to your main.js?");
     };
     return FluentEnsure;
 }());

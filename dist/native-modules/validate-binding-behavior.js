@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import { TaskQueue } from 'aurelia-task-queue';
 import { validateTrigger } from './validate-trigger';
 import { ValidateBindingBehaviorBase } from './validate-binding-behavior-base';
@@ -14,7 +19,7 @@ import { ValidateBindingBehaviorBase } from './validate-binding-behavior-base';
 var ValidateBindingBehavior = (function (_super) {
     __extends(ValidateBindingBehavior, _super);
     function ValidateBindingBehavior() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     ValidateBindingBehavior.prototype.getValidateTrigger = function (controller) {
         return controller.validateTrigger;
@@ -31,7 +36,7 @@ ValidateBindingBehavior.inject = [TaskQueue];
 var ValidateManuallyBindingBehavior = (function (_super) {
     __extends(ValidateManuallyBindingBehavior, _super);
     function ValidateManuallyBindingBehavior() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     ValidateManuallyBindingBehavior.prototype.getValidateTrigger = function () {
         return validateTrigger.manual;
@@ -47,7 +52,7 @@ ValidateManuallyBindingBehavior.inject = [TaskQueue];
 var ValidateOnBlurBindingBehavior = (function (_super) {
     __extends(ValidateOnBlurBindingBehavior, _super);
     function ValidateOnBlurBindingBehavior() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     ValidateOnBlurBindingBehavior.prototype.getValidateTrigger = function () {
         return validateTrigger.blur;
@@ -64,7 +69,7 @@ ValidateOnBlurBindingBehavior.inject = [TaskQueue];
 var ValidateOnChangeBindingBehavior = (function (_super) {
     __extends(ValidateOnChangeBindingBehavior, _super);
     function ValidateOnChangeBindingBehavior() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     ValidateOnChangeBindingBehavior.prototype.getValidateTrigger = function () {
         return validateTrigger.change;
@@ -81,7 +86,7 @@ ValidateOnChangeBindingBehavior.inject = [TaskQueue];
 var ValidateOnChangeOrBlurBindingBehavior = (function (_super) {
     __extends(ValidateOnChangeOrBlurBindingBehavior, _super);
     function ValidateOnChangeOrBlurBindingBehavior() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     ValidateOnChangeOrBlurBindingBehavior.prototype.getValidateTrigger = function () {
         return validateTrigger.changeOrBlur;

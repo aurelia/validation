@@ -1,12 +1,11 @@
 import { AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter } from 'aurelia-binding';
 function getObject(expression, objectExpression, source) {
-    let value = objectExpression.evaluate(source, null);
+    const value = objectExpression.evaluate(source, null);
     if (value === null || value === undefined || value instanceof Object) {
         return value;
     }
-    /* tslint:disable */
+    // tslint:disable-next-line:max-line-length
     throw new Error(`The '${objectExpression}' part of '${expression}' evaluates to ${value} instead of an object, null or undefined.`);
-    /* tslint:enable */
 }
 /**
  * Retrieves the object and property name for the specified expression.

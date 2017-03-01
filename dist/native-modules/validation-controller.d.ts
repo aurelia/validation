@@ -1,5 +1,6 @@
 import { Binding } from 'aurelia-binding';
 import { Validator } from './validator';
+import { validateTrigger } from './validate-trigger';
 import { ValidationRenderer } from './validation-renderer';
 import { ValidateResult } from './validate-result';
 import { ValidateInstruction } from './validate-instruction';
@@ -31,7 +32,7 @@ export declare class ValidationController {
     /**
      * The trigger that will invoke automatic validation of a property used in a binding.
      */
-    validateTrigger: number;
+    validateTrigger: validateTrigger;
     private finishValidating;
     constructor(validator: Validator);
     /**
