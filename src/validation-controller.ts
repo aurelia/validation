@@ -88,7 +88,7 @@ export class ValidationController {
     } else {
       resolvedPropertyName = this.propertyParser.parse(propertyName);
     }
-    const result = new ValidateResult({}, object, resolvedPropertyName, false, message);
+    const result = new ValidateResult({ __manuallyAdded__: true }, object, resolvedPropertyName, false, message);
     this.processResultDelta('validate', [], [result]);
     return result;
   }
@@ -390,6 +390,19 @@ export class ValidationController {
       const source = binding.source;
       binding.unbind();
       binding.bind(source);
+    }
+  }
+
+  /**
+   * Revalidates the controller's current set of errors.
+   */
+  public revalidateErrors() {
+    for (const { object, propertyName, rule } of this.errors) {
+      if (rule.__manuallyAdded__) {
+        continue;
+      }
+      const rules = [rule];
+      this.validate({ object, propertyName, rules });
     }
   }
 }
