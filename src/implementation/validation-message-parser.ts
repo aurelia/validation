@@ -5,12 +5,11 @@ import {
   Binary,
   Conditional,
   LiteralPrimitive,
-  CallMember,
-  Unparser
+  CallMember
 } from 'aurelia-binding';
 import { BindingLanguage } from 'aurelia-templating';
-
 import * as LogManager from 'aurelia-logging';
+import { ExpressionVisitor } from './expression-visitor';
 
 export class ValidationMessageParser {
   public static inject = [BindingLanguage];
@@ -65,14 +64,14 @@ export class ValidationMessageParser {
   }
 }
 
-export class MessageExpressionValidator extends Unparser {
+export class MessageExpressionValidator extends ExpressionVisitor {
   public static validate(expression: Expression, originalMessage: string) {
     const visitor = new MessageExpressionValidator(originalMessage);
     expression.accept(visitor);
   }
 
   constructor(private originalMessage: string) {
-    super([]);
+    super();
   }
 
   public visitAccessScope(access: AccessScope) {

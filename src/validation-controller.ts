@@ -378,6 +378,20 @@ export class ValidationController {
     const { object, propertyName } = propertyInfo;
     this.reset({ object, propertyName });
   }
+
+  /**
+   * Changes the controller's validateTrigger.
+   * @param newTrigger The new validateTrigger
+   */
+  public changeTrigger(newTrigger: validateTrigger) {
+    this.validateTrigger = newTrigger;
+    const bindings = Array.from(this.bindings.keys());
+    for (const binding of bindings) {
+      const source = binding.source;
+      binding.unbind();
+      binding.bind(source);
+    }
+  }
 }
 
 /**
