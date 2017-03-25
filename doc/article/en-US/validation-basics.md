@@ -764,6 +764,92 @@ A common application of a custom rule is to confirm that two password entries ma
 </code-listing>
 
 
+## Multiple validation controllers
+
+If you have two forms that need to be independently validated, it is of course recommended you implement them in separate components. However, it is technically possible to do two or more independant validations in the same component by creating multiple validation controllers.
+
+For instance: imagine you're building an order form for an Italian restaurant. The customer can order pizza or pasta. If the customer makes a mistake in ordering a pizza, they should be able to order a pasta regardless. In that case your view model would look like this:
+
+<code-listing heading="ViewModel with multiple validation controllers">
+  <source-code lang="ES 2015">
+    import {inject, NewInstance} from 'aurelia-framework';
+    import {ValidationController, ValidationRules} from 'aurelia-validation';
+
+    @inject(NewInstance.of(ValidationController), NewInstance.of(ValidationController))
+    export class ItalianRestaurant {
+      pizza;
+      pasta;
+
+      pizzaValidationController;
+      pastaValidationController
+
+      constructor(pizzaValidationController, pastaValidationController) {
+        this.pizzaValidationController = pizzaValidationController;
+        this.pastaValidationController = pastaValidationController;
+
+        const pizzaRules = ValidationRules
+          .ensure((res: ItalianRestaurant) => res.pizza).required()
+          .rules;
+        this.pizzaValidationController.addObject(this, pizzaRules);
+
+        const pastaRules = ValidationRules
+          .ensure((res: ItalianRestaurant) => res.pasta).required()
+          .rules;
+        this.pastaValidationController.addObject(this, pastaRules);
+      }
+
+      orderPizza() {
+        this.pizzaValidationController.validate()
+          .then(result => {
+            if (result.valid) {
+              alert("Ordering this pizza: " + this.pizza);
+            }
+          });
+      }
+
+      orderPasta() {
+        this.pastaValidationController.validate()
+          .then(result => {
+            if (result.valid) {
+              alert("Ordering this pasta: " + this.pasta);
+            }
+          });
+      }
+    }
+  </source-code>
+</code-listing>
+
+In your view you need to take care to associate each input with the correct validation controller:
+
+<code-listing heading="I18N View">
+  <source-code lang="HTML">
+    <template>
+      <form validation-errors="errors.bind: pizzaErrors; controller.bind: pizzaValidationController"
+            submit.delegate="orderPizza()">
+        <label for="pizza">Choose a pizza:</label>
+        <input id="pizza" value.bind="pizza & validateManually:pizzaValidationController"/>
+        <span class="help-block" repeat.for="errorInfo of pizzaErrors">
+          ${errorInfo.error.message}
+        </span>
+        <input type="submit" value="Order pizza!"/>
+      </form>
+
+      <form validation-errors="errors.bind: pastaErrors; controller.bind: pastaValidationController"
+            submit.delegate="orderPasta()">
+        <label for="pasta">Choose a pasta:</label>
+        <input id="pasta" value.bind="pasta & validateManually:pastaValidationController"/>
+        <span class="help-block" repeat.for="errorInfo of pastaErrors">
+          ${errorInfo.error.message}
+        </span>
+        <input type="submit" value="Order pasta!"/>
+      </form>
+    </template>
+  </source-code>
+</code-listing>
+
+In the forms above you can see that each `validation-errors` attribute and each `validateManually` binding behavior is bound to the appropriate validation controller. This needs to be specified each time, since by default the attribute and the binding behavior will ask the container for a `ValidationController` instance not knowing which one it will get.
+
+
 ## [Integration With Other Libraries](aurelia-doc://section/11/version/1.0.0)
 
 In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has its own validation logic. You can replace the `StandardValidator` with your own implementation when the plugin is installed. Here's an example using breeze:
