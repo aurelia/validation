@@ -23,7 +23,7 @@ export interface RuleProperty {
 export interface Rule<TObject, TValue> {
   property: RuleProperty;
   condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>;
-  config: Object;
+  config: object;
   when: ((object: TObject) => boolean) | null;
   messageKey: string;
   message: Expression | null;

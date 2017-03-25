@@ -7,7 +7,7 @@ import {
   ValueConverter
 } from 'aurelia-binding';
 
-function getObject(expression: Expression, objectExpression: Expression, source: any): null | undefined | Object {
+function getObject(expression: Expression, objectExpression: Expression, source: any): null | undefined | object {
   const value = objectExpression.evaluate(source, null as any);
   if (value === null || value === undefined || value instanceof Object) {
     return value;
@@ -21,13 +21,13 @@ function getObject(expression: Expression, objectExpression: Expression, source:
  * @param expression The expression
  * @param source The scope
  */
-export function getPropertyInfo(expression: Expression, source: any): { object: Object; propertyName: string; } | null {
+export function getPropertyInfo(expression: Expression, source: any): { object: object; propertyName: string; } | null {
   const originalExpression = expression;
   while (expression instanceof BindingBehavior || expression instanceof ValueConverter) {
     expression = expression.expression;
   }
 
-  let object: null | undefined | Object;
+  let object: null | undefined | object;
   let propertyName: string;
   if (expression instanceof AccessScope) {
     object = source.bindingContext;
