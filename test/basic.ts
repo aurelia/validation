@@ -176,6 +176,36 @@ describe('end to end', () => {
       .then(() => change(lastName, ''))
       // confirm there's an error.
       .then(() => expect(viewModel.controller.errors.length).toBe(1))
+      // make lastName valid again
+      .then(() => change(lastName, 'ghi'))
+      // confirm there's an error.
+      .then(() => expect(viewModel.controller.errors.length).toBe(0))
+      // add some errors
+      .then(() => {
+        const error1 = viewModel.controller.addError('object error', viewModel);
+        expect(error1.message).toBe('object error');
+        expect(error1.object).toBe(viewModel);
+        expect(error1.propertyName).toBe(null);
+        const error2 = viewModel.controller.addError('string property error', viewModel, 'lastName');
+        expect(error2.message).toBe('string property error');
+        expect(error2.object).toBe(viewModel);
+        expect(error2.propertyName).toBe('lastName');
+        const error3 = viewModel.controller.addError('expression property error', viewModel, vm => vm.firstName);
+        expect(error3.message).toBe('expression property error');
+        expect(error3.object).toBe(viewModel);
+        expect(error3.propertyName).toBe('firstName');
+
+        expect(viewModel.controller.errors.length).toBe(3);
+
+        viewModel.controller.removeError(error1);
+        expect(viewModel.controller.errors.length).toBe(2);
+
+        viewModel.controller.removeError(error2);
+        expect(viewModel.controller.errors.length).toBe(1);
+
+        viewModel.controller.removeError(error3);
+        expect(viewModel.controller.errors.length).toBe(0);
+      })
 
       // cleanup and finish.
       .then(() => component.dispose())

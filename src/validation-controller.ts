@@ -6,6 +6,7 @@ import { ValidationRenderer, RenderInstruction } from './validation-renderer';
 import { ValidateResult } from './validate-result';
 import { ValidateInstruction } from './validate-instruction';
 import { ControllerValidateResult } from './controller-validate-result';
+import { PropertyAccessorParser, PropertyAccessor } from './property-accessor-parser';
 
 /**
  * Orchestrates validation.
@@ -13,7 +14,7 @@ import { ControllerValidateResult } from './controller-validate-result';
  * Exposes the current list of validation results for binding purposes.
  */
 export class ValidationController {
-  public static inject = [Validator];
+  public static inject = [Validator, PropertyAccessorParser];
 
   // Registered bindings (via the validate binding behavior)
   private bindings = new Map<Binding, BindingInfo>();
@@ -50,7 +51,7 @@ export class ValidationController {
   // Promise that resolves when validation has completed.
   private finishValidating: Promise<any> = Promise.resolve();
 
-  constructor(private validator: Validator) { }
+  constructor(private validator: Validator, private propertyParser: PropertyAccessorParser) { }
 
   /**
    * Adds an object to the set of objects that should be validated when validate is called.
@@ -76,8 +77,18 @@ export class ValidationController {
   /**
    * Adds and renders an error.
    */
-  public addError(message: string, object: any, propertyName: string | null = null): ValidateResult {
-    const result = new ValidateResult({}, object, propertyName, false, message);
+  public addError<TObject>(
+    message: string,
+    object: TObject,
+    propertyName: string | PropertyAccessor<TObject, string> | null = null
+  ): ValidateResult {
+    let resolvedPropertyName: string | null;
+    if (propertyName === null) {
+      resolvedPropertyName = propertyName;
+    } else {
+      resolvedPropertyName = this.propertyParser.parse(propertyName);
+    }
+    const result = new ValidateResult({}, object, resolvedPropertyName, false, message);
     this.processResultDelta('validate', [], [result]);
     return result;
   }
