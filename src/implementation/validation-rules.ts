@@ -4,7 +4,7 @@ import { Rules } from './rules';
 import { validationMessages } from './validation-messages';
 import { ValidationDisplayNameAccessor } from './rule';
 import { PropertyAccessorParser, PropertyAccessor } from '../property-accessor-parser';
-import {isString} from '../util';
+import { isString } from '../util';
 
 /**
  * Part of the fluent rule API. Enables customizing property rules.
@@ -367,10 +367,12 @@ export class FluentEnsure<TObject> {
    */
   public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>) {
     this.assertInitialized();
-    return new FluentRules<TObject, TValue>(
+    const name = this.parsers.property.parse(property);
+    const fluentRules = new FluentRules<TObject, TValue>(
       this,
       this.parsers,
-      { name: this.parsers.property.parse(property), displayName: null });
+      { name, displayName: null });
+    return this.mergeRules(fluentRules, name);
   }
 
   /**
@@ -378,8 +380,9 @@ export class FluentEnsure<TObject> {
    */
   public ensureObject() {
     this.assertInitialized();
-    return new FluentRules<TObject, TObject>(
+    const fluentRules = new FluentRules<TObject, TObject>(
       this, this.parsers, { name: null, displayName: null });
+    return this.mergeRules(fluentRules, null);
   }
 
   /**
@@ -407,6 +410,18 @@ export class FluentEnsure<TObject> {
       return;
     }
     throw new Error(`Did you forget to add ".plugin('aurelia-validation')" to your main.js?`);
+  }
+
+  private mergeRules(fluentRules: FluentRules<TObject, any>, propertyName: string | null) {
+    const existingRules = this.rules.find(r => r.length > 0 && r[0].property.name === propertyName);
+    if (existingRules) {
+      const rule = existingRules[existingRules.length - 1];
+      fluentRules.sequence = rule.sequence;
+      if (rule.property.displayName !== null) {
+        fluentRules = fluentRules.displayName(rule.property.displayName);
+      }
+    }
+    return fluentRules;
   }
 }
 
