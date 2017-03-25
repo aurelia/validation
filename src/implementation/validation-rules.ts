@@ -118,7 +118,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Will be called with two arguments, the property value and the object.
    * Should return a boolean or a Promise that resolves to a boolean.
    */
-  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: object) {
+  public satisfies(condition: (value: TValue, object: TObject) => boolean | Promise<boolean>, config?: object) {
     return this.fluentRules.satisfies(condition, config);
   }
 
