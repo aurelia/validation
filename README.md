@@ -31,8 +31,10 @@ npm run test
 
 ## Developing
 
+Run the tests in watch mode:
+
 ```shell
-npm run test-watch
+npm run develop
 ```
 
 ## Publishing
