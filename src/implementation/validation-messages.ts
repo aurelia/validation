@@ -51,7 +51,7 @@ export class ValidationMessageProvider {
    * Override this with your own custom logic.
    * @param propertyName The property name.
    */
-  public getDisplayName(propertyName: string, displayName?: string|null|Function): string {
+  public getDisplayName(propertyName: string, displayName?: string | null | (() => string)): string {
     if (displayName !== null && displayName !== undefined) {
       return (displayName instanceof Function) ? displayName() : displayName as string;
     }

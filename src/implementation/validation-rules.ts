@@ -14,7 +14,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
   constructor(
     property: RuleProperty,
     condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>,
-    config: Object = {},
+    config: object = {},
     private fluentEnsure: FluentEnsure<TObject>,
     private fluentRules: FluentRules<TObject, TValue>,
     private parser: ValidationParser
@@ -118,7 +118,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Will be called with two arguments, the property value and the object.
    * Should return a boolean or a Promise that resolves to a boolean.
    */
-  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: Object) {
+  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: object) {
     return this.fluentRules.satisfies(condition, config);
   }
 
@@ -235,7 +235,7 @@ export class FluentRules<TObject, TValue> {
    * Will be called with two arguments, the property value and the object.
    * Should return a boolean or a Promise that resolves to a boolean.
    */
-  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: Object) {
+  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: object) {
     return new FluentRuleCustomizer<TObject, TValue>(
       this.property, condition, config, this.fluentEnsure, this, this.parser);
   }
