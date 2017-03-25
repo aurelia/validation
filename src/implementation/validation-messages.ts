@@ -1,5 +1,5 @@
 import { Expression } from 'aurelia-binding';
-import { ValidationParser } from './validation-parser';
+import { ValidationMessageParser } from './validation-message-parser';
 
 export interface ValidationMessages {
   [key: string]: string;
@@ -27,9 +27,9 @@ export const validationMessages: ValidationMessages = {
  * Retrieves validation messages and property display names.
  */
 export class ValidationMessageProvider {
-  public static inject = [ValidationParser];
+  public static inject = [ValidationMessageParser];
 
-  constructor(private parser: ValidationParser) { }
+  constructor(private parser: ValidationMessageParser) { }
 
   /**
    * Returns a message binding expression that corresponds to the key.
@@ -42,7 +42,7 @@ export class ValidationMessageProvider {
     } else {
       message = validationMessages['default'];
     }
-    return this.parser.parseMessage(message);
+    return this.parser.parse(message);
   }
 
   /**

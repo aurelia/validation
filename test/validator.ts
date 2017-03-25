@@ -4,8 +4,9 @@ import { TemplatingBindingLanguage } from 'aurelia-templating-binding';
 import {
   StandardValidator,
   ValidationRules,
-  ValidationParser,
-  ValidateResult
+  ValidationMessageParser,
+  ValidateResult,
+  PropertyAccessorParser
 } from '../src/aurelia-validation';
 
 describe('Validator', () => {
@@ -14,8 +15,9 @@ describe('Validator', () => {
   beforeAll(() => {
     const container = new Container();
     container.registerInstance(BindingLanguage, container.get(TemplatingBindingLanguage));
-    const parser = container.get(ValidationParser);
-    ValidationRules.initialize(parser);
+    const messageParser = container.get(ValidationMessageParser);
+    const propertyParser = container.get(PropertyAccessorParser);
+    ValidationRules.initialize(messageParser, propertyParser);
     validator = container.get(StandardValidator);
   });
 
