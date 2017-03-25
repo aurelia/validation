@@ -4,8 +4,14 @@ import {
   AccessKeyed,
   BindingBehavior,
   Expression,
-  ValueConverter
+  ValueConverter,
+  Scope,
+  getContextFor
 } from 'aurelia-binding';
+
+declare module 'aurelia-binding' {
+  export const getContextFor: any;
+}
 
 function getObject(expression: Expression, objectExpression: Expression, source: any): null | undefined | object {
   const value = objectExpression.evaluate(source, null as any);
@@ -21,7 +27,10 @@ function getObject(expression: Expression, objectExpression: Expression, source:
  * @param expression The expression
  * @param source The scope
  */
-export function getPropertyInfo(expression: Expression, source: any): { object: object; propertyName: string; } | null {
+export function getPropertyInfo(
+  expression: Expression,
+  source: Scope
+): { object: object; propertyName: string; } | null {
   const originalExpression = expression;
   while (expression instanceof BindingBehavior || expression instanceof ValueConverter) {
     expression = expression.expression;
@@ -30,7 +39,7 @@ export function getPropertyInfo(expression: Expression, source: any): { object: 
   let object: null | undefined | object;
   let propertyName: string;
   if (expression instanceof AccessScope) {
-    object = source.bindingContext;
+    object = getContextFor(expression.name, source, expression.ancestor);
     propertyName = expression.name;
   } else if (expression instanceof AccessMember) {
     object = getObject(originalExpression, expression.object, source);
