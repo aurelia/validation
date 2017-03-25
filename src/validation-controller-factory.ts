@@ -1,6 +1,7 @@
 import { Container } from 'aurelia-dependency-injection';
 import { ValidationController } from './validation-controller';
 import { Validator } from './validator';
+import { PropertyAccessorParser } from './property-accessor-parser';
 
 /**
  * Creates ValidationController instances.
@@ -19,7 +20,8 @@ export class ValidationControllerFactory {
     if (!validator) {
       validator = this.container.get(Validator) as Validator;
     }
-    return new ValidationController(validator);
+    const propertyParser = this.container.get(PropertyAccessorParser) as PropertyAccessorParser;
+    return new ValidationController(validator, propertyParser);
   }
 
   /**
