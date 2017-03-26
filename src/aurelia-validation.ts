@@ -5,6 +5,7 @@ export * from './get-target-dom-element';
 export * from './property-info';
 export * from './property-accessor-parser';
 export * from './validate-binding-behavior';
+export * from './validate-event';
 export * from './validate-instruction';
 export * from './validate-result';
 export * from './validate-trigger';

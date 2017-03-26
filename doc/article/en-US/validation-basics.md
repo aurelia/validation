@@ -383,6 +383,10 @@ You may need to surface validation errors from other sources. Perhaps while atte
 
 The validation controller renders errors by sending them to implementations of the `ValidationRenderer` interface. The library ships with a built-in renderer that "renders" the errors to an array property for data-binding/templating purposes. This is covered in the [displaying errors](aurelia-doc://section/11/version/1.0.0) section below. You can create your own [custom renderer](aurelia-doc://section/12/version/1.0.0) and add it to the controller's set of renderers using the `addRenderer(renderer)` method.
 
+### Events
+
+The validation controller has a `subscribe(callback: (event: ValidateEvent) => void)` method you can use to subscribe to validate and reset events. Callbacks will be invoked whenever the controller's validate and reset methods are called. Callbacks will be passed an instance `ValidateEvent` which contains properties you can use to determine the overall validity state as well as the result of the validate or reset invocation. Refer to the API docs for more info. 
+
 ## [Validator](aurelia-doc://section/5/version/1.0.0)
 
 `Validator` is an interface used by the `ValidationController` to do the behind-the-scenes work of validating objects and properties. The `aurelia-validation` plugin ships with an implementation of this interface called the `StandardValidator`, which knows how to evaluate rules created by `aurelia-validation`'s fluent API. When you use a `Validator` directly to validate a particular object or property, there are no UI side-effects- the validation results are not sent to the the validation renderers.

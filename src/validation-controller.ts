@@ -7,6 +7,7 @@ import { ValidateResult } from './validate-result';
 import { ValidateInstruction } from './validate-instruction';
 import { ControllerValidateResult } from './controller-validate-result';
 import { PropertyAccessorParser, PropertyAccessor } from './property-accessor-parser';
+import { ValidateEvent } from './validate-event';
 
 /**
  * Orchestrates validation.
@@ -51,7 +52,27 @@ export class ValidationController {
   // Promise that resolves when validation has completed.
   private finishValidating: Promise<any> = Promise.resolve();
 
+  private eventCallbacks: ((event: ValidateEvent) => void)[] = [];
+
   constructor(private validator: Validator, private propertyParser: PropertyAccessorParser) { }
+
+  /**
+   * Subscribe to controller validate and reset events. These events occur when the
+   * controller's "validate"" and "reset" methods are called.
+   * @param callback The callback to be invoked when the controller validates or resets.
+   */
+  public subscribe(callback: (event: ValidateEvent) => void) {
+    this.eventCallbacks.push(callback);
+    return {
+      dispose: () => {
+        const index = this.eventCallbacks.indexOf(callback);
+        if (index === -1) {
+          return;
+        }
+        this.eventCallbacks.splice(index, 1);
+      }
+    };
+  }
 
   /**
    * Adds an object to the set of objects that should be validated when validate is called.
@@ -224,6 +245,7 @@ export class ValidationController {
           valid: newResults.find(x => !x.valid) === undefined,
           results: newResults
         };
+        this.invokeCallbacks(instruction, result);
         return result;
       })
       .catch(exception => {
@@ -248,6 +270,7 @@ export class ValidationController {
     const predicate = this.getInstructionPredicate(instruction);
     const oldResults = this.results.filter(predicate);
     this.processResultDelta('reset', oldResults, []);
+    this.invokeCallbacks(instruction, null);
   }
 
   /**
@@ -403,6 +426,21 @@ export class ValidationController {
       }
       const rules = [rule];
       this.validate({ object, propertyName, rules });
+    }
+  }
+
+  private invokeCallbacks(instruction: ValidateInstruction | undefined, result: ControllerValidateResult | null) {
+    if (this.eventCallbacks.length === 0) {
+      return;
+    }
+    const event = new ValidateEvent(
+      result ? 'validate' : 'reset',
+      this.errors,
+      this.results,
+      instruction || null,
+      result);
+    for (let i = 0; i < this.eventCallbacks.length; i++) {
+      this.eventCallbacks[i](event);
     }
   }
 }

@@ -1,7 +1,7 @@
 import { StageComponent, ComponentTester } from 'aurelia-testing';
 import { bootstrap } from 'aurelia-bootstrapper';
 import { RegistrationForm } from './resources/registration-form';
-import { validateTrigger } from '../src/aurelia-validation';
+import { validateTrigger, ValidateEvent } from '../src/aurelia-validation';
 import { configure, blur, change } from './shared';
 
 describe('end to end', () => {
@@ -205,6 +205,33 @@ describe('end to end', () => {
 
         viewModel.controller.removeError(error3);
         expect(viewModel.controller.errors.length).toBe(0);
+      })
+      // subscribe to error events
+      .then(() => {
+        let event1: ValidateEvent;
+        let event2: ValidateEvent;
+        const spy1 = jasmine.createSpy().and.callFake((event: ValidateEvent) => event1 = event);
+        const spy2 = jasmine.createSpy().and.callFake((event: ValidateEvent) => event2 = event);
+        viewModel.controller.subscribe(spy1);
+        viewModel.controller.subscribe(spy2);
+        return change(lastName, '')
+          .then(() => {
+            expect(spy1).toHaveBeenCalled();
+            expect(spy2).toHaveBeenCalled();
+            expect(event1).toBe(event2);
+            expect(event1.errors.length).toBe(1);
+            spy1.calls.reset();
+            spy2.calls.reset();
+            event1 = null as any;
+            event2 = null as any;
+          })
+          .then(() => change(firstName, ''))
+          .then(() => {
+            expect(spy1).toHaveBeenCalled();
+            expect(spy2).toHaveBeenCalled();
+            expect(event1).toBe(event2);
+            expect(event1.errors.length).toBe(2);
+          });
       })
 
       // cleanup and finish.
