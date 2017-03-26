@@ -651,6 +651,10 @@ export class ValidationRules {
     ValidationRules.parser = parser;
   }
 
+ public static CreateFluentRulesGenerator(): FluentRulesGenerator<any> {
+    return new FluentRulesGenerator<any>(new FluentEnsure<any>(ValidationRules.parser));
+  }
+
   /**
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
