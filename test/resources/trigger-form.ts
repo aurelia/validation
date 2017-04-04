@@ -11,7 +11,7 @@ import {
     <input ref="standardInput"     type="text" value.bind="standardProp & validate">
     <input ref="blurInput"         type="text" value.bind="blurProp & validateOnBlur">
     <input ref="changeInput"       type="text" value.bind="changeProp & validateOnChange">
-    <input ref="changeOrBlurInput" type="text" value.bind="changeOrBlurProp & validateOnChangeOrBlur"> 
+    <input ref="changeOrBlurInput" type="text" value.bind="changeOrBlurProp & validateOnChangeOrBlur">
     <input ref="manualInput"       type="text" value.bind="manualProp & validateManually">
   </form>
 </template>`)

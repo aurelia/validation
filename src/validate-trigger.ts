@@ -23,4 +23,4 @@ export enum validateTrigger {
    * when it updates the model due to a change in the view.
    */
   changeOrBlur = 3
-};
+}

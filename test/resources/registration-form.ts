@@ -12,7 +12,7 @@ import {
     <input        id="firstName" type="text" value.bind="firstName & validate">
     <input        id="lastName"  type="text" value.bind="lastName & validate">
     <input        id="email"     type="text" value.bind="email & validate">
-    <input        id="number1"   type="text" number-value.bind="number1 & validate"> 
+    <input        id="number1"   type="text" number-value.bind="number1 & validate">
     <number-input id="number2"               value.bind="number2 & validate"></number-input>
     <input        id="password"        type="text" value.bind="password & validate">
     <input        id="confirmPassword" type="text" value.bind="confirmPassword & validate">

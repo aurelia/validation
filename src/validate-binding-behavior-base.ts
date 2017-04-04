@@ -35,7 +35,8 @@ export abstract class ValidateBindingBehaviorBase {
     if (trigger & validateTrigger.change) {
       binding.standardUpdateSource = binding.updateSource;
       // tslint:disable-next-line:only-arrow-functions
-      binding.updateSource = function(value: any) {
+      // tslint:disable-next-line:space-before-function-paren
+      binding.updateSource = function (value: any) {
         this.standardUpdateSource(value);
         this.validationController.validateBinding(this);
       };
@@ -53,7 +54,8 @@ export abstract class ValidateBindingBehaviorBase {
     if (trigger !== validateTrigger.manual) {
       binding.standardUpdateTarget = binding.updateTarget;
       // tslint:disable-next-line:only-arrow-functions
-      binding.updateTarget = function(value: any) {
+      // tslint:disable-next-line:space-before-function-paren
+      binding.updateTarget = function (value: any) {
         this.standardUpdateTarget(value);
         this.validationController.resetBinding(this);
       };
