@@ -20,7 +20,7 @@ This article covers the basics of validation with Aurelia's validation plugin. Y
 
 To get started you'll need to install `aurelia-validation` using `jspm install aurelia-validation` or `npm install aurelia-validation --save`. Afterwards, add `.plugin('aurelia-validation')` to the configuration in your `main.js` to ensure the plugin is loaded at application startup.
 
-If you're using the `aurelia-cli`, add the following configuration to your `aurelia.json` after you've installed the package with npm. 
+If you're using the `aurelia-cli`, add the following configuration to your `aurelia.json` after you've installed the package with npm.
 
 <code-listing heading="aurelia.json">
   <source-code lang="ES 2015">
@@ -315,9 +315,9 @@ If you'd like to be completely explicit when wiring up controllers with view mod
 
 ### Setting the Validate Trigger
 
-Once you've created a controller you can set its `validationTrigger` to either `blur`, `change`, `changeOrBlur` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus). 
+Once you've created a controller you can set its `validationTrigger` to either `blur`, `change`, `changeOrBlur` or `manual`. The default is `blur` which means the validation controller will validate the property accessed in a binding when the binding's associated element "blurs" (loses focus).
 
-When the trigger is `change`, each change the binding makes to the model property will trigger validation of the property. Use the `throttle`, `debounce` and `updateTrigger` binding behaviors in conjunction with the `change` validate trigger to customize the behavior. 
+When the trigger is `change`, each change the binding makes to the model property will trigger validation of the property. Use the `throttle`, `debounce` and `updateTrigger` binding behaviors in conjunction with the `change` validate trigger to customize the behavior.
 
 Use the `manual` trigger to indicate the controller should not automatically validate properties used in bindings. Errors will only be displayed when you invoke the controller's `validate` method and will be cleared when you invoke the controller's `reset` method.
 
@@ -363,7 +363,7 @@ Invoking the validate method with no arguments will validate all bindings and ob
   </source-code>
 </code-listing>
 
-Most of the time you will use the `ControllerValidateResult` instance's `valid` property to determine whether validation passed or failed. Use the `results` property to access the `ValidateResult` for every rule that was evaluated by the `controller.validate(...)` call. Each `ValidateResult` has it's own `rule` and `valid` properties that will tell you whether a particular rule passed or failed, along with `message`, `object` and `propertyName` properties. 
+Most of the time you will use the `ControllerValidateResult` instance's `valid` property to determine whether validation passed or failed. Use the `results` property to access the `ValidateResult` for every rule that was evaluated by the `controller.validate(...)` call. Each `ValidateResult` has it's own `rule` and `valid` properties that will tell you whether a particular rule passed or failed, along with `message`, `object` and `propertyName` properties.
 
 The opposite of the `validate` method is `reset`. Calling reset with no arguments will unrender any previously rendered validation results. You can supply a reset instruction to limit the reset to a specific object or property:
 
@@ -385,7 +385,7 @@ The validation controller renders errors by sending them to implementations of t
 
 ### Events
 
-The validation controller has a `subscribe(callback: (event: ValidateEvent) => void)` method you can use to subscribe to validate and reset events. Callbacks will be invoked whenever the controller's validate and reset methods are called. Callbacks will be passed an instance `ValidateEvent` which contains properties you can use to determine the overall validity state as well as the result of the validate or reset invocation. Refer to the API docs for more info. 
+The validation controller has a `subscribe(callback: (event: ValidateEvent) => void)` method you can use to subscribe to validate and reset events. Callbacks will be invoked whenever the controller's validate and reset methods are called. Callbacks will be passed an instance `ValidateEvent` which contains properties you can use to determine the overall validity state as well as the result of the validate or reset invocation. Refer to the API docs for more info.
 
 ## [Validator](aurelia-doc://section/5/version/1.0.0)
 
@@ -420,9 +420,9 @@ The `validate` binding behavior enables quick and easy validation for two-way da
 <code-listing heading="Automatic Binding Validation">
   <source-code lang="HTML">
     <input type="text" value.bind="firstName & validate">
-    
+
     <input type="text" value.bind="person.firstName & validate">
-    
+
     <input type="text" value.bind="person['firstName'] | upperCase & validate">
 
     <input type="text" value.bind="currentEntity[p] & debounce & validate">    
@@ -434,7 +434,7 @@ The `validate` binding behavior enables quick and easy validation for two-way da
 <code-listing heading="Explicit Binding Validation">
   <source-code lang="HTML">
     <input type="text" value.bind="firstName & validate:personController">
-    
+
     <input type="text" value.bind="firstName & validate:personRules">
 
     <input type="text" value.bind="firstName & validate:personController:personRules">
@@ -480,7 +480,7 @@ To build more sophisticated error UIs you might need a list of errors specific t
       <div class="form-group" validation-errors.bind="firstNameErrors"
            class.bind="firstNameErrors.length ? 'has-error' : ''">
         <label for="firstName">First Name</label>
-        <input type="text" class="form-control" id="firstName" 
+        <input type="text" class="form-control" id="firstName"
                placeholder="First Name"
                value.bind="firstName & validate">
         <span class="help-block" repeat.for="errorInfo of firstNameErrors">
@@ -688,7 +688,7 @@ The fluent API's `satisfies` method enables quick custom rules. If you have a cu
     ValidationRules.customRule(
       'date',
       (value, obj) => value === null || value === undefined || value instanceof Date,
-      `\${$displayName} must be a Date.` 
+      `\${$displayName} must be a Date.`
     );
 
     ValidationRules
@@ -704,10 +704,10 @@ You will often need to pass arguments to your custom rule. Below is an example o
   <source-code lang="ES 2015">
     ValidationRules.customRule(
       'integerRange',
-      (value, obj, min, max) => value === null || value === undefined 
+      (value, obj, min, max) => value === null || value === undefined
         || Number.isInteger(value) && value >= min && value <= max,
       `\${$displayName} must be an integer between \${$config.min} and \${$config.max}.`,
-      (min, max) => ({ min, max }) 
+      (min, max) => ({ min, max })
     );
 
     ValidationRules
@@ -730,7 +730,7 @@ A common application of a custom rule is to confirm that two password entries ma
   <source-code lang="ES 2015">
       ValidationRules.customRule(
         'matchesProperty',
-        (value, obj, otherPropertyName) => 
+        (value, obj, otherPropertyName) =>
           value === null
           || value === undefined
           || value === ''
@@ -767,8 +767,7 @@ A common application of a custom rule is to confirm that two password entries ma
   </source-code>
 </code-listing>
 
-
-## Multiple validation controllers
+## [Multiple Validation Controllers](aurelia-doc://section/11/version/1.0.0)
 
 If you have two forms that need to be independently validated, it is of course recommended you implement them in separate components. However, it is technically possible to do two or more independant validations in the same component by creating multiple validation controllers.
 
@@ -854,7 +853,7 @@ In your view you need to take care to associate each input with the correct vali
 In the forms above you can see that each `validation-errors` attribute and each `validateManually` binding behavior is bound to the appropriate validation controller. This needs to be specified each time, since by default the attribute and the binding behavior will ask the container for a `ValidationController` instance not knowing which one it will get.
 
 
-## [Integration With Other Libraries](aurelia-doc://section/11/version/1.0.0)
+## [Integration With Other Libraries](aurelia-doc://section/12/version/1.0.0)
 
 In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has its own validation logic. You can replace the `StandardValidator` with your own implementation when the plugin is installed. Here's an example using breeze:
 
@@ -898,7 +897,7 @@ In `aurelia-validation` the object and property validation work is handled by th
   </source-code>
 </code-listing>
 
-## [Integrating with Aurelia-I18N](aurelia-doc://section/12/version/1.0.0)
+## [Integrating with Aurelia-I18N](aurelia-doc://section/13/version/1.0.0)
 
 `aurelia-i18n` is Aurelia's official I18N plugin. Check out the project's [readme](https://github.com/aurelia/i18n/blob/master/README.md) for information on how to use `aurelia-i18n` in your application.
 
@@ -943,7 +942,7 @@ Once you've overriden the necessary methods in `ValidationMessageProvider` you'r
   <source-code lang="HTML">
     <template>
       <form>
-        <label>${'firstName' & t}: <br /> 
+        <label>${'firstName' & t}: <br />
           <input type="text" value.bind="firstName & validate" />
         </label>
         <label>${'lastName' & t}: <br />
@@ -951,7 +950,7 @@ Once you've overriden the necessary methods in `ValidationMessageProvider` you'r
         </label>
         <button click.delegate="submit()">${'submit' & t}</button>
       </form>
-	
+
       <div>
         <h3>${'latestValidationResult' & t}: ${message}</h3>
         <ul if.bind="controller.errors.length">
@@ -978,31 +977,31 @@ Here's the view model:
     export class App {
       firstName;
       lastName;
-    
+
       controller;
       i18n;
       message = '';
-    
+
       constructor(controller, i18n) {
         this.controller = controller;
         this.i18n = i18n;
-    
+
         ValidationRules
           .ensure((m: App) => m.firstName).required()
           .ensure((m: App) => m.lastName).required()
           .on(this);
       }
-    
+
       submit() {
         this.executeValidation();
       }
-    
+
       switchLanguage() {
         const currentLocale = this.i18n.getLocale();
         this.i18n.setLocale(currentLocale === 'en' ? 'de' : 'en')
           .then(() => this.executeValidation());
       }
-    
+
       executeValidation() {
         this.controller.validate()
           .then(errors => {
@@ -1028,7 +1027,7 @@ Last but not least, create translation files that include translations for each 
 	  "firstName": "Vorname",
 	  "lastName": "Nachname",
 	  "submit": "Abschicken",
-	  "switchLanguage": "Sprache wechseln", 
+	  "switchLanguage": "Sprache wechseln",
 	  "youHaveErrors": "Es gibt Fehler!",
 	  "allGood": "Alles in Ordnung!",
 	  "latestValidationResult": "Aktuelles Validierungsergebnis",
@@ -1053,7 +1052,7 @@ Last but not least, create translation files that include translations for each 
   </source-code>
 </code-listing>
 
-## [Server-Side Validation](aurelia-doc://section/13/version/1.0.0)
+## [Server-Side Validation](aurelia-doc://section/14/version/1.0.0)
 
 The fluent rule API and Validator API can be used server-side in a NodeJS application.
 
