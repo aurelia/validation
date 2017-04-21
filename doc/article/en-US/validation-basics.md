@@ -107,7 +107,7 @@ Here's an example:
     ValidationRules      
       .ensure('ssn').displayName('SSN')
         .required().withMessage(`\${$displayName} cannot be blank.`);
-        .matches(/\d{3}-\d{2}-\d{4}/).withMessage(`\"${$value}" is not a valid \${$displayName}.`);
+        .matches(/\d{3}-\d{2}-\d{4}/).withMessage(`"\${$value}" is not a valid \${$displayName}.`);
   </source-code>
 </code-listing>
 
