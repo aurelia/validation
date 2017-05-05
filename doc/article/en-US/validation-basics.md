@@ -167,7 +167,7 @@ In the example above, the `emailNotAlreadyRegistered` custom rule will only be e
 
 ### Tagging Rules
 
-Use the `.tag(tag: string)` method to tag a specific property rule with a name. You can retrieve rules with a specific tag using `let someRules = ValidationRules.taggedRules(rules, tag)`. This can come in handy when you want to execute a specific rule or subset of rules. The documentation for the ValidationController (below) shows how to validate specific objects/properties/rules. You can also use the subset of rules with the Validator API (also documented below).
+Use the `.tag(tag: string)` method to tag a specific property rule with a name. You can retrieve rules with a specific tag using `let someRules = ValidationRules.taggedRules(rules, tag)`. To get only rules that have no tag applied to them you can use `let someRules = ValidationRules.untaggedRules(rules)`. This can come in handy when you want to execute a specific rule or subset of rules. The documentation for the ValidationController (below) shows how to validate specific objects/properties/rules. You can also use the subset of rules with the Validator API (also documented below).
 
 ### on
 
