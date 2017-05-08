@@ -481,6 +481,14 @@ export class ValidationRules {
   }
 
   /**
+   * Returns rules that have no tag.
+   * @param rules The rules to search.
+   */
+  public static untaggedRules(rules: Rule<any, any>[][]): Rule<any, any>[][] {
+    return rules.map(x => x.filter(r => r.tag === undefined));
+  }
+
+  /**
    * Removes the rules from a class or object.
    * @param target A class or object.
    */
