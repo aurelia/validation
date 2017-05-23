@@ -127,4 +127,165 @@ describe('Validator', () => {
       })
       .then(done);
   });
+
+  it('handles multiple ensures on a property', (done: () => void) => {
+    const obj = { name: 'value' };
+    const displayName = 'product name';
+    const propertyName = 'name';
+    // tslint:disable-next-line:no-invalid-template-strings
+    const messageMinLength = '\${$displayName} has fewer than 5 characters';
+    const messageMinLengthConfirm = `${displayName} has fewer than 5 characters`;
+    // tslint:disable-next-line:no-invalid-template-strings
+    const messageRequired = '\${$displayName} is missing';
+    const messageRequiredConfirm = `${displayName} is missing`;
+
+    let rules = ValidationRules
+      .ensure(propertyName)
+      .displayName(displayName)
+      .ensure(propertyName)
+      .required()
+      .withMessage(messageRequired)
+      .on(obj)
+      .rules;
+
+    validator.validateProperty(obj, propertyName, rules)
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length).toEqual(1);
+        expect(results[0].valid).toEqual(true);
+
+        (obj as any).name = null;
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length).toEqual(1);
+        expect(results[0].message).toEqual(messageRequiredConfirm);
+
+        rules = ValidationRules
+          .ensure(propertyName)
+          .minLength(5)
+          .withMessage(messageMinLength)
+          .ensure(propertyName)
+          .displayName(displayName)
+          .required()
+          .withMessage(messageRequired)
+          .on(obj)
+          .rules;
+
+        obj.name = 'abc';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length).toEqual(2);
+        expect(results[0].message).toEqual(messageMinLengthConfirm);
+        expect(results[1].valid).toEqual(true);
+
+        rules = ValidationRules
+          .ensure(propertyName)
+          .displayName(displayName)
+          .minLength(5)
+          .withMessage(messageMinLength)
+          .ensure(propertyName)
+          .required()
+          .withMessage(messageRequired)
+          .on(obj)
+          .rules;
+
+        obj.name = 'abc';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results[0].message).toEqual(messageMinLengthConfirm);
+        expect(results[1].valid).toEqual(true);
+
+        rules = ValidationRules
+          .ensure(propertyName)
+          .displayName(displayName)
+          .required()
+          .withMessage(messageRequired)
+          .ensure(propertyName)
+          .minLength(5)
+          .withMessage(messageMinLength)
+          .on(obj)
+          .rules;
+
+        obj.name = 'abc';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length).toEqual(2);
+        expect(results[0].valid).toEqual(true);
+        expect(results[1].message).toEqual(messageMinLengthConfirm);
+
+        rules = ValidationRules
+          .ensure(propertyName)
+          .displayName(displayName)
+          .required()
+          .withMessage(messageRequired)
+          .then()
+          .ensure(propertyName)
+          .minLength(5)
+          .withMessage(messageMinLength)
+          .on(obj)
+          .rules;
+
+        obj.name = '';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length).toEqual(2);
+        expect(results[0].message).toEqual(messageRequiredConfirm);
+        // a little weird since it actually isn't valid, it just hasn't been tested
+        expect(results[1].valid).toEqual(true);
+
+        rules = ValidationRules
+          .ensure(propertyName)
+          .required()
+          .displayName(displayName) // <= not the usual position for this call
+          .withMessage(messageRequired)
+          .ensure(propertyName)
+          .minLength(5)
+          .withMessage(messageMinLength)
+          .on(obj)
+          .rules;
+
+        obj.name = 'abc';
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length).toEqual(2);
+        expect(results[0].valid).toEqual(true);
+        expect(results[1].message).toEqual(messageMinLengthConfirm);
+
+        rules = ValidationRules
+          .ensure(propertyName)
+          .required()
+          .displayName(displayName) // <= not the usual position for this call
+          .withMessage(messageRequired)
+          .ensureObject()
+          .displayName(displayName)
+          .ensureObject()
+          .maxLength(5)
+          .withMessage(messageMinLength)
+          .on(obj)
+          .rules;
+
+        obj.name = 'abc';
+        return validator.validateObject(obj, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        expect(results.length).toEqual(2);
+        expect(results[0].valid).toEqual(true);
+        expect(results[1].message).toEqual(messageMinLengthConfirm);
+        rules = ValidationRules
+          .ensure(propertyName)
+          .ensure(propertyName)
+          .on(obj)
+          .rules;
+
+        obj.name = 'abc';
+        // should not crash
+        return validator.validateProperty(obj, propertyName, rules);
+      })
+      .then(done);
+  });
 });

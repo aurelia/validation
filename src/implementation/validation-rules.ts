@@ -6,6 +6,209 @@ import { ValidationDisplayNameAccessor } from './rule';
 import { PropertyAccessorParser, PropertyAccessor } from '../property-accessor-parser';
 import { isString } from '../util';
 
+export class FluentRulesGenerator<TObject> {
+
+  private fluentCustomizer: FluentRuleCustomizer<TObject, any> | null = null;
+  private fluentRules: FluentRules<TObject, any> | null = null;
+
+  constructor(private fluentEnsure: FluentEnsure<TObject>) {
+    if (!fluentEnsure) {
+      throw new Error(`FluentRuleGenerator requires an instance of FluentEnsure`);
+    }
+  }
+
+  /**
+   * Target a property with validation rules.
+   * @param property The property to target. Can be the property name or a property accessor function.
+   */
+  public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRulesGenerator<TObject> {
+    this.fluentRules = this.fluentEnsure!.ensure(property);
+    this.fluentCustomizer = null;
+    return this;
+  }
+  /**
+   * Targets an object with validation rules.
+   */
+  public ensureObject(): FluentRulesGenerator<TObject> {
+    this.fluentRules = this.fluentEnsure!.ensureObject();
+    this.fluentCustomizer = null;
+    return this;
+  }
+  /**
+   * Sets the display name of the ensured property.
+   */
+  public displayName(name: string): FluentRulesGenerator<TObject> {
+    this.fluentRules!.displayName(name);
+    return this;
+  }
+  /**
+   * Applies an ad-hoc rule function to the ensured property or object.
+   * @param condition The function to validate the rule.
+   * Will be called with two arguments, the property value and the object.
+   * Should return a boolean or a Promise that resolves to a boolean.
+   */
+  // tslint:disable-next-line:max-line-length
+  public satisfies<TValue>(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: object): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.satisfies(condition, config);
+    return this;
+  }
+  /**
+   * Applies a rule by name.
+   * @param name The name of the custom or standard rule.
+   * @param args The rule's arguments.
+   */
+  public satisfiesRule(name: string, ...args: any[]): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.satisfiesRule(name, ...args);
+    return this;
+  }
+  /**
+   * Applies the "required" rule to the property.
+   * The value cannot be null, undefined or whitespace.
+   */
+  public required(): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.required();
+    return this;
+  }
+  /**
+   * Applies the "matches" rule to the property.
+   * Value must match the specified regular expression.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public matches(regex: RegExp): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.matches(regex);
+    return this;
+  }
+  /**
+   * Applies the "email" rule to the property.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public email(): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.email();
+    return this;
+  }
+  /**
+   * Applies the "minLength" STRING validation rule to the property.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public minLength(length: number): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.minLength(length);
+    return this;
+  }
+  /**
+   * Applies the "maxLength" STRING validation rule to the property.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public maxLength(length: number): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.maxLength(length);
+    return this;
+  }
+  /**
+   * Applies the "minItems" ARRAY validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public minItems(count: number): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.minItems(count);
+    return this;
+  }
+  /**
+   * Applies the "maxItems" ARRAY validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public maxItems(count: number): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.maxItems(count);
+    return this;
+  }
+  /**
+   * Applies the "equals" validation rule to the property.
+   * null, undefined and empty-string values are considered valid.
+   */
+  public equals<TValue>(expectedValue: TValue): FluentRulesGenerator<TObject> {
+    this.fluentCustomizer = this.fluentRules!.equals(expectedValue);
+    return this;
+  }
+  /**
+   * Validate subsequent rules after previously declared rules have
+   * been validated successfully. Use to postpone validation of costly
+   * rules until less expensive rules pass validation.
+   */
+  public then(): FluentRulesGenerator<TObject> {
+    this.fluentRules!.sequence++;
+    return this;
+  }
+  /**
+   * Specifies the key to use when looking up the rule's validation message.
+   */
+  public withMessageKey(key: string): FluentRulesGenerator<TObject> {
+    this.assertFluentCustomizer();
+    this.fluentCustomizer!.withMessageKey(key);
+    return this;
+  }
+  /**
+   * Specifies rule's validation message.
+   */
+  public withMessage(message: string): FluentRulesGenerator<TObject> {
+    this.assertFluentCustomizer();
+    this.fluentCustomizer!.withMessage(message);
+    return this;
+  }
+  /**
+   * Specifies a condition that must be met before attempting to validate the rule.
+   * @param condition A function that accepts the object as a parameter and returns true
+   * or false whether the rule should be evaluated.
+   */
+  public when(condition: (object: TObject) => boolean): FluentRulesGenerator<TObject> {
+    this.assertFluentCustomizer();
+    this.fluentCustomizer!.when(condition);
+    return this;
+  }
+  /**
+   * Tags the rule instance, enabling the rule to be found easily
+   * using ValidationRules.taggedRules(rules, tag)
+   */
+  public tag(tag: string): FluentRulesGenerator<TObject> {
+    this.assertFluentCustomizer();
+    this.fluentCustomizer!.tag(tag);
+    return this;
+  }
+  /**
+   * Applies the rules to a class or object, making them discoverable by the StandardValidator.
+   * @param target A class or object.
+   */
+  public on(target: any): FluentRulesGenerator<TObject> {
+    this.fluentEnsure!.on(target);
+    return this;
+  }
+  /**
+   * Rules that have been defined using the fluent API.
+   */
+  public get rules(): Array<Array<Rule<TObject, any>>> {
+    return this.fluentEnsure!.rules;
+  }
+  /**
+   * Current rule sequence number. Used to postpone evaluation of rules until rules
+   * with lower sequence number have successfully validated. The "then" fluent API method
+   * manages this property, there's usually no need to set it directly.
+   */
+  public get sequence(): number {
+    return this.fluentRules!.sequence;
+  }
+
+  public get customRules(): {
+    [name: string]: {
+      condition: (value: any, object?: any, ...fluentArgs: any[]) => boolean | Promise<boolean>;
+      argsToConfig?: (...args: any[]) => any;
+    }
+  } {
+    return FluentRules.customRules;
+  }
+
+  private assertFluentCustomizer(): void | never {
+    if (!this.fluentCustomizer) {
+      throw new Error(`Invalid call sequence.  Are you trying to modify a rule that has not be defined?`);
+    }
+  }
+}
+
 /**
  * Part of the fluent rule API. Enables customizing property rules.
  */
@@ -33,19 +236,9 @@ export class FluentRuleCustomizer<TObject, TValue> {
   }
 
   /**
-   * Validate subsequent rules after previously declared rules have
-   * been validated successfully. Use to postpone validation of costly
-   * rules until less expensive rules pass validation.
-   */
-  public then() {
-    this.fluentRules.sequence++;
-    return this;
-  }
-
-  /**
    * Specifies the key to use when looking up the rule's validation message.
    */
-  public withMessageKey(key: string) {
+  public withMessageKey(key: string): FluentRuleCustomizer<TObject, TValue> {
     this.rule.messageKey = key;
     this.rule.message = null;
     return this;
@@ -54,7 +247,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
   /**
    * Specifies rule's validation message.
    */
-  public withMessage(message: string) {
+  public withMessage(message: string): FluentRuleCustomizer<TObject, TValue> {
     this.rule.messageKey = 'custom';
     this.rule.message = this.parsers.message.parse(message);
     return this;
@@ -65,7 +258,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * @param condition A function that accepts the object as a parameter and returns true
    * or false whether the rule should be evaluated.
    */
-  public when(condition: (object: TObject) => boolean) {
+  public when(condition: (object: TObject) => boolean): FluentRuleCustomizer<TObject, TValue> {
     this.rule.when = condition;
     return this;
   }
@@ -74,7 +267,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Tags the rule instance, enabling the rule to be found easily
    * using ValidationRules.taggedRules(rules, tag)
    */
-  public tag(tag: string) {
+  public tag(tag: string): FluentRuleCustomizer<TObject, TValue> {
     this.rule.tag = tag;
     return this;
   }
@@ -85,21 +278,21 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
    */
-  public ensure<TValue2>(subject: string | ((model: TObject) => TValue2)) {
+  public ensure<TValue2>(subject: string | ((model: TObject) => TValue2)): FluentRules<TObject, TValue2> {
     return this.fluentEnsure.ensure<TValue2>(subject);
   }
 
   /**
    * Targets an object with validation rules.
    */
-  public ensureObject() {
+  public ensureObject(): FluentRules<TObject, TObject> {
     return this.fluentEnsure.ensureObject();
   }
 
   /**
    * Rules that have been defined using the fluent API.
    */
-  public get rules() {
+  public get rules(): Array<Array<Rule<TObject, any>>> {
     return this.fluentEnsure.rules;
   }
 
@@ -107,19 +300,29 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies the rules to a class or object, making them discoverable by the StandardValidator.
    * @param target A class or object.
    */
-  public on(target: any) {
+  public on(target: any): FluentEnsure<TObject> {
     return this.fluentEnsure.on(target);
   }
 
   ///////// FluentRules APIs /////////
 
   /**
+   * Validate subsequent rules after previously declared rules have
+   * been validated successfully. Use to postpone validation of costly
+   * rules until less expensive rules pass validation.
+   */
+  public then(): FluentRuleCustomizer<TObject, TValue> {
+    this.fluentRules.sequence++;
+    return this;
+  }
+  /**
    * Applies an ad-hoc rule function to the ensured property or object.
    * @param condition The function to validate the rule.
    * Will be called with two arguments, the property value and the object.
    * Should return a boolean or a Promise that resolves to a boolean.
    */
-  public satisfies(condition: (value: TValue, object: TObject) => boolean | Promise<boolean>, config?: object) {
+  // tslint:disable-next-line:max-line-length
+  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: object): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.satisfies(condition, config);
   }
 
@@ -128,7 +331,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * @param name The name of the custom or standard rule.
    * @param args The rule's arguments.
    */
-  public satisfiesRule(name: string, ...args: any[]) {
+  public satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.satisfiesRule(name, ...args);
   }
 
@@ -136,7 +339,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies the "required" rule to the property.
    * The value cannot be null, undefined or whitespace.
    */
-  public required() {
+  public required(): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.required();
   }
 
@@ -145,7 +348,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Value must match the specified regular expression.
    * null, undefined and empty-string values are considered valid.
    */
-  public matches(regex: RegExp) {
+  public matches(regex: RegExp): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.matches(regex);
   }
 
@@ -153,7 +356,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies the "email" rule to the property.
    * null, undefined and empty-string values are considered valid.
    */
-  public email() {
+  public email(): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.email();
   }
 
@@ -161,7 +364,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies the "minLength" STRING validation rule to the property.
    * null, undefined and empty-string values are considered valid.
    */
-  public minLength(length: number) {
+  public minLength(length: number): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.minLength(length);
   }
 
@@ -169,7 +372,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies the "maxLength" STRING validation rule to the property.
    * null, undefined and empty-string values are considered valid.
    */
-  public maxLength(length: number) {
+  public maxLength(length: number): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.maxLength(length);
   }
 
@@ -177,7 +380,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies the "minItems" ARRAY validation rule to the property.
    * null and undefined values are considered valid.
    */
-  public minItems(count: number) {
+  public minItems(count: number): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.minItems(count);
   }
 
@@ -185,7 +388,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies the "maxItems" ARRAY validation rule to the property.
    * null and undefined values are considered valid.
    */
-  public maxItems(count: number) {
+  public maxItems(count: number): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.maxItems(count);
   }
 
@@ -193,7 +396,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Applies the "equals" validation rule to the property.
    * null, undefined and empty-string values are considered valid.
    */
-  public equals(expectedValue: TValue) {
+  public equals(expectedValue: TValue): FluentRuleCustomizer<TObject, TValue> {
     return this.fluentRules.equals(expectedValue);
   }
 }
@@ -236,7 +439,8 @@ export class FluentRules<TObject, TValue> {
    * Will be called with two arguments, the property value and the object.
    * Should return a boolean or a Promise that resolves to a boolean.
    */
-  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: object) {
+  // tslint:disable-next-line:max-line-length
+  public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: object): FluentRuleCustomizer<TObject, TValue> {
     return new FluentRuleCustomizer<TObject, TValue>(
       this.property, condition, config, this.fluentEnsure, this, this.parsers);
   }
@@ -291,9 +495,8 @@ export class FluentRules<TObject, TValue> {
    */
   public email() {
     // regex from https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
-    /* tslint:disable:max-line-length */
+    // tslint:disable-next-line:max-line-length
     return this.matches(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
-      /* tslint:enable:max-line-length */
       .withMessageKey('email');
   }
 
@@ -356,7 +559,8 @@ export class FluentEnsure<TObject> {
   /**
    * Rules that have been defined using the fluent API.
    */
-  public rules: Rule<TObject, any>[][] = [];
+  public rules: Array<Array<Rule<TObject, any>>> = [];
+  private properties: Map<string, RuleProperty> = new Map<string, RuleProperty>();
 
   constructor(private parsers: Parsers) { }
 
@@ -365,24 +569,53 @@ export class FluentEnsure<TObject> {
    * @param property The property to target. Can be the property name or a property accessor
    * function.
    */
-  public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>) {
+  public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRules<TObject, TValue> {
     this.assertInitialized();
+
+    //    const name = this.parsers.property.parse(property);
+    //    const fluentRules = new FluentRules<TObject, TValue>(
+    //      this,
+    //      this.parsers,
+    //      { name, displayName: null });
+    //    return this.mergeRules(fluentRules, name);
+
     const name = this.parsers.property.parse(property);
-    const fluentRules = new FluentRules<TObject, TValue>(
-      this,
-      this.parsers,
-      { name, displayName: null });
-    return this.mergeRules(fluentRules, name);
+
+    const ruleProperty = { name, displayName: null };
+
+    // if this property has been previously-ensured then we want to use that RuleProperty object
+    const preExistingProperty: RuleProperty | undefined = this.properties.get(name);
+
+    if (!preExistingProperty) {
+      this.properties.set(name, ruleProperty);
+    }
+
+    return new FluentRules<TObject, TValue>(this, this.parsers,
+      preExistingProperty ? preExistingProperty : ruleProperty);
   }
 
   /**
    * Targets an object with validation rules.
    */
-  public ensureObject() {
+  public ensureObject(): FluentRules<TObject, TObject> {
     this.assertInitialized();
-    const fluentRules = new FluentRules<TObject, TObject>(
-      this, this.parsers, { name: null, displayName: null });
-    return this.mergeRules(fluentRules, null);
+
+    //    const fluentRules = new FluentRules<TObject, TObject>(
+    //      this, this.parsers, { name: null, displayName: null });
+    //    return this.mergeRules(fluentRules, null);
+
+    const objectPropertyKey = '__objectProp__';
+    const ruleProperty: RuleProperty = { name: null, displayName: null };
+
+    // if this property has been previously-ensured then we want to use that RuleProperty object
+    const preExistingProperty: RuleProperty | undefined = this.properties.get(objectPropertyKey);
+
+    if (!preExistingProperty) {
+      this.properties.set(objectPropertyKey, ruleProperty);
+    }
+
+    return new FluentRules<TObject, TObject>(this, this.parsers,
+      preExistingProperty ? preExistingProperty : ruleProperty);
   }
 
   /**
@@ -412,17 +645,17 @@ export class FluentEnsure<TObject> {
     throw new Error(`Did you forget to add ".plugin('aurelia-validation')" to your main.js?`);
   }
 
-  private mergeRules(fluentRules: FluentRules<TObject, any>, propertyName: string | null) {
-    const existingRules = this.rules.find(r => r.length > 0 && r[0].property.name === propertyName);
-    if (existingRules) {
-      const rule = existingRules[existingRules.length - 1];
-      fluentRules.sequence = rule.sequence;
-      if (rule.property.displayName !== null) {
-        fluentRules = fluentRules.displayName(rule.property.displayName);
-      }
-    }
-    return fluentRules;
-  }
+  //  private mergeRules(fluentRules: FluentRules<TObject, any>, propertyName: string | null) {
+  //    const existingRules = this.rules.find(r => r.length > 0 && r[0].property.name === propertyName);
+  //    if (existingRules) {
+  //      const rule = existingRules[existingRules.length - 1];
+  //      fluentRules.sequence = rule.sequence;
+  //      if (rule.property.displayName !== null) {
+  //        fluentRules = fluentRules.displayName(rule.property.displayName);
+  //      }
+  //    }
+  //    return fluentRules;
+  //  }
 }
 
 /**
@@ -438,19 +671,48 @@ export class ValidationRules {
     };
   }
 
+  public static CreateFluentRulesGenerator(): FluentRulesGenerator<any> {
+    return new FluentRulesGenerator<any>(new FluentEnsure<any>(ValidationRules.parsers));
+  }
+
+  // tslint:disable:max-line-length
+
+  // /**
+  //  * Target a property with validation rules.
+  //  * @param property The property to target. Can be the property name or a property accessor function.
+  //  */
+  // // tslint:disable-next-line:max-line-length
+  // public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRules<TObject, TValue> {
+  //   // this works just as well:
+  //   // return new FluentRulesGenerator<TObject>(new FluentEnsure<TObject>(ValidationRules.parsers)).ensure(property);
+  //   return new FluentEnsure<TObject>(ValidationRules.parsers).ensure(property);
+  // }
+
+  // /**
+  //  * Targets an object with validation rules.
+  //  */
+  // public static ensureObject<TObject>(): FluentRules<TObject, any> {
+  //   // this works just as well:
+  //   // return new FluentRulesGenerator<TObject>(new FluentEnsure<TObject>(ValidationRules.parsers)).ensureObject();
+  //   return new FluentEnsure<TObject>(ValidationRules.parsers).ensureObject();
+  // }
+
+  // tslint:enable:max-line-length
+
   /**
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
    */
-  public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>) {
-    return new FluentEnsure<TObject>(ValidationRules.parsers).ensure(property);
+  // tslint:disable-next-line:max-line-length
+  public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRulesGenerator<TObject> {
+    return new FluentRulesGenerator<TObject>(new FluentEnsure<TObject>(ValidationRules.parsers)).ensure(property);
   }
 
   /**
    * Targets an object with validation rules.
    */
-  public static ensureObject<TObject>() {
-    return new FluentEnsure<TObject>(ValidationRules.parsers).ensureObject();
+  public static ensureObject<TObject>(): FluentRulesGenerator<TObject> {
+    return new FluentRulesGenerator<TObject>(new FluentEnsure<TObject>(ValidationRules.parsers)).ensureObject();
   }
 
   /**
