@@ -37,11 +37,7 @@ export class ValidationMessageProvider {
    */
   public getMessage(key: string): Expression {
     let message: string;
-    if (key in validationMessages) {
-      message = validationMessages[key];
-    } else {
-      message = validationMessages['default'];
-    }
+    message = (key in validationMessages) ? validationMessages[key] : validationMessages['default'];
     return this.parser.parse(message);
   }
 

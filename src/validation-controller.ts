@@ -104,11 +104,7 @@ export class ValidationController {
     propertyName: string | PropertyAccessor<TObject, string> | null = null
   ): ValidateResult {
     let resolvedPropertyName: string | null;
-    if (propertyName === null) {
-      resolvedPropertyName = propertyName;
-    } else {
-      resolvedPropertyName = this.propertyParser.parse(propertyName);
-    }
+    resolvedPropertyName = (propertyName === null) ? propertyName : this.propertyParser.parse(propertyName);
     const result = new ValidateResult({ __manuallyAdded__: true }, object, resolvedPropertyName, false, message);
     this.processResultDelta('validate', [], [result]);
     return result;
@@ -176,11 +172,8 @@ export class ValidationController {
     if (instruction) {
       const { object, propertyName, rules } = instruction;
       let predicate: (result: ValidateResult) => boolean;
-      if (instruction.propertyName) {
-        predicate = x => x.object === object && x.propertyName === propertyName;
-      } else {
-        predicate = x => x.object === object;
-      }
+      predicate = (instruction.propertyName) ? x => x.object === object && x.propertyName === propertyName :
+        x => x.object === object;
       if (rules) {
         return x => predicate(x) && this.validator.ruleExists(rules, x.rule);
       }
@@ -204,13 +197,11 @@ export class ValidationController {
       // if rules were not specified, check the object map.
       rules = rules || this.objects.get(object);
       // property specified?
-      if (instruction.propertyName === undefined) {
-        // validate the specified object.
-        execute = () => this.validator.validateObject(object, rules);
-      } else {
-        // validate the specified property.
-        execute = () => this.validator.validateProperty(object, propertyName, rules);
-      }
+      execute = (instruction.propertyName === undefined) ?
+        // validate the specified object
+        () => this.validator.validateObject(object, rules) :
+        // validate the specified property
+        () => this.validator.validateProperty(object, propertyName, rules);
     } else {
       // validate all objects and bindings.
       execute = () => {
