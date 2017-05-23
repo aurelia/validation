@@ -680,30 +680,23 @@ export class ValidationRules {
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
    */
+  // public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>) {
+  //   return new FluentEnsure<TObject>(ValidationRules.parsers).ensure(property);
+  // }
   public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRulesGenerator<TObject> {
     return new FluentRulesGenerator<TObject>(new FluentEnsure<TObject>(ValidationRules.parsers)).ensure(property);
   }
+
   /**
    * Targets an object with validation rules.
    */
+  // public static ensureObject<TObject>() {
+  //   return new FluentEnsure<TObject>(ValidationRules.parsers).ensureObject();
+  // }
   public static ensureObject<TObject>(): FluentRulesGenerator<TObject> {
     return new FluentRulesGenerator<TObject>(new FluentEnsure<TObject>(ValidationRules.parsers)).ensureObject();
   }
   // tslint:enable:max-line-length
-  // /**
-  //  * Target a property with validation rules.
-  //  * @param property The property to target. Can be the property name or a property accessor function.
-  //  */
-  // public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>) {
-  //   return new FluentEnsure<TObject>(ValidationRules.parsers).ensure(property);
-  // }
-
-  // /**
-  //  * Targets an object with validation rules.
-  //  */
-  // public static ensureObject<TObject>() {
-  //   return new FluentEnsure<TObject>(ValidationRules.parsers).ensureObject();
-  // }
   /**
    * Defines a custom rule.
    * @param name The name of the custom rule. Also serves as the message key.

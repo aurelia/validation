@@ -233,6 +233,7 @@ describe('Validator', () => {
       })
       .then((results: Array<ValidateResult>) => {
         expect(results.length).toEqual(2);
+        expect(results[0].valid).toEqual(false);
         expect(results[0].message).toEqual(messageRequiredConfirm);
         // a little weird since it actually isn't valid, it just hasn't been tested
         expect(results[1].valid).toEqual(true);
@@ -255,6 +256,28 @@ describe('Validator', () => {
         expect(results.length).toEqual(2);
         expect(results[0].valid).toEqual(true);
         expect(results[1].message).toEqual(messageMinLengthConfirm);
+        rules = ValidationRules
+          .ensure(propertyName)
+          .required()
+          .displayName(displayName)
+          .withMessage(messageRequired)
+          .then()
+          .ensure(propertyName) // <= challenge is putting another ensure after a then
+          .maxLength(5)
+          .withMessage(messageMinLength)
+          .on(obj)
+          .rules;
+
+        delete obj.name;
+        return validator.validateObject(obj, rules);
+      })
+      .then((results: Array<ValidateResult>) => {
+        // make sure 'then' is working
+        expect(results.length).toEqual(2);
+        expect(results[0].valid).toEqual(false);
+        expect(results[0].message).toEqual(messageRequiredConfirm);
+        // a little weird since it actually isn't valid, it just hasn't been tested
+        expect(results[1].valid).toEqual(true);
 
         rules = ValidationRules
           .ensure(propertyName)
@@ -272,6 +295,7 @@ describe('Validator', () => {
         obj.name = 'abc';
         return validator.validateObject(obj, rules);
       })
+
       .then((results: Array<ValidateResult>) => {
         expect(results.length).toEqual(2);
         expect(results[0].valid).toEqual(true);

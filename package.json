@@ -24,7 +24,7 @@
     "lint": "cross-env tslint --project tsconfig.json",
     "pretest": "cross-env npm run lint",
     "test": "cross-env rimraf dist && tsc && karma start --single-run",
-    "develop": "concurrently \"./node_modules/.bin/tsc --watch\" \"./node_modules/.bin/karma start\"",
+    "develop": "concurrently \"tsc --watch\" \"karma start\"",
     "prebuild:amd": "cross-env rimraf dist/amd",
     "build:amd": "cross-env tsc --project tsconfig.build.json --outDir dist/amd --module amd",
     "postbuild:amd": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/amd",
