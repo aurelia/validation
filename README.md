@@ -9,6 +9,12 @@ This library is part of the [Aurelia](http://www.aurelia.io/) platform and conta
 
 > To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.aurelia.io/) and [our email list](http://eepurl.com/ces50j). We also invite you to [follow us on twitter](https://twitter.com/aureliaeffect). If you have questions, please [join our community on Gitter](https://gitter.im/aurelia/discuss) or use [stack overflow](http://stackoverflow.com/search?q=aurelia). Documentation can be found [in our developer hub](http://aurelia.io/hub.html). If you would like to have deeper insight into our development process, please install the [ZenHub](https://zenhub.io) Chrome or Firefox Extension and visit any of our repository's boards.
 
+## Webpack Users
+
+You must add this to your postinstall script<br>
+<strong>rm -rf ./node_modules/aurelia-validation/node_modules</strong>
+<br>Reference this issue for more details: https://github.com/aurelia/validation/issues/445
+
 ## Documentation
 
 Check out the [docs](http://aurelia.io/hub.html#/doc/article/aurelia/validation/latest/validation-basics) on the Aurelia Hub.
