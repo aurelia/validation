@@ -11,8 +11,8 @@ This library is part of the [Aurelia](http://www.aurelia.io/) platform and conta
 
 ## Webpack Users
 
-You must add this to your postinstall script<br>
-<strong>rm -rf ./node_modules/aurelia-validation/node_modules</strong>
+You must add this to the scripts section in your package.json<br>
+<strong>"postinstall": "rm -rf ./node_modules/aurelia-validation/node_modules"</strong>
 <br>Reference this issue for more details: https://github.com/aurelia/validation/issues/445
 
 ## Documentation
