@@ -1,3 +1,4 @@
+// tslint:disable:no-invalid-template-strings
 import { Container } from 'aurelia-dependency-injection';
 import { BindingLanguage } from 'aurelia-templating';
 import { TemplatingBindingLanguage } from 'aurelia-templating-binding';

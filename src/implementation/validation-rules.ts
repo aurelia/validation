@@ -246,7 +246,7 @@ export class FluentRules<TObject, TValue> {
    * @param name The name of the custom or standard rule.
    * @param args The rule's arguments.
    */
-  public satisfiesRule(name: string, ...args: any[]) {
+  public satisfiesRule(name: string, ...args: any[]): FluentRuleCustomizer<TObject, TValue> {
     let rule = FluentRules.customRules[name];
     if (!rule) {
       // standard rule?

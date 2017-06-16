@@ -1,3 +1,4 @@
+// tslint:disable:no-invalid-template-strings
 import { inject } from 'aurelia-dependency-injection';
 import { inlineView } from 'aurelia-templating';
 import {

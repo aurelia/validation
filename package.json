@@ -20,7 +20,6 @@
     "url": "https://github.com/aurelia/validation"
   },
   "scripts": {
-    "postinstall": "npm uninstall @types/fs-extra @types/handlebars @types/highlight.js @types/lodash @types/marked @types/minimatch @types/shelljs",
     "lint": "cross-env tslint --project tsconfig.json",
     "pretest": "cross-env npm run lint",
     "test": "cross-env rimraf dist && tsc && karma start --single-run",
@@ -30,10 +29,10 @@
     "postbuild:amd": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/amd",
     "prebuild:commonjs": "cross-env rimraf dist/commonjs",
     "build:commonjs": "cross-env tsc --project tsconfig.build.json --outDir dist/commonjs --module commonjs",
-    "postbuild:commonjs": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/commonjs",    
+    "postbuild:commonjs": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/commonjs",
     "prebuild:es2017": "cross-env rimraf dist/es2017",
     "build:es2017": "cross-env tsc --project tsconfig.build.json --outDir dist/es2017 --module es2015 --target es2017",
-    "postbuild:es2017": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/es2017",    
+    "postbuild:es2017": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/es2017",
     "prebuild:es2015": "cross-env rimraf dist/es2015",
     "build:es2015": "cross-env tsc --project tsconfig.build.json --outDir dist/es2015 --module es2015 --target es2015",
     "postbuild:es2015": "cross-env copyfiles --up 1 src/**/*.html src/**/*.css dist/es2015",
@@ -62,54 +61,54 @@
       "dist": "dist/amd"
     },
     "peerDependencies": {
-      "aurelia-binding": "^1.2.0",
-      "aurelia-dependency-injection": "^1.3.0",
-      "aurelia-logging": "^1.3.0",
+      "aurelia-binding": "^1.2.1",
+      "aurelia-dependency-injection": "^1.3.1",
+      "aurelia-logging": "^1.3.1",
       "aurelia-pal": "^1.3.0",
       "aurelia-task-queue": "^1.2.0",
-      "aurelia-templating": "^1.4.0"
+      "aurelia-templating": "^1.4.2"
     },
     "dependencies": {
-      "aurelia-binding": "^1.2.0",
-      "aurelia-dependency-injection": "^1.3.0",
-      "aurelia-logging": "^1.3.0",
+      "aurelia-binding": "^1.2.1",
+      "aurelia-dependency-injection": "^1.3.1",
+      "aurelia-logging": "^1.3.1",
       "aurelia-pal": "^1.3.0",
       "aurelia-task-queue": "^1.2.0",
-      "aurelia-templating": "^1.4.0"
+      "aurelia-templating": "^1.4.2"
     },
     "devDependencies": {}
   },
   "dependencies": {
-    "aurelia-binding": "^1.2.0",
-    "aurelia-dependency-injection": "^1.3.0",
-    "aurelia-logging": "^1.3.0",
+    "aurelia-binding": "^1.2.1",
+    "aurelia-dependency-injection": "^1.3.1",
+    "aurelia-logging": "^1.3.1",
     "aurelia-pal": "^1.3.0",
     "aurelia-task-queue": "^1.2.0",
-    "aurelia-templating": "^1.4.0"
+    "aurelia-templating": "^1.4.2"
   },
   "devDependencies": {
-    "@types/node": "^7.0.12",
+    "@types/node": "^7.0.31",
     "aurelia-bootstrapper": "^2.1.1",
-    "aurelia-pal-browser": "^1.2.0",
+    "aurelia-pal-browser": "^1.2.1",
     "aurelia-pal-nodejs": "^1.0.0-beta.1.0.0",
     "aurelia-polyfills": "^1.2.1",
     "aurelia-testing": "^1.0.0-beta.3.0.1",
     "concurrently": "^3.4.0",
     "conventional-changelog-cli": "^1.3.1",
     "copyfiles": "^1.2.0",
-    "cross-env": "^4.0.0",
-    "jasmine-core": "^2.5.2",
-    "karma": "^1.5.0",
-    "karma-chrome-launcher": "^2.0.0",
+    "cross-env": "^5.0.1",
+    "jasmine-core": "^2.6.3",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.1.1",
     "karma-ie-launcher": "^1.0.0",
     "karma-jasmine": "^1.1.0",
     "karma-requirejs": "^1.1.0",
     "requirejs": "^2.3.3",
     "requirejs-text": "^2.0.15",
     "rimraf": "^2.6.1",
-    "tslint": "^5.0.0",
-    "typedoc": "^0.5.10",
-    "typescript": "^2.2.2"
+    "tslint": "^5.4.3",
+    "typedoc": "^0.7.1",
+    "typescript": "^2.3.4"
   },
   "aurelia": {
     "build": {
