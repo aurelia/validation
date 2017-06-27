@@ -65,17 +65,17 @@ define(["require", "exports", "aurelia-binding", "aurelia-dependency-injection",
                 this.controller.removeRenderer(this);
             }
         };
+        ValidationErrorsCustomAttribute.inject = [aurelia_pal_1.DOM.Element, aurelia_dependency_injection_1.Lazy.of(validation_controller_1.ValidationController)];
+        __decorate([
+            aurelia_templating_1.bindable({ defaultBindingMode: aurelia_binding_1.bindingMode.oneWay })
+        ], ValidationErrorsCustomAttribute.prototype, "controller", void 0);
+        __decorate([
+            aurelia_templating_1.bindable({ primaryProperty: true, defaultBindingMode: aurelia_binding_1.bindingMode.twoWay })
+        ], ValidationErrorsCustomAttribute.prototype, "errors", void 0);
+        ValidationErrorsCustomAttribute = __decorate([
+            aurelia_templating_1.customAttribute('validation-errors')
+        ], ValidationErrorsCustomAttribute);
         return ValidationErrorsCustomAttribute;
     }());
-    ValidationErrorsCustomAttribute.inject = [aurelia_pal_1.DOM.Element, aurelia_dependency_injection_1.Lazy.of(validation_controller_1.ValidationController)];
-    __decorate([
-        aurelia_templating_1.bindable({ defaultBindingMode: aurelia_binding_1.bindingMode.oneWay })
-    ], ValidationErrorsCustomAttribute.prototype, "controller", void 0);
-    __decorate([
-        aurelia_templating_1.bindable({ primaryProperty: true, defaultBindingMode: aurelia_binding_1.bindingMode.twoWay })
-    ], ValidationErrorsCustomAttribute.prototype, "errors", void 0);
-    ValidationErrorsCustomAttribute = __decorate([
-        aurelia_templating_1.customAttribute('validation-errors')
-    ], ValidationErrorsCustomAttribute);
     exports.ValidationErrorsCustomAttribute = ValidationErrorsCustomAttribute;
 });

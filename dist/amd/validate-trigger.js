@@ -25,5 +25,4 @@ define(["require", "exports"], function (require, exports) {
          */
         validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
     })(validateTrigger = exports.validateTrigger || (exports.validateTrigger = {}));
-    ;
 });

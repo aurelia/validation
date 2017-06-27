@@ -20,7 +20,7 @@ var ValidateResult = (function () {
     ValidateResult.prototype.toString = function () {
         return this.valid ? 'Valid.' : this.message;
     };
+    ValidateResult.nextId = 0;
     return ValidateResult;
 }());
 export { ValidateResult };
-ValidateResult.nextId = 0;

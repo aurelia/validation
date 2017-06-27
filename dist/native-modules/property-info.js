@@ -1,4 +1,4 @@
-import { AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter } from 'aurelia-binding';
+import { AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor } from 'aurelia-binding';
 function getObject(expression, objectExpression, source) {
     var value = objectExpression.evaluate(source, null);
     if (value === null || value === undefined || value instanceof Object) {
@@ -20,7 +20,7 @@ export function getPropertyInfo(expression, source) {
     var object;
     var propertyName;
     if (expression instanceof AccessScope) {
-        object = source.bindingContext;
+        object = getContextFor(expression.name, source, expression.ancestor);
         propertyName = expression.name;
     }
     else if (expression instanceof AccessMember) {

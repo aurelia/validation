@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var validation_controller_1 = require("./validation-controller");
 var validator_1 = require("./validator");
+var property_accessor_parser_1 = require("./property-accessor-parser");
 /**
  * Creates ValidationController instances.
  */
@@ -19,7 +20,8 @@ var ValidationControllerFactory = (function () {
         if (!validator) {
             validator = this.container.get(validator_1.Validator);
         }
-        return new validation_controller_1.ValidationController(validator);
+        var propertyParser = this.container.get(property_accessor_parser_1.PropertyAccessorParser);
+        return new validation_controller_1.ValidationController(validator, propertyParser);
     };
     /**
      * Creates a new controller and registers it in the current element's container so that it's

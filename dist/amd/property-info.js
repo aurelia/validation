@@ -22,7 +22,7 @@ define(["require", "exports", "aurelia-binding"], function (require, exports, au
         var object;
         var propertyName;
         if (expression instanceof aurelia_binding_1.AccessScope) {
-            object = source.bindingContext;
+            object = aurelia_binding_1.getContextFor(expression.name, source, expression.ancestor);
             propertyName = expression.name;
         }
         else if (expression instanceof aurelia_binding_1.AccessMember) {

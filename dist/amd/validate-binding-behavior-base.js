@@ -31,6 +31,7 @@ define(["require", "exports", "aurelia-dependency-injection", "./validation-cont
             if (trigger & validate_trigger_1.validateTrigger.change) {
                 binding.standardUpdateSource = binding.updateSource;
                 // tslint:disable-next-line:only-arrow-functions
+                // tslint:disable-next-line:space-before-function-paren
                 binding.updateSource = function (value) {
                     this.standardUpdateSource(value);
                     this.validationController.validateBinding(this);
@@ -47,6 +48,7 @@ define(["require", "exports", "aurelia-dependency-injection", "./validation-cont
             if (trigger !== validate_trigger_1.validateTrigger.manual) {
                 binding.standardUpdateTarget = binding.updateTarget;
                 // tslint:disable-next-line:only-arrow-functions
+                // tslint:disable-next-line:space-before-function-paren
                 binding.updateTarget = function (value) {
                     this.standardUpdateTarget(value);
                     this.validationController.resetBinding(this);

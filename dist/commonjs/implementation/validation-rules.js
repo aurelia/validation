@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var util_1 = require("./util");
 var rules_1 = require("./rules");
 var validation_messages_1 = require("./validation-messages");
+var util_1 = require("../util");
 /**
  * Part of the fluent rule API. Enables customizing property rules.
  */
 var FluentRuleCustomizer = (function () {
-    function FluentRuleCustomizer(property, condition, config, fluentEnsure, fluentRules, parser) {
+    function FluentRuleCustomizer(property, condition, config, fluentEnsure, fluentRules, parsers) {
         if (config === void 0) { config = {}; }
         this.fluentEnsure = fluentEnsure;
         this.fluentRules = fluentRules;
-        this.parser = parser;
+        this.parsers = parsers;
         this.rule = {
             property: property,
             condition: condition,
@@ -45,7 +45,7 @@ var FluentRuleCustomizer = (function () {
      */
     FluentRuleCustomizer.prototype.withMessage = function (message) {
         this.rule.messageKey = 'custom';
-        this.rule.message = this.parser.parseMessage(message);
+        this.rule.message = this.parsers.message.parse(message);
         return this;
     };
     /**
@@ -183,9 +183,9 @@ exports.FluentRuleCustomizer = FluentRuleCustomizer;
  * Part of the fluent rule API. Enables applying rules to properties and objects.
  */
 var FluentRules = (function () {
-    function FluentRules(fluentEnsure, parser, property) {
+    function FluentRules(fluentEnsure, parsers, property) {
         this.fluentEnsure = fluentEnsure;
-        this.parser = parser;
+        this.parsers = parsers;
         this.property = property;
         /**
          * Current rule sequence number. Used to postpone evaluation of rules until rules
@@ -208,7 +208,7 @@ var FluentRules = (function () {
      * Should return a boolean or a Promise that resolves to a boolean.
      */
     FluentRules.prototype.satisfies = function (condition, config) {
-        return new FluentRuleCustomizer(this.property, condition, config, this.fluentEnsure, this, this.parser);
+        return new FluentRuleCustomizer(this.property, condition, config, this.fluentEnsure, this, this.parsers);
     };
     /**
      * Applies a rule by name.
@@ -307,16 +307,16 @@ var FluentRules = (function () {
         return this.satisfies(function (value) { return value === null || value === undefined || value === '' || value === expectedValue; }, { expectedValue: expectedValue })
             .withMessageKey('equals');
     };
+    FluentRules.customRules = {};
     return FluentRules;
 }());
-FluentRules.customRules = {};
 exports.FluentRules = FluentRules;
 /**
  * Part of the fluent rule API. Enables targeting properties and objects with rules.
  */
 var FluentEnsure = (function () {
-    function FluentEnsure(parser) {
-        this.parser = parser;
+    function FluentEnsure(parsers) {
+        this.parsers = parsers;
         /**
          * Rules that have been defined using the fluent API.
          */
@@ -329,14 +329,17 @@ var FluentEnsure = (function () {
      */
     FluentEnsure.prototype.ensure = function (property) {
         this.assertInitialized();
-        return new FluentRules(this, this.parser, this.parser.parseProperty(property));
+        var name = this.parsers.property.parse(property);
+        var fluentRules = new FluentRules(this, this.parsers, { name: name, displayName: null });
+        return this.mergeRules(fluentRules, name);
     };
     /**
      * Targets an object with validation rules.
      */
     FluentEnsure.prototype.ensureObject = function () {
         this.assertInitialized();
-        return new FluentRules(this, this.parser, { name: null, displayName: null });
+        var fluentRules = new FluentRules(this, this.parsers, { name: null, displayName: null });
+        return this.mergeRules(fluentRules, null);
     };
     /**
      * Applies the rules to a class or object, making them discoverable by the StandardValidator.
@@ -357,10 +360,21 @@ var FluentEnsure = (function () {
         this.rules[rule.sequence].push(rule);
     };
     FluentEnsure.prototype.assertInitialized = function () {
-        if (this.parser) {
+        if (this.parsers) {
             return;
         }
         throw new Error("Did you forget to add \".plugin('aurelia-validation')\" to your main.js?");
+    };
+    FluentEnsure.prototype.mergeRules = function (fluentRules, propertyName) {
+        var existingRules = this.rules.find(function (r) { return r.length > 0 && r[0].property.name === propertyName; });
+        if (existingRules) {
+            var rule = existingRules[existingRules.length - 1];
+            fluentRules.sequence = rule.sequence;
+            if (rule.property.displayName !== null) {
+                fluentRules = fluentRules.displayName(rule.property.displayName);
+            }
+        }
+        return fluentRules;
     };
     return FluentEnsure;
 }());
@@ -371,21 +385,24 @@ exports.FluentEnsure = FluentEnsure;
 var ValidationRules = (function () {
     function ValidationRules() {
     }
-    ValidationRules.initialize = function (parser) {
-        ValidationRules.parser = parser;
+    ValidationRules.initialize = function (messageParser, propertyParser) {
+        this.parsers = {
+            message: messageParser,
+            property: propertyParser
+        };
     };
     /**
      * Target a property with validation rules.
      * @param property The property to target. Can be the property name or a property accessor function.
      */
     ValidationRules.ensure = function (property) {
-        return new FluentEnsure(ValidationRules.parser).ensure(property);
+        return new FluentEnsure(ValidationRules.parsers).ensure(property);
     };
     /**
      * Targets an object with validation rules.
      */
     ValidationRules.ensureObject = function () {
-        return new FluentEnsure(ValidationRules.parser).ensureObject();
+        return new FluentEnsure(ValidationRules.parsers).ensureObject();
     };
     /**
      * Defines a custom rule.
@@ -406,6 +423,13 @@ var ValidationRules = (function () {
      */
     ValidationRules.taggedRules = function (rules, tag) {
         return rules.map(function (x) { return x.filter(function (r) { return r.tag === tag; }); });
+    };
+    /**
+     * Returns rules that have no tag.
+     * @param rules The rules to search.
+     */
+    ValidationRules.untaggedRules = function (rules) {
+        return rules.map(function (x) { return x.filter(function (r) { return r.tag === undefined; }); });
     };
     /**
      * Removes the rules from a class or object.

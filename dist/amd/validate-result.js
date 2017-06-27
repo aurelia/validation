@@ -23,8 +23,8 @@ define(["require", "exports"], function (require, exports) {
         ValidateResult.prototype.toString = function () {
             return this.valid ? 'Valid.' : this.message;
         };
+        ValidateResult.nextId = 0;
         return ValidateResult;
     }());
-    ValidateResult.nextId = 0;
     exports.ValidateResult = ValidateResult;
 });

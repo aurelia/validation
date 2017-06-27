@@ -5,6 +5,8 @@ import { ValidationRenderer } from './validation-renderer';
 import { ValidateResult } from './validate-result';
 import { ValidateInstruction } from './validate-instruction';
 import { ControllerValidateResult } from './controller-validate-result';
+import { PropertyAccessorParser, PropertyAccessor } from './property-accessor-parser';
+import { ValidateEvent } from './validate-event';
 /**
  * Orchestrates validation.
  * Manages a set of bindings, renderers and objects.
@@ -12,7 +14,8 @@ import { ControllerValidateResult } from './controller-validate-result';
  */
 export declare class ValidationController {
     private validator;
-    static inject: typeof Validator[];
+    private propertyParser;
+    static inject: (typeof PropertyAccessorParser | typeof Validator)[];
     private bindings;
     private renderers;
     /**
@@ -34,7 +37,16 @@ export declare class ValidationController {
      */
     validateTrigger: validateTrigger;
     private finishValidating;
-    constructor(validator: Validator);
+    private eventCallbacks;
+    constructor(validator: Validator, propertyParser: PropertyAccessorParser);
+    /**
+     * Subscribe to controller validate and reset events. These events occur when the
+     * controller's "validate"" and "reset" methods are called.
+     * @param callback The callback to be invoked when the controller validates or resets.
+     */
+    subscribe(callback: (event: ValidateEvent) => void): {
+        dispose: () => void;
+    };
     /**
      * Adds an object to the set of objects that should be validated when validate is called.
      * @param object The object.
@@ -49,7 +61,7 @@ export declare class ValidationController {
     /**
      * Adds and renders an error.
      */
-    addError(message: string, object: any, propertyName?: string | null): ValidateResult;
+    addError<TObject>(message: string, object: TObject, propertyName?: string | PropertyAccessor<TObject, string> | null): ValidateResult;
     /**
      * Removes and unrenders an error.
      */
@@ -106,4 +118,14 @@ export declare class ValidationController {
      * Resets the results for a property associated with a binding.
      */
     resetBinding(binding: Binding): void;
+    /**
+     * Changes the controller's validateTrigger.
+     * @param newTrigger The new validateTrigger
+     */
+    changeTrigger(newTrigger: validateTrigger): void;
+    /**
+     * Revalidates the controller's current set of errors.
+     */
+    revalidateErrors(): void;
+    private invokeCallbacks(instruction, result);
 }

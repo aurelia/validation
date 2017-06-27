@@ -1,7 +1,9 @@
 // Exports
 export * from './get-target-dom-element';
 export * from './property-info';
+export * from './property-accessor-parser';
 export * from './validate-binding-behavior';
+export * from './validate-event';
 export * from './validate-result';
 export * from './validate-trigger';
 export * from './validation-controller';
@@ -12,13 +14,14 @@ export * from './validator';
 export * from './implementation/rules';
 export * from './implementation/standard-validator';
 export * from './implementation/validation-messages';
-export * from './implementation/validation-parser';
+export * from './implementation/validation-message-parser';
 export * from './implementation/validation-rules';
 // Configuration
 import { PLATFORM } from 'aurelia-pal';
 import { Validator } from './validator';
 import { StandardValidator } from './implementation/standard-validator';
-import { ValidationParser } from './implementation/validation-parser';
+import { ValidationMessageParser } from './implementation/validation-message-parser';
+import { PropertyAccessorParser } from './property-accessor-parser';
 import { ValidationRules } from './implementation/validation-rules';
 /**
  * Aurelia Validation Configuration API
@@ -49,8 +52,9 @@ export { AureliaValidationConfiguration };
 export function configure(frameworkConfig, callback) {
     // the fluent rule definition API needs the parser to translate messages
     // to interpolation expressions.
-    var parser = frameworkConfig.container.get(ValidationParser);
-    ValidationRules.initialize(parser);
+    var messageParser = frameworkConfig.container.get(ValidationMessageParser);
+    var propertyParser = frameworkConfig.container.get(PropertyAccessorParser);
+    ValidationRules.initialize(messageParser, propertyParser);
     // configure...
     var config = new AureliaValidationConfiguration();
     if (callback instanceof Function) {

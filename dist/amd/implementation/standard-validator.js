@@ -131,8 +131,8 @@ define(["require", "exports", "aurelia-templating", "../validator", "../validate
             }
             return this.validateRuleSequence(object, propertyName, rules, 0, []);
         };
+        StandardValidator.inject = [validation_messages_1.ValidationMessageProvider, aurelia_templating_1.ViewResources];
         return StandardValidator;
     }(validator_1.Validator));
-    StandardValidator.inject = [validation_messages_1.ValidationMessageProvider, aurelia_templating_1.ViewResources];
     exports.StandardValidator = StandardValidator;
 });

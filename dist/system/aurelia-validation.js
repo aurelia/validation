@@ -1,5 +1,5 @@
 // Exports
-System.register(["./get-target-dom-element", "./property-info", "./validate-binding-behavior", "./validate-result", "./validate-trigger", "./validation-controller", "./validation-controller-factory", "./validation-errors-custom-attribute", "./validation-renderer-custom-attribute", "./validator", "./implementation/rules", "./implementation/standard-validator", "./implementation/validation-messages", "./implementation/validation-parser", "./implementation/validation-rules", "aurelia-pal"], function (exports_1, context_1) {
+System.register(["./get-target-dom-element", "./property-info", "./property-accessor-parser", "./validate-binding-behavior", "./validate-event", "./validate-result", "./validate-trigger", "./validation-controller", "./validation-controller-factory", "./validation-errors-custom-attribute", "./validation-renderer-custom-attribute", "./validator", "./implementation/rules", "./implementation/standard-validator", "./implementation/validation-messages", "./implementation/validation-message-parser", "./implementation/validation-rules", "aurelia-pal"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     /**
@@ -8,8 +8,9 @@ System.register(["./get-target-dom-element", "./property-info", "./validate-bind
     function configure(frameworkConfig, callback) {
         // the fluent rule definition API needs the parser to translate messages
         // to interpolation expressions.
-        var parser = frameworkConfig.container.get(validation_parser_1.ValidationParser);
-        validation_rules_1.ValidationRules.initialize(parser);
+        var messageParser = frameworkConfig.container.get(validation_message_parser_1.ValidationMessageParser);
+        var propertyParser = frameworkConfig.container.get(property_accessor_parser_1.PropertyAccessorParser);
+        validation_rules_1.ValidationRules.initialize(messageParser, propertyParser);
         // configure...
         var config = new AureliaValidationConfiguration();
         if (callback instanceof Function) {
@@ -22,7 +23,7 @@ System.register(["./get-target-dom-element", "./property-info", "./validate-bind
         }
     }
     exports_1("configure", configure);
-    var aurelia_pal_1, validator_1, standard_validator_1, validation_parser_1, validation_rules_1, AureliaValidationConfiguration;
+    var aurelia_pal_1, validator_1, standard_validator_1, validation_message_parser_1, property_accessor_parser_1, validation_rules_1, AureliaValidationConfiguration;
     var exportedNames_1 = {
         "AureliaValidationConfiguration": true,
         "configure": true
@@ -42,8 +43,15 @@ System.register(["./get-target-dom-element", "./property-info", "./validate-bind
             function (property_info_1_1) {
                 exportStar_1(property_info_1_1);
             },
+            function (property_accessor_parser_2_1) {
+                exportStar_1(property_accessor_parser_2_1);
+                property_accessor_parser_1 = property_accessor_parser_2_1;
+            },
             function (validate_binding_behavior_1_1) {
                 exportStar_1(validate_binding_behavior_1_1);
+            },
+            function (validate_event_1_1) {
+                exportStar_1(validate_event_1_1);
             },
             function (validate_result_1_1) {
                 exportStar_1(validate_result_1_1);
@@ -77,9 +85,9 @@ System.register(["./get-target-dom-element", "./property-info", "./validate-bind
             function (validation_messages_1_1) {
                 exportStar_1(validation_messages_1_1);
             },
-            function (validation_parser_2_1) {
-                exportStar_1(validation_parser_2_1);
-                validation_parser_1 = validation_parser_2_1;
+            function (validation_message_parser_2_1) {
+                exportStar_1(validation_message_parser_2_1);
+                validation_message_parser_1 = validation_message_parser_2_1;
             },
             function (validation_rules_2_1) {
                 exportStar_1(validation_rules_2_1);

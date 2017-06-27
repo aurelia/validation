@@ -1,4 +1,4 @@
-import { ValidationParser } from './validation-parser';
+import { ValidationMessageParser } from './validation-message-parser';
 /**
  * Dictionary of validation messages. [messageKey]: messageExpression
  */
@@ -35,7 +35,7 @@ var ValidationMessageProvider = (function () {
         else {
             message = validationMessages['default'];
         }
-        return this.parser.parseMessage(message);
+        return this.parser.parse(message);
     };
     /**
      * Formulates a property display name using the property name and the configured
@@ -52,7 +52,7 @@ var ValidationMessageProvider = (function () {
         // capitalize first letter.
         return words.charAt(0).toUpperCase() + words.slice(1);
     };
+    ValidationMessageProvider.inject = [ValidationMessageParser];
     return ValidationMessageProvider;
 }());
 export { ValidationMessageProvider };
-ValidationMessageProvider.inject = [ValidationParser];

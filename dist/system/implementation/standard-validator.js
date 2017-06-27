@@ -31,10 +31,6 @@ System.register(["aurelia-templating", "../validator", "../validate-result", "./
             }
         ],
         execute: function () {
-            /**
-             * Validates.
-             * Responsible for validating objects and properties.
-             */
             StandardValidator = (function (_super) {
                 __extends(StandardValidator, _super);
                 function StandardValidator(messageProvider, resources) {
@@ -151,9 +147,9 @@ System.register(["aurelia-templating", "../validator", "../validate-result", "./
                     }
                     return this.validateRuleSequence(object, propertyName, rules, 0, []);
                 };
+                StandardValidator.inject = [validation_messages_1.ValidationMessageProvider, aurelia_templating_1.ViewResources];
                 return StandardValidator;
             }(validator_1.Validator));
-            StandardValidator.inject = [validation_messages_1.ValidationMessageProvider, aurelia_templating_1.ViewResources];
             exports_1("StandardValidator", StandardValidator);
         }
     };

@@ -5,9 +5,6 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            /**
-             * The result of validating an individual validation rule.
-             */
             ValidateResult = (function () {
                 /**
                  * @param rule The rule associated with the result. Validator implementation specific.
@@ -27,9 +24,9 @@ System.register([], function (exports_1, context_1) {
                 ValidateResult.prototype.toString = function () {
                     return this.valid ? 'Valid.' : this.message;
                 };
+                ValidateResult.nextId = 0;
                 return ValidateResult;
             }());
-            ValidateResult.nextId = 0;
             exports_1("ValidateResult", ValidateResult);
         }
     };

@@ -24,4 +24,3 @@ var validateTrigger;
      */
     validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
 })(validateTrigger = exports.validateTrigger || (exports.validateTrigger = {}));
-;

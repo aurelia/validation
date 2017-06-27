@@ -1,4 +1,4 @@
-define(["require", "exports", "./validation-parser"], function (require, exports, validation_parser_1) {
+define(["require", "exports", "./validation-message-parser"], function (require, exports, validation_message_parser_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -37,7 +37,7 @@ define(["require", "exports", "./validation-parser"], function (require, exports
             else {
                 message = exports.validationMessages['default'];
             }
-            return this.parser.parseMessage(message);
+            return this.parser.parse(message);
         };
         /**
          * Formulates a property display name using the property name and the configured
@@ -54,8 +54,8 @@ define(["require", "exports", "./validation-parser"], function (require, exports
             // capitalize first letter.
             return words.charAt(0).toUpperCase() + words.slice(1);
         };
+        ValidationMessageProvider.inject = [validation_message_parser_1.ValidationMessageParser];
         return ValidationMessageProvider;
     }());
-    ValidationMessageProvider.inject = [validation_parser_1.ValidationParser];
     exports.ValidationMessageProvider = ValidationMessageProvider;
 });

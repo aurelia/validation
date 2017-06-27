@@ -29,7 +29,6 @@ System.register([], function (exports_1, context_1) {
                 validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
             })(validateTrigger || (validateTrigger = {}));
             exports_1("validateTrigger", validateTrigger);
-            ;
         }
     };
 });

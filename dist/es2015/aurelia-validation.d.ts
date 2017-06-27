@@ -1,7 +1,9 @@
 export * from './controller-validate-result';
 export * from './get-target-dom-element';
 export * from './property-info';
+export * from './property-accessor-parser';
 export * from './validate-binding-behavior';
+export * from './validate-event';
 export * from './validate-instruction';
 export * from './validate-result';
 export * from './validate-trigger';
@@ -15,7 +17,7 @@ export * from './implementation/rule';
 export * from './implementation/rules';
 export * from './implementation/standard-validator';
 export * from './implementation/validation-messages';
-export * from './implementation/validation-parser';
+export * from './implementation/validation-message-parser';
 export * from './implementation/validation-rules';
 import { Container } from 'aurelia-dependency-injection';
 import { Validator } from './validator';

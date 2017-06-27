@@ -1,3 +1,24 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/aurelia/validation/compare/1.0.0...v1.1.0) (2017-06-27)
+
+
+### Bug Fixes
+
+* **getPropertyInfo:** use scope traversal ([6789112](https://github.com/aurelia/validation/commit/6789112)), closes [#408](https://github.com/aurelia/validation/issues/408)
+* **ValidationControllerFactory:** supply required arg ([377e6c9](https://github.com/aurelia/validation/commit/377e6c9))
+* **ValidationRules:** merge rules for same property ([33f741a](https://github.com/aurelia/validation/commit/33f741a)), closes [#400](https://github.com/aurelia/validation/issues/400)
+* **ValidationRules:** satisfies callback arg required ([258615e](https://github.com/aurelia/validation/commit/258615e)), closes [#426](https://github.com/aurelia/validation/issues/426)
+
+
+### Features
+
+* **build:** add ES2017 target ([b266af5](https://github.com/aurelia/validation/commit/b266af5))
+* **ValidationController:** accept property accessor expression in addError ([842fb4c](https://github.com/aurelia/validation/commit/842fb4c)), closes [#422](https://github.com/aurelia/validation/issues/422)
+* **ValidationController:** add revalidateErrors method ([47026ec](https://github.com/aurelia/validation/commit/47026ec)), closes [#349](https://github.com/aurelia/validation/issues/349)
+* **ValidationController:** events ([57232ce](https://github.com/aurelia/validation/commit/57232ce)), closes [#318](https://github.com/aurelia/validation/issues/318)
+* **ValidationRules:** untaggedRules ([549a4a9](https://github.com/aurelia/validation/commit/549a4a9)), closes [#436](https://github.com/aurelia/validation/issues/436)
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/aurelia/validation/compare/1.0.0-beta.1.0.1...v1.0.0) (2017-03-01)
 
@@ -230,6 +251,3 @@
 ### Features
 
 * **validation:** add binding behavior ([7f9817a](https://github.com/aurelia/validation/commit/7f9817a))
-
-
-

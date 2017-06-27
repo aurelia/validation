@@ -67,16 +67,16 @@ var ValidationErrorsCustomAttribute = (function () {
             this.controller.removeRenderer(this);
         }
     };
+    ValidationErrorsCustomAttribute.inject = [DOM.Element, Lazy.of(ValidationController)];
+    __decorate([
+        bindable({ defaultBindingMode: bindingMode.oneWay })
+    ], ValidationErrorsCustomAttribute.prototype, "controller", void 0);
+    __decorate([
+        bindable({ primaryProperty: true, defaultBindingMode: bindingMode.twoWay })
+    ], ValidationErrorsCustomAttribute.prototype, "errors", void 0);
+    ValidationErrorsCustomAttribute = __decorate([
+        customAttribute('validation-errors')
+    ], ValidationErrorsCustomAttribute);
     return ValidationErrorsCustomAttribute;
 }());
-ValidationErrorsCustomAttribute.inject = [DOM.Element, Lazy.of(ValidationController)];
-__decorate([
-    bindable({ defaultBindingMode: bindingMode.oneWay })
-], ValidationErrorsCustomAttribute.prototype, "controller", void 0);
-__decorate([
-    bindable({ primaryProperty: true, defaultBindingMode: bindingMode.twoWay })
-], ValidationErrorsCustomAttribute.prototype, "errors", void 0);
-ValidationErrorsCustomAttribute = __decorate([
-    customAttribute('validation-errors')
-], ValidationErrorsCustomAttribute);
 export { ValidationErrorsCustomAttribute };

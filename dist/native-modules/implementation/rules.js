@@ -28,10 +28,10 @@ var Rules = (function () {
     Rules.get = function (target) {
         return target[Rules.key] || null;
     };
+    /**
+     * The name of the property that stores the rules.
+     */
+    Rules.key = '__rules__';
     return Rules;
 }());
 export { Rules };
-/**
- * The name of the property that stores the rules.
- */
-Rules.key = '__rules__';

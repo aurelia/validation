@@ -1,4 +1,4 @@
-System.register(["aurelia-binding", "aurelia-templating", "./util", "aurelia-logging"], function (exports_1, context_1) {
+System.register(["aurelia-binding", "aurelia-templating", "aurelia-logging", "./expression-visitor"], function (exports_1, context_1) {
     "use strict";
     var __extends = (this && this.__extends) || (function () {
         var extendStatics = Object.setPrototypeOf ||
@@ -11,7 +11,7 @@ System.register(["aurelia-binding", "aurelia-templating", "./util", "aurelia-log
         };
     })();
     var __moduleName = context_1 && context_1.id;
-    var aurelia_binding_1, aurelia_templating_1, util_1, LogManager, ValidationParser, MessageExpressionValidator;
+    var aurelia_binding_1, aurelia_templating_1, LogManager, expression_visitor_1, ValidationMessageParser, MessageExpressionValidator;
     return {
         setters: [
             function (aurelia_binding_1_1) {
@@ -20,24 +20,23 @@ System.register(["aurelia-binding", "aurelia-templating", "./util", "aurelia-log
             function (aurelia_templating_1_1) {
                 aurelia_templating_1 = aurelia_templating_1_1;
             },
-            function (util_1_1) {
-                util_1 = util_1_1;
-            },
             function (LogManager_1) {
                 LogManager = LogManager_1;
+            },
+            function (expression_visitor_1_1) {
+                expression_visitor_1 = expression_visitor_1_1;
             }
         ],
         execute: function () {
-            ValidationParser = (function () {
-                function ValidationParser(parser, bindinqLanguage) {
-                    this.parser = parser;
+            ValidationMessageParser = (function () {
+                function ValidationMessageParser(bindinqLanguage) {
                     this.bindinqLanguage = bindinqLanguage;
                     this.emptyStringExpression = new aurelia_binding_1.LiteralString('');
                     this.nullExpression = new aurelia_binding_1.LiteralPrimitive(null);
                     this.undefinedExpression = new aurelia_binding_1.LiteralPrimitive(undefined);
                     this.cache = {};
                 }
-                ValidationParser.prototype.parseMessage = function (message) {
+                ValidationMessageParser.prototype.parse = function (message) {
                     if (this.cache[message] !== undefined) {
                         return this.cache[message];
                     }
@@ -53,43 +52,18 @@ System.register(["aurelia-binding", "aurelia-templating", "./util", "aurelia-log
                     this.cache[message] = expression;
                     return expression;
                 };
-                ValidationParser.prototype.parseProperty = function (property) {
-                    if (util_1.isString(property)) {
-                        return { name: property, displayName: null };
-                    }
-                    var accessor = this.getAccessorExpression(property.toString());
-                    if (accessor instanceof aurelia_binding_1.AccessScope
-                        || accessor instanceof aurelia_binding_1.AccessMember && accessor.object instanceof aurelia_binding_1.AccessScope) {
-                        return {
-                            name: accessor.name,
-                            displayName: null
-                        };
-                    }
-                    throw new Error("Invalid subject: \"" + accessor + "\"");
-                };
-                ValidationParser.prototype.coalesce = function (part) {
+                ValidationMessageParser.prototype.coalesce = function (part) {
                     // part === null || part === undefined ? '' : part
                     return new aurelia_binding_1.Conditional(new aurelia_binding_1.Binary('||', new aurelia_binding_1.Binary('===', part, this.nullExpression), new aurelia_binding_1.Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new aurelia_binding_1.CallMember(part, 'toString', []));
                 };
-                ValidationParser.prototype.getAccessorExpression = function (fn) {
-                    /* tslint:disable:max-line-length */
-                    var classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?\s*(?:[$_\w\d.['"\]+;]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
-                    /* tslint:enable:max-line-length */
-                    var arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
-                    var match = classic.exec(fn) || arrow.exec(fn);
-                    if (match === null) {
-                        throw new Error("Unable to parse accessor function:\n" + fn);
-                    }
-                    return this.parser.parse(match[1]);
-                };
-                return ValidationParser;
+                ValidationMessageParser.inject = [aurelia_templating_1.BindingLanguage];
+                return ValidationMessageParser;
             }());
-            ValidationParser.inject = [aurelia_binding_1.Parser, aurelia_templating_1.BindingLanguage];
-            exports_1("ValidationParser", ValidationParser);
+            exports_1("ValidationMessageParser", ValidationMessageParser);
             MessageExpressionValidator = (function (_super) {
                 __extends(MessageExpressionValidator, _super);
                 function MessageExpressionValidator(originalMessage) {
-                    var _this = _super.call(this, []) || this;
+                    var _this = _super.call(this) || this;
                     _this.originalMessage = originalMessage;
                     return _this;
                 }
@@ -107,7 +81,7 @@ System.register(["aurelia-binding", "aurelia-templating", "./util", "aurelia-log
                     }
                 };
                 return MessageExpressionValidator;
-            }(aurelia_binding_1.Unparser));
+            }(expression_visitor_1.ExpressionVisitor));
             exports_1("MessageExpressionValidator", MessageExpressionValidator);
         }
     };

@@ -133,7 +133,7 @@ var StandardValidator = (function (_super) {
         }
         return this.validateRuleSequence(object, propertyName, rules, 0, []);
     };
+    StandardValidator.inject = [ValidationMessageProvider, ViewResources];
     return StandardValidator;
 }(Validator));
 export { StandardValidator };
-StandardValidator.inject = [ValidationMessageProvider, ViewResources];

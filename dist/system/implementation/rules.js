@@ -5,10 +5,10 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            /**
-             * Sets, unsets and retrieves rules on an object or constructor function.
-             */
             Rules = (function () {
+                /**
+                 * Sets, unsets and retrieves rules on an object or constructor function.
+                 */
                 function Rules() {
                 }
                 /**
@@ -35,12 +35,12 @@ System.register([], function (exports_1, context_1) {
                 Rules.get = function (target) {
                     return target[Rules.key] || null;
                 };
+                /**
+                 * The name of the property that stores the rules.
+                 */
+                Rules.key = '__rules__';
                 return Rules;
             }());
-            /**
-             * The name of the property that stores the rules.
-             */
-            Rules.key = '__rules__';
             exports_1("Rules", Rules);
         }
     };

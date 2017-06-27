@@ -2,14 +2,17 @@ import { Validator } from './validator';
 import { validateTrigger } from './validate-trigger';
 import { getPropertyInfo } from './property-info';
 import { ValidateResult } from './validate-result';
+import { PropertyAccessorParser } from './property-accessor-parser';
+import { ValidateEvent } from './validate-event';
 /**
  * Orchestrates validation.
  * Manages a set of bindings, renderers and objects.
  * Exposes the current list of validation results for binding purposes.
  */
 var ValidationController = (function () {
-    function ValidationController(validator) {
+    function ValidationController(validator, propertyParser) {
         this.validator = validator;
+        this.propertyParser = propertyParser;
         // Registered bindings (via the validate binding behavior)
         this.bindings = new Map();
         // Renderers that have been added to the controller instance.
@@ -36,7 +39,26 @@ var ValidationController = (function () {
         this.validateTrigger = validateTrigger.blur;
         // Promise that resolves when validation has completed.
         this.finishValidating = Promise.resolve();
+        this.eventCallbacks = [];
     }
+    /**
+     * Subscribe to controller validate and reset events. These events occur when the
+     * controller's "validate"" and "reset" methods are called.
+     * @param callback The callback to be invoked when the controller validates or resets.
+     */
+    ValidationController.prototype.subscribe = function (callback) {
+        var _this = this;
+        this.eventCallbacks.push(callback);
+        return {
+            dispose: function () {
+                var index = _this.eventCallbacks.indexOf(callback);
+                if (index === -1) {
+                    return;
+                }
+                _this.eventCallbacks.splice(index, 1);
+            }
+        };
+    };
     /**
      * Adds an object to the set of objects that should be validated when validate is called.
      * @param object The object.
@@ -58,7 +80,14 @@ var ValidationController = (function () {
      */
     ValidationController.prototype.addError = function (message, object, propertyName) {
         if (propertyName === void 0) { propertyName = null; }
-        var result = new ValidateResult({}, object, propertyName, false, message);
+        var resolvedPropertyName;
+        if (propertyName === null) {
+            resolvedPropertyName = propertyName;
+        }
+        else {
+            resolvedPropertyName = this.propertyParser.parse(propertyName);
+        }
+        var result = new ValidateResult({ __manuallyAdded__: true }, object, resolvedPropertyName, false, message);
         this.processResultDelta('validate', [], [result]);
         return result;
     };
@@ -196,6 +225,7 @@ var ValidationController = (function () {
                 valid: newResults.find(function (x) { return !x.valid; }) === undefined,
                 results: newResults
             };
+            _this.invokeCallbacks(instruction, result);
             return result;
         })
             .catch(function (exception) {
@@ -216,6 +246,7 @@ var ValidationController = (function () {
         var predicate = this.getInstructionPredicate(instruction);
         var oldResults = this.results.filter(predicate);
         this.processResultDelta('reset', oldResults, []);
+        this.invokeCallbacks(instruction, null);
     };
     /**
      * Gets the elements associated with an object and propertyName (if any).
@@ -340,7 +371,43 @@ var ValidationController = (function () {
         var object = propertyInfo.object, propertyName = propertyInfo.propertyName;
         this.reset({ object: object, propertyName: propertyName });
     };
+    /**
+     * Changes the controller's validateTrigger.
+     * @param newTrigger The new validateTrigger
+     */
+    ValidationController.prototype.changeTrigger = function (newTrigger) {
+        this.validateTrigger = newTrigger;
+        var bindings = Array.from(this.bindings.keys());
+        for (var _i = 0, bindings_1 = bindings; _i < bindings_1.length; _i++) {
+            var binding = bindings_1[_i];
+            var source = binding.source;
+            binding.unbind();
+            binding.bind(source);
+        }
+    };
+    /**
+     * Revalidates the controller's current set of errors.
+     */
+    ValidationController.prototype.revalidateErrors = function () {
+        for (var _i = 0, _a = this.errors; _i < _a.length; _i++) {
+            var _b = _a[_i], object = _b.object, propertyName = _b.propertyName, rule = _b.rule;
+            if (rule.__manuallyAdded__) {
+                continue;
+            }
+            var rules = [rule];
+            this.validate({ object: object, propertyName: propertyName, rules: rules });
+        }
+    };
+    ValidationController.prototype.invokeCallbacks = function (instruction, result) {
+        if (this.eventCallbacks.length === 0) {
+            return;
+        }
+        var event = new ValidateEvent(result ? 'validate' : 'reset', this.errors, this.results, instruction || null, result);
+        for (var i = 0; i < this.eventCallbacks.length; i++) {
+            this.eventCallbacks[i](event);
+        }
+    };
+    ValidationController.inject = [Validator, PropertyAccessorParser];
     return ValidationController;
 }());
 export { ValidationController };
-ValidationController.inject = [Validator];

@@ -24,10 +24,10 @@ var ValidateBindingBehavior = (function (_super) {
     ValidateBindingBehavior.prototype.getValidateTrigger = function (controller) {
         return controller.validateTrigger;
     };
+    ValidateBindingBehavior.inject = [TaskQueue];
     return ValidateBindingBehavior;
 }(ValidateBindingBehaviorBase));
 export { ValidateBindingBehavior };
-ValidateBindingBehavior.inject = [TaskQueue];
 /**
  * Binding behavior. Indicates the bound property will be validated
  * manually, by calling controller.validate(). No automatic validation
@@ -41,10 +41,10 @@ var ValidateManuallyBindingBehavior = (function (_super) {
     ValidateManuallyBindingBehavior.prototype.getValidateTrigger = function () {
         return validateTrigger.manual;
     };
+    ValidateManuallyBindingBehavior.inject = [TaskQueue];
     return ValidateManuallyBindingBehavior;
 }(ValidateBindingBehaviorBase));
 export { ValidateManuallyBindingBehavior };
-ValidateManuallyBindingBehavior.inject = [TaskQueue];
 /**
  * Binding behavior. Indicates the bound property should be validated
  * when the associated element blurs.
@@ -57,10 +57,10 @@ var ValidateOnBlurBindingBehavior = (function (_super) {
     ValidateOnBlurBindingBehavior.prototype.getValidateTrigger = function () {
         return validateTrigger.blur;
     };
+    ValidateOnBlurBindingBehavior.inject = [TaskQueue];
     return ValidateOnBlurBindingBehavior;
 }(ValidateBindingBehaviorBase));
 export { ValidateOnBlurBindingBehavior };
-ValidateOnBlurBindingBehavior.inject = [TaskQueue];
 /**
  * Binding behavior. Indicates the bound property should be validated
  * when the associated element is changed by the user, causing a change
@@ -74,10 +74,10 @@ var ValidateOnChangeBindingBehavior = (function (_super) {
     ValidateOnChangeBindingBehavior.prototype.getValidateTrigger = function () {
         return validateTrigger.change;
     };
+    ValidateOnChangeBindingBehavior.inject = [TaskQueue];
     return ValidateOnChangeBindingBehavior;
 }(ValidateBindingBehaviorBase));
 export { ValidateOnChangeBindingBehavior };
-ValidateOnChangeBindingBehavior.inject = [TaskQueue];
 /**
  * Binding behavior. Indicates the bound property should be validated
  * when the associated element blurs or is changed by the user, causing
@@ -91,7 +91,7 @@ var ValidateOnChangeOrBlurBindingBehavior = (function (_super) {
     ValidateOnChangeOrBlurBindingBehavior.prototype.getValidateTrigger = function () {
         return validateTrigger.changeOrBlur;
     };
+    ValidateOnChangeOrBlurBindingBehavior.inject = [TaskQueue];
     return ValidateOnChangeOrBlurBindingBehavior;
 }(ValidateBindingBehaviorBase));
 export { ValidateOnChangeOrBlurBindingBehavior };
-ValidateOnChangeOrBlurBindingBehavior.inject = [TaskQueue];

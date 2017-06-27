@@ -24,9 +24,9 @@ define(["require", "exports", "aurelia-task-queue", "./validate-trigger", "./val
         ValidateBindingBehavior.prototype.getValidateTrigger = function (controller) {
             return controller.validateTrigger;
         };
+        ValidateBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
         return ValidateBindingBehavior;
     }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
-    ValidateBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
     exports.ValidateBindingBehavior = ValidateBindingBehavior;
     /**
      * Binding behavior. Indicates the bound property will be validated
@@ -41,9 +41,9 @@ define(["require", "exports", "aurelia-task-queue", "./validate-trigger", "./val
         ValidateManuallyBindingBehavior.prototype.getValidateTrigger = function () {
             return validate_trigger_1.validateTrigger.manual;
         };
+        ValidateManuallyBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
         return ValidateManuallyBindingBehavior;
     }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
-    ValidateManuallyBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
     exports.ValidateManuallyBindingBehavior = ValidateManuallyBindingBehavior;
     /**
      * Binding behavior. Indicates the bound property should be validated
@@ -57,9 +57,9 @@ define(["require", "exports", "aurelia-task-queue", "./validate-trigger", "./val
         ValidateOnBlurBindingBehavior.prototype.getValidateTrigger = function () {
             return validate_trigger_1.validateTrigger.blur;
         };
+        ValidateOnBlurBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
         return ValidateOnBlurBindingBehavior;
     }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
-    ValidateOnBlurBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
     exports.ValidateOnBlurBindingBehavior = ValidateOnBlurBindingBehavior;
     /**
      * Binding behavior. Indicates the bound property should be validated
@@ -74,9 +74,9 @@ define(["require", "exports", "aurelia-task-queue", "./validate-trigger", "./val
         ValidateOnChangeBindingBehavior.prototype.getValidateTrigger = function () {
             return validate_trigger_1.validateTrigger.change;
         };
+        ValidateOnChangeBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
         return ValidateOnChangeBindingBehavior;
     }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
-    ValidateOnChangeBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
     exports.ValidateOnChangeBindingBehavior = ValidateOnChangeBindingBehavior;
     /**
      * Binding behavior. Indicates the bound property should be validated
@@ -91,8 +91,8 @@ define(["require", "exports", "aurelia-task-queue", "./validate-trigger", "./val
         ValidateOnChangeOrBlurBindingBehavior.prototype.getValidateTrigger = function () {
             return validate_trigger_1.validateTrigger.changeOrBlur;
         };
+        ValidateOnChangeOrBlurBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
         return ValidateOnChangeOrBlurBindingBehavior;
     }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
-    ValidateOnChangeOrBlurBindingBehavior.inject = [aurelia_task_queue_1.TaskQueue];
     exports.ValidateOnChangeOrBlurBindingBehavior = ValidateOnChangeOrBlurBindingBehavior;
 });

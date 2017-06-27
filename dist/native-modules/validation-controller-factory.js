@@ -1,5 +1,6 @@
 import { ValidationController } from './validation-controller';
 import { Validator } from './validator';
+import { PropertyAccessorParser } from './property-accessor-parser';
 /**
  * Creates ValidationController instances.
  */
@@ -17,7 +18,8 @@ var ValidationControllerFactory = (function () {
         if (!validator) {
             validator = this.container.get(Validator);
         }
-        return new ValidationController(validator);
+        var propertyParser = this.container.get(PropertyAccessorParser);
+        return new ValidationController(validator, propertyParser);
     };
     /**
      * Creates a new controller and registers it in the current element's container so that it's

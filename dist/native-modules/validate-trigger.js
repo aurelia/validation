@@ -1,9 +1,7 @@
 /**
  * Validation triggers.
  */
-/**
- * Validation triggers.
- */ export var validateTrigger;
+export var validateTrigger;
 (function (validateTrigger) {
     /**
      * Manual validation.  Use the controller's `validate()` and  `reset()` methods
@@ -24,4 +22,3 @@
      */
     validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
 })(validateTrigger || (validateTrigger = {}));
-;

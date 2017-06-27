@@ -32,6 +32,7 @@ var ValidateBindingBehaviorBase = (function () {
         if (trigger & validateTrigger.change) {
             binding.standardUpdateSource = binding.updateSource;
             // tslint:disable-next-line:only-arrow-functions
+            // tslint:disable-next-line:space-before-function-paren
             binding.updateSource = function (value) {
                 this.standardUpdateSource(value);
                 this.validationController.validateBinding(this);
@@ -48,6 +49,7 @@ var ValidateBindingBehaviorBase = (function () {
         if (trigger !== validateTrigger.manual) {
             binding.standardUpdateTarget = binding.updateTarget;
             // tslint:disable-next-line:only-arrow-functions
+            // tslint:disable-next-line:space-before-function-paren
             binding.updateTarget = function (value) {
                 this.standardUpdateTarget(value);
                 this.validationController.resetBinding(this);

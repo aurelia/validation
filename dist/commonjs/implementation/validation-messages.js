@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var validation_parser_1 = require("./validation-parser");
+var validation_message_parser_1 = require("./validation-message-parser");
 /**
  * Dictionary of validation messages. [messageKey]: messageExpression
  */
@@ -37,7 +37,7 @@ var ValidationMessageProvider = (function () {
         else {
             message = exports.validationMessages['default'];
         }
-        return this.parser.parseMessage(message);
+        return this.parser.parse(message);
     };
     /**
      * Formulates a property display name using the property name and the configured
@@ -54,7 +54,7 @@ var ValidationMessageProvider = (function () {
         // capitalize first letter.
         return words.charAt(0).toUpperCase() + words.slice(1);
     };
+    ValidationMessageProvider.inject = [validation_message_parser_1.ValidationMessageParser];
     return ValidationMessageProvider;
 }());
-ValidationMessageProvider.inject = [validation_parser_1.ValidationParser];
 exports.ValidationMessageProvider = ValidationMessageProvider;

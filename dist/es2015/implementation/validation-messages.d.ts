@@ -1,5 +1,5 @@
 import { Expression } from 'aurelia-binding';
-import { ValidationParser } from './validation-parser';
+import { ValidationMessageParser } from './validation-message-parser';
 export interface ValidationMessages {
     [key: string]: string;
 }
@@ -12,8 +12,8 @@ export declare const validationMessages: ValidationMessages;
  */
 export declare class ValidationMessageProvider {
     private parser;
-    static inject: typeof ValidationParser[];
-    constructor(parser: ValidationParser);
+    static inject: typeof ValidationMessageParser[];
+    constructor(parser: ValidationMessageParser);
     /**
      * Returns a message binding expression that corresponds to the key.
      * @param key The message key.
@@ -25,5 +25,5 @@ export declare class ValidationMessageProvider {
      * Override this with your own custom logic.
      * @param propertyName The property name.
      */
-    getDisplayName(propertyName: string, displayName?: string | null | Function): string;
+    getDisplayName(propertyName: string, displayName?: string | null | (() => string)): string;
 }

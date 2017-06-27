@@ -1,17 +1,16 @@
-import { Parser, AccessMember, AccessScope, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, Unparser } from 'aurelia-binding';
+import { LiteralString, Binary, Conditional, LiteralPrimitive, CallMember } from 'aurelia-binding';
 import { BindingLanguage } from 'aurelia-templating';
-import { isString } from './util';
 import * as LogManager from 'aurelia-logging';
-export class ValidationParser {
-    constructor(parser, bindinqLanguage) {
-        this.parser = parser;
+import { ExpressionVisitor } from './expression-visitor';
+export class ValidationMessageParser {
+    constructor(bindinqLanguage) {
         this.bindinqLanguage = bindinqLanguage;
         this.emptyStringExpression = new LiteralString('');
         this.nullExpression = new LiteralPrimitive(null);
         this.undefinedExpression = new LiteralPrimitive(undefined);
         this.cache = {};
     }
-    parseMessage(message) {
+    parse(message) {
         if (this.cache[message] !== undefined) {
             return this.cache[message];
         }
@@ -27,40 +26,15 @@ export class ValidationParser {
         this.cache[message] = expression;
         return expression;
     }
-    parseProperty(property) {
-        if (isString(property)) {
-            return { name: property, displayName: null };
-        }
-        const accessor = this.getAccessorExpression(property.toString());
-        if (accessor instanceof AccessScope
-            || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
-            return {
-                name: accessor.name,
-                displayName: null
-            };
-        }
-        throw new Error(`Invalid subject: "${accessor}"`);
-    }
     coalesce(part) {
         // part === null || part === undefined ? '' : part
         return new Conditional(new Binary('||', new Binary('===', part, this.nullExpression), new Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new CallMember(part, 'toString', []));
     }
-    getAccessorExpression(fn) {
-        /* tslint:disable:max-line-length */
-        const classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?\s*(?:[$_\w\d.['"\]+;]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
-        /* tslint:enable:max-line-length */
-        const arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
-        const match = classic.exec(fn) || arrow.exec(fn);
-        if (match === null) {
-            throw new Error(`Unable to parse accessor function:\n${fn}`);
-        }
-        return this.parser.parse(match[1]);
-    }
 }
-ValidationParser.inject = [Parser, BindingLanguage];
-export class MessageExpressionValidator extends Unparser {
+ValidationMessageParser.inject = [BindingLanguage];
+export class MessageExpressionValidator extends ExpressionVisitor {
     constructor(originalMessage) {
-        super([]);
+        super();
         this.originalMessage = originalMessage;
     }
     static validate(expression, originalMessage) {

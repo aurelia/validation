@@ -8,20 +8,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Parser, AccessMember, AccessScope, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, Unparser } from 'aurelia-binding';
+import { LiteralString, Binary, Conditional, LiteralPrimitive, CallMember } from 'aurelia-binding';
 import { BindingLanguage } from 'aurelia-templating';
-import { isString } from './util';
 import * as LogManager from 'aurelia-logging';
-var ValidationParser = (function () {
-    function ValidationParser(parser, bindinqLanguage) {
-        this.parser = parser;
+import { ExpressionVisitor } from './expression-visitor';
+var ValidationMessageParser = (function () {
+    function ValidationMessageParser(bindinqLanguage) {
         this.bindinqLanguage = bindinqLanguage;
         this.emptyStringExpression = new LiteralString('');
         this.nullExpression = new LiteralPrimitive(null);
         this.undefinedExpression = new LiteralPrimitive(undefined);
         this.cache = {};
     }
-    ValidationParser.prototype.parseMessage = function (message) {
+    ValidationMessageParser.prototype.parse = function (message) {
         if (this.cache[message] !== undefined) {
             return this.cache[message];
         }
@@ -37,43 +36,18 @@ var ValidationParser = (function () {
         this.cache[message] = expression;
         return expression;
     };
-    ValidationParser.prototype.parseProperty = function (property) {
-        if (isString(property)) {
-            return { name: property, displayName: null };
-        }
-        var accessor = this.getAccessorExpression(property.toString());
-        if (accessor instanceof AccessScope
-            || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
-            return {
-                name: accessor.name,
-                displayName: null
-            };
-        }
-        throw new Error("Invalid subject: \"" + accessor + "\"");
-    };
-    ValidationParser.prototype.coalesce = function (part) {
+    ValidationMessageParser.prototype.coalesce = function (part) {
         // part === null || part === undefined ? '' : part
         return new Conditional(new Binary('||', new Binary('===', part, this.nullExpression), new Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new CallMember(part, 'toString', []));
     };
-    ValidationParser.prototype.getAccessorExpression = function (fn) {
-        /* tslint:disable:max-line-length */
-        var classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?\s*(?:[$_\w\d.['"\]+;]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
-        /* tslint:enable:max-line-length */
-        var arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
-        var match = classic.exec(fn) || arrow.exec(fn);
-        if (match === null) {
-            throw new Error("Unable to parse accessor function:\n" + fn);
-        }
-        return this.parser.parse(match[1]);
-    };
-    return ValidationParser;
+    ValidationMessageParser.inject = [BindingLanguage];
+    return ValidationMessageParser;
 }());
-export { ValidationParser };
-ValidationParser.inject = [Parser, BindingLanguage];
+export { ValidationMessageParser };
 var MessageExpressionValidator = (function (_super) {
     __extends(MessageExpressionValidator, _super);
     function MessageExpressionValidator(originalMessage) {
-        var _this = _super.call(this, []) || this;
+        var _this = _super.call(this) || this;
         _this.originalMessage = originalMessage;
         return _this;
     }
@@ -91,5 +65,5 @@ var MessageExpressionValidator = (function (_super) {
         }
     };
     return MessageExpressionValidator;
-}(Unparser));
+}(ExpressionVisitor));
 export { MessageExpressionValidator };

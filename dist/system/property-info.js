@@ -22,7 +22,7 @@ System.register(["aurelia-binding"], function (exports_1, context_1) {
         var object;
         var propertyName;
         if (expression instanceof aurelia_binding_1.AccessScope) {
-            object = source.bindingContext;
+            object = aurelia_binding_1.getContextFor(expression.name, source, expression.ancestor);
             propertyName = expression.name;
         }
         else if (expression instanceof aurelia_binding_1.AccessMember) {
