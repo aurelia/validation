@@ -418,14 +418,22 @@ export class ValidationController {
 
   /**
    * Revalidates the controller's current set of errors.
+   * @param objectToRevalidate Optional. The object to revalidate. Only errors for this object will be revalidated.
+   * @param propertyNameToRevalidate Optional. The name of the property to revalidate. Only errors for this property
+   * will be revalidated.
    */
-  public revalidateErrors() {
-    for (const { object, propertyName, rule } of this.errors) {
-      if (rule.__manuallyAdded__) {
+  public revalidateErrors(object?: any, propertyName?: string) {
+    for (const error of this.errors) {
+      if (error.rule.__manuallyAdded__
+        || (object && error.object !== object)
+        || (propertyName && error.propertyName !== propertyName)) {
         continue;
       }
-      const rules = [rule];
-      this.validate({ object, propertyName, rules });
+      this.validate({
+        object: error.object,
+        propertyName: error.propertyName,
+        rules: [error.rule]
+      });
     }
   }
 
