@@ -424,7 +424,7 @@ export class ValidationController {
       if (rule.__manuallyAdded__) {
         continue;
       }
-      const rules = [rule];
+      const rules = [[rule]];
       this.validate({ object, propertyName, rules });
     }
   }
