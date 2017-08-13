@@ -1,8 +1,7 @@
-import { Rule, RuleProperty } from './rule';
+import { Rule, RuleProperty, ValidationDisplayNameAccessor } from './rule';
 import { ValidationMessageParser } from './validation-message-parser';
 import { Rules } from './rules';
 import { validationMessages } from './validation-messages';
-import { ValidationDisplayNameAccessor } from './rule';
 import { PropertyAccessorParser, PropertyAccessor } from '../property-accessor-parser';
 import { isString } from '../util';
 

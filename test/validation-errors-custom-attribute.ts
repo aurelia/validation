@@ -15,7 +15,7 @@ describe('ValidationErrorsCustomAttribute', () => {
   let container: Container;
 
   const stageTest = (validationErrors: string, supplyControllerToViewModel?: boolean) => {
-    const form: string =  `
+    const form: string = `
       <template>
         <form novalidate autocomplete='off' ${validationErrors}>
           <input ref='standardInput' type='text' value.bind='standardProp & validateOnBlur'>
@@ -29,18 +29,18 @@ describe('ValidationErrorsCustomAttribute', () => {
       // tslint:disable-next-line:max-line-length
       .inView(`<compose containerless view-model="./dist/test/test/resources/validation-errors-form-one" model.bind="{ form: form, controller: controller }"></compose>`)
       // tslint:enable-next-line:max-line-length
-      .boundTo( parentViewModel );
+      .boundTo(parentViewModel);
 
-    const myConfigure = (aurelia: Aurelia)  => {
+    const myConfigure = (aurelia: Aurelia) => {
       configure(aurelia);
       container = aurelia.container;
     };
 
     component.bootstrap(myConfigure);
 
-      /*
-        at this point validation plugin has not yet been initialized, not until in component.create()
-      */
+    /*
+      at this point validation plugin has not yet been initialized, not until in component.create()
+    */
     if (supplyControllerToViewModel) {
       /*
         the viewmodel is going to call this in created().
@@ -76,7 +76,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       .then(done)
       /* tslint:disable:no-console */
       .catch(e => { console.log(e.toString()); done(); });
-      /* tslint:enable:no-console */
+    /* tslint:enable:no-console */
   });
 
   it('sets errors given as named property', (done: () => void) => {
@@ -93,7 +93,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       .then(done)
       /* tslint:disable:no-console */
       .catch(e => { console.log(e.toString()); done(); });
-      /* tslint:enable:no-console */
+    /* tslint:enable:no-console */
   });
 
   it('uses given controller', (done: () => void) => {
