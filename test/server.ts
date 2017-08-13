@@ -1,7 +1,7 @@
 import 'aurelia-polyfills';
-import {initialize} from 'aurelia-pal-nodejs';
-import {Container} from 'aurelia-dependency-injection';
-import {configure as configureBindingLanguage} from 'aurelia-templating-binding';
+import { initialize } from 'aurelia-pal-nodejs';
+import { Container } from 'aurelia-dependency-injection';
+import { configure as configureBindingLanguage } from 'aurelia-templating-binding';
 import {
   configure as configureValidation,
   ValidationRules,
@@ -21,7 +21,7 @@ const rules = ValidationRules
 
 const validator: Validator = container.get(Validator);
 
-validator.validateObject({ firstName: '', lastName: 'test'}, rules)
+validator.validateObject({ firstName: '', lastName: 'test' }, rules)
   .then(result => {
     assert(result.length === 2);
     assert(result[0].propertyName === 'firstName');
@@ -30,14 +30,14 @@ validator.validateObject({ firstName: '', lastName: 'test'}, rules)
     assert(result[1].valid === true);
   });
 
-validator.validateProperty({ firstName: '', lastName: 'test'}, 'firstName', rules)
+validator.validateProperty({ firstName: '', lastName: 'test' }, 'firstName', rules)
   .then(result => {
     assert(result.length === 1);
     assert(result[0].propertyName === 'firstName');
     assert(result[0].valid === false);
   });
 
-validator.validateProperty({ firstName: '', lastName: 'test'}, 'lastName', rules)
+validator.validateProperty({ firstName: '', lastName: 'test' }, 'lastName', rules)
   .then(result => {
     assert(result.length === 1);
     assert(result[0].propertyName === 'lastName');

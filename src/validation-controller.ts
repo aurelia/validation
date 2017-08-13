@@ -432,7 +432,7 @@ export class ValidationController {
       this.validate({
         object: error.object,
         propertyName: error.propertyName,
-        rules: [error.rule]
+        rules: [[error.rule]]
       });
     }
   }

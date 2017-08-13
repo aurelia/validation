@@ -5,7 +5,7 @@ import {
   ValidationController,
   ValidationControllerFactory
 } from '../../src/aurelia-validation';
-import {InlineViewStrategy} from 'aurelia-framework';
+import { InlineViewStrategy } from 'aurelia-framework';
 
 @noView
 @inject(ValidationControllerFactory)
