@@ -20,6 +20,8 @@ This article covers the basics of validation with Aurelia's validation plugin. Y
 
 To get started you'll need to install `aurelia-validation` using `jspm install aurelia-validation` or `npm install aurelia-validation --save`. Afterwards, add `.plugin('aurelia-validation')` to the configuration in your `main.js` to ensure the plugin is loaded at application startup.
 
+### Aurelia CLI
+
 If you're using the `aurelia-cli`, add the following configuration to your `aurelia.json` after you've installed the package with npm.
 
 <code-listing heading="aurelia.json">
@@ -33,6 +35,12 @@ If you're using the `aurelia-cli`, add the following configuration to your `aure
 </code-listing>
 
 If you're not sure where to put this, search your `aurelia.json` for *aurelia-templating-resources* and put it underneath.
+
+### Webpack
+
+If you're using webpack, go to your `webpack.config.vendor.js` file and insert 'aurelia-validation' in the entry.vendor section of the returned object.
+
+In your boot.ts(.js) file you will need to use `.plugin(PLATFORM.moduleName('aurelia-validation'));`
 
 ## [Defining Rules](aurelia-doc://section/2/version/1.0.0)
 
