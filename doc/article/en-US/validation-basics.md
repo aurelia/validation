@@ -235,7 +235,7 @@ You can override the `ValidationMessageProvider`'s `getMessage(key: string): Exp
     ValidationMessageProvider.prototype.standardGetMessage = ValidationMessageProvider.prototype.getMessage;
     ValidationMessageProvider.prototype.getMessage = function(key) {
       const translation = i18next.t(key);
-      return this.parser.parseMessage(translation);
+      return this.parser.parse(translation);
     };
   </source-code>
 </code-listing>
@@ -917,7 +917,7 @@ Here's how to override the methods, in your main.js, during application startup:
       ValidationMessageProvider.prototype.getMessage = function(key) {
         const i18n = aurelia.container.get(I18N);
         const translation = i18n.tr(`errorMessages.${key}`);
-        return this.parser.parseMessage(translation);
+        return this.parser.parse(translation);
       };
 
       ValidationMessageProvider.prototype.getDisplayName = function(propertyName, displayName) {
