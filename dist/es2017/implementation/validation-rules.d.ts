@@ -1,6 +1,5 @@
-import { Rule, RuleProperty } from './rule';
+import { Rule, RuleProperty, ValidationDisplayNameAccessor } from './rule';
 import { ValidationMessageParser } from './validation-message-parser';
-import { ValidationDisplayNameAccessor } from './rule';
 import { PropertyAccessorParser, PropertyAccessor } from '../property-accessor-parser';
 /**
  * Part of the fluent rule API. Enables customizing property rules.

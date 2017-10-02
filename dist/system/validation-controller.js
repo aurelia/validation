@@ -409,7 +409,7 @@ System.register(["./validator", "./validate-trigger", "./property-info", "./vali
                         if (rule.__manuallyAdded__) {
                             continue;
                         }
-                        var rules = [rule];
+                        var rules = [[rule]];
                         this.validate({ object: object, propertyName: propertyName, rules: rules });
                     }
                 };

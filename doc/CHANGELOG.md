@@ -1,3 +1,13 @@
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/aurelia/validation/compare/1.1.1...v1.1.2) (2017-10-02)
+
+
+### Bug Fixes
+
+* **validation-controller:** fix revalidateErrors method ([bcf8a46](https://github.com/aurelia/validation/commit/bcf8a46)), closes [#456](https://github.com/aurelia/validation/issues/456)
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/aurelia/validation/compare/1.0.0...v1.1.0) (2017-06-27)
 
