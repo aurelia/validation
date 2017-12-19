@@ -1,8 +1,8 @@
-import { Aurelia } from 'aurelia-framework';
+import { Aurelia, FrameworkConfiguration } from 'aurelia-framework';
 import { DOM } from 'aurelia-pal';
 
-export function configure(aurelia: Aurelia) {
-  aurelia.use
+export function configure(aurelia: Aurelia): FrameworkConfiguration {
+  return aurelia.use
     .standardConfiguration()
     // .developmentLogging()
     .plugin('dist/test/src/aurelia-validation')

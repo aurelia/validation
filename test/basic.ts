@@ -16,7 +16,7 @@ describe('end to end', () => {
     let lastName: HTMLInputElement;
     let number1: HTMLInputElement;
     let number2: HTMLInputElement;
-    let password: HTMLInputElement;
+    // let password: HTMLInputElement;
     let confirmPassword: HTMLInputElement;
 
     let viewModel: RegistrationForm;
@@ -32,7 +32,7 @@ describe('end to end', () => {
         lastName = component.element.querySelector('#lastName') as HTMLInputElement;
         number1 = component.element.querySelector('#number1') as HTMLInputElement;
         number2 = component.element.querySelector('#number2') as HTMLInputElement;
-        password = component.element.querySelector('#password') as HTMLInputElement;
+        // password = component.element.querySelector('#password') as HTMLInputElement;
         confirmPassword = component.element.querySelector('#confirmPassword') as HTMLInputElement;
       })
       // initially there should not be any errors

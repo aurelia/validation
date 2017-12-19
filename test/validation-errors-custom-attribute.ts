@@ -32,8 +32,9 @@ describe('ValidationErrorsCustomAttribute', () => {
       .boundTo(parentViewModel);
 
     const myConfigure = (aurelia: Aurelia) => {
-      configure(aurelia);
+      const config = configure(aurelia);
       container = aurelia.container;
+      return config;
     };
 
     component.bootstrap(myConfigure);

@@ -9,10 +9,6 @@ import {
   getContextFor
 } from 'aurelia-binding';
 
-declare module 'aurelia-binding' {
-  export const getContextFor: any;
-}
-
 function getObject(expression: Expression, objectExpression: Expression, source: any): null | undefined | object {
   const value = objectExpression.evaluate(source, null as any);
   if (value === null || value === undefined || value instanceof Object) {
