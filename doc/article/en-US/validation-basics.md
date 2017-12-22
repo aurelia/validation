@@ -1,17 +1,7 @@
 ---
-{
-  "name": "Validation: Basics",
-  "culture": "en-US",
-  "description": "The basics of validation with Aurelia.",
-  "engines" : { "aurelia-doc" : "^1.0.0" },
-  "author": {
-    "name": "Jeremy Danyow",
-  	"url": "http://danyow.net"
-  },
-  "contributors": [],
-  "translators": [],
-  "keywords": ["Validation", "Data Binding", "JavaScript", "TypeScript"]
-}
+name: "Validation: Basics"
+description: The basics of validation with Aurelia.
+author: Jeremy Danyow (http://danyow.net)
 ---
 
 ## [Introduction](aurelia-doc://section/1/version/1.0.0)
