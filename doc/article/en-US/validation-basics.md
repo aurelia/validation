@@ -4,7 +4,7 @@ description: The basics of validation with Aurelia.
 author: Jeremy Danyow (http://danyow.net)
 ---
 
-## [Introduction](aurelia-doc://section/1/version/1.0.0)
+## Introduction
 
 This article covers the basics of validation with Aurelia's validation plugin. You'll learn how to add validation to your applications using a fluent rule API and minimal changes to your templates.
 
@@ -24,7 +24,7 @@ If you're using the `aurelia-cli`, add the following configuration to your `aure
 
 If you're not sure where to put this, search your `aurelia.json` for *aurelia-templating-resources* and put it underneath.
 
-## [Defining Rules](aurelia-doc://section/2/version/1.0.0)
+## Defining Rules
 
 Aurelia Validation's standard rule engine uses a fluent syntax to define a set of rules. There are five parts to the syntax:
 1. Selecting a property using `.ensure`
@@ -204,7 +204,7 @@ There is no requirement to apply the rules directly to an object or class, you c
   </source-code>
 </code-listing>
 
-## [Customizing Messages](aurelia-doc://section/3/version/1.0.0)
+## Customizing Messages
 
 The previous section showed how to customize the message of an individual property rule. You can override messages system-wide by replacing a rule's default message in the `validationMessages` dictionary:
 
@@ -245,7 +245,7 @@ You can also override the `ValidationMessageProvider`'s `getDisplayName(property
   </source-code>
 </code-listing>
 
-## [Validation Controller](aurelia-doc://section/4/version/1.0.0)
+## Validation Controller
 
 The `ValidationController` orchestrates the UI process of validating properties in response to various triggers and surfacing validation errors via renderers. Typically you'll have one validation controller instance per "form" view model. Depending on the use-case you may have multiple.
 
@@ -377,7 +377,7 @@ The validation controller renders errors by sending them to implementations of t
 
 The validation controller has a `subscribe(callback: (event: ValidateEvent) => void)` method you can use to subscribe to validate and reset events. Callbacks will be invoked whenever the controller's validate and reset methods are called. Callbacks will be passed an instance `ValidateEvent` which contains properties you can use to determine the overall validity state as well as the result of the validate or reset invocation. Refer to the API docs for more info.
 
-## [Validator](aurelia-doc://section/5/version/1.0.0)
+## Validator
 
 `Validator` is an interface used by the `ValidationController` to do the behind-the-scenes work of validating objects and properties. The `aurelia-validation` plugin ships with an implementation of this interface called the `StandardValidator`, which knows how to evaluate rules created by `aurelia-validation`'s fluent API. When you use a `Validator` directly to validate a particular object or property, there are no UI side-effects- the validation results are not sent to the the validation renderers.
 
@@ -403,7 +403,7 @@ Validators can be injected:
 
 Use the Validator instance's `validateObject` and `validateProperty` methods to run validation without any render side-effects. These methods return a `Promise` that resolves with an array of `ValidateResults`.
 
-## [Validate Binding Behavior](aurelia-doc://section/6/version/1.0.0)
+## Validate Binding Behavior
 
 The `validate` binding behavior enables quick and easy validation for two-way data-bindings. The behavior registers the binding instance with a controller, enabling the system to validate the binding's associated property when the validate trigger occurs (blur / change). The binding behavior is able to identify the object and property name to validate in all sorts of binding expressions:
 
@@ -438,7 +438,7 @@ The `validate` binding behavior obeys the associated controller's `validateTrigg
 * `& validateOnChangeOrBlur`: DOM blur or data entry triggers validation.
 * `& validateManually`: the binding is not validated automatically when the associated element is blurred or changed by the user.
 
-## [Displaying Errors](aurelia-doc://section/7/version/1.0.0)
+## Displaying Errors
 
 The controller exposes properties that are useful for creating error UIs using standard Aurelia templating techniques:
 
@@ -496,7 +496,7 @@ This first form-group div uses the `validation-errors` custom attribute to creat
 
 The `validation-errors` custom attribute implements the `ValidationRenderer` interface. Instead of doing direct DOM manipulation to display the errors it "renders" the errors to an array property to enable the data-binding and templating scenarios illustrated above. It also automatically adds itself to the controller using `addRenderer` when its "bind" lifecycle event occurs and removes itself from the controller using the `removeRenderer` method when its "unbind" composition lifecycle event occurs.
 
-## [Custom Renderers](aurelia-doc://section/8/version/1.0.0)
+## Custom Renderers
 
 The templating approaches described in the previous section may require more markup than you wish to include in your templates. If you would prefer use direct DOM manipulation to render validation errors you can implement a custom renderer.
 
@@ -647,7 +647,7 @@ Here's another renderer for bootstrap forms that demonstrates "success styling".
   </source-code>
 </code-listing>
 
-## [Entity Validation](aurelia-doc://section/9/version/1.0.0)
+## Entity Validation
 
 The examples so far show the controller validating specific properties used in `& validate` bindings. The controller can validate whole entities even if some of the properties aren't used in data bindings. Opt in to this "entity" style validation using the controller's `addObject(object, rules?)` method. Calling `addObject` will add the specified object to the set of objects the controller should validate when its `validate` method is called. The `rules` parameter is optional. Use it when the rules for the object haven't been specified using the fluent syntax's `.on` method. You can remove objects from the controller's list of objects to validate using `removeObject(object)`. Calling `removeObject` will unrender any errors associated with the object.
 
@@ -669,7 +669,7 @@ You may have rules that are not associated with a single property. The fluent ru
   </source-code>
 </code-listing>
 
-## [Custom Rules](aurelia-doc://section/10/version/1.0.0)
+## Custom Rules
 
 The fluent API's `satisfies` method enables quick custom rules. If you have a custom rule that you need to use multiple times you can define it using the `customRule` method. Once defined, you can apply the rule using `satisfiesRule`.  Here's how you could define and use a simple date validation rule:
 
@@ -757,7 +757,7 @@ A common application of a custom rule is to confirm that two password entries ma
   </source-code>
 </code-listing>
 
-## [Multiple Validation Controllers](aurelia-doc://section/11/version/1.0.0)
+## Multiple Validation Controllers
 
 If you have two forms that need to be independently validated, it is of course recommended you implement them in separate components. However, it is technically possible to do two or more independant validations in the same component by creating multiple validation controllers.
 
@@ -843,7 +843,7 @@ In your view you need to take care to associate each input with the correct vali
 In the forms above you can see that each `validation-errors` attribute and each `validateManually` binding behavior is bound to the appropriate validation controller. This needs to be specified each time, since by default the attribute and the binding behavior will ask the container for a `ValidationController` instance not knowing which one it will get.
 
 
-## [Integration With Other Libraries](aurelia-doc://section/12/version/1.0.0)
+## Integration With Other Libraries
 
 In `aurelia-validation` the object and property validation work is handled by the `StandardValidator` class which is an implementation of the `Validator` interface. The `StandardValidator` is responsible for applying the rules created with aurelia-validation's fluent syntax. You may not need any of this machinery if you have your own custom validation engine or if you're using a client-side data management library like [Breeze](http://www.getbreezenow.com/breezejs) which has its own validation logic. You can replace the `StandardValidator` with your own implementation when the plugin is installed. Here's an example using breeze:
 
@@ -887,7 +887,7 @@ In `aurelia-validation` the object and property validation work is handled by th
   </source-code>
 </code-listing>
 
-## [Integrating with Aurelia-I18N](aurelia-doc://section/13/version/1.0.0)
+## Integrating with Aurelia-I18N
 
 `aurelia-i18n` is Aurelia's official I18N plugin. Check out the project's [readme](https://github.com/aurelia/i18n/blob/master/README.md) for information on how to use `aurelia-i18n` in your application.
 
@@ -1042,7 +1042,7 @@ Last but not least, create translation files that include translations for each 
   </source-code>
 </code-listing>
 
-## [Server-Side Validation](aurelia-doc://section/14/version/1.0.0)
+## Server-Side Validation
 
 The fluent rule API and Validator API can be used server-side in a NodeJS application.
 
