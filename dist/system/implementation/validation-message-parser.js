@@ -28,7 +28,7 @@ System.register(["aurelia-binding", "aurelia-templating", "aurelia-logging", "./
             }
         ],
         execute: function () {
-            ValidationMessageParser = (function () {
+            ValidationMessageParser = /** @class */ (function () {
                 function ValidationMessageParser(bindinqLanguage) {
                     this.bindinqLanguage = bindinqLanguage;
                     this.emptyStringExpression = new aurelia_binding_1.LiteralString('');
@@ -60,7 +60,7 @@ System.register(["aurelia-binding", "aurelia-templating", "aurelia-logging", "./
                 return ValidationMessageParser;
             }());
             exports_1("ValidationMessageParser", ValidationMessageParser);
-            MessageExpressionValidator = (function (_super) {
+            MessageExpressionValidator = /** @class */ (function (_super) {
                 __extends(MessageExpressionValidator, _super);
                 function MessageExpressionValidator(originalMessage) {
                     var _this = _super.call(this) || this;

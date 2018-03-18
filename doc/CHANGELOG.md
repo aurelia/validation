@@ -1,3 +1,13 @@
+<a name="1.1.3"></a>
+## [1.1.3](https://github.com/aurelia/validation/compare/1.1.2...1.1.3) (2018-03-18)
+
+
+### Bug Fixes
+
+* **ValidateBindingBehavior:** avoid conflicts ([e15b06b](https://github.com/aurelia/validation/commit/e15b06b)), closes [#470](https://github.com/aurelia/validation/issues/470)
+
+
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/aurelia/validation/compare/1.1.1...v1.1.2) (2017-10-02)
 

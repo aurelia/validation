@@ -29,11 +29,11 @@ export class ValidateBindingBehaviorBase {
         const trigger = this.getValidateTrigger(controller);
         // tslint:disable-next-line:no-bitwise
         if (trigger & validateTrigger.change) {
-            binding.standardUpdateSource = binding.updateSource;
+            binding.vbbUpdateSource = binding.updateSource;
             // tslint:disable-next-line:only-arrow-functions
             // tslint:disable-next-line:space-before-function-paren
             binding.updateSource = function (value) {
-                this.standardUpdateSource(value);
+                this.vbbUpdateSource(value);
                 this.validationController.validateBinding(this);
             };
         }
@@ -57,9 +57,9 @@ export class ValidateBindingBehaviorBase {
     }
     unbind(binding) {
         // reset the binding to it's original state.
-        if (binding.standardUpdateSource) {
-            binding.updateSource = binding.standardUpdateSource;
-            binding.standardUpdateSource = null;
+        if (binding.vbbUpdateSource) {
+            binding.updateSource = binding.vbbUpdateSource;
+            binding.vbbUpdateSource = null;
         }
         if (binding.standardUpdateTarget) {
             binding.updateTarget = binding.standardUpdateTarget;

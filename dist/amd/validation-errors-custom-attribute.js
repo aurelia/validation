@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "aurelia-binding", "aurelia-dependency-injection", "aurelia-templating", "./validation-controller", "aurelia-pal"], function (require, exports, aurelia_binding_1, aurelia_dependency_injection_1, aurelia_templating_1, validation_controller_1, aurelia_pal_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ValidationErrorsCustomAttribute = (function () {
+    var ValidationErrorsCustomAttribute = /** @class */ (function () {
         function ValidationErrorsCustomAttribute(boundaryElement, controllerAccessor) {
             this.boundaryElement = boundaryElement;
             this.controllerAccessor = controllerAccessor;

@@ -8,7 +8,7 @@ import { ValidateBindingBehaviorBase } from './validate-binding-behavior-base';
  * validateTrigger property occurs.
  */
 export declare class ValidateBindingBehavior extends ValidateBindingBehaviorBase {
-    static inject: typeof TaskQueue[];
+    static inject: (typeof TaskQueue)[];
     getValidateTrigger(controller: ValidationController): validateTrigger;
 }
 /**
@@ -17,7 +17,7 @@ export declare class ValidateBindingBehavior extends ValidateBindingBehaviorBase
  * triggered by data-entry or blur will occur.
  */
 export declare class ValidateManuallyBindingBehavior extends ValidateBindingBehaviorBase {
-    static inject: typeof TaskQueue[];
+    static inject: (typeof TaskQueue)[];
     getValidateTrigger(): validateTrigger;
 }
 /**
@@ -25,7 +25,7 @@ export declare class ValidateManuallyBindingBehavior extends ValidateBindingBeha
  * when the associated element blurs.
  */
 export declare class ValidateOnBlurBindingBehavior extends ValidateBindingBehaviorBase {
-    static inject: typeof TaskQueue[];
+    static inject: (typeof TaskQueue)[];
     getValidateTrigger(): validateTrigger;
 }
 /**
@@ -34,7 +34,7 @@ export declare class ValidateOnBlurBindingBehavior extends ValidateBindingBehavi
  * to the model.
  */
 export declare class ValidateOnChangeBindingBehavior extends ValidateBindingBehaviorBase {
-    static inject: typeof TaskQueue[];
+    static inject: (typeof TaskQueue)[];
     getValidateTrigger(): validateTrigger;
 }
 /**
@@ -43,6 +43,6 @@ export declare class ValidateOnChangeBindingBehavior extends ValidateBindingBeha
  * a change to the model.
  */
 export declare class ValidateOnChangeOrBlurBindingBehavior extends ValidateBindingBehaviorBase {
-    static inject: typeof TaskQueue[];
+    static inject: (typeof TaskQueue)[];
     getValidateTrigger(): validateTrigger;
 }

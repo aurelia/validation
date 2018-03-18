@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var validation_controller_1 = require("./validation-controller");
-var ValidationRendererCustomAttribute = (function () {
+var ValidationRendererCustomAttribute = /** @class */ (function () {
     function ValidationRendererCustomAttribute() {
     }
     ValidationRendererCustomAttribute.prototype.created = function (view) {

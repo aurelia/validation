@@ -14,7 +14,7 @@ var aurelia_binding_1 = require("aurelia-binding");
 var aurelia_templating_1 = require("aurelia-templating");
 var LogManager = require("aurelia-logging");
 var expression_visitor_1 = require("./expression-visitor");
-var ValidationMessageParser = (function () {
+var ValidationMessageParser = /** @class */ (function () {
     function ValidationMessageParser(bindinqLanguage) {
         this.bindinqLanguage = bindinqLanguage;
         this.emptyStringExpression = new aurelia_binding_1.LiteralString('');
@@ -46,7 +46,7 @@ var ValidationMessageParser = (function () {
     return ValidationMessageParser;
 }());
 exports.ValidationMessageParser = ValidationMessageParser;
-var MessageExpressionValidator = (function (_super) {
+var MessageExpressionValidator = /** @class */ (function (_super) {
     __extends(MessageExpressionValidator, _super);
     function MessageExpressionValidator(originalMessage) {
         var _this = _super.call(this) || this;

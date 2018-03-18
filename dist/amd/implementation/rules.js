@@ -4,7 +4,7 @@ define(["require", "exports"], function (require, exports) {
     /**
      * Sets, unsets and retrieves rules on an object or constructor function.
      */
-    var Rules = (function () {
+    var Rules = /** @class */ (function () {
         function Rules() {
         }
         /**

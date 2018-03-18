@@ -1,5 +1,5 @@
 import { ValidationController } from './validation-controller';
-var ValidationRendererCustomAttribute = (function () {
+var ValidationRendererCustomAttribute = /** @class */ (function () {
     function ValidationRendererCustomAttribute() {
     }
     ValidationRendererCustomAttribute.prototype.created = function (view) {

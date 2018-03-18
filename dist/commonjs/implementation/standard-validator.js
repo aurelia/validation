@@ -19,7 +19,7 @@ var validation_messages_1 = require("./validation-messages");
  * Validates.
  * Responsible for validating objects and properties.
  */
-var StandardValidator = (function (_super) {
+var StandardValidator = /** @class */ (function (_super) {
     __extends(StandardValidator, _super);
     function StandardValidator(messageProvider, resources) {
         var _this = _super.call(this) || this;

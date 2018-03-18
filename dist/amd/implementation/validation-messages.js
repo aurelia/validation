@@ -21,7 +21,7 @@ define(["require", "exports", "./validation-message-parser"], function (require,
     /**
      * Retrieves validation messages and property display names.
      */
-    var ValidationMessageProvider = (function () {
+    var ValidationMessageProvider = /** @class */ (function () {
         function ValidationMessageProvider(parser) {
             this.parser = parser;
         }

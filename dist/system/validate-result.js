@@ -5,7 +5,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            ValidateResult = (function () {
+            ValidateResult = /** @class */ (function () {
                 /**
                  * @param rule The rule associated with the result. Validator implementation specific.
                  * @param object The object that was validated.

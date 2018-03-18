@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Validates objects and properties.
  */
-var Validator = (function () {
+var Validator = /** @class */ (function () {
     function Validator() {
     }
     return Validator;

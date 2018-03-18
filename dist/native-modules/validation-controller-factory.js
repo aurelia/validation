@@ -4,7 +4,7 @@ import { PropertyAccessorParser } from './property-accessor-parser';
 /**
  * Creates ValidationController instances.
  */
-var ValidationControllerFactory = (function () {
+var ValidationControllerFactory = /** @class */ (function () {
     function ValidationControllerFactory(container) {
         this.container = container;
     }

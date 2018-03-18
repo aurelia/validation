@@ -26,7 +26,7 @@ import { ValidationRules } from './implementation/validation-rules';
 /**
  * Aurelia Validation Configuration API
  */
-var AureliaValidationConfiguration = (function () {
+var AureliaValidationConfiguration = /** @class */ (function () {
     function AureliaValidationConfiguration() {
         this.validatorType = StandardValidator;
     }

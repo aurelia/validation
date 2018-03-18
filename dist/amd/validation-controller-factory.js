@@ -4,7 +4,7 @@ define(["require", "exports", "./validation-controller", "./validator", "./prope
     /**
      * Creates ValidationController instances.
      */
-    var ValidationControllerFactory = (function () {
+    var ValidationControllerFactory = /** @class */ (function () {
         function ValidationControllerFactory(container) {
             this.container = container;
         }

@@ -6,7 +6,7 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             // tslint:disable:no-empty
-            ExpressionVisitor = (function () {
+            ExpressionVisitor = /** @class */ (function () {
                 function ExpressionVisitor() {
                 }
                 ExpressionVisitor.prototype.visitChain = function (chain) {

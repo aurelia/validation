@@ -1,6 +1,6 @@
 import { Parser, AccessMember, AccessScope } from 'aurelia-binding';
 import { isString } from './util';
-var PropertyAccessorParser = (function () {
+var PropertyAccessorParser = /** @class */ (function () {
     function PropertyAccessorParser(parser) {
         this.parser = parser;
     }

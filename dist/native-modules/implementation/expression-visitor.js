@@ -1,5 +1,5 @@
 // tslint:disable:no-empty
-var ExpressionVisitor = (function () {
+var ExpressionVisitor = /** @class */ (function () {
     function ExpressionVisitor() {
     }
     ExpressionVisitor.prototype.visitChain = function (chain) {

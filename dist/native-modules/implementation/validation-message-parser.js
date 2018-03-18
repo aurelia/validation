@@ -12,7 +12,7 @@ import { LiteralString, Binary, Conditional, LiteralPrimitive, CallMember } from
 import { BindingLanguage } from 'aurelia-templating';
 import * as LogManager from 'aurelia-logging';
 import { ExpressionVisitor } from './expression-visitor';
-var ValidationMessageParser = (function () {
+var ValidationMessageParser = /** @class */ (function () {
     function ValidationMessageParser(bindinqLanguage) {
         this.bindinqLanguage = bindinqLanguage;
         this.emptyStringExpression = new LiteralString('');
@@ -44,7 +44,7 @@ var ValidationMessageParser = (function () {
     return ValidationMessageParser;
 }());
 export { ValidationMessageParser };
-var MessageExpressionValidator = (function (_super) {
+var MessageExpressionValidator = /** @class */ (function (_super) {
     __extends(MessageExpressionValidator, _super);
     function MessageExpressionValidator(originalMessage) {
         var _this = _super.call(this) || this;

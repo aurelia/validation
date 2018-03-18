@@ -24,7 +24,7 @@ System.register(["./validator", "./validate-trigger", "./property-info", "./vali
             }
         ],
         execute: function () {
-            ValidationController = (function () {
+            ValidationController = /** @class */ (function () {
                 function ValidationController(validator, propertyParser) {
                     this.validator = validator;
                     this.propertyParser = propertyParser;

@@ -31,7 +31,7 @@ System.register(["aurelia-templating", "../validator", "../validate-result", "./
             }
         ],
         execute: function () {
-            StandardValidator = (function (_super) {
+            StandardValidator = /** @class */ (function (_super) {
                 __extends(StandardValidator, _super);
                 function StandardValidator(messageProvider, resources) {
                     var _this = _super.call(this) || this;

@@ -7,7 +7,7 @@ var get_target_dom_element_1 = require("./get-target-dom-element");
 /**
  * Binding behavior. Indicates the bound property should be validated.
  */
-var ValidateBindingBehaviorBase = (function () {
+var ValidateBindingBehaviorBase = /** @class */ (function () {
     function ValidateBindingBehaviorBase(taskQueue) {
         this.taskQueue = taskQueue;
     }
@@ -32,11 +32,11 @@ var ValidateBindingBehaviorBase = (function () {
         var trigger = this.getValidateTrigger(controller);
         // tslint:disable-next-line:no-bitwise
         if (trigger & validate_trigger_1.validateTrigger.change) {
-            binding.standardUpdateSource = binding.updateSource;
+            binding.vbbUpdateSource = binding.updateSource;
             // tslint:disable-next-line:only-arrow-functions
             // tslint:disable-next-line:space-before-function-paren
             binding.updateSource = function (value) {
-                this.standardUpdateSource(value);
+                this.vbbUpdateSource(value);
                 this.validationController.validateBinding(this);
             };
         }
@@ -60,9 +60,9 @@ var ValidateBindingBehaviorBase = (function () {
     };
     ValidateBindingBehaviorBase.prototype.unbind = function (binding) {
         // reset the binding to it's original state.
-        if (binding.standardUpdateSource) {
-            binding.updateSource = binding.standardUpdateSource;
-            binding.standardUpdateSource = null;
+        if (binding.vbbUpdateSource) {
+            binding.updateSource = binding.vbbUpdateSource;
+            binding.vbbUpdateSource = null;
         }
         if (binding.standardUpdateTarget) {
             binding.updateTarget = binding.standardUpdateTarget;

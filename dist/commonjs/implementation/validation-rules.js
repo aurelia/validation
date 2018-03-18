@@ -6,7 +6,7 @@ var util_1 = require("../util");
 /**
  * Part of the fluent rule API. Enables customizing property rules.
  */
-var FluentRuleCustomizer = (function () {
+var FluentRuleCustomizer = /** @class */ (function () {
     function FluentRuleCustomizer(property, condition, config, fluentEnsure, fluentRules, parsers) {
         if (config === void 0) { config = {}; }
         this.fluentEnsure = fluentEnsure;
@@ -182,7 +182,7 @@ exports.FluentRuleCustomizer = FluentRuleCustomizer;
 /**
  * Part of the fluent rule API. Enables applying rules to properties and objects.
  */
-var FluentRules = (function () {
+var FluentRules = /** @class */ (function () {
     function FluentRules(fluentEnsure, parsers, property) {
         this.fluentEnsure = fluentEnsure;
         this.parsers = parsers;
@@ -314,7 +314,7 @@ exports.FluentRules = FluentRules;
 /**
  * Part of the fluent rule API. Enables targeting properties and objects with rules.
  */
-var FluentEnsure = (function () {
+var FluentEnsure = /** @class */ (function () {
     function FluentEnsure(parsers) {
         this.parsers = parsers;
         /**
@@ -382,7 +382,7 @@ exports.FluentEnsure = FluentEnsure;
 /**
  * Fluent rule definition API.
  */
-var ValidationRules = (function () {
+var ValidationRules = /** @class */ (function () {
     function ValidationRules() {
     }
     ValidationRules.initialize = function (messageParser, propertyParser) {

@@ -4,7 +4,7 @@ define(["require", "exports"], function (require, exports) {
     /**
      * Validates objects and properties.
      */
-    var Validator = (function () {
+    var Validator = /** @class */ (function () {
         function Validator() {
         }
         return Validator;

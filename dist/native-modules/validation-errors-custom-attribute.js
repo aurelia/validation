@@ -9,7 +9,7 @@ import { Lazy } from 'aurelia-dependency-injection';
 import { customAttribute, bindable } from 'aurelia-templating';
 import { ValidationController } from './validation-controller';
 import { DOM } from 'aurelia-pal';
-var ValidationErrorsCustomAttribute = (function () {
+var ValidationErrorsCustomAttribute = /** @class */ (function () {
     function ValidationErrorsCustomAttribute(boundaryElement, controllerAccessor) {
         this.boundaryElement = boundaryElement;
         this.controllerAccessor = controllerAccessor;

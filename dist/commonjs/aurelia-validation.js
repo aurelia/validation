@@ -31,7 +31,7 @@ var validation_rules_1 = require("./implementation/validation-rules");
 /**
  * Aurelia Validation Configuration API
  */
-var AureliaValidationConfiguration = (function () {
+var AureliaValidationConfiguration = /** @class */ (function () {
     function AureliaValidationConfiguration() {
         this.validatorType = standard_validator_1.StandardValidator;
     }

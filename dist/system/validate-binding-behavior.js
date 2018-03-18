@@ -25,7 +25,7 @@ System.register(["aurelia-task-queue", "./validate-trigger", "./validate-binding
             }
         ],
         execute: function () {
-            ValidateBindingBehavior = (function (_super) {
+            ValidateBindingBehavior = /** @class */ (function (_super) {
                 __extends(ValidateBindingBehavior, _super);
                 /**
                  * Binding behavior. Indicates the bound property should be validated
@@ -42,7 +42,7 @@ System.register(["aurelia-task-queue", "./validate-trigger", "./validate-binding
                 return ValidateBindingBehavior;
             }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
             exports_1("ValidateBindingBehavior", ValidateBindingBehavior);
-            ValidateManuallyBindingBehavior = (function (_super) {
+            ValidateManuallyBindingBehavior = /** @class */ (function (_super) {
                 __extends(ValidateManuallyBindingBehavior, _super);
                 /**
                  * Binding behavior. Indicates the bound property will be validated
@@ -59,7 +59,7 @@ System.register(["aurelia-task-queue", "./validate-trigger", "./validate-binding
                 return ValidateManuallyBindingBehavior;
             }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
             exports_1("ValidateManuallyBindingBehavior", ValidateManuallyBindingBehavior);
-            ValidateOnBlurBindingBehavior = (function (_super) {
+            ValidateOnBlurBindingBehavior = /** @class */ (function (_super) {
                 __extends(ValidateOnBlurBindingBehavior, _super);
                 /**
                  * Binding behavior. Indicates the bound property should be validated
@@ -75,7 +75,7 @@ System.register(["aurelia-task-queue", "./validate-trigger", "./validate-binding
                 return ValidateOnBlurBindingBehavior;
             }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
             exports_1("ValidateOnBlurBindingBehavior", ValidateOnBlurBindingBehavior);
-            ValidateOnChangeBindingBehavior = (function (_super) {
+            ValidateOnChangeBindingBehavior = /** @class */ (function (_super) {
                 __extends(ValidateOnChangeBindingBehavior, _super);
                 /**
                  * Binding behavior. Indicates the bound property should be validated
@@ -92,7 +92,7 @@ System.register(["aurelia-task-queue", "./validate-trigger", "./validate-binding
                 return ValidateOnChangeBindingBehavior;
             }(validate_binding_behavior_base_1.ValidateBindingBehaviorBase));
             exports_1("ValidateOnChangeBindingBehavior", ValidateOnChangeBindingBehavior);
-            ValidateOnChangeOrBlurBindingBehavior = (function (_super) {
+            ValidateOnChangeOrBlurBindingBehavior = /** @class */ (function (_super) {
                 __extends(ValidateOnChangeOrBlurBindingBehavior, _super);
                 /**
                  * Binding behavior. Indicates the bound property should be validated

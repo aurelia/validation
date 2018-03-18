@@ -101,7 +101,7 @@ System.register(["./get-target-dom-element", "./property-info", "./property-acce
             /**
              * Aurelia Validation Configuration API
              */
-            AureliaValidationConfiguration = (function () {
+            AureliaValidationConfiguration = /** @class */ (function () {
                 function AureliaValidationConfiguration() {
                     this.validatorType = standard_validator_1.StandardValidator;
                 }

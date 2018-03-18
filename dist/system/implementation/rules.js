@@ -5,7 +5,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            Rules = (function () {
+            Rules = /** @class */ (function () {
                 /**
                  * Sets, unsets and retrieves rules on an object or constructor function.
                  */

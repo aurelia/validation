@@ -18,7 +18,7 @@ System.register(["./validation-controller", "./validator", "./property-accessor-
             /**
              * Creates ValidationController instances.
              */
-            ValidationControllerFactory = (function () {
+            ValidationControllerFactory = /** @class */ (function () {
                 function ValidationControllerFactory(container) {
                     this.container = container;
                 }

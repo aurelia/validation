@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * The result of validating an individual validation rule.
  */
-var ValidateResult = (function () {
+var ValidateResult = /** @class */ (function () {
     /**
      * @param rule The rule associated with the result. Validator implementation specific.
      * @param object The object that was validated.

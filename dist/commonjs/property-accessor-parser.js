@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var aurelia_binding_1 = require("aurelia-binding");
 var util_1 = require("./util");
-var PropertyAccessorParser = (function () {
+var PropertyAccessorParser = /** @class */ (function () {
     function PropertyAccessorParser(parser) {
         this.parser = parser;
     }

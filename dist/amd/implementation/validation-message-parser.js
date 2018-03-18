@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "aurelia-binding", "aurelia-templating", "aurelia-logging", "./expression-visitor"], function (require, exports, aurelia_binding_1, aurelia_templating_1, LogManager, expression_visitor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ValidationMessageParser = (function () {
+    var ValidationMessageParser = /** @class */ (function () {
         function ValidationMessageParser(bindinqLanguage) {
             this.bindinqLanguage = bindinqLanguage;
             this.emptyStringExpression = new aurelia_binding_1.LiteralString('');
@@ -43,7 +43,7 @@ define(["require", "exports", "aurelia-binding", "aurelia-templating", "aurelia-
         return ValidationMessageParser;
     }());
     exports.ValidationMessageParser = ValidationMessageParser;
-    var MessageExpressionValidator = (function (_super) {
+    var MessageExpressionValidator = /** @class */ (function (_super) {
         __extends(MessageExpressionValidator, _super);
         function MessageExpressionValidator(originalMessage) {
             var _this = _super.call(this) || this;

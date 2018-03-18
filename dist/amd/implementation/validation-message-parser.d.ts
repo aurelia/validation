@@ -3,7 +3,7 @@ import { BindingLanguage } from 'aurelia-templating';
 import { ExpressionVisitor } from './expression-visitor';
 export declare class ValidationMessageParser {
     private bindinqLanguage;
-    static inject: typeof BindingLanguage[];
+    static inject: (typeof BindingLanguage)[];
     private emptyStringExpression;
     private nullExpression;
     private undefinedExpression;

@@ -8,7 +8,7 @@ System.register([], function (exports_1, context_1) {
             /**
              * Validates objects and properties.
              */
-            Validator = (function () {
+            Validator = /** @class */ (function () {
                 function Validator() {
                 }
                 return Validator;

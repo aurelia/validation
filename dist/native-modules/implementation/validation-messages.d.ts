@@ -12,7 +12,7 @@ export declare const validationMessages: ValidationMessages;
  */
 export declare class ValidationMessageProvider {
     private parser;
-    static inject: typeof ValidationMessageParser[];
+    static inject: (typeof ValidationMessageParser)[];
     constructor(parser: ValidationMessageParser);
     /**
      * Returns a message binding expression that corresponds to the key.

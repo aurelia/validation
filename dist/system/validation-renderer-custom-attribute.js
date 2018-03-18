@@ -9,7 +9,7 @@ System.register(["./validation-controller"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            ValidationRendererCustomAttribute = (function () {
+            ValidationRendererCustomAttribute = /** @class */ (function () {
                 function ValidationRendererCustomAttribute() {
                 }
                 ValidationRendererCustomAttribute.prototype.created = function (view) {

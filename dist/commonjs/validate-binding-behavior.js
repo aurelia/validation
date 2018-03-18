@@ -18,7 +18,7 @@ var validate_binding_behavior_base_1 = require("./validate-binding-behavior-base
  * when the validate trigger specified by the associated controller's
  * validateTrigger property occurs.
  */
-var ValidateBindingBehavior = (function (_super) {
+var ValidateBindingBehavior = /** @class */ (function (_super) {
     __extends(ValidateBindingBehavior, _super);
     function ValidateBindingBehavior() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -35,7 +35,7 @@ exports.ValidateBindingBehavior = ValidateBindingBehavior;
  * manually, by calling controller.validate(). No automatic validation
  * triggered by data-entry or blur will occur.
  */
-var ValidateManuallyBindingBehavior = (function (_super) {
+var ValidateManuallyBindingBehavior = /** @class */ (function (_super) {
     __extends(ValidateManuallyBindingBehavior, _super);
     function ValidateManuallyBindingBehavior() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -51,7 +51,7 @@ exports.ValidateManuallyBindingBehavior = ValidateManuallyBindingBehavior;
  * Binding behavior. Indicates the bound property should be validated
  * when the associated element blurs.
  */
-var ValidateOnBlurBindingBehavior = (function (_super) {
+var ValidateOnBlurBindingBehavior = /** @class */ (function (_super) {
     __extends(ValidateOnBlurBindingBehavior, _super);
     function ValidateOnBlurBindingBehavior() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -68,7 +68,7 @@ exports.ValidateOnBlurBindingBehavior = ValidateOnBlurBindingBehavior;
  * when the associated element is changed by the user, causing a change
  * to the model.
  */
-var ValidateOnChangeBindingBehavior = (function (_super) {
+var ValidateOnChangeBindingBehavior = /** @class */ (function (_super) {
     __extends(ValidateOnChangeBindingBehavior, _super);
     function ValidateOnChangeBindingBehavior() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -85,7 +85,7 @@ exports.ValidateOnChangeBindingBehavior = ValidateOnChangeBindingBehavior;
  * when the associated element blurs or is changed by the user, causing
  * a change to the model.
  */
-var ValidateOnChangeOrBlurBindingBehavior = (function (_super) {
+var ValidateOnChangeOrBlurBindingBehavior = /** @class */ (function (_super) {
     __extends(ValidateOnChangeOrBlurBindingBehavior, _super);
     function ValidateOnChangeOrBlurBindingBehavior() {
         return _super !== null && _super.apply(this, arguments) || this;

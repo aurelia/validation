@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Sets, unsets and retrieves rules on an object or constructor function.
  */
-var Rules = (function () {
+var Rules = /** @class */ (function () {
     function Rules() {
     }
     /**

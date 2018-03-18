@@ -11,7 +11,7 @@ var aurelia_dependency_injection_1 = require("aurelia-dependency-injection");
 var aurelia_templating_1 = require("aurelia-templating");
 var validation_controller_1 = require("./validation-controller");
 var aurelia_pal_1 = require("aurelia-pal");
-var ValidationErrorsCustomAttribute = (function () {
+var ValidationErrorsCustomAttribute = /** @class */ (function () {
     function ValidationErrorsCustomAttribute(boundaryElement, controllerAccessor) {
         this.boundaryElement = boundaryElement;
         this.controllerAccessor = controllerAccessor;

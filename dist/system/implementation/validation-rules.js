@@ -18,7 +18,7 @@ System.register(["./rules", "./validation-messages", "../util"], function (expor
             /**
              * Part of the fluent rule API. Enables customizing property rules.
              */
-            FluentRuleCustomizer = (function () {
+            FluentRuleCustomizer = /** @class */ (function () {
                 function FluentRuleCustomizer(property, condition, config, fluentEnsure, fluentRules, parsers) {
                     if (config === void 0) { config = {}; }
                     this.fluentEnsure = fluentEnsure;
@@ -191,7 +191,7 @@ System.register(["./rules", "./validation-messages", "../util"], function (expor
                 return FluentRuleCustomizer;
             }());
             exports_1("FluentRuleCustomizer", FluentRuleCustomizer);
-            FluentRules = (function () {
+            FluentRules = /** @class */ (function () {
                 function FluentRules(fluentEnsure, parsers, property) {
                     this.fluentEnsure = fluentEnsure;
                     this.parsers = parsers;
@@ -323,7 +323,7 @@ System.register(["./rules", "./validation-messages", "../util"], function (expor
             /**
              * Part of the fluent rule API. Enables targeting properties and objects with rules.
              */
-            FluentEnsure = (function () {
+            FluentEnsure = /** @class */ (function () {
                 function FluentEnsure(parsers) {
                     this.parsers = parsers;
                     /**
@@ -391,7 +391,7 @@ System.register(["./rules", "./validation-messages", "../util"], function (expor
             /**
              * Fluent rule definition API.
              */
-            ValidationRules = (function () {
+            ValidationRules = /** @class */ (function () {
                 function ValidationRules() {
                 }
                 ValidationRules.initialize = function (messageParser, propertyParser) {

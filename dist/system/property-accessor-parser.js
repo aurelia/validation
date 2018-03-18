@@ -24,7 +24,7 @@ System.register(["aurelia-binding", "./util"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            PropertyAccessorParser = (function () {
+            PropertyAccessorParser = /** @class */ (function () {
                 function PropertyAccessorParser(parser) {
                     this.parser = parser;
                 }

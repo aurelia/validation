@@ -27,7 +27,7 @@ System.register(["aurelia-binding", "aurelia-dependency-injection", "aurelia-tem
             }
         ],
         execute: function () {
-            ValidationErrorsCustomAttribute = (function () {
+            ValidationErrorsCustomAttribute = /** @class */ (function () {
                 function ValidationErrorsCustomAttribute(boundaryElement, controllerAccessor) {
                     this.boundaryElement = boundaryElement;
                     this.controllerAccessor = controllerAccessor;

@@ -11,7 +11,7 @@ var validate_event_1 = require("./validate-event");
  * Manages a set of bindings, renderers and objects.
  * Exposes the current list of validation results for binding purposes.
  */
-var ValidationController = (function () {
+var ValidationController = /** @class */ (function () {
     function ValidationController(validator, propertyParser) {
         this.validator = validator;
         this.propertyParser = propertyParser;

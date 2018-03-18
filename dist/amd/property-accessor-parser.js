@@ -1,7 +1,7 @@
 define(["require", "exports", "aurelia-binding", "./util"], function (require, exports, aurelia_binding_1, util_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var PropertyAccessorParser = (function () {
+    var PropertyAccessorParser = /** @class */ (function () {
         function PropertyAccessorParser(parser) {
             this.parser = parser;
         }

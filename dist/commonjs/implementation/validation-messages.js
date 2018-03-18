@@ -21,7 +21,7 @@ exports.validationMessages = {
 /**
  * Retrieves validation messages and property display names.
  */
-var ValidationMessageProvider = (function () {
+var ValidationMessageProvider = /** @class */ (function () {
     function ValidationMessageProvider(parser) {
         this.parser = parser;
     }

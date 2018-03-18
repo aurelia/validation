@@ -2,7 +2,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     // tslint:disable:no-empty
-    var ExpressionVisitor = (function () {
+    var ExpressionVisitor = /** @class */ (function () {
         function ExpressionVisitor() {
         }
         ExpressionVisitor.prototype.visitChain = function (chain) {

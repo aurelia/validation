@@ -25,7 +25,7 @@ define(["require", "exports", "./get-target-dom-element", "./property-info", "./
     /**
      * Aurelia Validation Configuration API
      */
-    var AureliaValidationConfiguration = (function () {
+    var AureliaValidationConfiguration = /** @class */ (function () {
         function AureliaValidationConfiguration() {
             this.validatorType = standard_validator_2.StandardValidator;
         }
