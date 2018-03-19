@@ -16,8 +16,10 @@ describe('ValidationMessageParser', () => {
 
   it('parses', () => {
     expect(parser.parse('test') instanceof LiteralString).toBe(true);
+    // tslint:disable-next-line:no-invalid-template-strings
     expect(parser.parse('${$value} is invalid') instanceof Binary).toBe(true);
     // tslint:disable-next-line:max-line-length
+    // tslint:disable-next-line:no-invalid-template-strings
     expect(parser.parse('${$value} should equal ${$object.foo.bar().baz ? object.something[0] : \'test\'}') instanceof Binary).toBe(true);
   });
 });

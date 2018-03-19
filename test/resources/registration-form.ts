@@ -46,6 +46,7 @@ ValidationRules.customRule(
     || obj[otherPropertyName] === undefined
     || obj[otherPropertyName] === ''
     || value === obj[otherPropertyName],
+  // tslint:disable-next-line:no-invalid-template-strings
   '${$displayName} must match ${$getDisplayName($config.otherPropertyName)}',
   otherPropertyName => ({ otherPropertyName })
 );
@@ -55,7 +56,9 @@ ValidationRules
   .ensure(f => f.lastName).required()
   .ensure('email').required().email()
   .ensure(f => f.number1).satisfies(value => value > 0)
-  .ensure(f => f.number2).satisfies(value => value > 0).withMessage('${displayName} gots to be greater than zero.')
+  .ensure(f => f.number2).satisfies(value => value > 0)
+  // tslint:disable-next-line:no-invalid-template-strings
+  .withMessage('${displayName} gots to be greater than zero.')
   .ensure(f => f.password).required()
   .ensure(f => f.confirmPassword).required().satisfiesRule('matchesProperty', 'password')
   .on(RegistrationForm);
