@@ -126,7 +126,7 @@ define(["require", "exports", "aurelia-templating", "../validator", "../validate
                 rules = rules_1.Rules.get(object);
             }
             // any rules?
-            if (!rules) {
+            if (!rules || rules.length === 0) {
                 return Promise.resolve([]);
             }
             return this.validateRuleSequence(object, propertyName, rules, 0, []);

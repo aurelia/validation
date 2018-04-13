@@ -127,4 +127,11 @@ describe('Validator', () => {
       })
       .then(done);
   });
+
+  it('handles empty rulesets', (done: () => void) => {
+    const obj = { prop: 'test', __rules__: [] };
+
+    validator.validateProperty(obj, 'test', null)
+      .then(done);
+  });
 });
