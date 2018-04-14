@@ -112,7 +112,7 @@ export class StandardValidator extends Validator {
             rules = Rules.get(object);
         }
         // any rules?
-        if (!rules) {
+        if (!rules || rules.length === 0) {
             return Promise.resolve([]);
         }
         return this.validateRuleSequence(object, propertyName, rules, 0, []);

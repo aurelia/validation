@@ -146,7 +146,7 @@ export class StandardValidator extends Validator {
     }
 
     // any rules?
-    if (!rules) {
+    if (!rules || rules.length === 0) {
       return Promise.resolve([]);
     }
 
