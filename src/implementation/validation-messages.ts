@@ -29,7 +29,7 @@ export const validationMessages: ValidationMessages = {
 export class ValidationMessageProvider {
   public static inject = [ValidationMessageParser];
 
-  constructor(private parser: ValidationMessageParser) { }
+  constructor(parser: ValidationMessageParser) { }
 
   /**
    * Returns a message binding expression that corresponds to the key.
