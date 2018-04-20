@@ -27,7 +27,7 @@ export class NullableObjectForm {
     console.log(value);
   }
 
-  public rules = ValidationRules.ensure('prop').required().rules as any;
+  public rules = ValidationRules.ensure<any>('prop').required().rules as any;
 
   constructor(public controller: ValidationController) { }
 }

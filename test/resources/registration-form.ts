@@ -51,11 +51,11 @@ ValidationRules.customRule(
 );
 
 ValidationRules
-  .ensure((f: RegistrationForm) => f.firstName).required()
-  .ensure(f => f.lastName).required()
+  .ensure<RegistrationForm>('firstName').required()
+  .ensure('lastName').required()
   .ensure('email').required().email()
-  .ensure(f => f.number1).satisfies(value => value > 0)
-  .ensure(f => f.number2).satisfies(value => value > 0).withMessage('${displayName} gots to be greater than zero.')
-  .ensure(f => f.password).required()
-  .ensure(f => f.confirmPassword).required().satisfiesRule('matchesProperty', 'password')
+  .ensure('number1').satisfies(value => value > 0)
+  .ensure('number2').satisfies(value => value > 0).withMessage('${displayName} gots to be greater than zero.')
+  .ensure('password').required()
+  .ensure('confirmPassword').required().satisfiesRule('matchesProperty', 'password')
   .on(RegistrationForm);

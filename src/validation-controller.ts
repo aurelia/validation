@@ -6,7 +6,6 @@ import { ValidationRenderer, RenderInstruction } from './validation-renderer';
 import { ValidateResult } from './validate-result';
 import { ValidateInstruction } from './validate-instruction';
 import { ControllerValidateResult } from './controller-validate-result';
-import { PropertyAccessorParser, PropertyAccessor } from './property-accessor-parser';
 import { ValidateEvent } from './validate-event';
 
 /**
@@ -15,7 +14,7 @@ import { ValidateEvent } from './validate-event';
  * Exposes the current list of validation results for binding purposes.
  */
 export class ValidationController {
-  public static inject = [Validator, PropertyAccessorParser];
+  public static inject = [Validator];
 
   // Registered bindings (via the validate binding behavior)
   private bindings = new Map<Binding, BindingInfo>();
@@ -54,7 +53,7 @@ export class ValidationController {
 
   private eventCallbacks: ((event: ValidateEvent) => void)[] = [];
 
-  constructor(private validator: Validator, private propertyParser: PropertyAccessorParser) { }
+  constructor(private validator: Validator) { }
 
   /**
    * Subscribe to controller validate and reset events. These events occur when the
@@ -101,15 +100,9 @@ export class ValidationController {
   public addError<TObject>(
     message: string,
     object: TObject,
-    propertyName: string | PropertyAccessor<TObject, string> | null = null
+    propertyName: string | null = null
   ): ValidateResult {
-    let resolvedPropertyName: string | null;
-    if (propertyName === null) {
-      resolvedPropertyName = propertyName;
-    } else {
-      resolvedPropertyName = this.propertyParser.parse(propertyName);
-    }
-    const result = new ValidateResult({ __manuallyAdded__: true }, object, resolvedPropertyName, false, message);
+    const result = new ValidateResult({ __manuallyAdded__: true }, object, propertyName, false, message);
     this.processResultDelta('validate', [], [result]);
     return result;
   }

@@ -15,7 +15,7 @@ configureBindingLanguage({ container });
 configureValidation({ container });
 
 const rules = ValidationRules
-  .ensure('firstName').required()
+  .ensure<any>('firstName').required()
   .ensure('lastName').required()
   .rules;
 
