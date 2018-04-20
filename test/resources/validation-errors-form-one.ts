@@ -36,5 +36,5 @@ export class ValidationErrorsFormOne {
 }
 
 ValidationRules
-  .ensure((f: ValidationErrorsFormOne) => f.standardProp).required()
+  .ensure<ValidationErrorsFormOne>('standardProp').required()
   .on(ValidationErrorsFormOne);

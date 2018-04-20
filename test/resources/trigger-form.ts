@@ -34,9 +34,9 @@ export class TriggerForm {
 }
 
 ValidationRules
-  .ensure((f: TriggerForm) => f.standardProp).required()
-  .ensure(f => f.blurProp).required()
-  .ensure(f => f.changeProp).required()
-  .ensure(f => f.changeOrBlurProp).required()
-  .ensure(f => f.manualProp).required()
+  .ensure<TriggerForm>('standardProp').required()
+  .ensure('blurProp').required()
+  .ensure('changeProp').required()
+  .ensure('changeOrBlurProp').required()
+  .ensure('manualProp').required()
   .on(TriggerForm);
