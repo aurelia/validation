@@ -190,20 +190,13 @@ describe('end to end', () => {
         expect(error2.message).toBe('string property error');
         expect(error2.object).toBe(viewModel);
         expect(error2.propertyName).toBe('lastName');
-        const error3 = viewModel.controller.addError('expression property error', viewModel, vm => vm.firstName);
-        expect(error3.message).toBe('expression property error');
-        expect(error3.object).toBe(viewModel);
-        expect(error3.propertyName).toBe('firstName');
 
-        expect(viewModel.controller.errors.length).toBe(3);
-
-        viewModel.controller.removeError(error1);
         expect(viewModel.controller.errors.length).toBe(2);
 
-        viewModel.controller.removeError(error2);
+        viewModel.controller.removeError(error1);
         expect(viewModel.controller.errors.length).toBe(1);
 
-        viewModel.controller.removeError(error3);
+        viewModel.controller.removeError(error2);
         expect(viewModel.controller.errors.length).toBe(0);
       })
       // subscribe to error events

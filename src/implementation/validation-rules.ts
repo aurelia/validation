@@ -2,7 +2,6 @@ import { Rule, RuleProperty, ValidationDisplayNameAccessor } from './rule';
 import { ValidationMessageParser } from './validation-message-parser';
 import { Rules } from './rules';
 import { validationMessages } from './validation-messages';
-import { PropertyAccessorParser, PropertyAccessor } from '../property-accessor-parser';
 import { isString } from '../util';
 
 /**
@@ -17,7 +16,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
     config: object = {},
     private fluentEnsure: FluentEnsure<TObject>,
     private fluentRules: FluentRules<TObject, TValue>,
-    private parsers: Parsers
+    private messageParser: ValidationMessageParser
   ) {
     this.rule = {
       property,
@@ -55,7 +54,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
    */
   public withMessage(message: string) {
     this.rule.messageKey = 'custom';
-    this.rule.message = this.parsers.message.parse(message);
+    this.rule.message = this.messageParser.parse(message);
     return this;
   }
 
@@ -84,8 +83,8 @@ export class FluentRuleCustomizer<TObject, TValue> {
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
    */
-  public ensure<TValue2>(subject: string | ((model: TObject) => TValue2)) {
-    return this.fluentEnsure.ensure<TValue2>(subject);
+  public ensure<TValue>(subject: keyof TObject) {
+    return this.fluentEnsure.ensure<TValue>(subject);
   }
 
   /**
@@ -217,7 +216,7 @@ export class FluentRules<TObject, TValue> {
 
   constructor(
     private fluentEnsure: FluentEnsure<TObject>,
-    private parsers: Parsers,
+    private messageParser: ValidationMessageParser,
     private property: RuleProperty
   ) { }
 
@@ -237,7 +236,7 @@ export class FluentRules<TObject, TValue> {
    */
   public satisfies(condition: (value: TValue, object?: TObject) => boolean | Promise<boolean>, config?: object) {
     return new FluentRuleCustomizer<TObject, TValue>(
-      this.property, condition, config, this.fluentEnsure, this, this.parsers);
+      this.property, condition, config, this.fluentEnsure, this, this.messageParser);
   }
 
   /**
@@ -357,21 +356,21 @@ export class FluentEnsure<TObject> {
    */
   public rules: Rule<TObject, any>[][] = [];
 
-  constructor(private parsers: Parsers) { }
+  constructor(private messageParser: ValidationMessageParser) { }
 
   /**
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor
    * function.
    */
-  public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>) {
+  public ensure<TValue>(property: keyof TObject) {
     this.assertInitialized();
-    const name = this.parsers.property.parse(property);
+    const name = property as string;
     const fluentRules = new FluentRules<TObject, TValue>(
       this,
-      this.parsers,
+      this.messageParser,
       { name, displayName: null });
-    return this.mergeRules(fluentRules, name);
+    return this.mergeRules(fluentRules, property);
   }
 
   /**
@@ -380,7 +379,7 @@ export class FluentEnsure<TObject> {
   public ensureObject() {
     this.assertInitialized();
     const fluentRules = new FluentRules<TObject, TObject>(
-      this, this.parsers, { name: null, displayName: null });
+      this, this.messageParser, { name: null, displayName: null });
     return this.mergeRules(fluentRules, null);
   }
 
@@ -405,7 +404,7 @@ export class FluentEnsure<TObject> {
   }
 
   private assertInitialized() {
-    if (this.parsers) {
+    if (this.messageParser) {
       return;
     }
     throw new Error(`Did you forget to add ".plugin('aurelia-validation')" to your main.js?`);
@@ -428,28 +427,25 @@ export class FluentEnsure<TObject> {
  * Fluent rule definition API.
  */
 export class ValidationRules {
-  private static parsers: Parsers;
+  private static messageParser: ValidationMessageParser;
 
-  public static initialize(messageParser: ValidationMessageParser, propertyParser: PropertyAccessorParser) {
-    this.parsers = {
-      message: messageParser,
-      property: propertyParser
-    };
+  public static initialize(messageParser: ValidationMessageParser) {
+    this.messageParser = messageParser;
   }
 
   /**
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
    */
-  public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>) {
-    return new FluentEnsure<TObject>(ValidationRules.parsers).ensure(property);
+  public static ensure<TObject>(property: keyof TObject) {
+    return new FluentEnsure<TObject>(ValidationRules.messageParser).ensure(property);
   }
 
   /**
    * Targets an object with validation rules.
    */
   public static ensureObject<TObject>() {
-    return new FluentEnsure<TObject>(ValidationRules.parsers).ensureObject();
+    return new FluentEnsure<TObject>(ValidationRules.messageParser).ensureObject();
   }
 
   /**
@@ -494,9 +490,4 @@ export class ValidationRules {
   public static off(target: any): void {
     Rules.unset(target);
   }
-}
-
-export interface Parsers {
-  message: ValidationMessageParser;
-  property: PropertyAccessorParser;
 }
