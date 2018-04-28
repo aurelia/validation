@@ -411,8 +411,9 @@ export class FluentEnsure<TObject> {
     throw new Error(`Did you forget to add ".plugin('aurelia-validation')" to your main.js?`);
   }
 
-  private mergeRules(fluentRules: FluentRules<TObject, any>, propertyName: string | null) {
-    const existingRules = this.rules.find(r => r.length > 0 && r[0].property.name === propertyName);
+  private mergeRules(fluentRules: FluentRules<TObject, any>, propertyName: string | number | null) {
+    // tslint:disable-next-line:triple-equals | Use loose equality for property keys
+    const existingRules = this.rules.find(r => r.length > 0 && r[0].property.name == propertyName);
     if (existingRules) {
       const rule = existingRules[existingRules.length - 1];
       fluentRules.sequence = rule.sequence;

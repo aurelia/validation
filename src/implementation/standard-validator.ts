@@ -101,7 +101,8 @@ export class StandardValidator extends Validator {
       const rule = rules[i];
 
       // is the rule related to the property we're validating.
-      if (!validateAllProperties && rule.property.name !== propertyName) {
+      // tslint:disable-next-line:triple-equals | Use loose equality for property keys
+      if (!validateAllProperties && rule.property.name != propertyName) {
         continue;
       }
 
@@ -117,21 +118,21 @@ export class StandardValidator extends Validator {
         promiseOrBoolean = Promise.resolve(promiseOrBoolean);
       }
       promises.push(promiseOrBoolean.then(valid => {
-        const message = valid ? null : this.getMessage(rule, object, value);
-        results.push(new ValidateResult(rule, object, rule.property.name, valid, message));
-        allValid = allValid && valid;
-        return valid;
-      }));
+          const message = valid ? null : this.getMessage(rule, object, value);
+          results.push(new ValidateResult(rule, object, rule.property.name, valid, message));
+          allValid = allValid && valid;
+          return valid;
+        }));
     }
 
     return Promise.all(promises)
       .then(() => {
-        sequence++;
-        if (allValid && sequence < ruleSequence.length) {
-          return this.validateRuleSequence(object, propertyName, ruleSequence, sequence, results);
-        }
-        return results;
-      });
+      sequence++;
+      if (allValid && sequence < ruleSequence.length) {
+        return this.validateRuleSequence(object, propertyName, ruleSequence, sequence, results);
+      }
+      return results;
+    });
   }
 
   private validate(

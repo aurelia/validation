@@ -12,7 +12,7 @@ export class PropertyAccessorParser {
 
   constructor(private parser: Parser) { }
 
-  public parse<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): string {
+  public parse<TObject, TValue>(property: string | number | PropertyAccessor<TObject, TValue>): string {
     if (isString(property)) {
       return property as string;
     }

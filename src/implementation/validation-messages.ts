@@ -51,13 +51,13 @@ export class ValidationMessageProvider {
    * Override this with your own custom logic.
    * @param propertyName The property name.
    */
-  public getDisplayName(propertyName: string, displayName?: string | null | (() => string)): string {
+  public getDisplayName(propertyName: string | number, displayName?: string | null | (() => string)): string {
     if (displayName !== null && displayName !== undefined) {
       return (displayName instanceof Function) ? displayName() : displayName as string;
     }
 
     // split on upper-case letters.
-    const words = propertyName.split(/(?=[A-Z])/).join(' ');
+    const words = propertyName.toString().split(/(?=[A-Z])/).join(' ');
     // capitalize first letter.
     return words.charAt(0).toUpperCase() + words.slice(1);
   }
