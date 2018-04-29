@@ -85,6 +85,68 @@ describe('Validator', () => {
       .then(done);
   });
 
+  it('handles numeric properties', (done: () => void) => {
+    const objStr = {} as any;
+    objStr['2'] = 'test';
+    const objNum = {} as any;
+    objNum[2] = 'test';
+
+    const rulesStr = ValidationRules.ensure('2').equals('test').rules;
+    const rulesNum = ValidationRules.ensure(2).equals('test').rules;
+    Promise.resolve()
+      .then(() => {
+        return validator.validateProperty(objStr, 2, rulesStr);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rulesStr[0][0], objStr, '2', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+        return validator.validateProperty(objNum, 2, rulesStr);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rulesStr[0][0], objNum, '2', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+        return validator.validateProperty(objStr, '2', rulesStr);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rulesStr[0][0], objStr, '2', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+        return validator.validateProperty(objNum, '2', rulesStr);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rulesStr[0][0], objNum, '2', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+        return validator.validateProperty(objStr, 2, rulesNum);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rulesNum[0][0], objStr, 2, true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+        return validator.validateProperty(objNum, 2, rulesNum);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rulesNum[0][0], objNum, 2, true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+        return validator.validateProperty(objStr, '2', rulesNum);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rulesNum[0][0], objStr, 2, true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+        return validator.validateProperty(objNum, '2', rulesNum);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rulesNum[0][0], objNum, 2, true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(done);
+  });
+
   it('bails', (done: () => void) => {
     let obj = { prop: 'invalid email', prop2: '' };
     const spy1 = jasmine.createSpy().and.returnValue(true);

@@ -3,7 +3,7 @@ import {
   AccessMember,
   AccessScope
 } from 'aurelia-binding';
-import { isString } from './util';
+import { isString, isNumber } from './util';
 
 export type PropertyAccessor<TObject, TValue> = (object: TObject) => TValue;
 
@@ -12,9 +12,9 @@ export class PropertyAccessorParser {
 
   constructor(private parser: Parser) { }
 
-  public parse<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): string {
-    if (isString(property)) {
-      return property as string;
+  public parse<TObject, TValue>(property: string | number | PropertyAccessor<TObject, TValue>): string | number {
+    if (isString(property) || isNumber(property)) {
+      return property as string | number;
     }
     const accessorText = getAccessorExpression(property.toString());
     const accessor = this.parser.parse(accessorText);

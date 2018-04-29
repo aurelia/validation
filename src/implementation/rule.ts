@@ -9,7 +9,7 @@ export interface RuleProperty {
   /**
    * The property name. null indicates the rule targets the object itself.
    */
-  name: string | null;
+  name: string | number | null;
 
   /**
    * The displayName of the property (or object).

@@ -103,7 +103,7 @@ export class ValidationController {
     object: TObject,
     propertyName: string | PropertyAccessor<TObject, string> | null = null
   ): ValidateResult {
-    let resolvedPropertyName: string | null;
+    let resolvedPropertyName: string | number | null;
     if (propertyName === null) {
       resolvedPropertyName = propertyName;
     } else {

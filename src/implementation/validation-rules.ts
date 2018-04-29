@@ -364,7 +364,7 @@ export class FluentEnsure<TObject> {
    * @param property The property to target. Can be the property name or a property accessor
    * function.
    */
-  public ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>) {
+  public ensure<TValue>(property: string | number | PropertyAccessor<TObject, TValue>) {
     this.assertInitialized();
     const name = this.parsers.property.parse(property);
     const fluentRules = new FluentRules<TObject, TValue>(
@@ -411,8 +411,9 @@ export class FluentEnsure<TObject> {
     throw new Error(`Did you forget to add ".plugin('aurelia-validation')" to your main.js?`);
   }
 
-  private mergeRules(fluentRules: FluentRules<TObject, any>, propertyName: string | null) {
-    const existingRules = this.rules.find(r => r.length > 0 && r[0].property.name === propertyName);
+  private mergeRules(fluentRules: FluentRules<TObject, any>, propertyName: string | number | null) {
+    // tslint:disable-next-line:triple-equals | Use loose equality for property keys
+    const existingRules = this.rules.find(r => r.length > 0 && r[0].property.name == propertyName);
     if (existingRules) {
       const rule = existingRules[existingRules.length - 1];
       fluentRules.sequence = rule.sequence;
@@ -441,7 +442,7 @@ export class ValidationRules {
    * Target a property with validation rules.
    * @param property The property to target. Can be the property name or a property accessor function.
    */
-  public static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>) {
+  public static ensure<TObject, TValue>(property: string | number | PropertyAccessor<TObject, TValue>) {
     return new FluentEnsure<TObject>(ValidationRules.parsers).ensure(property);
   }
 
