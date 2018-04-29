@@ -19,6 +19,7 @@ describe('PropertyAccessorParser', () => {
     expect(parser.parse('firstName')).toEqual('firstName');
     expect(parser.parse('3_letter_id')).toEqual('3_letter_id');
     expect(parser.parse('. @$# ???')).toEqual('. @$# ???');
+    expect(parser.parse(42)).toEqual(42);
     expect(parser.parse((x: any) => x.firstName)).toEqual('firstName');
   });
 

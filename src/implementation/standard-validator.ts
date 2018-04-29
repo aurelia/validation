@@ -31,7 +31,7 @@ export class StandardValidator extends Validator {
    * @param rules Optional. If unspecified, the rules will be looked up using the metadata
    * for the object created by ValidationRules....on(class/object)
    */
-  public validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidateResult[]> {
+  public validateProperty(object: any, propertyName: string | number, rules?: any): Promise<ValidateResult[]> {
     return this.validate(object, propertyName, rules || null);
   }
 
@@ -84,7 +84,7 @@ export class StandardValidator extends Validator {
 
   private validateRuleSequence(
     object: any,
-    propertyName: string | null,
+    propertyName: string | number | null,
     ruleSequence: Rule<any, any>[][],
     sequence: number,
     results: ValidateResult[]
@@ -137,7 +137,7 @@ export class StandardValidator extends Validator {
 
   private validate(
     object: any,
-    propertyName: string | null,
+    propertyName: string | number | null,
     rules: Rule<any, any>[][] | null
   ): Promise<ValidateResult[]> {
     // rules specified?
