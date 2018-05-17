@@ -468,7 +468,7 @@ To build more sophisticated error UIs you might need a list of errors specific t
   <source-code lang="HTML">
     <form>
       <div class="form-group" validation-errors.bind="firstNameErrors"
-           class.bind="firstNameErrors.length ? 'has-error' : ''">
+           class.bind="firstNameErrors.length ? 'is-invalid' : ''">
         <label for="firstName">First Name</label>
         <input type="text" class="form-control" id="firstName"
                placeholder="First Name"
@@ -479,7 +479,7 @@ To build more sophisticated error UIs you might need a list of errors specific t
       </div>
 
       <div class="form-group" validation-errors.bind="lastNameErrors"
-           class.bind="lastNameErrors.length ? 'has-error' : ''">
+           class.bind="lastNameErrors.length ? 'is-invalid' : ''">
         <label for="lastName">Last Name</label>
         <input type="text" class="form-control" id="lastName"
                placeholder="Last Name"
@@ -539,8 +539,8 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
         formGroup.classList.add('has-error');
 
         // add help-block
-        const message = document.createElement('span');
-        message.className = 'help-block validation-message';
+        const message = document.createElement("div");
+        message.className = "invalid-feedback";
         message.textContent = result.message;
         message.id = `validation-message-${result.id}`;
         formGroup.appendChild(message);
@@ -557,13 +557,15 @@ Custom renderers implement a one-method interface: `render(instruction: RenderIn
         }
 
         // remove help-block
-        const message = formGroup.querySelector(`#validation-message-${result.id}`);
+        const message = formGroup.querySelector(
+          `#validation-message-${result.id}`
+        );
         if (message) {
           formGroup.removeChild(message);
 
-          // remove the has-error class from the enclosing form-group div
-          if (formGroup.querySelectorAll('.help-block.validation-message').length === 0) {
-            formGroup.classList.remove('has-error');
+          // remove the is-invalid class from the enclosing form-group div
+          if (formGroup.querySelectorAll(".invalid-feedback").length === 0) {
+            element.classList.remove("is-invalid");
           }
         }
       }
@@ -577,7 +579,7 @@ To use a custom renderer you'll need to instantiate it and pass it to your contr
 > Warning
 > The renderer example uses `Element.closest`. You'll need to [polyfill](https://github.com/jonathantneal/closest) this method in Internet Explorer.
 
-Here's another renderer for bootstrap forms that demonstrates "success styling". When a property transitions from indeterminate validity to valid or from invalid to valid, the form control will highlight in green. When a property transitions from indeterminate validity to invalid or from valid to invalid, the form control will highlight in red, just like in the previous bootstrap form renderer example.
+Here's another renderer for bootstrap 4 forms that demonstrates "success styling". When a property transitions from indeterminate validity to valid or from invalid to valid, the form control will highlight in green. When a property transitions from indeterminate validity to invalid or from valid to invalid, the form control will highlight in red, just like in the previous bootstrap form renderer example.
 
 <code-listing heading="bootstrap-form-renderer.ts">
   <source-code lang="TypeScript">
@@ -597,23 +599,23 @@ Here's another renderer for bootstrap forms that demonstrates "success styling".
       }
 
       add(element: Element, result: ValidateResult) {
-        const formGroup = element.closest('.form-group');
+        const formGroup = element.closest(".form-group");
         if (!formGroup) {
           return;
         }
 
         if (result.valid) {
-          if (!formGroup.classList.contains('has-error')) {
-            formGroup.classList.add('has-success');
+          if (!element.classList.contains("is-invalid")) {
+            element.classList.add("is-valid");
           }
         } else {
-          // add the has-error class to the enclosing form-group div
-          formGroup.classList.remove('has-success');
-          formGroup.classList.add('has-error');
+          // add the is-invalid class to the enclosing form-group div
+          element.classList.remove("is-valid");
+          element.classList.add("is-invalid");
 
           // add help-block
-          const message = document.createElement('span');
-          message.className = 'help-block validation-message';
+          const message = document.createElement("div");
+          message.className = "invalid-feedback";
           message.textContent = result.message;
           message.id = `validation-message-${result.id}`;
           formGroup.appendChild(message);
@@ -621,24 +623,26 @@ Here's another renderer for bootstrap forms that demonstrates "success styling".
       }
 
       remove(element: Element, result: ValidateResult) {
-        const formGroup = element.closest('.form-group');
+        const formGroup = element.closest(".form-group");
         if (!formGroup) {
           return;
         }
 
         if (result.valid) {
-          if (formGroup.classList.contains('has-success')) {
-            formGroup.classList.remove('has-success');
+          if (element.classList.contains("is-valid")) {
+            element.classList.remove("is-valid");
           }
         } else {
           // remove help-block
-          const message = formGroup.querySelector(`#validation-message-${result.id}`);
+          const message = formGroup.querySelector(
+            `#validation-message-${result.id}`
+          );
           if (message) {
             formGroup.removeChild(message);
 
-            // remove the has-error class from the enclosing form-group div
-            if (formGroup.querySelectorAll('.help-block.validation-message').length === 0) {
-              formGroup.classList.remove('has-error');
+            // remove the is-invalid class from the enclosing form-group div
+            if (formGroup.querySelectorAll(".invalid-feedback").length === 0) {
+              element.classList.remove("is-invalid");
             }
           }
         }
