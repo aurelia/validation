@@ -4,6 +4,6 @@ export declare class PropertyAccessorParser {
     private parser;
     static inject: (typeof Parser)[];
     constructor(parser: Parser);
-    parse<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): string;
+    parse<TObject, TValue>(property: string | number | PropertyAccessor<TObject, TValue>): string | number;
 }
 export declare function getAccessorExpression(fn: string): string;

@@ -87,7 +87,8 @@ define(["require", "exports", "aurelia-templating", "../validator", "../validate
             var _loop_1 = function (i) {
                 var rule = rules[i];
                 // is the rule related to the property we're validating.
-                if (!validateAllProperties && rule.property.name !== propertyName) {
+                // tslint:disable-next-line:triple-equals | Use loose equality for property keys
+                if (!validateAllProperties && rule.property.name != propertyName) {
                     return "continue";
                 }
                 // is this a conditional rule? is the condition met?

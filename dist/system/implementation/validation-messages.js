@@ -55,7 +55,7 @@ System.register(["./validation-message-parser"], function (exports_1, context_1)
                         return (displayName instanceof Function) ? displayName() : displayName;
                     }
                     // split on upper-case letters.
-                    var words = propertyName.split(/(?=[A-Z])/).join(' ');
+                    var words = propertyName.toString().split(/(?=[A-Z])/).join(' ');
                     // capitalize first letter.
                     return words.charAt(0).toUpperCase() + words.slice(1);
                 };

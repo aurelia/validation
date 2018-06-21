@@ -76,7 +76,8 @@ export class StandardValidator extends Validator {
         for (let i = 0; i < rules.length; i++) {
             const rule = rules[i];
             // is the rule related to the property we're validating.
-            if (!validateAllProperties && rule.property.name !== propertyName) {
+            // tslint:disable-next-line:triple-equals | Use loose equality for property keys
+            if (!validateAllProperties && rule.property.name != propertyName) {
                 continue;
             }
             // is this a conditional rule? is the condition met?

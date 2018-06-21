@@ -6,7 +6,7 @@ define(["require", "exports", "aurelia-binding", "./util"], function (require, e
             this.parser = parser;
         }
         PropertyAccessorParser.prototype.parse = function (property) {
-            if (util_1.isString(property)) {
+            if (util_1.isString(property) || util_1.isNumber(property)) {
                 return property;
             }
             var accessorText = getAccessorExpression(property.toString());

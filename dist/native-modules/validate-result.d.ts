@@ -4,7 +4,7 @@
 export declare class ValidateResult {
     rule: any;
     object: any;
-    propertyName: string | null;
+    propertyName: string | number | null;
     valid: boolean;
     message: string | null;
     private static nextId;
@@ -18,6 +18,6 @@ export declare class ValidateResult {
      * @param propertyName The name of the property that was validated.
      * @param error The error, if the result is a validation error.
      */
-    constructor(rule: any, object: any, propertyName: string | null, valid: boolean, message?: string | null);
+    constructor(rule: any, object: any, propertyName: string | number | null, valid: boolean, message?: string | null);
     toString(): string | null;
 }

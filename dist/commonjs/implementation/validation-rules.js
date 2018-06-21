@@ -366,7 +366,8 @@ var FluentEnsure = /** @class */ (function () {
         throw new Error("Did you forget to add \".plugin('aurelia-validation')\" to your main.js?");
     };
     FluentEnsure.prototype.mergeRules = function (fluentRules, propertyName) {
-        var existingRules = this.rules.find(function (r) { return r.length > 0 && r[0].property.name === propertyName; });
+        // tslint:disable-next-line:triple-equals | Use loose equality for property keys
+        var existingRules = this.rules.find(function (r) { return r.length > 0 && r[0].property.name == propertyName; });
         if (existingRules) {
             var rule = existingRules[existingRules.length - 1];
             fluentRules.sequence = rule.sequence;

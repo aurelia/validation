@@ -5,6 +5,10 @@ System.register([], function (exports_1, context_1) {
         return Object.prototype.toString.call(value) === '[object String]';
     }
     exports_1("isString", isString);
+    function isNumber(value) {
+        return Object.prototype.toString.call(value) === '[object Number]';
+    }
+    exports_1("isNumber", isNumber);
     return {
         setters: [],
         execute: function () {

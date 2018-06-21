@@ -1,11 +1,11 @@
 import { Parser, AccessMember, AccessScope } from 'aurelia-binding';
-import { isString } from './util';
+import { isString, isNumber } from './util';
 export class PropertyAccessorParser {
     constructor(parser) {
         this.parser = parser;
     }
     parse(property) {
-        if (isString(property)) {
+        if (isString(property) || isNumber(property)) {
             return property;
         }
         const accessorText = getAccessorExpression(property.toString());

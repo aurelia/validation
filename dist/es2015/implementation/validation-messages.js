@@ -48,7 +48,7 @@ export class ValidationMessageProvider {
             return (displayName instanceof Function) ? displayName() : displayName;
         }
         // split on upper-case letters.
-        const words = propertyName.split(/(?=[A-Z])/).join(' ');
+        const words = propertyName.toString().split(/(?=[A-Z])/).join(' ');
         // capitalize first letter.
         return words.charAt(0).toUpperCase() + words.slice(1);
     }

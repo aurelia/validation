@@ -11,7 +11,7 @@ export declare const validationMessages: ValidationMessages;
  * Retrieves validation messages and property display names.
  */
 export declare class ValidationMessageProvider {
-    private parser;
+    parser: ValidationMessageParser;
     static inject: (typeof ValidationMessageParser)[];
     constructor(parser: ValidationMessageParser);
     /**
@@ -25,5 +25,5 @@ export declare class ValidationMessageProvider {
      * Override this with your own custom logic.
      * @param propertyName The property name.
      */
-    getDisplayName(propertyName: string, displayName?: string | null | (() => string)): string;
+    getDisplayName(propertyName: string | number, displayName?: string | null | (() => string)): string;
 }

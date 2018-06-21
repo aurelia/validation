@@ -20,7 +20,7 @@ export declare class StandardValidator extends Validator {
      * @param rules Optional. If unspecified, the rules will be looked up using the metadata
      * for the object created by ValidationRules....on(class/object)
      */
-    validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidateResult[]>;
+    validateProperty(object: any, propertyName: string | number, rules?: any): Promise<ValidateResult[]>;
     /**
      * Validates all rules for specified object and it's properties.
      * @param object The object to validate.

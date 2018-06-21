@@ -202,7 +202,7 @@ export declare class FluentEnsure<TObject> {
      * @param property The property to target. Can be the property name or a property accessor
      * function.
      */
-    ensure<TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRules<TObject, any>;
+    ensure<TValue>(property: string | number | PropertyAccessor<TObject, TValue>): FluentRules<TObject, any>;
     /**
      * Targets an object with validation rules.
      */
@@ -225,7 +225,7 @@ export declare class ValidationRules {
      * Target a property with validation rules.
      * @param property The property to target. Can be the property name or a property accessor function.
      */
-    static ensure<TObject, TValue>(property: string | PropertyAccessor<TObject, TValue>): FluentRules<TObject, any>;
+    static ensure<TObject, TValue>(property: string | number | PropertyAccessor<TObject, TValue>): FluentRules<TObject, any>;
     /**
      * Targets an object with validation rules.
      */

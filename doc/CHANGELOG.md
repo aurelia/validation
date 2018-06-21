@@ -1,3 +1,22 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/aurelia/validation/compare/1.1.3...1.2.0) (2018-06-21)
+
+
+### Bug Fixes
+
+* **property-access:** make number and string property keys work the same way ([bca8d33](https://github.com/aurelia/validation/commit/bca8d33))
+* **property-accessor-parser:** handle numeric property keys ([7288a73](https://github.com/aurelia/validation/commit/7288a73))
+* **StandardValidator:** change to handle empty rule sets ([85145b8](https://github.com/aurelia/validation/commit/85145b8)), closes [#483](https://github.com/aurelia/validation/issues/483)
+* **validation-messages:** assign the parser in the constructor ([7ba58da](https://github.com/aurelia/validation/commit/7ba58da))
+* **ValidationMessageProvider:** increase visibility of parser field ([b7636b5](https://github.com/aurelia/validation/commit/b7636b5)), closes [#464](https://github.com/aurelia/validation/issues/464)
+
+
+### Features
+
+* **Validation:** support integer property keys ([e74ca86](https://github.com/aurelia/validation/commit/e74ca86)), closes [#474](https://github.com/aurelia/validation/issues/474)
+
+
+
 <a name="1.1.3"></a>
 ## [1.1.3](https://github.com/aurelia/validation/compare/1.1.2...1.1.3) (2018-03-18)
 
