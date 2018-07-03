@@ -1,6 +1,6 @@
 {
   "name": "aurelia-validation",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Validation for Aurelia applications",
   "keywords": [
     "aurelia",
@@ -19,6 +19,6 @@
   "dependencies": {
     "aurelia-binding": "^2.0.0",
     "aurelia-metadata": "^1.0.0",
-    "aurelia-templating": "^1.0.0"
+    "aurelia-templating": "^1.8.1"
   }
 }
