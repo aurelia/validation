@@ -54,7 +54,6 @@
   },
   "jspm": {
     "registry": "npm",
-    "jspmPackage": true,
     "main": "aurelia-validation",
     "format": "amd",
     "directories": {
@@ -76,7 +75,11 @@
       "aurelia-task-queue": "^1.2.0",
       "aurelia-templating": "^1.8.1"
     },
-    "devDependencies": {}
+    "devDependencies": {
+      "babel": "babel-core@^5.8.24",
+      "babel-runtime": "^5.8.24",
+      "core-js": "^1.1.4"
+    }
   },
   "dependencies": {
     "aurelia-binding": "^2.0.0",
