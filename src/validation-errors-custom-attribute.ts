@@ -13,7 +13,7 @@ export interface RenderedError {
 
 @customAttribute('validation-errors')
 export class ValidationErrorsCustomAttribute implements ValidationRenderer {
-  public static inject = [DOM.Element, Lazy.of(ValidationController)];
+  public static inject() { return [DOM.Element, Lazy.of(ValidationController)]; }
 
   @bindable({ defaultBindingMode: bindingMode.oneWay })
   public controller: ValidationController | null = null;
