@@ -1,3 +1,13 @@
+<a name="1.2.3"></a>
+## [1.2.3](https://github.com/aurelia/validation/compare/1.2.2...1.2.3) (2018-09-25)
+
+
+### Bug Fixes
+
+* **DI:** static inject method instead of property ([69d3eff](https://github.com/aurelia/validation/commit/69d3eff))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/aurelia/validation/compare/1.1.3...1.2.0) (2018-06-21)
 

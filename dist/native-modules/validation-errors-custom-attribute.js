@@ -17,6 +17,7 @@ var ValidationErrorsCustomAttribute = /** @class */ (function () {
         this.errors = [];
         this.errorsInternal = [];
     }
+    ValidationErrorsCustomAttribute.inject = function () { return [DOM.Element, Lazy.of(ValidationController)]; };
     ValidationErrorsCustomAttribute.prototype.sort = function () {
         this.errorsInternal.sort(function (a, b) {
             if (a.targets[0] === b.targets[0]) {
@@ -67,7 +68,6 @@ var ValidationErrorsCustomAttribute = /** @class */ (function () {
             this.controller.removeRenderer(this);
         }
     };
-    ValidationErrorsCustomAttribute.inject = [DOM.Element, Lazy.of(ValidationController)];
     __decorate([
         bindable({ defaultBindingMode: bindingMode.oneWay })
     ], ValidationErrorsCustomAttribute.prototype, "controller", void 0);

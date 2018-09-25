@@ -17,6 +17,7 @@ let ValidationErrorsCustomAttribute = class ValidationErrorsCustomAttribute {
         this.errors = [];
         this.errorsInternal = [];
     }
+    static inject() { return [DOM.Element, Lazy.of(ValidationController)]; }
     sort() {
         this.errorsInternal.sort((a, b) => {
             if (a.targets[0] === b.targets[0]) {
@@ -61,7 +62,6 @@ let ValidationErrorsCustomAttribute = class ValidationErrorsCustomAttribute {
         }
     }
 };
-ValidationErrorsCustomAttribute.inject = [DOM.Element, Lazy.of(ValidationController)];
 __decorate([
     bindable({ defaultBindingMode: bindingMode.oneWay })
 ], ValidationErrorsCustomAttribute.prototype, "controller", void 0);

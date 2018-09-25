@@ -15,6 +15,7 @@ define(["require", "exports", "aurelia-binding", "aurelia-dependency-injection",
             this.errors = [];
             this.errorsInternal = [];
         }
+        ValidationErrorsCustomAttribute.inject = function () { return [aurelia_pal_1.DOM.Element, aurelia_dependency_injection_1.Lazy.of(validation_controller_1.ValidationController)]; };
         ValidationErrorsCustomAttribute.prototype.sort = function () {
             this.errorsInternal.sort(function (a, b) {
                 if (a.targets[0] === b.targets[0]) {
@@ -65,7 +66,6 @@ define(["require", "exports", "aurelia-binding", "aurelia-dependency-injection",
                 this.controller.removeRenderer(this);
             }
         };
-        ValidationErrorsCustomAttribute.inject = [aurelia_pal_1.DOM.Element, aurelia_dependency_injection_1.Lazy.of(validation_controller_1.ValidationController)];
         __decorate([
             aurelia_templating_1.bindable({ defaultBindingMode: aurelia_binding_1.bindingMode.oneWay })
         ], ValidationErrorsCustomAttribute.prototype, "controller", void 0);

@@ -9,7 +9,7 @@ export interface RenderedError {
 export declare class ValidationErrorsCustomAttribute implements ValidationRenderer {
     private boundaryElement;
     private controllerAccessor;
-    static inject: ({
+    static inject(): ({
         new (): Element;
         prototype: Element;
     } | Lazy)[];
