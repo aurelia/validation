@@ -1,7 +1,10 @@
 import { ValidationController } from './validation-controller';
 import { ValidationRenderer } from './validation-renderer';
+import { customAttribute } from 'aurelia-framework';
 
+@customAttribute('validation-renderer')
 export class ValidationRendererCustomAttribute {
+
   private container: any;
   private controller: ValidationController;
   private value: string;

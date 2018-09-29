@@ -17,6 +17,7 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "noEmitHelpers": false,
+    "importHelpers": true,
     "stripInternal": true
   },
   "exclude": [

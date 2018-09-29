@@ -57,6 +57,7 @@ window.require.config({
     'aurelia-task-queue': '/base/node_modules/aurelia-task-queue/dist/amd/aurelia-task-queue',
     'aurelia-templating': '/base/node_modules/aurelia-templating/dist/amd/aurelia-templating',
     'aurelia-templating-binding': '/base/node_modules/aurelia-templating-binding/dist/amd/aurelia-templating-binding',
+    'tslib': '/base/node_modules/tslib/tslib',
     /* tslint:enable:max-line-length */
     /* tslint:disable */
     'text': '/base/node_modules/requirejs-text/text',
