@@ -11,11 +11,11 @@ export function configure(aurelia: Aurelia): FrameworkConfiguration {
 
 export function blur(element: Element): Promise<void> {
   element.dispatchEvent(DOM.createCustomEvent('blur', {}));
-  return new Promise<void>(setTimeout);
+  return new Promise<void>(resolve => setTimeout(resolve));
 }
 
 export function change(element: HTMLInputElement, value: string): Promise<void> {
   element.value = value;
   element.dispatchEvent(DOM.createCustomEvent('change', { bubbles: true }));
-  return new Promise<void>(setTimeout);
+  return new Promise<void>(resolve => setTimeout(resolve));
 }
