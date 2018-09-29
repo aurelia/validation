@@ -15,7 +15,6 @@ export default [{
     file: `dist/es2015/${entryName}.js`,
     format: 'es'
   },
-  external: 'tslib',
   plugins: [
     typescript({
       useTsconfigDeclarationDir: true,
@@ -42,7 +41,6 @@ export default [{
         file: `dist/es2017/${entryName}.js`,
         format: 'es',
       },
-      external: 'tslib',
       plugins: [
         typescript({
           // tsconfigDefaults: defaultCfg,
@@ -68,7 +66,6 @@ export default [{
         { file: `dist/native-modules/${entryName}.js`, format: 'es' },
         { file: `dist/system/${entryName}.js`, format: 'system' }
       ],
-      external: 'tslib',
       plugins: [
         typescript({
           // tsconfigDefaults: defaultCfg,
