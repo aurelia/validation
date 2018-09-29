@@ -68,7 +68,7 @@ export class AureliaValidationConfiguration {
  */
 export function configure(
   // tslint:disable-next-line:ban-types
-  frameworkConfig: { container: Container, globalResources?: (...resources: Function[]) => any },
+  frameworkConfig: { container: Container, globalResources?: (...resources: any[]) => any },
   callback?: (config: AureliaValidationConfiguration) => void
 ) {
   // the fluent rule definition API needs the parser to translate messages
