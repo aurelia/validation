@@ -25,13 +25,21 @@ export * from './implementation/validation-rules';
 
 // Configuration
 
-import { PLATFORM } from 'aurelia-pal';
 import { Container } from 'aurelia-dependency-injection';
 import { Validator } from './validator';
 import { StandardValidator } from './implementation/standard-validator';
 import { ValidationMessageParser } from './implementation/validation-message-parser';
 import { PropertyAccessorParser } from './property-accessor-parser';
 import { ValidationRules } from './implementation/validation-rules';
+import {
+  ValidateBindingBehavior,
+  ValidateManuallyBindingBehavior,
+  ValidateOnBlurBindingBehavior,
+  ValidateOnChangeBindingBehavior,
+  ValidateOnChangeOrBlurBindingBehavior
+} from './validate-binding-behavior';
+import { ValidationErrorsCustomAttribute } from './validation-errors-custom-attribute';
+import { ValidationRendererCustomAttribute } from './validation-renderer-custom-attribute';
 
 /**
  * Aurelia Validation Configuration API
@@ -59,7 +67,8 @@ export class AureliaValidationConfiguration {
  * Configures the plugin.
  */
 export function configure(
-  frameworkConfig: { container: Container, globalResources?: (...resources: string[]) => any },
+  // tslint:disable-next-line:ban-types
+  frameworkConfig: { container: Container, globalResources?: (...resources: Function[]) => any },
   callback?: (config: AureliaValidationConfiguration) => void
 ) {
   // the fluent rule definition API needs the parser to translate messages
@@ -78,8 +87,12 @@ export function configure(
   // globalize the behaviors.
   if (frameworkConfig.globalResources) {
     frameworkConfig.globalResources(
-      PLATFORM.moduleName('./validate-binding-behavior'),
-      PLATFORM.moduleName('./validation-errors-custom-attribute'),
-      PLATFORM.moduleName('./validation-renderer-custom-attribute'));
+      ValidateBindingBehavior,
+      ValidateManuallyBindingBehavior,
+      ValidateOnBlurBindingBehavior,
+      ValidateOnChangeBindingBehavior,
+      ValidateOnChangeOrBlurBindingBehavior,
+      ValidationErrorsCustomAttribute,
+      ValidationRendererCustomAttribute);
   }
 }
