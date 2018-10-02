@@ -1,4 +1,4 @@
 {
   "name": "aurelia-validation",
-  "main": "dist/amd/aurelia-validation.d.ts"
+  "main": "dist/types/aurelia-validation.d.ts"
 }
