@@ -60,7 +60,7 @@ Once you've targetted a property using `ensure` you can define the property's di
 
 <code-listing heading="displayName">
   <source-code lang="ES 2015">
-    ValidationRules      
+    ValidationRules
       .ensure('ssn').displayName('SSN')...
   </source-code>
 </code-listing>
@@ -94,7 +94,7 @@ Here's an example:
 
 <code-listing heading="withMessage">
   <source-code lang="ES 2015">
-    ValidationRules      
+    ValidationRules
       .ensure('ssn').displayName('SSN')
         .required().withMessage(`\${$displayName} cannot be blank.`);
         .matches(/\d{3}-\d{2}-\d{4}/).withMessage(`"\${$value}" is not a valid \${$displayName}.`);
@@ -339,7 +339,7 @@ Invoking the validate method with no arguments will validate all bindings and ob
     controller.validate();
     controller.validate({ object: person });
     controller.validate({ object: person, rules: myRules });
-    controller.validate({ object: person, propertyName: 'firstName' });    
+    controller.validate({ object: person, propertyName: 'firstName' });
     controller.validate({ object: person, propertyName: 'firstName', rules: myRules });
 
     controller.validate()
@@ -415,7 +415,7 @@ The `validate` binding behavior enables quick and easy validation for two-way da
 
     <input type="text" value.bind="person['firstName'] | upperCase & validate">
 
-    <input type="text" value.bind="currentEntity[p] & debounce & validate">    
+    <input type="text" value.bind="currentEntity[p] & debounce & validate">
   </source-code>
 </code-listing>
 
@@ -820,21 +820,21 @@ In your view you need to take care to associate each input with the correct vali
       <form validation-errors="errors.bind: pizzaErrors; controller.bind: pizzaValidationController"
             submit.delegate="orderPizza()">
         <label for="pizza">Choose a pizza:</label>
-        <input id="pizza" value.bind="pizza & validateManually:pizzaValidationController"/>
+        <input id="pizza" value.bind="pizza & validateManually:pizzaValidationController">
         <span class="help-block" repeat.for="errorInfo of pizzaErrors">
           ${errorInfo.error.message}
         </span>
-        <input type="submit" value="Order pizza!"/>
+        <input type="submit" value="Order pizza!">
       </form>
 
       <form validation-errors="errors.bind: pastaErrors; controller.bind: pastaValidationController"
             submit.delegate="orderPasta()">
         <label for="pasta">Choose a pasta:</label>
-        <input id="pasta" value.bind="pasta & validateManually:pastaValidationController"/>
+        <input id="pasta" value.bind="pasta & validateManually:pastaValidationController">
         <span class="help-block" repeat.for="errorInfo of pastaErrors">
           ${errorInfo.error.message}
         </span>
-        <input type="submit" value="Order pasta!"/>
+        <input type="submit" value="Order pasta!">
       </form>
     </template>
   </source-code>
@@ -918,7 +918,7 @@ Here's how to override the methods, in your main.js, during application startup:
         return i18n.tr(propertyName);
       };
 
-      ...      
+      ...
       ...
     }
   </source-code>
@@ -932,11 +932,11 @@ Once you've overriden the necessary methods in `ValidationMessageProvider` you'r
   <source-code lang="HTML">
     <template>
       <form>
-        <label>${'firstName' & t}: <br />
-          <input type="text" value.bind="firstName & validate" />
+        <label>${'firstName' & t}: <br>
+          <input type="text" value.bind="firstName & validate">
         </label>
-        <label>${'lastName' & t}: <br />
-          <input type="text" value.bind="lastName & validate" />
+        <label>${'lastName' & t}: <br>
+          <input type="text" value.bind="lastName & validate">
         </label>
         <button click.delegate="submit()">${'submit' & t}</button>
       </form>
@@ -951,7 +951,7 @@ Once you've overriden the necessary methods in `ValidationMessageProvider` you'r
       </div>
 
 	    <button click.trigger="switchLanguage()">${'switchLanguage' & t}</button>
-    <template>   
+    <template>
   </source-code>
 </code-listing>
 
@@ -1012,7 +1012,7 @@ Last but not least, create translation files that include translations for each 
 
 <code-listing heading="Translation files">
   <source-code lang="JSON">
-	// file: locales/de/translation.json    
+	// file: locales/de/translation.json
 	{
 	  "firstName": "Vorname",
 	  "lastName": "Nachname",
