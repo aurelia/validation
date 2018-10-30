@@ -1,3 +1,14 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/aurelia/validation/compare/1.2.3...1.3.0) (2018-10-30)
+
+
+### Bug Fixes
+
+* **BindingBehaviors:** add explicit name ([59e3f1c](https://github.com/aurelia/validation/commit/59e3f1c))
+* **typings:** path to typescript definitions ([77ffaa1](https://github.com/aurelia/validation/commit/77ffaa1))
+
+
+
 <a name="1.2.3"></a>
 ## [1.2.3](https://github.com/aurelia/validation/compare/1.2.2...1.2.3) (2018-09-25)
 

@@ -1,6 +1,6 @@
 System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-task-queue', 'aurelia-templating', 'aurelia-framework', 'aurelia-logging'], function (exports, module) {
   'use strict';
-  var DOM, AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingMode, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, Optional, Lazy, TaskQueue, customAttribute, bindable, BindingLanguage, ViewResources, customAttribute$1, getLogger;
+  var DOM, AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingBehavior, bindingMode, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, Optional, Lazy, TaskQueue, customAttribute, bindable, BindingLanguage, ViewResources, customAttribute$1, getLogger;
   return {
     setters: [function (module) {
       DOM = module.DOM;
@@ -12,6 +12,7 @@ System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection
       ValueConverter = module.ValueConverter;
       getContextFor = module.getContextFor;
       Parser = module.Parser;
+      bindingBehavior = module.bindingBehavior;
       bindingMode = module.bindingMode;
       LiteralString = module.LiteralString;
       Binary = module.Binary;
@@ -780,6 +781,9 @@ System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection
               return controller.validateTrigger;
           };
           ValidateBindingBehavior.inject = [TaskQueue];
+          ValidateBindingBehavior = __decorate([
+              bindingBehavior('validate')
+          ], ValidateBindingBehavior);
           return ValidateBindingBehavior;
       }(ValidateBindingBehaviorBase)));
       /**
@@ -796,6 +800,9 @@ System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection
               return validateTrigger.manual;
           };
           ValidateManuallyBindingBehavior.inject = [TaskQueue];
+          ValidateManuallyBindingBehavior = __decorate([
+              bindingBehavior('validateManually')
+          ], ValidateManuallyBindingBehavior);
           return ValidateManuallyBindingBehavior;
       }(ValidateBindingBehaviorBase)));
       /**
@@ -811,6 +818,9 @@ System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection
               return validateTrigger.blur;
           };
           ValidateOnBlurBindingBehavior.inject = [TaskQueue];
+          ValidateOnBlurBindingBehavior = __decorate([
+              bindingBehavior('validateOnBlur')
+          ], ValidateOnBlurBindingBehavior);
           return ValidateOnBlurBindingBehavior;
       }(ValidateBindingBehaviorBase)));
       /**
@@ -827,6 +837,9 @@ System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection
               return validateTrigger.change;
           };
           ValidateOnChangeBindingBehavior.inject = [TaskQueue];
+          ValidateOnChangeBindingBehavior = __decorate([
+              bindingBehavior('validateOnChange')
+          ], ValidateOnChangeBindingBehavior);
           return ValidateOnChangeBindingBehavior;
       }(ValidateBindingBehaviorBase)));
       /**
@@ -843,6 +856,9 @@ System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection
               return validateTrigger.changeOrBlur;
           };
           ValidateOnChangeOrBlurBindingBehavior.inject = [TaskQueue];
+          ValidateOnChangeOrBlurBindingBehavior = __decorate([
+              bindingBehavior('validateOnChangeOrBlur')
+          ], ValidateOnChangeOrBlurBindingBehavior);
           return ValidateOnChangeOrBlurBindingBehavior;
       }(ValidateBindingBehaviorBase)));
 

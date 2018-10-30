@@ -736,6 +736,9 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
           return controller.validateTrigger;
       };
       ValidateBindingBehavior.inject = [aureliaTaskQueue.TaskQueue];
+      ValidateBindingBehavior = __decorate([
+          aureliaBinding.bindingBehavior('validate')
+      ], ValidateBindingBehavior);
       return ValidateBindingBehavior;
   }(ValidateBindingBehaviorBase));
   /**
@@ -752,6 +755,9 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
           return exports.validateTrigger.manual;
       };
       ValidateManuallyBindingBehavior.inject = [aureliaTaskQueue.TaskQueue];
+      ValidateManuallyBindingBehavior = __decorate([
+          aureliaBinding.bindingBehavior('validateManually')
+      ], ValidateManuallyBindingBehavior);
       return ValidateManuallyBindingBehavior;
   }(ValidateBindingBehaviorBase));
   /**
@@ -767,6 +773,9 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
           return exports.validateTrigger.blur;
       };
       ValidateOnBlurBindingBehavior.inject = [aureliaTaskQueue.TaskQueue];
+      ValidateOnBlurBindingBehavior = __decorate([
+          aureliaBinding.bindingBehavior('validateOnBlur')
+      ], ValidateOnBlurBindingBehavior);
       return ValidateOnBlurBindingBehavior;
   }(ValidateBindingBehaviorBase));
   /**
@@ -783,6 +792,9 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
           return exports.validateTrigger.change;
       };
       ValidateOnChangeBindingBehavior.inject = [aureliaTaskQueue.TaskQueue];
+      ValidateOnChangeBindingBehavior = __decorate([
+          aureliaBinding.bindingBehavior('validateOnChange')
+      ], ValidateOnChangeBindingBehavior);
       return ValidateOnChangeBindingBehavior;
   }(ValidateBindingBehaviorBase));
   /**
@@ -799,6 +811,9 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
           return exports.validateTrigger.changeOrBlur;
       };
       ValidateOnChangeOrBlurBindingBehavior.inject = [aureliaTaskQueue.TaskQueue];
+      ValidateOnChangeOrBlurBindingBehavior = __decorate([
+          aureliaBinding.bindingBehavior('validateOnChangeOrBlur')
+      ], ValidateOnChangeOrBlurBindingBehavior);
       return ValidateOnChangeOrBlurBindingBehavior;
   }(ValidateBindingBehaviorBase));
 

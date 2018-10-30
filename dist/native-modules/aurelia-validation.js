@@ -1,5 +1,5 @@
 import { DOM } from 'aurelia-pal';
-import { AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingMode, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember } from 'aurelia-binding';
+import { AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingBehavior, bindingMode, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember } from 'aurelia-binding';
 import { Optional, Lazy } from 'aurelia-dependency-injection';
 import { TaskQueue } from 'aurelia-task-queue';
 import { customAttribute, bindable, BindingLanguage, ViewResources } from 'aurelia-templating';
@@ -743,6 +743,9 @@ var ValidateBindingBehavior = /** @class */ (function (_super) {
         return controller.validateTrigger;
     };
     ValidateBindingBehavior.inject = [TaskQueue];
+    ValidateBindingBehavior = __decorate([
+        bindingBehavior('validate')
+    ], ValidateBindingBehavior);
     return ValidateBindingBehavior;
 }(ValidateBindingBehaviorBase));
 /**
@@ -759,6 +762,9 @@ var ValidateManuallyBindingBehavior = /** @class */ (function (_super) {
         return validateTrigger.manual;
     };
     ValidateManuallyBindingBehavior.inject = [TaskQueue];
+    ValidateManuallyBindingBehavior = __decorate([
+        bindingBehavior('validateManually')
+    ], ValidateManuallyBindingBehavior);
     return ValidateManuallyBindingBehavior;
 }(ValidateBindingBehaviorBase));
 /**
@@ -774,6 +780,9 @@ var ValidateOnBlurBindingBehavior = /** @class */ (function (_super) {
         return validateTrigger.blur;
     };
     ValidateOnBlurBindingBehavior.inject = [TaskQueue];
+    ValidateOnBlurBindingBehavior = __decorate([
+        bindingBehavior('validateOnBlur')
+    ], ValidateOnBlurBindingBehavior);
     return ValidateOnBlurBindingBehavior;
 }(ValidateBindingBehaviorBase));
 /**
@@ -790,6 +799,9 @@ var ValidateOnChangeBindingBehavior = /** @class */ (function (_super) {
         return validateTrigger.change;
     };
     ValidateOnChangeBindingBehavior.inject = [TaskQueue];
+    ValidateOnChangeBindingBehavior = __decorate([
+        bindingBehavior('validateOnChange')
+    ], ValidateOnChangeBindingBehavior);
     return ValidateOnChangeBindingBehavior;
 }(ValidateBindingBehaviorBase));
 /**
@@ -806,6 +818,9 @@ var ValidateOnChangeOrBlurBindingBehavior = /** @class */ (function (_super) {
         return validateTrigger.changeOrBlur;
     };
     ValidateOnChangeOrBlurBindingBehavior.inject = [TaskQueue];
+    ValidateOnChangeOrBlurBindingBehavior = __decorate([
+        bindingBehavior('validateOnChangeOrBlur')
+    ], ValidateOnChangeOrBlurBindingBehavior);
     return ValidateOnChangeOrBlurBindingBehavior;
 }(ValidateBindingBehaviorBase));
 
