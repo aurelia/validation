@@ -1,6 +1,6 @@
 import { ValidationController } from './validation-controller';
 import { ValidationRenderer } from './validation-renderer';
-import { customAttribute } from 'aurelia-framework';
+import { customAttribute } from 'aurelia-templating';
 
 @customAttribute('validation-renderer')
 export class ValidationRendererCustomAttribute {
