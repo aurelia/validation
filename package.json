@@ -27,6 +27,8 @@
     "develop": "concurrently \"./node_modules/.bin/tsc --watch\" \"./node_modules/.bin/karma start\"",
     "prebuild": "cross-env rimraf dist",
     "build": "rollup -c --environment NODE_ENV:production",
+    "postbuild": "npm run build:dts",
+    "build:dts": "dts-bundle-generator -o dist/aurelia-validation.d.ts src/aurelia-validation.ts",
     "predoc": "cross-env rimraf doc/api.json && rimraf dist/doc-temp && tsc --project tsconfig.build.json --outFile dist/doc-temp/aurelia-validation.js && node doc/shape-defs && copyfiles tsconfig.json dist/doc-temp",
     "doc": "cross-env typedoc --json doc/api.json --excludeExternals --includeDeclarations --mode modules --target ES6 --name aurelia-validation-docs dist/doc-temp/",
     "postdoc": "cross-env node doc/shape-doc && rimraf dist/doc-temp",
@@ -70,6 +72,7 @@
     "aurelia-templating": "^1.9.0"
   },
   "devDependencies": {
+    "@types/jsdom": "^12.2.0",
     "@types/node": "^8.5.1",
     "aurelia-bootstrapper": "^2.3.0",
     "aurelia-pal-browser": "^1.8.0",
@@ -80,6 +83,7 @@
     "conventional-changelog-cli": "^2.0.5",
     "copyfiles": "^2.1.0",
     "cross-env": "^5.2.0",
+    "dts-bundle-generator": "^1.6.1",
     "jasmine-core": "^3.2.1",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
