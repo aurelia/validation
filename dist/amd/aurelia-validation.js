@@ -1,4 +1,4 @@
-define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-task-queue', 'aurelia-templating', 'aurelia-framework', 'aurelia-logging'], function (exports, aureliaPal, aureliaBinding, aureliaDependencyInjection, aureliaTaskQueue, aureliaTemplating, aureliaFramework, LogManager) { 'use strict';
+define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-task-queue', 'aurelia-templating', 'aurelia-logging'], function (exports, aureliaPal, aureliaBinding, aureliaDependencyInjection, aureliaTaskQueue, aureliaTemplating, LogManager) { 'use strict';
 
   /**
    * Gets the DOM element associated with the data-binding. Most of the time it's
@@ -940,7 +940,7 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
           this.renderer = null;
       };
       ValidationRendererCustomAttribute = __decorate([
-          aureliaFramework.customAttribute('validation-renderer')
+          aureliaTemplating.customAttribute('validation-renderer')
       ], ValidationRendererCustomAttribute);
       return ValidationRendererCustomAttribute;
   }());

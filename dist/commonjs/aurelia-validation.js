@@ -7,7 +7,6 @@ var aureliaBinding = require('aurelia-binding');
 var aureliaDependencyInjection = require('aurelia-dependency-injection');
 var aureliaTaskQueue = require('aurelia-task-queue');
 var aureliaTemplating = require('aurelia-templating');
-var aureliaFramework = require('aurelia-framework');
 var LogManager = require('aurelia-logging');
 
 /**
@@ -950,7 +949,7 @@ var ValidationRendererCustomAttribute = /** @class */ (function () {
         this.renderer = null;
     };
     ValidationRendererCustomAttribute = __decorate([
-        aureliaFramework.customAttribute('validation-renderer')
+        aureliaTemplating.customAttribute('validation-renderer')
     ], ValidationRendererCustomAttribute);
     return ValidationRendererCustomAttribute;
 }());

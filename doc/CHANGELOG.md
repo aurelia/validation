@@ -1,3 +1,13 @@
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/aurelia/validation/compare/1.3.0...1.3.1) (2018-11-16)
+
+
+### Bug Fixes
+
+* **CustomAttribute:** import customAttribute from aurelia-templating ([08c2f45](https://github.com/aurelia/validation/commit/08c2f45)), closes [#507](https://github.com/aurelia/validation/issues/507)
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/aurelia/validation/compare/1.2.3...1.3.0) (2018-10-30)
 

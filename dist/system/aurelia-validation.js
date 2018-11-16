@@ -1,6 +1,6 @@
-System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-task-queue', 'aurelia-templating', 'aurelia-framework', 'aurelia-logging'], function (exports, module) {
+System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-task-queue', 'aurelia-templating', 'aurelia-logging'], function (exports, module) {
   'use strict';
-  var DOM, AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingBehavior, bindingMode, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, Optional, Lazy, TaskQueue, customAttribute, bindable, BindingLanguage, ViewResources, customAttribute$1, getLogger;
+  var DOM, AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingBehavior, bindingMode, LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, Optional, Lazy, TaskQueue, customAttribute, bindable, BindingLanguage, ViewResources, getLogger;
   return {
     setters: [function (module) {
       DOM = module.DOM;
@@ -29,8 +29,6 @@ System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection
       bindable = module.bindable;
       BindingLanguage = module.BindingLanguage;
       ViewResources = module.ViewResources;
-    }, function (module) {
-      customAttribute$1 = module.customAttribute;
     }, function (module) {
       getLogger = module.getLogger;
     }],
@@ -985,7 +983,7 @@ System.register(['aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection
               this.renderer = null;
           };
           ValidationRendererCustomAttribute = __decorate([
-              customAttribute$1('validation-renderer')
+              customAttribute('validation-renderer')
           ], ValidationRendererCustomAttribute);
           return ValidationRendererCustomAttribute;
       }()));

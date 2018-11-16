@@ -3,7 +3,6 @@ import { AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter
 import { Optional, Lazy } from 'aurelia-dependency-injection';
 import { TaskQueue } from 'aurelia-task-queue';
 import { customAttribute, bindable, BindingLanguage, ViewResources } from 'aurelia-templating';
-import { customAttribute as customAttribute$1 } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
 
 /**
@@ -869,7 +868,7 @@ let ValidationRendererCustomAttribute = class ValidationRendererCustomAttribute 
     }
 };
 ValidationRendererCustomAttribute = __decorate([
-    customAttribute$1('validation-renderer')
+    customAttribute('validation-renderer')
 ], ValidationRendererCustomAttribute);
 
 /**
