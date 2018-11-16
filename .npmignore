@@ -1,0 +1,15 @@
+.vscode
+doc
+src
+test
+.editorconfig
+.gitignore
+.npmignore
+circle.yml
+CONTRIBUTING.md
+ISSUE_TEMPLATE.md
+karma.conf.js
+rollup.config.js
+tsconfig.build.json
+tsconfig.json
+tslint.json
