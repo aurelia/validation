@@ -11,10 +11,25 @@ const entryName = 'aurelia-validation';
 
 export default [{
   input: `src/${entryName}.ts`,
-  output: {
-    file: `dist/es2015/${entryName}.js`,
-    format: 'es'
-  },
+  output: [
+    {
+      file: `dist/es2015/${entryName}.js`,
+      format: 'es'
+    },
+    {
+      file: `dist/umd/${entryName}.js`,
+      format: 'umd',
+      name: 'au.validation',
+      globals: {
+        'aurelia-binding': 'au',
+        'aurelia-templating': 'au',
+        'aurelia-dependency-injection': "au",
+        "aurelia-logging": "au.LogManager",
+        "aurelia-pal": "au",
+        "aurelia-task-queue": "au",
+      }
+    }
+  ],
   plugins: [
     typescript({
       useTsconfigDeclarationDir: true,
