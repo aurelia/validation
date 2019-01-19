@@ -1,3 +1,8 @@
+<a name="1.3.3"></a>
+## [1.3.3](https://github.com/aurelia/validation/compare/1.3.2...1.3.3) (2019-01-19)
+
+* Add module and CDN fields to package.json
+
 <a name="1.3.1"></a>
 ## [1.3.1](https://github.com/aurelia/validation/compare/1.3.0...1.3.1) (2018-11-16)
 
