@@ -23,6 +23,14 @@
     "type": "git",
     "url": "https://github.com/aurelia/validation"
   },
+  "files": [
+    "dist",
+    "doc",
+    "src",
+    "typings.json",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "lint": "cross-env tslint --project tsconfig.json",
     "pretest": "cross-env npm run lint",
