@@ -20,6 +20,9 @@ export const validationMessages: ValidationMessages = {
   maxLength: `\${$displayName} cannot be longer than \${$config.length} character\${$config.length === 1 ? '' : 's'}.`,
   minItems: `\${$displayName} must contain at least \${$config.count} item\${$config.count === 1 ? '' : 's'}.`,
   maxItems: `\${$displayName} cannot contain more than \${$config.count} item\${$config.count === 1 ? '' : 's'}.`,
+  min: `\${$displayName} must be at least \${$config.constraint}.`,
+  max: `\${$displayName} must be at most \${$config.constraint}.`,
+  range: `\${$displayName} must be between \${$config.min} and \${$config.max}.`,
   equals: `\${$displayName} must be \${$config.expectedValue}.`,
 };
 

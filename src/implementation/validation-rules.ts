@@ -189,6 +189,30 @@ export class FluentRuleCustomizer<TObject, TValue> {
   }
 
   /**
+   * Applies the "min" NUMBER validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public min(value: number) {
+    return this.fluentRules.min(value);
+  }
+
+  /**
+   * Applies the "max" NUMBER validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public max(value: number) {
+    return this.fluentRules.max(value);
+  }
+
+  /**
+   * Applies the "range" NUMBER validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public range(min: number, max: number, inclusive: boolean = true) {
+    return this.fluentRules.range(min, max, inclusive);
+  }
+
+  /**
    * Applies the "equals" validation rule to the property.
    * null, undefined and empty-string values are considered valid.
    */
@@ -334,6 +358,40 @@ export class FluentRules<TObject, TValue> {
   public maxItems(count: number) {
     return this.satisfies((value: any) => value === null || value === undefined || value.length <= count, { count })
       .withMessageKey('maxItems');
+  }
+
+  /**
+   * Applies the "min" NUMBER validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public min(constraint: number) {
+    return this.satisfies((value: any) => value === null || value === undefined || value >= constraint, { constraint })
+      .withMessageKey('min');
+  }
+
+  /**
+   * Applies the "max" NUMBER validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public max(constraint: number) {
+    return this.satisfies((value: any) => value === null || value === undefined || value <= constraint, { constraint })
+      .withMessageKey('max');
+  }
+
+  /**
+   * Applies the "range" NUMBER validation rule to the property.
+   * null and undefined values are considered valid.
+   */
+  public range(min: number, max: number, inclusive: boolean = true) {
+    if (inclusive) {
+      return this.satisfies((value: any) => value === null || value === undefined || (value >= min && value <= max),
+        { min, max, inclusive })
+        .withMessageKey('range');
+    } else {
+      return this.satisfies((value: any) => value === null || value === undefined || (value > min && value < max),
+        { min, max, inclusive })
+        .withMessageKey('range');
+    }
   }
 
   /**

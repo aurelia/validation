@@ -85,6 +85,81 @@ describe('Validator', () => {
       .then(done);
   });
 
+  it('validates numeric properties', (done: () => void) => {
+    const obj = { value: 1 };
+    let rules = ValidationRules.ensure('value').min(1).rules;
+    validator.validateObject(obj, rules)
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(() => {
+        rules = ValidationRules.ensure('value').max(1).rules;
+        return validator.validateObject(obj, rules);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(() => {
+        rules = ValidationRules.ensure('value').range(0, 1).rules;
+        return validator.validateObject(obj, rules);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(() => {
+        rules = ValidationRules.ensure('value').range(0, 2, false).rules;
+        return validator.validateObject(obj, rules);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', true, null)];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(() => {
+        rules = ValidationRules.ensure('value').min(2).rules;
+        return validator.validateObject(obj, rules);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', false, 'Value must be at least 2.')];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(() => {
+        rules = ValidationRules.ensure('value').max(0).rules;
+        return validator.validateObject(obj, rules);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', false, 'Value must be at most 0.')];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(() => {
+        rules = ValidationRules.ensure('value').range(2, 3).rules;
+        return validator.validateObject(obj, rules);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', false, 'Value must be between 2 and 3.')];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(() => {
+        rules = ValidationRules.ensure('value').range(1, 3, false).rules;
+        return validator.validateObject(obj, rules);
+      })
+      .then(results => {
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', false, 'Value must be between 1 and 3.')];
+        expected[0].id = results[0].id;
+        expect(results).toEqual(expected);
+      })
+      .then(done);
+  });
+
   it('handles numeric properties', (done: () => void) => {
     const objStr = {} as any;
     objStr['2'] = 'test';
