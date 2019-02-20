@@ -16,7 +16,7 @@
   "main": "dist/commonjs/aurelia-validation.js",
   "module": "dist/es2015/aurelia-validation.js",
   "browser": "dist/umd/aurelia-validation.js",
-  "unpkg": "dist/umd/aurelia-validation.js",
+  "unpkg": "dist/umd-es2015/aurelia-validation.js",
   "types": "dist/aurelia-validation.d.ts",
   "typings": "dist/aurelia-validation.d.ts",
   "repository": {
