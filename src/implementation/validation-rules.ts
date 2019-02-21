@@ -190,6 +190,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
 
   /**
    * Applies the "min" NUMBER validation rule to the property.
+   * Value must be greater than or equal to the specified constraint.
    * null and undefined values are considered valid.
    */
   public min(value: number) {
@@ -198,6 +199,7 @@ export class FluentRuleCustomizer<TObject, TValue> {
 
   /**
    * Applies the "max" NUMBER validation rule to the property.
+   * Value must be less than or equal to the specified constraint.
    * null and undefined values are considered valid.
    */
   public max(value: number) {
@@ -206,10 +208,20 @@ export class FluentRuleCustomizer<TObject, TValue> {
 
   /**
    * Applies the "range" NUMBER validation rule to the property.
+   * Value must be between or equal to the specified min and max.
    * null and undefined values are considered valid.
    */
-  public range(min: number, max: number, inclusive: boolean = true) {
-    return this.fluentRules.range(min, max, inclusive);
+  public range(min: number, max: number) {
+    return this.fluentRules.range(min, max);
+  }
+
+  /**
+   * Applies the "between" NUMBER validation rule to the property.
+   * Value must be between but not equal to the specified min and max.
+   * null and undefined values are considered valid.
+   */
+  public between(min: number, max: number) {
+    return this.fluentRules.between(min, max);
   }
 
   /**
@@ -362,6 +374,7 @@ export class FluentRules<TObject, TValue> {
 
   /**
    * Applies the "min" NUMBER validation rule to the property.
+   * Value must be greater than or equal to the specified constraint.
    * null and undefined values are considered valid.
    */
   public min(constraint: number) {
@@ -371,6 +384,7 @@ export class FluentRules<TObject, TValue> {
 
   /**
    * Applies the "max" NUMBER validation rule to the property.
+   * Value must be less than or equal to the specified constraint.
    * null and undefined values are considered valid.
    */
   public max(constraint: number) {
@@ -380,18 +394,24 @@ export class FluentRules<TObject, TValue> {
 
   /**
    * Applies the "range" NUMBER validation rule to the property.
+   * Value must be between or equal to the specified min and max.
    * null and undefined values are considered valid.
    */
-  public range(min: number, max: number, inclusive: boolean = true) {
-    if (inclusive) {
-      return this.satisfies((value: any) => value === null || value === undefined || (value >= min && value <= max),
-        { min, max, inclusive })
-        .withMessageKey('range');
-    } else {
-      return this.satisfies((value: any) => value === null || value === undefined || (value > min && value < max),
-        { min, max, inclusive })
-        .withMessageKey('range');
-    }
+  public range(min: number, max: number) {
+    return this.satisfies((value: any) => value === null || value === undefined || (value >= min && value <= max),
+      { min, max })
+      .withMessageKey('range');
+  }
+
+  /**
+   * Applies the "between" NUMBER validation rule to the property.
+   * Value must be between but not equal to the specified min and max.
+   * null and undefined values are considered valid.
+   */
+  public between(min: number, max: number) {
+    return this.satisfies((value: any) => value === null || value === undefined || (value > min && value < max),
+      { min, max })
+      .withMessageKey('between');
   }
 
   /**

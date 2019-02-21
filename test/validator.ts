@@ -113,7 +113,7 @@ describe('Validator', () => {
         expect(results).toEqual(expected);
       })
       .then(() => {
-        rules = ValidationRules.ensure('value').range(0, 2, false).rules;
+        rules = ValidationRules.ensure('value').between(0, 2).rules;
         return validator.validateObject(obj, rules);
       })
       .then(results => {
@@ -144,16 +144,18 @@ describe('Validator', () => {
         return validator.validateObject(obj, rules);
       })
       .then(results => {
-        const expected = [new ValidateResult(rules[0][0], obj, 'value', false, 'Value must be between 2 and 3.')];
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', false,
+          'Value must be between or equal to 2 and 3.')];
         expected[0].id = results[0].id;
         expect(results).toEqual(expected);
       })
       .then(() => {
-        rules = ValidationRules.ensure('value').range(1, 3, false).rules;
+        rules = ValidationRules.ensure('value').between(1, 3).rules;
         return validator.validateObject(obj, rules);
       })
       .then(results => {
-        const expected = [new ValidateResult(rules[0][0], obj, 'value', false, 'Value must be between 1 and 3.')];
+        const expected = [new ValidateResult(rules[0][0], obj, 'value', false,
+          'Value must be between but not equal to 1 and 3.')];
         expected[0].id = results[0].id;
         expect(results).toEqual(expected);
       })

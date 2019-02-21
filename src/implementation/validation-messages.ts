@@ -22,7 +22,8 @@ export const validationMessages: ValidationMessages = {
   maxItems: `\${$displayName} cannot contain more than \${$config.count} item\${$config.count === 1 ? '' : 's'}.`,
   min: `\${$displayName} must be at least \${$config.constraint}.`,
   max: `\${$displayName} must be at most \${$config.constraint}.`,
-  range: `\${$displayName} must be between \${$config.min} and \${$config.max}.`,
+  range: `\${$displayName} must be between or equal to \${$config.min} and \${$config.max}.`,
+  between: `\${$displayName} must be between but not equal to \${$config.min} and \${$config.max}.`,
   equals: `\${$displayName} must be \${$config.expectedValue}.`,
 };
 
