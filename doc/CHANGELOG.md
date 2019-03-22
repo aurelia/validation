@@ -1,3 +1,26 @@
+# Change Log
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+# [1.4.0](https://github.com/aurelia/validation/compare/1.3.3...1.4.0) (2019-03-22)
+
+
+### Bug Fixes
+
+* **build:** adjust umd build, add umd-es2015 ([895b149](https://github.com/aurelia/validation/commit/895b149))
+* **ci:** remove circle ci config ([5f9cf3c](https://github.com/aurelia/validation/commit/5f9cf3c))
+* **ci:** update ci config ([306b935](https://github.com/aurelia/validation/commit/306b935))
+* **ci:** update circleci ([cc54202](https://github.com/aurelia/validation/commit/cc54202))
+* **ci:** use v2.1 ([71074ef](https://github.com/aurelia/validation/commit/71074ef))
+* **package:** fix unpkg field ([2635ecd](https://github.com/aurelia/validation/commit/2635ecd))
+
+
+### Features
+
+* **ValidationRules:** add number validation rules ([f67cf59](https://github.com/aurelia/validation/commit/f67cf59)), closes [#440](https://github.com/aurelia/validation/issues/440)
+
+
+
 <a name="1.3.3"></a>
 ## [1.3.3](https://github.com/aurelia/validation/compare/1.3.2...1.3.3) (2019-01-19)
 
