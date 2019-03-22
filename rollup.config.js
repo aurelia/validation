@@ -17,7 +17,7 @@ export default [{
       format: 'es'
     },
     {
-      file: `dist/umd/${entryName}.js`,
+      file: `dist/umd-es2015/${entryName}.js`,
       format: 'umd',
       name: 'au.validation',
       globals: {
@@ -77,6 +77,18 @@ export default [{
         { file: `dist/commonjs/${entryName}.js`, format: 'cjs' },
         { file: `dist/amd/${entryName}.js`, format: 'amd', amd: { id: entryName } },
         { file: `dist/native-modules/${entryName}.js`, format: 'es' },
+        { file: `dist/umd/${entryName}.js`,
+          format: 'umd',
+          name: 'au.validation',
+          globals: {
+            'aurelia-binding': 'au',
+            'aurelia-templating': 'au',
+            'aurelia-dependency-injection': "au",
+            "aurelia-logging": "au.LogManager",
+            "aurelia-pal": "au",
+            "aurelia-task-queue": "au",
+          }
+        },
         { file: `dist/system/${entryName}.js`, format: 'system' }
       ],
       plugins: [
@@ -85,7 +97,8 @@ export default [{
           // tsconfig: undefined,
           tsconfigOverride: {
             compilerOptions: {
-              module: 'es2015'
+              module: 'es2015',
+              target: 'es5'
             },
             include: ['src'],
             exclude: undefined
