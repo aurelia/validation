@@ -43,10 +43,8 @@
     "predoc": "cross-env rimraf doc/api.json && rimraf dist/doc-temp && tsc --project tsconfig.build.json --outFile dist/doc-temp/aurelia-validation.js && node doc/shape-defs && copyfiles tsconfig.json dist/doc-temp",
     "doc": "cross-env typedoc --json doc/api.json --excludeExternals --includeDeclarations --mode modules --target ES6 --name aurelia-validation-docs dist/doc-temp/",
     "postdoc": "cross-env node doc/shape-doc && rimraf dist/doc-temp",
-    "changelog": "cross-env conventional-changelog -p angular -i doc/CHANGELOG.md -s",
-    "bump-version": "npm --no-git-tag-version version",
     "precut-release": "cross-env npm run test",
-    "cut-release": "cross-env npm run changelog && npm run build && npm run doc"
+    "cut-release": "standard-version -t \"\" -i doc/CHANGELOG.md && npm run build && npm run doc"
   },
   "jspm": {
     "registry": "npm",
@@ -107,6 +105,7 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.66.2",
     "rollup-plugin-typescript2": "^0.17.0",
+    "standard-version": "^5.0.2",
     "tslib": "^1.9.3",
     "tslint": "^5.11.0",
     "typedoc": "^0.12.0",
