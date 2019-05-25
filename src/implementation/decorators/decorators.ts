@@ -1,7 +1,64 @@
 import { PropertyCustomizations } from './property-customizations';
-import { ValidationRules, FluentRuleCustomizer, FluentRules } from '../validation-rules';
 import { Rule } from '../rule';
 import { Rules } from '../rules';
+import { ValidationRules, FluentRuleCustomizer, FluentRules } from '../validation-rules';
+
+export function required(customMessage?: string): void;
+export function required(when: (object: object) => boolean): void;
+export function required(customMessage: string, when: (object: object) => boolean): void;
+export function satisfiesRule(ruleName: string, args: any[]): void;
+export function satisfiesRule(ruleName: string, customMessage: string, args: any[]): void;
+export function satisfiesRule(ruleName: string, when: (object: object) => boolean, args: any[]): void;
+export function satisfiesRule(ruleName: string, customMessage: string, when: (object: object) => boolean, args: any[]): void;
+export function satisfies(condition: (value: any, object: object) => boolean | Promise<boolean>): void;
+export function satisfies(condition: (value: any, object: object) => boolean | Promise<boolean>, customMessage: string): void;
+export function satisfies(condition: (value: any, object: object) => boolean | Promise<boolean>, when: (object: object) => boolean): void;
+export function satisfies(condition: (value: any, object: object) => boolean | Promise<boolean>, customMessage: string, when: (object: object) => boolean): void;
+export function email(): void;
+export function email(customMessage: string): void;
+export function email(when: (object: object) => boolean): void;
+export function email(customMessage: string, when: (object: object) => boolean): void;
+export function matches(regex: RegExp): void;
+export function matches(regex: RegExp, customMessage: string): void;
+export function matches(regex: RegExp, when: (object: object) => boolean): void;
+export function matches(regex: RegExp, customMessage: string, when: (object: object) => boolean): void;
+export function minLength(length: number): void;
+export function minLength(length: number, customMessage: string): void;
+export function minLength(length: number, when: (object: object) => boolean): void;
+export function minLength(length: number, customMessage: string, when: (object: object) => boolean): void;
+export function maxLength(length: number, customMessage: string): void;
+export function maxLength(length: number, when: (object: object) => boolean): void;
+export function maxLength(length: number, customMessage: string, when: (object: object) => boolean): void;
+export function minItems(count: number): void;
+export function minItems(count: number, customMessage: string): void;
+export function minItems(count: number, when: (object: object) => boolean): void;
+export function minItems(count: number, customMessage: string, when: (object: object) => boolean): void;
+export function maxItems(count: number, customMessage: string): void;
+export function maxItems(count: number, when: (object: object) => boolean): void;
+export function maxItems(count: number, customMessage: string, when: (object: object) => boolean): void;
+export function min(value: number): void;
+export function min(value: number, customMessage: string): void;
+export function min(value: number, when: (object: object) => boolean): void;
+export function min(value: number, customMessage: string, when: (object: object) => boolean): void;
+export function max(value: number): void;
+export function max(value: number, customMessage: string): void;
+export function max(value: number, when: (object: object) => boolean): void;
+export function max(value: number, customMessage: string, when: (object: object) => boolean): void;
+export function range(min: number, max: number): void;
+export function range(min: number, max: number, customMessage: string): void;
+export function range(min: number, max: number, when: (object: object) => boolean): void;
+export function range(min: number, max: number, customMessage: string, when: (object: object) => boolean): void;
+export function between(min: number, max: number): void;
+export function between(min: number, max: number, customMessage: string): void;
+export function between(min: number, max: number, when: (object: object) => boolean): void;
+export function between(min: number, max: number, customMessage: string, when: (object: object) => boolean): void;
+export function equals(value: any): void;
+export function equals(value: any, customMessage: string): void;
+export function equals(value: any, when: (object: object) => boolean): void;
+export function equals(value: any, customMessage: string, when: (object: object) => boolean): void;
+export function displayName(customName: string): (targetClass: Object, name: string) => void;
+export function tag(tag: string): (targetClass: Object, name: string) => void;
+
 
 export function required(arg1?: string | ((object: object) => boolean), arg2?: (object: object) => boolean) {
   return (targetClass: object, name: string) => {
@@ -27,23 +84,32 @@ export function required(arg1?: string | ((object: object) => boolean), arg2?: (
 
 export function satisfiesRule(
   arg1: string,
-  arg2?: string | ((object: object) => boolean),
-  arg3?: (object: object) => boolean
+  arg2?: string | ((object: object) => boolean) | any[],
+  arg3?: (object: object) => boolean | any[],
+  arg4?: any[]
 ) {
   return (targetClass: object, name: string) => {
     const fluentRules = ValidationRules.ensure(name);
-    const satisfiesRuleApplied = fluentRules.satisfiesRule(arg1);
+    let ruleArgs = [];
+    if (arg2 instanceof Array) {
+      ruleArgs = arg2;
+    } else if (arg3 instanceof Array) {
+      ruleArgs = arg3;
+    } else if (arg4) {
+      ruleArgs = arg4;
+    }
+    const satisfiesRuleApplied = fluentRules.satisfiesRule(arg1, ruleArgs);
     addDisplayNameToProp(targetClass, name, fluentRules);
     addTagToProp(targetClass, name, satisfiesRuleApplied);
     let newRules = satisfiesRuleApplied.rules;
 
     if (typeof(arg2) === 'string') {
       newRules = addCustomMessage(satisfiesRuleApplied, arg2).rules;
-    } else if (arg2) {
+    } else if (!(arg2 instanceof Array)) {
       newRules = satisfiesRuleApplied.when(arg2 as (object: object) => boolean).rules;
     }
 
-    if (arg3) {
+    if (!(arg3 instanceof Array)) {
       newRules = satisfiesRuleApplied.when(arg3 as (object: object) => boolean).rules;
     }
 

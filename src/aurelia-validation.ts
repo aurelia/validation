@@ -22,6 +22,8 @@ export * from './implementation/standard-validator';
 export * from './implementation/validation-messages';
 export * from './implementation/validation-message-parser';
 export * from './implementation/validation-rules';
+export * from './implementation/decorators/property-customizations';
+export * from './implementation/decorators/decorators';
 
 // Configuration
 
