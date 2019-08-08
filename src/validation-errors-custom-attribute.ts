@@ -14,7 +14,7 @@ export interface RenderedError {
 @customAttribute('validation-errors')
 export class ValidationErrorsCustomAttribute implements ValidationRenderer {
 
-  public static inject() {
+  public static inject(): [typeof DOM.Element, Lazy<ValidationController>] {
     return [DOM.Element, Lazy.of(ValidationController)];
   }
 
