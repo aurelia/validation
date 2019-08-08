@@ -1,5 +1,5 @@
 import { AccessKeyed, AccessMember, AccessScope, Binary, Binding, BindingBehavior, CallMember, Conditional, Expression, Parser, Scope, ValueConverter } from 'aurelia-binding';
-import { Container, Lazy } from 'aurelia-dependency-injection';
+import { Container } from 'aurelia-dependency-injection';
 import { TaskQueue } from 'aurelia-task-queue';
 import { BindingLanguage, ViewResources } from 'aurelia-templating';
 
@@ -430,10 +430,7 @@ export interface RenderedError {
 export declare class ValidationErrorsCustomAttribute implements ValidationRenderer {
 	private boundaryElement;
 	private controllerAccessor;
-	static inject(): ({
-		new (): Element;
-		prototype: Element;
-	} | Lazy)[];
+	static inject(): any[];
 	controller: ValidationController | null;
 	errors: RenderedError[];
 	private errorsInternal;

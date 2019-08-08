@@ -15,7 +15,7 @@ export interface RenderedError {
 export class ValidationErrorsCustomAttribute implements ValidationRenderer {
 
   public static inject() {
-    return [DOM.Element, Lazy.of(ValidationController)];
+    return [DOM.Element, Lazy.of(ValidationController) as any];
   }
 
   @bindable({ defaultBindingMode: bindingMode.oneWay })
