@@ -1,5 +1,6 @@
 // Exports
 
+export * from './config';
 export * from './controller-validate-result';
 export * from './get-target-dom-element';
 export * from './property-info';
@@ -26,8 +27,7 @@ export * from './implementation/validation-rules';
 // Configuration
 
 import { Container } from 'aurelia-dependency-injection';
-import { Validator } from './validator';
-import { StandardValidator } from './implementation/standard-validator';
+import { AureliaValidationConfiguration } from './config';
 import { ValidationMessageParser } from './implementation/validation-message-parser';
 import { PropertyAccessorParser } from './property-accessor-parser';
 import { ValidationRules } from './implementation/validation-rules';
@@ -40,28 +40,6 @@ import {
 } from './validate-binding-behavior';
 import { ValidationErrorsCustomAttribute } from './validation-errors-custom-attribute';
 import { ValidationRendererCustomAttribute } from './validation-renderer-custom-attribute';
-
-/**
- * Aurelia Validation Configuration API
- */
-export class AureliaValidationConfiguration {
-  private validatorType: { new (...args: any[]): Validator } = StandardValidator;
-
-  /**
-   * Use a custom Validator implementation.
-   */
-  public customValidator(type: { new (...args: any[]): Validator }) {
-    this.validatorType = type;
-  }
-
-  /**
-   * Applies the configuration.
-   */
-  public apply(container: Container) {
-    const validator = container.get(this.validatorType);
-    container.registerInstance(Validator, validator);
-  }
-}
 
 /**
  * Configures the plugin.

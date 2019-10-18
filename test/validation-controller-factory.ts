@@ -1,8 +1,10 @@
 import { Container, Optional } from 'aurelia-dependency-injection';
 import {
+  AureliaValidationConfiguration,
   ValidationControllerFactory,
   ValidationController,
-  Validator
+  Validator,
+  validateTrigger
 } from '../src/aurelia-validation';
 
 describe('ValidationControllerFactory', () => {
@@ -10,10 +12,14 @@ describe('ValidationControllerFactory', () => {
     const container = new Container();
     const standardValidator = {};
     container.registerInstance(Validator, standardValidator);
+    const config = new AureliaValidationConfiguration();
+    config.defaultValidationTrigger(validateTrigger.manual);
+    container.registerInstance(AureliaValidationConfiguration, config);
     const childContainer = container.createChild();
     const factory = childContainer.get(ValidationControllerFactory);
     const controller = factory.createForCurrentScope();
     expect(controller.validator).toBe(standardValidator);
+    expect(controller.validateTrigger).toBe(validateTrigger.manual);
     expect(container.get(Optional.of(ValidationController))).toBe(null);
     expect(childContainer.get(Optional.of(ValidationController))).toBe(controller);
     const customValidator = {};

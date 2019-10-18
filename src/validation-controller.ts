@@ -1,4 +1,5 @@
 import { Binding, Expression } from 'aurelia-binding';
+import { AureliaValidationConfiguration } from './config';
 import { Validator } from './validator';
 import { validateTrigger } from './validate-trigger';
 import { getPropertyInfo } from './property-info';
@@ -15,7 +16,7 @@ import { ValidateEvent } from './validate-event';
  * Exposes the current list of validation results for binding purposes.
  */
 export class ValidationController {
-  public static inject = [Validator, PropertyAccessorParser];
+  public static inject = [Validator, PropertyAccessorParser, AureliaValidationConfiguration];
 
   // Registered bindings (via the validate binding behavior)
   private bindings = new Map<Binding, BindingInfo>();
@@ -47,14 +48,20 @@ export class ValidationController {
   /**
    * The trigger that will invoke automatic validation of a property used in a binding.
    */
-  public validateTrigger = validateTrigger.blur;
+  public validateTrigger: validateTrigger;
 
   // Promise that resolves when validation has completed.
   private finishValidating: Promise<any> = Promise.resolve();
 
   private eventCallbacks: ((event: ValidateEvent) => void)[] = [];
 
-  constructor(private validator: Validator, private propertyParser: PropertyAccessorParser) { }
+  constructor(
+    private validator: Validator,
+    private propertyParser: PropertyAccessorParser,
+    config: AureliaValidationConfiguration,
+  ) {
+    this.validateTrigger = config.getDefaultValidationTrigger();
+  }
 
   /**
    * Subscribe to controller validate and reset events. These events occur when the
