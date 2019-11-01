@@ -58,9 +58,11 @@ export class ValidationController {
   constructor(
     private validator: Validator,
     private propertyParser: PropertyAccessorParser,
-    config: AureliaValidationConfiguration,
+    config?: AureliaValidationConfiguration,
   ) {
-    this.validateTrigger = config.getDefaultValidationTrigger();
+    this.validateTrigger = config instanceof AureliaValidationConfiguration
+        ? config.getDefaultValidationTrigger()
+        : AureliaValidationConfiguration.DEFAULT_VALIDATION_TRIGGER;
   }
 
   /**
