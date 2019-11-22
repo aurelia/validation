@@ -17,10 +17,12 @@ export class GlobalValidationConfiguration {
    */
   public customValidator(type: { new (...args: any[]): Validator }) {
     this.validatorType = type;
+    return this;
   }
 
   public defaultValidationTrigger(trigger: validateTrigger) {
     this.validationTrigger = trigger;
+    return this;
   }
 
   public getDefaultValidationTrigger() {
