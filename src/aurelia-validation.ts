@@ -1,5 +1,6 @@
 // Exports
 
+export * from './config';
 export * from './controller-validate-result';
 export * from './get-target-dom-element';
 export * from './property-info';
@@ -26,8 +27,7 @@ export * from './implementation/validation-rules';
 // Configuration
 
 import { Container } from 'aurelia-dependency-injection';
-import { Validator } from './validator';
-import { StandardValidator } from './implementation/standard-validator';
+import { GlobalValidationConfiguration } from './config';
 import { ValidationMessageParser } from './implementation/validation-message-parser';
 import { PropertyAccessorParser } from './property-accessor-parser';
 import { ValidationRules } from './implementation/validation-rules';
@@ -42,34 +42,12 @@ import { ValidationErrorsCustomAttribute } from './validation-errors-custom-attr
 import { ValidationRendererCustomAttribute } from './validation-renderer-custom-attribute';
 
 /**
- * Aurelia Validation Configuration API
- */
-export class AureliaValidationConfiguration {
-  private validatorType: { new (...args: any[]): Validator } = StandardValidator;
-
-  /**
-   * Use a custom Validator implementation.
-   */
-  public customValidator(type: { new (...args: any[]): Validator }) {
-    this.validatorType = type;
-  }
-
-  /**
-   * Applies the configuration.
-   */
-  public apply(container: Container) {
-    const validator = container.get(this.validatorType);
-    container.registerInstance(Validator, validator);
-  }
-}
-
-/**
  * Configures the plugin.
  */
 export function configure(
   // tslint:disable-next-line:ban-types
   frameworkConfig: { container: Container, globalResources?: (...resources: any[]) => any },
-  callback?: (config: AureliaValidationConfiguration) => void
+  callback?: (config: GlobalValidationConfiguration) => void
 ) {
   // the fluent rule definition API needs the parser to translate messages
   // to interpolation expressions.
@@ -78,7 +56,7 @@ export function configure(
   ValidationRules.initialize(messageParser, propertyParser);
 
   // configure...
-  const config = new AureliaValidationConfiguration();
+  const config = new GlobalValidationConfiguration();
   if (callback instanceof Function) {
     callback(config);
   }
