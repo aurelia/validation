@@ -27,7 +27,7 @@ export * from './implementation/validation-rules';
 // Configuration
 
 import { Container } from 'aurelia-dependency-injection';
-import { AureliaValidationConfiguration } from './config';
+import { GlobalValidationConfiguration } from './config';
 import { ValidationMessageParser } from './implementation/validation-message-parser';
 import { PropertyAccessorParser } from './property-accessor-parser';
 import { ValidationRules } from './implementation/validation-rules';
@@ -47,7 +47,7 @@ import { ValidationRendererCustomAttribute } from './validation-renderer-custom-
 export function configure(
   // tslint:disable-next-line:ban-types
   frameworkConfig: { container: Container, globalResources?: (...resources: any[]) => any },
-  callback?: (config: AureliaValidationConfiguration) => void
+  callback?: (config: GlobalValidationConfiguration) => void
 ) {
   // the fluent rule definition API needs the parser to translate messages
   // to interpolation expressions.
@@ -56,7 +56,7 @@ export function configure(
   ValidationRules.initialize(messageParser, propertyParser);
 
   // configure...
-  const config = new AureliaValidationConfiguration();
+  const config = new GlobalValidationConfiguration();
   if (callback instanceof Function) {
     callback(config);
   }

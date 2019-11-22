@@ -6,11 +6,11 @@ import { validateTrigger } from './validate-trigger';
 /**
  * Aurelia Validation Configuration API
  */
-export class AureliaValidationConfiguration {
+export class GlobalValidationConfiguration {
   public static DEFAULT_VALIDATION_TRIGGER = validateTrigger.blur;
 
   private validatorType: { new (...args: any[]): Validator } = StandardValidator;
-  private validationTrigger = AureliaValidationConfiguration.DEFAULT_VALIDATION_TRIGGER;
+  private validationTrigger = GlobalValidationConfiguration.DEFAULT_VALIDATION_TRIGGER;
 
   /**
    * Use a custom Validator implementation.
@@ -33,6 +33,6 @@ export class AureliaValidationConfiguration {
   public apply(container: Container) {
     const validator = container.get(this.validatorType);
     container.registerInstance(Validator, validator);
-    container.registerInstance(AureliaValidationConfiguration, this);
+    container.registerInstance(GlobalValidationConfiguration, this);
   }
 }

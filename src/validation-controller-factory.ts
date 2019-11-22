@@ -1,5 +1,5 @@
 import { Container } from 'aurelia-dependency-injection';
-import { AureliaValidationConfiguration } from './config';
+import { GlobalValidationConfiguration } from './config';
 import { ValidationController } from './validation-controller';
 import { Validator } from './validator';
 import { PropertyAccessorParser } from './property-accessor-parser';
@@ -22,7 +22,7 @@ export class ValidationControllerFactory {
       validator = this.container.get(Validator) as Validator;
     }
     const propertyParser = this.container.get(PropertyAccessorParser) as PropertyAccessorParser;
-    const config = this.container.get(AureliaValidationConfiguration) as AureliaValidationConfiguration;
+    const config = this.container.get(GlobalValidationConfiguration) as GlobalValidationConfiguration;
     return new ValidationController(validator, propertyParser, config);
   }
 

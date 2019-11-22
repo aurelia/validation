@@ -1,5 +1,5 @@
 import { Binding, Expression } from 'aurelia-binding';
-import { AureliaValidationConfiguration } from './config';
+import { GlobalValidationConfiguration } from './config';
 import { Validator } from './validator';
 import { validateTrigger } from './validate-trigger';
 import { getPropertyInfo } from './property-info';
@@ -16,7 +16,7 @@ import { ValidateEvent } from './validate-event';
  * Exposes the current list of validation results for binding purposes.
  */
 export class ValidationController {
-  public static inject = [Validator, PropertyAccessorParser, AureliaValidationConfiguration];
+  public static inject = [Validator, PropertyAccessorParser, GlobalValidationConfiguration];
 
   // Registered bindings (via the validate binding behavior)
   private bindings = new Map<Binding, BindingInfo>();
@@ -58,11 +58,11 @@ export class ValidationController {
   constructor(
     private validator: Validator,
     private propertyParser: PropertyAccessorParser,
-    config?: AureliaValidationConfiguration,
+    config?: GlobalValidationConfiguration,
   ) {
-    this.validateTrigger = config instanceof AureliaValidationConfiguration
+    this.validateTrigger = config instanceof GlobalValidationConfiguration
         ? config.getDefaultValidationTrigger()
-        : AureliaValidationConfiguration.DEFAULT_VALIDATION_TRIGGER;
+        : GlobalValidationConfiguration.DEFAULT_VALIDATION_TRIGGER;
   }
 
   /**

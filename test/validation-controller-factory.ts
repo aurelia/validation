@@ -1,6 +1,6 @@
 import { Container, Optional } from 'aurelia-dependency-injection';
 import {
-  AureliaValidationConfiguration,
+  GlobalValidationConfiguration,
   ValidationControllerFactory,
   ValidationController,
   Validator,
@@ -12,9 +12,9 @@ describe('ValidationControllerFactory', () => {
     const container = new Container();
     const standardValidator = {};
     container.registerInstance(Validator, standardValidator);
-    const config = new AureliaValidationConfiguration();
+    const config = new GlobalValidationConfiguration();
     config.defaultValidationTrigger(validateTrigger.manual);
-    container.registerInstance(AureliaValidationConfiguration, config);
+    container.registerInstance(GlobalValidationConfiguration, config);
     const childContainer = container.createChild();
     const factory = childContainer.get(ValidationControllerFactory);
     const controller = factory.createForCurrentScope();
