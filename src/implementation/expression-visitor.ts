@@ -1,40 +1,20 @@
 import {
   Expression,
-  // Chain,
   ValueConverter,
-  // Assign,
   Conditional,
-  // AccessThis,
-  // AccessScope,
+  AccessScope,
   AccessMember,
   AccessKeyed,
-  // CallScope,
-  // CallFunction,
   CallMember,
-  // PrefixNot,
   BindingBehavior,
   Binary,
-  // LiteralPrimitive,
-  // LiteralArray,
-  // LiteralObject,
-  // LiteralString
+  LiteralPrimitive,
+  LiteralString
 } from 'aurelia-binding';
-
-export type Chain = any;
-export type Assign = any;
-export type AccessThis = any;
-export type AccessScope = any;
-export type CallScope = any;
-export type CallFunction = any;
-export type PrefixNot = any;
-export type LiteralPrimitive = any;
-export type LiteralArray = any;
-export type LiteralObject = any;
-export type LiteralString = any;
 
 // tslint:disable:no-empty
 export class ExpressionVisitor {
-  public visitChain(chain: Chain) {
+  public visitChain(chain: any) {
     this.visitArgs(chain.expressions);
   }
 
@@ -48,7 +28,7 @@ export class ExpressionVisitor {
     this.visitArgs(converter.args);
   }
 
-  public visitAssign(assign: Assign) {
+  public visitAssign(assign: any) {
     assign.target.accept(this);
     assign.value.accept(this);
   }
@@ -59,7 +39,7 @@ export class ExpressionVisitor {
     conditional.no.accept(this);
   }
 
-  public visitAccessThis(access: AccessThis) {
+  public visitAccessThis(access: any) {
     access.ancestor = access.ancestor;
   }
 
@@ -76,11 +56,11 @@ export class ExpressionVisitor {
     access.key.accept(this);
   }
 
-  public visitCallScope(call: CallScope) {
+  public visitCallScope(call: any) {
     this.visitArgs(call.args);
   }
 
-  public visitCallFunction(call: CallFunction) {
+  public visitCallFunction(call: any) {
     call.func.accept(this);
     this.visitArgs(call.args);
   }
@@ -90,7 +70,7 @@ export class ExpressionVisitor {
     this.visitArgs(call.args);
   }
 
-  public visitPrefix(prefix: PrefixNot) {
+  public visitPrefix(prefix: any) {
     prefix.expression.accept(this);
   }
 
@@ -103,11 +83,11 @@ export class ExpressionVisitor {
     literal.value = literal.value;
   }
 
-  public visitLiteralArray(literal: LiteralArray) {
+  public visitLiteralArray(literal: any) {
     this.visitArgs(literal.elements);
   }
 
-  public visitLiteralObject(literal: LiteralObject) {
+  public visitLiteralObject(literal: any) {
     this.visitArgs(literal.values);
   }
 
