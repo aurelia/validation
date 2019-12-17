@@ -39,6 +39,7 @@ export default [{
         compilerOptions: {
           module: 'es2015',
           target: 'es2015',
+          declaration: false
         },
         include: ['src'],
         exclude: undefined
@@ -62,7 +63,8 @@ export default [{
           tsconfigOverride: {
             compilerOptions: {
               module: 'es2015',
-              target: 'es2017'
+              target: 'es2017',
+              declaration: false
             },
             include: ['src'],
             exclude: undefined
@@ -98,7 +100,8 @@ export default [{
           tsconfigOverride: {
             compilerOptions: {
               module: 'es2015',
-              target: 'es5'
+              target: 'es5',
+              declaration: false
             },
             include: ['src'],
             exclude: undefined
