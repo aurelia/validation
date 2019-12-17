@@ -442,7 +442,7 @@ export class FluentEnsure<TObject> {
    * @param property The property to target. Can be the property name or a property accessor
    * function.
    */
-  public ensure<TValue>(property: string | number | PropertyAccessor<TObject, TValue>) {
+  public ensure<TValue>(property: string | number | PropertyAccessor<TObject, TValue>): FluentRules<TObject, any> {
     this.assertInitialized();
     const name = this.parsers.property.parse(property);
     const fluentRules = new FluentRules<TObject, TValue>(
@@ -455,7 +455,7 @@ export class FluentEnsure<TObject> {
   /**
    * Targets an object with validation rules.
    */
-  public ensureObject() {
+  public ensureObject(): FluentRules<TObject, any> {
     this.assertInitialized();
     const fluentRules = new FluentRules<TObject, TObject>(
       this, this.parsers, { name: null, displayName: null });

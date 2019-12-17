@@ -3,19 +3,21 @@ import { Validator } from './validator';
 import { StandardValidator } from './implementation/standard-validator';
 import { validateTrigger } from './validate-trigger';
 
+type ValidatorCtor = new (...args: any[]) => Validator;
+
 /**
  * Aurelia Validation Configuration API
  */
 export class GlobalValidationConfiguration {
   public static DEFAULT_VALIDATION_TRIGGER = validateTrigger.blur;
 
-  private validatorType: { new (...args: any[]): Validator } = StandardValidator;
+  private validatorType: ValidatorCtor = StandardValidator;
   private validationTrigger = GlobalValidationConfiguration.DEFAULT_VALIDATION_TRIGGER;
 
   /**
    * Use a custom Validator implementation.
    */
-  public customValidator(type: { new (...args: any[]): Validator }) {
+  public customValidator(type: ValidatorCtor) {
     this.validatorType = type;
     return this;
   }

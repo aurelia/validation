@@ -55,7 +55,7 @@
       "dist": "dist/amd"
     },
     "peerDependencies": {
-      "aurelia-binding": "^2.1.5",
+      "aurelia-binding": "^2.5.2",
       "aurelia-dependency-injection": "^1.5.0",
       "aurelia-logging": "^1.5.0",
       "aurelia-pal": "^1.8.0",
@@ -63,7 +63,7 @@
       "aurelia-templating": "^1.9.0"
     },
     "dependencies": {
-      "aurelia-binding": "^2.1.5",
+      "aurelia-binding": "^2.5.2",
       "aurelia-dependency-injection": "^1.4.1",
       "aurelia-logging": "^1.5.0",
       "aurelia-pal": "^1.8.0",
@@ -73,7 +73,7 @@
     "devDependencies": {}
   },
   "dependencies": {
-    "aurelia-binding": "^2.1.5",
+    "aurelia-binding": "^2.5.2",
     "aurelia-dependency-injection": "^1.5.0",
     "aurelia-logging": "^1.5.0",
     "aurelia-pal": "^1.8.0",
