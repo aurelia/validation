@@ -1,4 +1,494 @@
-define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aurelia-dependency-injection', 'aurelia-task-queue', 'aurelia-templating', 'aurelia-logging'], function (exports, aureliaPal, aureliaBinding, aureliaDependencyInjection, aureliaTaskQueue, aureliaTemplating, LogManager) { 'use strict';
+define('aurelia-validation', ['exports', 'aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'aurelia-pal', 'aurelia-dependency-injection', 'aurelia-task-queue'], function (exports, aureliaBinding, aureliaTemplating, LogManager, aureliaPal, aureliaDependencyInjection, aureliaTaskQueue) { 'use strict';
+
+  /**
+   * Validates objects and properties.
+   */
+  var Validator = /** @class */ (function () {
+      function Validator() {
+      }
+      return Validator;
+  }());
+
+  /*! *****************************************************************************
+  Copyright (c) Microsoft Corporation. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+  this file except in compliance with the License. You may obtain a copy of the
+  License at http://www.apache.org/licenses/LICENSE-2.0
+
+  THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+  MERCHANTABLITY OR NON-INFRINGEMENT.
+
+  See the Apache Version 2.0 License for specific language governing permissions
+  and limitations under the License.
+  ***************************************************************************** */
+  /* global Reflect, Promise */
+
+  var extendStatics = function(d, b) {
+      extendStatics = Object.setPrototypeOf ||
+          ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+          function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+      return extendStatics(d, b);
+  };
+
+  function __extends(d, b) {
+      extendStatics(d, b);
+      function __() { this.constructor = d; }
+      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  }
+
+  function __decorate(decorators, target, key, desc) {
+      var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+      if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+      else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+      return c > 3 && r && Object.defineProperty(target, key, r), r;
+  }
+
+  function __spreadArrays() {
+      for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+      for (var r = Array(s), k = 0, i = 0; i < il; i++)
+          for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+              r[k] = a[j];
+      return r;
+  }
+
+  /**
+   * The result of validating an individual validation rule.
+   */
+  var ValidateResult = /** @class */ (function () {
+      /**
+       * @param rule The rule associated with the result. Validator implementation specific.
+       * @param object The object that was validated.
+       * @param propertyName The name of the property that was validated.
+       * @param error The error, if the result is a validation error.
+       */
+      function ValidateResult(rule, object, propertyName, valid, message) {
+          if (message === void 0) { message = null; }
+          this.rule = rule;
+          this.object = object;
+          this.propertyName = propertyName;
+          this.valid = valid;
+          this.message = message;
+          this.id = ValidateResult.nextId++;
+      }
+      ValidateResult.prototype.toString = function () {
+          return this.valid ? 'Valid.' : this.message;
+      };
+      ValidateResult.nextId = 0;
+      return ValidateResult;
+  }());
+
+  /**
+   * Sets, unsets and retrieves rules on an object or constructor function.
+   */
+  var Rules = /** @class */ (function () {
+      function Rules() {
+      }
+      /**
+       * Applies the rules to a target.
+       */
+      Rules.set = function (target, rules) {
+          if (target instanceof Function) {
+              target = target.prototype;
+          }
+          Object.defineProperty(target, Rules.key, { enumerable: false, configurable: false, writable: true, value: rules });
+      };
+      /**
+       * Removes rules from a target.
+       */
+      Rules.unset = function (target) {
+          if (target instanceof Function) {
+              target = target.prototype;
+          }
+          target[Rules.key] = null;
+      };
+      /**
+       * Retrieves the target's rules.
+       */
+      Rules.get = function (target) {
+          return target[Rules.key] || null;
+      };
+      /**
+       * The name of the property that stores the rules.
+       */
+      Rules.key = '__rules__';
+      return Rules;
+  }());
+
+  // tslint:disable:no-empty
+  var ExpressionVisitor = /** @class */ (function () {
+      function ExpressionVisitor() {
+      }
+      ExpressionVisitor.prototype.visitChain = function (chain) {
+          this.visitArgs(chain.expressions);
+      };
+      ExpressionVisitor.prototype.visitBindingBehavior = function (behavior) {
+          behavior.expression.accept(this);
+          this.visitArgs(behavior.args);
+      };
+      ExpressionVisitor.prototype.visitValueConverter = function (converter) {
+          converter.expression.accept(this);
+          this.visitArgs(converter.args);
+      };
+      ExpressionVisitor.prototype.visitAssign = function (assign) {
+          assign.target.accept(this);
+          assign.value.accept(this);
+      };
+      ExpressionVisitor.prototype.visitConditional = function (conditional) {
+          conditional.condition.accept(this);
+          conditional.yes.accept(this);
+          conditional.no.accept(this);
+      };
+      ExpressionVisitor.prototype.visitAccessThis = function (access) {
+          access.ancestor = access.ancestor;
+      };
+      ExpressionVisitor.prototype.visitAccessScope = function (access) {
+          access.name = access.name;
+      };
+      ExpressionVisitor.prototype.visitAccessMember = function (access) {
+          access.object.accept(this);
+      };
+      ExpressionVisitor.prototype.visitAccessKeyed = function (access) {
+          access.object.accept(this);
+          access.key.accept(this);
+      };
+      ExpressionVisitor.prototype.visitCallScope = function (call) {
+          this.visitArgs(call.args);
+      };
+      ExpressionVisitor.prototype.visitCallFunction = function (call) {
+          call.func.accept(this);
+          this.visitArgs(call.args);
+      };
+      ExpressionVisitor.prototype.visitCallMember = function (call) {
+          call.object.accept(this);
+          this.visitArgs(call.args);
+      };
+      ExpressionVisitor.prototype.visitPrefix = function (prefix) {
+          prefix.expression.accept(this);
+      };
+      ExpressionVisitor.prototype.visitBinary = function (binary) {
+          binary.left.accept(this);
+          binary.right.accept(this);
+      };
+      ExpressionVisitor.prototype.visitLiteralPrimitive = function (literal) {
+          literal.value = literal.value;
+      };
+      ExpressionVisitor.prototype.visitLiteralArray = function (literal) {
+          this.visitArgs(literal.elements);
+      };
+      ExpressionVisitor.prototype.visitLiteralObject = function (literal) {
+          this.visitArgs(literal.values);
+      };
+      ExpressionVisitor.prototype.visitLiteralString = function (literal) {
+          literal.value = literal.value;
+      };
+      ExpressionVisitor.prototype.visitArgs = function (args) {
+          for (var i = 0; i < args.length; i++) {
+              args[i].accept(this);
+          }
+      };
+      return ExpressionVisitor;
+  }());
+
+  var ValidationMessageParser = /** @class */ (function () {
+      function ValidationMessageParser(bindinqLanguage) {
+          this.bindinqLanguage = bindinqLanguage;
+          this.emptyStringExpression = new aureliaBinding.LiteralString('');
+          this.nullExpression = new aureliaBinding.LiteralPrimitive(null);
+          this.undefinedExpression = new aureliaBinding.LiteralPrimitive(undefined);
+          this.cache = {};
+      }
+      ValidationMessageParser.prototype.parse = function (message) {
+          if (this.cache[message] !== undefined) {
+              return this.cache[message];
+          }
+          var parts = this.bindinqLanguage.parseInterpolation(null, message);
+          if (parts === null) {
+              return new aureliaBinding.LiteralString(message);
+          }
+          var expression = new aureliaBinding.LiteralString(parts[0]);
+          for (var i = 1; i < parts.length; i += 2) {
+              expression = new aureliaBinding.Binary('+', expression, new aureliaBinding.Binary('+', this.coalesce(parts[i]), new aureliaBinding.LiteralString(parts[i + 1])));
+          }
+          MessageExpressionValidator.validate(expression, message);
+          this.cache[message] = expression;
+          return expression;
+      };
+      ValidationMessageParser.prototype.coalesce = function (part) {
+          // part === null || part === undefined ? '' : part
+          return new aureliaBinding.Conditional(new aureliaBinding.Binary('||', new aureliaBinding.Binary('===', part, this.nullExpression), new aureliaBinding.Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new aureliaBinding.CallMember(part, 'toString', []));
+      };
+      ValidationMessageParser.inject = [aureliaTemplating.BindingLanguage];
+      return ValidationMessageParser;
+  }());
+  var MessageExpressionValidator = /** @class */ (function (_super) {
+      __extends(MessageExpressionValidator, _super);
+      function MessageExpressionValidator(originalMessage) {
+          var _this = _super.call(this) || this;
+          _this.originalMessage = originalMessage;
+          return _this;
+      }
+      MessageExpressionValidator.validate = function (expression, originalMessage) {
+          var visitor = new MessageExpressionValidator(originalMessage);
+          expression.accept(visitor);
+      };
+      MessageExpressionValidator.prototype.visitAccessScope = function (access) {
+          if (access.ancestor !== 0) {
+              throw new Error('$parent is not permitted in validation message expressions.');
+          }
+          if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
+              LogManager.getLogger('aurelia-validation')
+                  // tslint:disable-next-line:max-line-length
+                  .warn("Did you mean to use \"$" + access.name + "\" instead of \"" + access.name + "\" in this validation message template: \"" + this.originalMessage + "\"?");
+          }
+      };
+      return MessageExpressionValidator;
+  }(ExpressionVisitor));
+
+  /**
+   * Dictionary of validation messages. [messageKey]: messageExpression
+   */
+  var validationMessages = {
+      /**
+       * The default validation message. Used with rules that have no standard message.
+       */
+      default: "${$displayName} is invalid.",
+      required: "${$displayName} is required.",
+      matches: "${$displayName} is not correctly formatted.",
+      email: "${$displayName} is not a valid email.",
+      minLength: "${$displayName} must be at least ${$config.length} character${$config.length === 1 ? '' : 's'}.",
+      maxLength: "${$displayName} cannot be longer than ${$config.length} character${$config.length === 1 ? '' : 's'}.",
+      minItems: "${$displayName} must contain at least ${$config.count} item${$config.count === 1 ? '' : 's'}.",
+      maxItems: "${$displayName} cannot contain more than ${$config.count} item${$config.count === 1 ? '' : 's'}.",
+      min: "${$displayName} must be at least ${$config.constraint}.",
+      max: "${$displayName} must be at most ${$config.constraint}.",
+      range: "${$displayName} must be between or equal to ${$config.min} and ${$config.max}.",
+      between: "${$displayName} must be between but not equal to ${$config.min} and ${$config.max}.",
+      equals: "${$displayName} must be ${$config.expectedValue}.",
+  };
+  /**
+   * Retrieves validation messages and property display names.
+   */
+  var ValidationMessageProvider = /** @class */ (function () {
+      function ValidationMessageProvider(parser) {
+          this.parser = parser;
+      }
+      /**
+       * Returns a message binding expression that corresponds to the key.
+       * @param key The message key.
+       */
+      ValidationMessageProvider.prototype.getMessage = function (key) {
+          var message;
+          if (key in validationMessages) {
+              message = validationMessages[key];
+          }
+          else {
+              message = validationMessages['default'];
+          }
+          return this.parser.parse(message);
+      };
+      /**
+       * Formulates a property display name using the property name and the configured
+       * displayName (if provided).
+       * Override this with your own custom logic.
+       * @param propertyName The property name.
+       */
+      ValidationMessageProvider.prototype.getDisplayName = function (propertyName, displayName) {
+          if (displayName !== null && displayName !== undefined) {
+              return (displayName instanceof Function) ? displayName() : displayName;
+          }
+          // split on upper-case letters.
+          var words = propertyName.toString().split(/(?=[A-Z])/).join(' ');
+          // capitalize first letter.
+          return words.charAt(0).toUpperCase() + words.slice(1);
+      };
+      ValidationMessageProvider.inject = [ValidationMessageParser];
+      return ValidationMessageProvider;
+  }());
+
+  /**
+   * Validates.
+   * Responsible for validating objects and properties.
+   */
+  var StandardValidator = /** @class */ (function (_super) {
+      __extends(StandardValidator, _super);
+      function StandardValidator(messageProvider, resources) {
+          var _this = _super.call(this) || this;
+          _this.messageProvider = messageProvider;
+          _this.lookupFunctions = resources.lookupFunctions;
+          _this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
+          return _this;
+      }
+      /**
+       * Validates the specified property.
+       * @param object The object to validate.
+       * @param propertyName The name of the property to validate.
+       * @param rules Optional. If unspecified, the rules will be looked up using the metadata
+       * for the object created by ValidationRules....on(class/object)
+       */
+      StandardValidator.prototype.validateProperty = function (object, propertyName, rules) {
+          return this.validate(object, propertyName, rules || null);
+      };
+      /**
+       * Validates all rules for specified object and it's properties.
+       * @param object The object to validate.
+       * @param rules Optional. If unspecified, the rules will be looked up using the metadata
+       * for the object created by ValidationRules....on(class/object)
+       */
+      StandardValidator.prototype.validateObject = function (object, rules) {
+          return this.validate(object, null, rules || null);
+      };
+      /**
+       * Determines whether a rule exists in a set of rules.
+       * @param rules The rules to search.
+       * @parem rule The rule to find.
+       */
+      StandardValidator.prototype.ruleExists = function (rules, rule) {
+          var i = rules.length;
+          while (i--) {
+              if (rules[i].indexOf(rule) !== -1) {
+                  return true;
+              }
+          }
+          return false;
+      };
+      StandardValidator.prototype.getMessage = function (rule, object, value) {
+          var expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
+          // tslint:disable-next-line:prefer-const
+          var _a = rule.property, propertyName = _a.name, displayName = _a.displayName;
+          if (propertyName !== null) {
+              displayName = this.messageProvider.getDisplayName(propertyName, displayName);
+          }
+          var overrideContext = {
+              $displayName: displayName,
+              $propertyName: propertyName,
+              $value: value,
+              $object: object,
+              $config: rule.config,
+              // returns the name of a given property, given just the property name (irrespective of the property's displayName)
+              // split on capital letters, first letter ensured to be capitalized
+              $getDisplayName: this.getDisplayName
+          };
+          return expression.evaluate({ bindingContext: object, overrideContext: overrideContext }, this.lookupFunctions);
+      };
+      StandardValidator.prototype.validateRuleSequence = function (object, propertyName, ruleSequence, sequence, results) {
+          var _this = this;
+          // are we validating all properties or a single property?
+          var validateAllProperties = propertyName === null || propertyName === undefined;
+          var rules = ruleSequence[sequence];
+          var allValid = true;
+          // validate each rule.
+          var promises = [];
+          var _loop_1 = function (i) {
+              var rule = rules[i];
+              // is the rule related to the property we're validating.
+              // tslint:disable-next-line:triple-equals | Use loose equality for property keys
+              if (!validateAllProperties && rule.property.name != propertyName) {
+                  return "continue";
+              }
+              // is this a conditional rule? is the condition met?
+              if (rule.when && !rule.when(object)) {
+                  return "continue";
+              }
+              // validate.
+              var value = rule.property.name === null ? object : object[rule.property.name];
+              var promiseOrBoolean = rule.condition(value, object);
+              if (!(promiseOrBoolean instanceof Promise)) {
+                  promiseOrBoolean = Promise.resolve(promiseOrBoolean);
+              }
+              promises.push(promiseOrBoolean.then(function (valid) {
+                  var message = valid ? null : _this.getMessage(rule, object, value);
+                  results.push(new ValidateResult(rule, object, rule.property.name, valid, message));
+                  allValid = allValid && valid;
+                  return valid;
+              }));
+          };
+          for (var i = 0; i < rules.length; i++) {
+              _loop_1(i);
+          }
+          return Promise.all(promises)
+              .then(function () {
+              sequence++;
+              if (allValid && sequence < ruleSequence.length) {
+                  return _this.validateRuleSequence(object, propertyName, ruleSequence, sequence, results);
+              }
+              return results;
+          });
+      };
+      StandardValidator.prototype.validate = function (object, propertyName, rules) {
+          // rules specified?
+          if (!rules) {
+              // no. attempt to locate the rules.
+              rules = Rules.get(object);
+          }
+          // any rules?
+          if (!rules || rules.length === 0) {
+              return Promise.resolve([]);
+          }
+          return this.validateRuleSequence(object, propertyName, rules, 0, []);
+      };
+      StandardValidator.inject = [ValidationMessageProvider, aureliaTemplating.ViewResources];
+      return StandardValidator;
+  }(Validator));
+
+  /**
+   * Validation triggers.
+   */
+  (function (validateTrigger) {
+      /**
+       * Manual validation.  Use the controller's `validate()` and  `reset()` methods
+       * to validate all bindings.
+       */
+      validateTrigger[validateTrigger["manual"] = 0] = "manual";
+      /**
+       * Validate the binding when the binding's target element fires a DOM "blur" event.
+       */
+      validateTrigger[validateTrigger["blur"] = 1] = "blur";
+      /**
+       * Validate the binding when it updates the model due to a change in the view.
+       */
+      validateTrigger[validateTrigger["change"] = 2] = "change";
+      /**
+       * Validate the binding when the binding's target element fires a DOM "blur" event and
+       * when it updates the model due to a change in the view.
+       */
+      validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
+  })(exports.validateTrigger || (exports.validateTrigger = {}));
+
+  /**
+   * Aurelia Validation Configuration API
+   */
+  var GlobalValidationConfiguration = /** @class */ (function () {
+      function GlobalValidationConfiguration() {
+          this.validatorType = StandardValidator;
+          this.validationTrigger = GlobalValidationConfiguration.DEFAULT_VALIDATION_TRIGGER;
+      }
+      /**
+       * Use a custom Validator implementation.
+       */
+      GlobalValidationConfiguration.prototype.customValidator = function (type) {
+          this.validatorType = type;
+          return this;
+      };
+      GlobalValidationConfiguration.prototype.defaultValidationTrigger = function (trigger) {
+          this.validationTrigger = trigger;
+          return this;
+      };
+      GlobalValidationConfiguration.prototype.getDefaultValidationTrigger = function () {
+          return this.validationTrigger;
+      };
+      /**
+       * Applies the configuration.
+       */
+      GlobalValidationConfiguration.prototype.apply = function (container) {
+          var validator = container.get(this.validatorType);
+          container.registerInstance(Validator, validator);
+          container.registerInstance(GlobalValidationConfiguration, this);
+      };
+      GlobalValidationConfiguration.DEFAULT_VALIDATION_TRIGGER = exports.validateTrigger.blur;
+      return GlobalValidationConfiguration;
+  }());
 
   /**
    * Gets the DOM element associated with the data-binding. Most of the time it's
@@ -106,101 +596,6 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
       return match[1];
   }
 
-  /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation. All rights reserved.
-  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-  this file except in compliance with the License. You may obtain a copy of the
-  License at http://www.apache.org/licenses/LICENSE-2.0
-
-  THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-  MERCHANTABLITY OR NON-INFRINGEMENT.
-
-  See the Apache Version 2.0 License for specific language governing permissions
-  and limitations under the License.
-  ***************************************************************************** */
-  /* global Reflect, Promise */
-
-  var extendStatics = function(d, b) {
-      extendStatics = Object.setPrototypeOf ||
-          ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-          function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-      return extendStatics(d, b);
-  };
-
-  function __extends(d, b) {
-      extendStatics(d, b);
-      function __() { this.constructor = d; }
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  }
-
-  function __decorate(decorators, target, key, desc) {
-      var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-      if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-      else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-      return c > 3 && r && Object.defineProperty(target, key, r), r;
-  }
-
-  /**
-   * Validation triggers.
-   */
-  (function (validateTrigger) {
-      /**
-       * Manual validation.  Use the controller's `validate()` and  `reset()` methods
-       * to validate all bindings.
-       */
-      validateTrigger[validateTrigger["manual"] = 0] = "manual";
-      /**
-       * Validate the binding when the binding's target element fires a DOM "blur" event.
-       */
-      validateTrigger[validateTrigger["blur"] = 1] = "blur";
-      /**
-       * Validate the binding when it updates the model due to a change in the view.
-       */
-      validateTrigger[validateTrigger["change"] = 2] = "change";
-      /**
-       * Validate the binding when the binding's target element fires a DOM "blur" event and
-       * when it updates the model due to a change in the view.
-       */
-      validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
-  })(exports.validateTrigger || (exports.validateTrigger = {}));
-
-  /**
-   * Validates objects and properties.
-   */
-  var Validator = /** @class */ (function () {
-      function Validator() {
-      }
-      return Validator;
-  }());
-
-  /**
-   * The result of validating an individual validation rule.
-   */
-  var ValidateResult = /** @class */ (function () {
-      /**
-       * @param rule The rule associated with the result. Validator implementation specific.
-       * @param object The object that was validated.
-       * @param propertyName The name of the property that was validated.
-       * @param error The error, if the result is a validation error.
-       */
-      function ValidateResult(rule, object, propertyName, valid, message) {
-          if (message === void 0) { message = null; }
-          this.rule = rule;
-          this.object = object;
-          this.propertyName = propertyName;
-          this.valid = valid;
-          this.message = message;
-          this.id = ValidateResult.nextId++;
-      }
-      ValidateResult.prototype.toString = function () {
-          return this.valid ? 'Valid.' : this.message;
-      };
-      ValidateResult.nextId = 0;
-      return ValidateResult;
-  }());
-
   var ValidateEvent = /** @class */ (function () {
       function ValidateEvent(
       /**
@@ -246,7 +641,7 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
    * Exposes the current list of validation results for binding purposes.
    */
   var ValidationController = /** @class */ (function () {
-      function ValidationController(validator, propertyParser) {
+      function ValidationController(validator, propertyParser, config) {
           this.validator = validator;
           this.propertyParser = propertyParser;
           // Registered bindings (via the validate binding behavior)
@@ -269,13 +664,12 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
           this.elements = new Map();
           // Objects that have been added to the controller instance (entity-style validation).
           this.objects = new Map();
-          /**
-           * The trigger that will invoke automatic validation of a property used in a binding.
-           */
-          this.validateTrigger = exports.validateTrigger.blur;
           // Promise that resolves when validation has completed.
           this.finishValidating = Promise.resolve();
           this.eventCallbacks = [];
+          this.validateTrigger = config instanceof GlobalValidationConfiguration
+              ? config.getDefaultValidationTrigger()
+              : GlobalValidationConfiguration.DEFAULT_VALIDATION_TRIGGER;
       }
       /**
        * Subscribe to controller validate and reset events. These events occur when the
@@ -643,7 +1037,7 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
               this.eventCallbacks[i](event);
           }
       };
-      ValidationController.inject = [Validator, PropertyAccessorParser];
+      ValidationController.inject = [Validator, PropertyAccessorParser, GlobalValidationConfiguration];
       return ValidationController;
   }());
 
@@ -835,7 +1229,8 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
               validator = this.container.get(Validator);
           }
           var propertyParser = this.container.get(PropertyAccessorParser);
-          return new ValidationController(validator, propertyParser);
+          var config = this.container.get(GlobalValidationConfiguration);
+          return new ValidationController(validator, propertyParser, config);
       };
       /**
        * Creates a new controller and registers it in the current element's container so that it's
@@ -946,359 +1341,6 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
   }());
 
   /**
-   * Sets, unsets and retrieves rules on an object or constructor function.
-   */
-  var Rules = /** @class */ (function () {
-      function Rules() {
-      }
-      /**
-       * Applies the rules to a target.
-       */
-      Rules.set = function (target, rules) {
-          if (target instanceof Function) {
-              target = target.prototype;
-          }
-          Object.defineProperty(target, Rules.key, { enumerable: false, configurable: false, writable: true, value: rules });
-      };
-      /**
-       * Removes rules from a target.
-       */
-      Rules.unset = function (target) {
-          if (target instanceof Function) {
-              target = target.prototype;
-          }
-          target[Rules.key] = null;
-      };
-      /**
-       * Retrieves the target's rules.
-       */
-      Rules.get = function (target) {
-          return target[Rules.key] || null;
-      };
-      /**
-       * The name of the property that stores the rules.
-       */
-      Rules.key = '__rules__';
-      return Rules;
-  }());
-
-  // tslint:disable:no-empty
-  var ExpressionVisitor = /** @class */ (function () {
-      function ExpressionVisitor() {
-      }
-      ExpressionVisitor.prototype.visitChain = function (chain) {
-          this.visitArgs(chain.expressions);
-      };
-      ExpressionVisitor.prototype.visitBindingBehavior = function (behavior) {
-          behavior.expression.accept(this);
-          this.visitArgs(behavior.args);
-      };
-      ExpressionVisitor.prototype.visitValueConverter = function (converter) {
-          converter.expression.accept(this);
-          this.visitArgs(converter.args);
-      };
-      ExpressionVisitor.prototype.visitAssign = function (assign) {
-          assign.target.accept(this);
-          assign.value.accept(this);
-      };
-      ExpressionVisitor.prototype.visitConditional = function (conditional) {
-          conditional.condition.accept(this);
-          conditional.yes.accept(this);
-          conditional.no.accept(this);
-      };
-      ExpressionVisitor.prototype.visitAccessThis = function (access) {
-          access.ancestor = access.ancestor;
-      };
-      ExpressionVisitor.prototype.visitAccessScope = function (access) {
-          access.name = access.name;
-      };
-      ExpressionVisitor.prototype.visitAccessMember = function (access) {
-          access.object.accept(this);
-      };
-      ExpressionVisitor.prototype.visitAccessKeyed = function (access) {
-          access.object.accept(this);
-          access.key.accept(this);
-      };
-      ExpressionVisitor.prototype.visitCallScope = function (call) {
-          this.visitArgs(call.args);
-      };
-      ExpressionVisitor.prototype.visitCallFunction = function (call) {
-          call.func.accept(this);
-          this.visitArgs(call.args);
-      };
-      ExpressionVisitor.prototype.visitCallMember = function (call) {
-          call.object.accept(this);
-          this.visitArgs(call.args);
-      };
-      ExpressionVisitor.prototype.visitPrefix = function (prefix) {
-          prefix.expression.accept(this);
-      };
-      ExpressionVisitor.prototype.visitBinary = function (binary) {
-          binary.left.accept(this);
-          binary.right.accept(this);
-      };
-      ExpressionVisitor.prototype.visitLiteralPrimitive = function (literal) {
-          literal.value = literal.value;
-      };
-      ExpressionVisitor.prototype.visitLiteralArray = function (literal) {
-          this.visitArgs(literal.elements);
-      };
-      ExpressionVisitor.prototype.visitLiteralObject = function (literal) {
-          this.visitArgs(literal.values);
-      };
-      ExpressionVisitor.prototype.visitLiteralString = function (literal) {
-          literal.value = literal.value;
-      };
-      ExpressionVisitor.prototype.visitArgs = function (args) {
-          for (var i = 0; i < args.length; i++) {
-              args[i].accept(this);
-          }
-      };
-      return ExpressionVisitor;
-  }());
-
-  var ValidationMessageParser = /** @class */ (function () {
-      function ValidationMessageParser(bindinqLanguage) {
-          this.bindinqLanguage = bindinqLanguage;
-          this.emptyStringExpression = new aureliaBinding.LiteralString('');
-          this.nullExpression = new aureliaBinding.LiteralPrimitive(null);
-          this.undefinedExpression = new aureliaBinding.LiteralPrimitive(undefined);
-          this.cache = {};
-      }
-      ValidationMessageParser.prototype.parse = function (message) {
-          if (this.cache[message] !== undefined) {
-              return this.cache[message];
-          }
-          var parts = this.bindinqLanguage.parseInterpolation(null, message);
-          if (parts === null) {
-              return new aureliaBinding.LiteralString(message);
-          }
-          var expression = new aureliaBinding.LiteralString(parts[0]);
-          for (var i = 1; i < parts.length; i += 2) {
-              expression = new aureliaBinding.Binary('+', expression, new aureliaBinding.Binary('+', this.coalesce(parts[i]), new aureliaBinding.LiteralString(parts[i + 1])));
-          }
-          MessageExpressionValidator.validate(expression, message);
-          this.cache[message] = expression;
-          return expression;
-      };
-      ValidationMessageParser.prototype.coalesce = function (part) {
-          // part === null || part === undefined ? '' : part
-          return new aureliaBinding.Conditional(new aureliaBinding.Binary('||', new aureliaBinding.Binary('===', part, this.nullExpression), new aureliaBinding.Binary('===', part, this.undefinedExpression)), this.emptyStringExpression, new aureliaBinding.CallMember(part, 'toString', []));
-      };
-      ValidationMessageParser.inject = [aureliaTemplating.BindingLanguage];
-      return ValidationMessageParser;
-  }());
-  var MessageExpressionValidator = /** @class */ (function (_super) {
-      __extends(MessageExpressionValidator, _super);
-      function MessageExpressionValidator(originalMessage) {
-          var _this = _super.call(this) || this;
-          _this.originalMessage = originalMessage;
-          return _this;
-      }
-      MessageExpressionValidator.validate = function (expression, originalMessage) {
-          var visitor = new MessageExpressionValidator(originalMessage);
-          expression.accept(visitor);
-      };
-      MessageExpressionValidator.prototype.visitAccessScope = function (access) {
-          if (access.ancestor !== 0) {
-              throw new Error('$parent is not permitted in validation message expressions.');
-          }
-          if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
-              LogManager.getLogger('aurelia-validation')
-                  // tslint:disable-next-line:max-line-length
-                  .warn("Did you mean to use \"$" + access.name + "\" instead of \"" + access.name + "\" in this validation message template: \"" + this.originalMessage + "\"?");
-          }
-      };
-      return MessageExpressionValidator;
-  }(ExpressionVisitor));
-
-  /**
-   * Dictionary of validation messages. [messageKey]: messageExpression
-   */
-  var validationMessages = {
-      /**
-       * The default validation message. Used with rules that have no standard message.
-       */
-      default: "${$displayName} is invalid.",
-      required: "${$displayName} is required.",
-      matches: "${$displayName} is not correctly formatted.",
-      email: "${$displayName} is not a valid email.",
-      minLength: "${$displayName} must be at least ${$config.length} character${$config.length === 1 ? '' : 's'}.",
-      maxLength: "${$displayName} cannot be longer than ${$config.length} character${$config.length === 1 ? '' : 's'}.",
-      minItems: "${$displayName} must contain at least ${$config.count} item${$config.count === 1 ? '' : 's'}.",
-      maxItems: "${$displayName} cannot contain more than ${$config.count} item${$config.count === 1 ? '' : 's'}.",
-      min: "${$displayName} must be at least ${$config.constraint}.",
-      max: "${$displayName} must be at most ${$config.constraint}.",
-      range: "${$displayName} must be between or equal to ${$config.min} and ${$config.max}.",
-      between: "${$displayName} must be between but not equal to ${$config.min} and ${$config.max}.",
-      equals: "${$displayName} must be ${$config.expectedValue}.",
-  };
-  /**
-   * Retrieves validation messages and property display names.
-   */
-  var ValidationMessageProvider = /** @class */ (function () {
-      function ValidationMessageProvider(parser) {
-          this.parser = parser;
-      }
-      /**
-       * Returns a message binding expression that corresponds to the key.
-       * @param key The message key.
-       */
-      ValidationMessageProvider.prototype.getMessage = function (key) {
-          var message;
-          if (key in validationMessages) {
-              message = validationMessages[key];
-          }
-          else {
-              message = validationMessages['default'];
-          }
-          return this.parser.parse(message);
-      };
-      /**
-       * Formulates a property display name using the property name and the configured
-       * displayName (if provided).
-       * Override this with your own custom logic.
-       * @param propertyName The property name.
-       */
-      ValidationMessageProvider.prototype.getDisplayName = function (propertyName, displayName) {
-          if (displayName !== null && displayName !== undefined) {
-              return (displayName instanceof Function) ? displayName() : displayName;
-          }
-          // split on upper-case letters.
-          var words = propertyName.toString().split(/(?=[A-Z])/).join(' ');
-          // capitalize first letter.
-          return words.charAt(0).toUpperCase() + words.slice(1);
-      };
-      ValidationMessageProvider.inject = [ValidationMessageParser];
-      return ValidationMessageProvider;
-  }());
-
-  /**
-   * Validates.
-   * Responsible for validating objects and properties.
-   */
-  var StandardValidator = /** @class */ (function (_super) {
-      __extends(StandardValidator, _super);
-      function StandardValidator(messageProvider, resources) {
-          var _this = _super.call(this) || this;
-          _this.messageProvider = messageProvider;
-          _this.lookupFunctions = resources.lookupFunctions;
-          _this.getDisplayName = messageProvider.getDisplayName.bind(messageProvider);
-          return _this;
-      }
-      /**
-       * Validates the specified property.
-       * @param object The object to validate.
-       * @param propertyName The name of the property to validate.
-       * @param rules Optional. If unspecified, the rules will be looked up using the metadata
-       * for the object created by ValidationRules....on(class/object)
-       */
-      StandardValidator.prototype.validateProperty = function (object, propertyName, rules) {
-          return this.validate(object, propertyName, rules || null);
-      };
-      /**
-       * Validates all rules for specified object and it's properties.
-       * @param object The object to validate.
-       * @param rules Optional. If unspecified, the rules will be looked up using the metadata
-       * for the object created by ValidationRules....on(class/object)
-       */
-      StandardValidator.prototype.validateObject = function (object, rules) {
-          return this.validate(object, null, rules || null);
-      };
-      /**
-       * Determines whether a rule exists in a set of rules.
-       * @param rules The rules to search.
-       * @parem rule The rule to find.
-       */
-      StandardValidator.prototype.ruleExists = function (rules, rule) {
-          var i = rules.length;
-          while (i--) {
-              if (rules[i].indexOf(rule) !== -1) {
-                  return true;
-              }
-          }
-          return false;
-      };
-      StandardValidator.prototype.getMessage = function (rule, object, value) {
-          var expression = rule.message || this.messageProvider.getMessage(rule.messageKey);
-          // tslint:disable-next-line:prefer-const
-          var _a = rule.property, propertyName = _a.name, displayName = _a.displayName;
-          if (propertyName !== null) {
-              displayName = this.messageProvider.getDisplayName(propertyName, displayName);
-          }
-          var overrideContext = {
-              $displayName: displayName,
-              $propertyName: propertyName,
-              $value: value,
-              $object: object,
-              $config: rule.config,
-              // returns the name of a given property, given just the property name (irrespective of the property's displayName)
-              // split on capital letters, first letter ensured to be capitalized
-              $getDisplayName: this.getDisplayName
-          };
-          return expression.evaluate({ bindingContext: object, overrideContext: overrideContext }, this.lookupFunctions);
-      };
-      StandardValidator.prototype.validateRuleSequence = function (object, propertyName, ruleSequence, sequence, results) {
-          var _this = this;
-          // are we validating all properties or a single property?
-          var validateAllProperties = propertyName === null || propertyName === undefined;
-          var rules = ruleSequence[sequence];
-          var allValid = true;
-          // validate each rule.
-          var promises = [];
-          var _loop_1 = function (i) {
-              var rule = rules[i];
-              // is the rule related to the property we're validating.
-              // tslint:disable-next-line:triple-equals | Use loose equality for property keys
-              if (!validateAllProperties && rule.property.name != propertyName) {
-                  return "continue";
-              }
-              // is this a conditional rule? is the condition met?
-              if (rule.when && !rule.when(object)) {
-                  return "continue";
-              }
-              // validate.
-              var value = rule.property.name === null ? object : object[rule.property.name];
-              var promiseOrBoolean = rule.condition(value, object);
-              if (!(promiseOrBoolean instanceof Promise)) {
-                  promiseOrBoolean = Promise.resolve(promiseOrBoolean);
-              }
-              promises.push(promiseOrBoolean.then(function (valid) {
-                  var message = valid ? null : _this.getMessage(rule, object, value);
-                  results.push(new ValidateResult(rule, object, rule.property.name, valid, message));
-                  allValid = allValid && valid;
-                  return valid;
-              }));
-          };
-          for (var i = 0; i < rules.length; i++) {
-              _loop_1(i);
-          }
-          return Promise.all(promises)
-              .then(function () {
-              sequence++;
-              if (allValid && sequence < ruleSequence.length) {
-                  return _this.validateRuleSequence(object, propertyName, ruleSequence, sequence, results);
-              }
-              return results;
-          });
-      };
-      StandardValidator.prototype.validate = function (object, propertyName, rules) {
-          // rules specified?
-          if (!rules) {
-              // no. attempt to locate the rules.
-              rules = Rules.get(object);
-          }
-          // any rules?
-          if (!rules || rules.length === 0) {
-              return Promise.resolve([]);
-          }
-          return this.validateRuleSequence(object, propertyName, rules, 0, []);
-      };
-      StandardValidator.inject = [ValidationMessageProvider, aureliaTemplating.ViewResources];
-      return StandardValidator;
-  }(Validator));
-
-  /**
    * Part of the fluent rule API. Enables customizing property rules.
    */
   var FluentRuleCustomizer = /** @class */ (function () {
@@ -1407,12 +1449,12 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
        * @param args The rule's arguments.
        */
       FluentRuleCustomizer.prototype.satisfiesRule = function (name) {
+          var _a;
           var args = [];
           for (var _i = 1; _i < arguments.length; _i++) {
               args[_i - 1] = arguments[_i];
           }
-          var _a;
-          return (_a = this.fluentRules).satisfiesRule.apply(_a, [name].concat(args));
+          return (_a = this.fluentRules).satisfiesRule.apply(_a, __spreadArrays([name], args));
       };
       /**
        * Applies the "required" rule to the property.
@@ -1552,14 +1594,14 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
               // standard rule?
               rule = this[name];
               if (rule instanceof Function) {
-                  return rule.call.apply(rule, [this].concat(args));
+                  return rule.call.apply(rule, __spreadArrays([this], args));
               }
               throw new Error("Rule with name \"" + name + "\" does not exist.");
           }
           var config = rule.argsToConfig ? rule.argsToConfig.apply(rule, args) : undefined;
           return this.satisfies(function (value, obj) {
               var _a;
-              return (_a = rule.condition).call.apply(_a, [_this, value, obj].concat(args));
+              return (_a = rule.condition).call.apply(_a, __spreadArrays([_this, value, obj], args));
           }, config)
               .withMessageKey(name);
       };
@@ -1805,28 +1847,6 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
 
   // Exports
   /**
-   * Aurelia Validation Configuration API
-   */
-  var AureliaValidationConfiguration = /** @class */ (function () {
-      function AureliaValidationConfiguration() {
-          this.validatorType = StandardValidator;
-      }
-      /**
-       * Use a custom Validator implementation.
-       */
-      AureliaValidationConfiguration.prototype.customValidator = function (type) {
-          this.validatorType = type;
-      };
-      /**
-       * Applies the configuration.
-       */
-      AureliaValidationConfiguration.prototype.apply = function (container) {
-          var validator = container.get(this.validatorType);
-          container.registerInstance(Validator, validator);
-      };
-      return AureliaValidationConfiguration;
-  }());
-  /**
    * Configures the plugin.
    */
   function configure(
@@ -1838,7 +1858,7 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
       var propertyParser = frameworkConfig.container.get(PropertyAccessorParser);
       ValidationRules.initialize(messageParser, propertyParser);
       // configure...
-      var config = new AureliaValidationConfiguration();
+      var config = new GlobalValidationConfiguration();
       if (callback instanceof Function) {
           callback(config);
       }
@@ -1849,8 +1869,8 @@ define('aurelia-validation', ['exports', 'aurelia-pal', 'aurelia-binding', 'aure
       }
   }
 
-  exports.AureliaValidationConfiguration = AureliaValidationConfiguration;
   exports.configure = configure;
+  exports.GlobalValidationConfiguration = GlobalValidationConfiguration;
   exports.getTargetDOMElement = getTargetDOMElement;
   exports.getPropertyInfo = getPropertyInfo;
   exports.PropertyAccessorParser = PropertyAccessorParser;

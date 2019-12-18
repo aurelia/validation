@@ -1,4 +1,4 @@
-import { AccessKeyed, AccessMember, AccessScope, Binary, Binding, BindingBehavior, CallMember, Conditional, Expression, Parser, Scope, ValueConverter } from 'aurelia-binding';
+import { AccessKeyed, AccessMember, AccessScope, Binary, Binding, BindingBehavior, CallMember, Conditional, Expression, LiteralPrimitive, LiteralString, Parser, Scope, ValueConverter } from 'aurelia-binding';
 import { Container, Lazy } from 'aurelia-dependency-injection';
 import { DOM } from 'aurelia-pal';
 import { TaskQueue } from 'aurelia-task-queue';
@@ -26,6 +26,74 @@ export declare class ValidateResult {
 	 */
 	constructor(rule: any, object: any, propertyName: string | number | null, valid: boolean, message?: string | null);
 	toString(): string | null;
+}
+/**
+ * Validates objects and properties.
+ */
+export declare abstract class Validator {
+	/**
+	 * Validates the specified property.
+	 * @param object The object to validate.
+	 * @param propertyName The name of the property to validate.
+	 * @param rules Optional. If unspecified, the implementation should lookup the rules for the
+	 * specified object. This may not be possible for all implementations of this interface.
+	 */
+	abstract validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidateResult[]>;
+	/**
+	 * Validates all rules for specified object and it's properties.
+	 * @param object The object to validate.
+	 * @param rules Optional. If unspecified, the implementation should lookup the rules for the
+	 * specified object. This may not be possible for all implementations of this interface.
+	 */
+	abstract validateObject(object: any, rules?: any): Promise<ValidateResult[]>;
+	/**
+	 * Determines whether a rule exists in a set of rules.
+	 * @param rules The rules to search.
+	 * @parem rule The rule to find.
+	 */
+	abstract ruleExists(rules: any, rule: any): boolean;
+}
+/**
+ * Validation triggers.
+ */
+export declare enum validateTrigger {
+	/**
+	 * Manual validation.  Use the controller's `validate()` and  `reset()` methods
+	 * to validate all bindings.
+	 */
+	manual = 0,
+	/**
+	 * Validate the binding when the binding's target element fires a DOM "blur" event.
+	 */
+	blur = 1,
+	/**
+	 * Validate the binding when it updates the model due to a change in the view.
+	 */
+	change = 2,
+	/**
+	 * Validate the binding when the binding's target element fires a DOM "blur" event and
+	 * when it updates the model due to a change in the view.
+	 */
+	changeOrBlur = 3
+}
+export declare type ValidatorCtor = new (...args: any[]) => Validator;
+/**
+ * Aurelia Validation Configuration API
+ */
+export declare class GlobalValidationConfiguration {
+	static DEFAULT_VALIDATION_TRIGGER: validateTrigger;
+	private validatorType;
+	private validationTrigger;
+	/**
+	 * Use a custom Validator implementation.
+	 */
+	customValidator(type: ValidatorCtor): this;
+	defaultValidationTrigger(trigger: validateTrigger): this;
+	getDefaultValidationTrigger(): validateTrigger;
+	/**
+	 * Applies the configuration.
+	 */
+	apply(container: Container): void;
 }
 /**
  * Instructions for the validation controller's validate method.
@@ -85,55 +153,6 @@ export declare class PropertyAccessorParser {
 	parse<TObject, TValue>(property: string | number | PropertyAccessor<TObject, TValue>): string | number;
 }
 export declare function getAccessorExpression(fn: string): string;
-/**
- * Validates objects and properties.
- */
-export declare abstract class Validator {
-	/**
-	 * Validates the specified property.
-	 * @param object The object to validate.
-	 * @param propertyName The name of the property to validate.
-	 * @param rules Optional. If unspecified, the implementation should lookup the rules for the
-	 * specified object. This may not be possible for all implementations of this interface.
-	 */
-	abstract validateProperty(object: any, propertyName: string, rules?: any): Promise<ValidateResult[]>;
-	/**
-	 * Validates all rules for specified object and it's properties.
-	 * @param object The object to validate.
-	 * @param rules Optional. If unspecified, the implementation should lookup the rules for the
-	 * specified object. This may not be possible for all implementations of this interface.
-	 */
-	abstract validateObject(object: any, rules?: any): Promise<ValidateResult[]>;
-	/**
-	 * Determines whether a rule exists in a set of rules.
-	 * @param rules The rules to search.
-	 * @parem rule The rule to find.
-	 */
-	abstract ruleExists(rules: any, rule: any): boolean;
-}
-/**
- * Validation triggers.
- */
-export declare enum validateTrigger {
-	/**
-	 * Manual validation.  Use the controller's `validate()` and  `reset()` methods
-	 * to validate all bindings.
-	 */
-	manual = 0,
-	/**
-	 * Validate the binding when the binding's target element fires a DOM "blur" event.
-	 */
-	blur = 1,
-	/**
-	 * Validate the binding when it updates the model due to a change in the view.
-	 */
-	change = 2,
-	/**
-	 * Validate the binding when the binding's target element fires a DOM "blur" event and
-	 * when it updates the model due to a change in the view.
-	 */
-	changeOrBlur = 3
-}
 /**
  * A result to render (or unrender) and the associated elements (if any)
  */
@@ -242,7 +261,7 @@ export declare class ValidateEvent {
 export declare class ValidationController {
 	private validator;
 	private propertyParser;
-	static inject: (typeof PropertyAccessorParser | typeof Validator)[];
+	static inject: (typeof Validator | typeof GlobalValidationConfiguration | typeof PropertyAccessorParser)[];
 	private bindings;
 	private renderers;
 	/**
@@ -265,7 +284,7 @@ export declare class ValidationController {
 	validateTrigger: validateTrigger;
 	private finishValidating;
 	private eventCallbacks;
-	constructor(validator: Validator, propertyParser: PropertyAccessorParser);
+	constructor(validator: Validator, propertyParser: PropertyAccessorParser, config?: GlobalValidationConfiguration);
 	/**
 	 * Subscribe to controller validate and reset events. These events occur when the
 	 * controller's "validate"" and "reset" methods are called.
@@ -499,35 +518,24 @@ export declare class Rules {
 	 */
 	static get(target: any): Rule<any, any>[][] | null;
 }
-export declare type Chain = any;
-export declare type Assign = any;
-export declare type AccessThis = any;
-export declare type AccessScope = any;
-export declare type CallScope = any;
-export declare type CallFunction = any;
-export declare type PrefixNot = any;
-export declare type LiteralPrimitive = any;
-export declare type LiteralArray = any;
-export declare type LiteralObject = any;
-export declare type LiteralString = any;
 declare class ExpressionVisitor {
-	visitChain(chain: Chain): void;
+	visitChain(chain: any): void;
 	visitBindingBehavior(behavior: BindingBehavior): void;
 	visitValueConverter(converter: ValueConverter): void;
-	visitAssign(assign: Assign): void;
+	visitAssign(assign: any): void;
 	visitConditional(conditional: Conditional): void;
-	visitAccessThis(access: AccessThis): void;
+	visitAccessThis(access: any): void;
 	visitAccessScope(access: AccessScope): void;
 	visitAccessMember(access: AccessMember): void;
 	visitAccessKeyed(access: AccessKeyed): void;
-	visitCallScope(call: CallScope): void;
-	visitCallFunction(call: CallFunction): void;
+	visitCallScope(call: any): void;
+	visitCallFunction(call: any): void;
 	visitCallMember(call: CallMember): void;
-	visitPrefix(prefix: PrefixNot): void;
+	visitPrefix(prefix: any): void;
 	visitBinary(binary: Binary): void;
 	visitLiteralPrimitive(literal: LiteralPrimitive): void;
-	visitLiteralArray(literal: LiteralArray): void;
-	visitLiteralObject(literal: LiteralObject): void;
+	visitLiteralArray(literal: any): void;
+	visitLiteralObject(literal: any): void;
 	visitLiteralString(literal: LiteralString): void;
 	private visitArgs;
 }
@@ -656,7 +664,7 @@ export declare class FluentRuleCustomizer<TObject, TValue> {
 	/**
 	 * Rules that have been defined using the fluent API.
 	 */
-	readonly rules: Rule<TObject, any>[][];
+	get rules(): Rule<TObject, any>[][];
 	/**
 	 * Applies the rules to a class or object, making them discoverable by the StandardValidator.
 	 * @param target A class or object.
@@ -918,25 +926,9 @@ export interface Parsers {
 	property: PropertyAccessorParser;
 }
 /**
- * Aurelia Validation Configuration API
- */
-export declare class AureliaValidationConfiguration {
-	private validatorType;
-	/**
-	 * Use a custom Validator implementation.
-	 */
-	customValidator(type: {
-		new (...args: any[]): Validator;
-	}): void;
-	/**
-	 * Applies the configuration.
-	 */
-	apply(container: Container): void;
-}
-/**
  * Configures the plugin.
  */
 export declare function configure(frameworkConfig: {
 	container: Container;
 	globalResources?: (...resources: any[]) => any;
-}, callback?: (config: AureliaValidationConfiguration) => void): void;
+}, callback?: (config: GlobalValidationConfiguration) => void): void;
