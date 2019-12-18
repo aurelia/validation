@@ -1,13 +1,7 @@
 import typescript from 'rollup-plugin-typescript2';
-// import cfg from './tsconfig.json';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const entryName = 'aurelia-validation';
-// const defaultCfg = { ...cfg, include: ['src'], exclude: undefined };
-
-// defaultCfg.compilerOptions.module = 'es2015';
-// defaultCfg.compilerOptions.noEmitHelpers = true;
-// defaultCfg.compilerOptions.importHelpers = true;
 
 export default [{
   input: `src/${entryName}.ts`,
@@ -33,8 +27,6 @@ export default [{
   plugins: [
     typescript({
       useTsconfigDeclarationDir: true,
-      // tsconfigDefaults: defaultCfg,
-      // tsconfig: undefined,
       tsconfigOverride: {
         compilerOptions: {
           module: 'es2015',
@@ -58,8 +50,6 @@ export default [{
       },
       plugins: [
         typescript({
-          // tsconfigDefaults: defaultCfg,
-          // tsconfig: undefined,
           tsconfigOverride: {
             compilerOptions: {
               module: 'es2015',

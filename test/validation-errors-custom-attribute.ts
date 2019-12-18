@@ -11,7 +11,7 @@ describe('ValidationErrorsCustomAttribute', () => {
 
   let component: ComponentTester;
   let viewModel: any;
-  const parentViewModel = { form: '', controller: () => null, theController: null };
+  const parentViewModel = { form: '', controller: (): any => null, theController: null };
   let container: Container;
 
   const stageTest = (validationErrors: string, supplyControllerToViewModel?: boolean) => {
@@ -51,7 +51,7 @@ describe('ValidationErrorsCustomAttribute', () => {
       parentViewModel.controller = () => {
         const factory = container.get(ValidationControllerFactory);
         const controller = factory.createForCurrentScope();
-        parentViewModel.theController = controller;
+        parentViewModel.theController = controller as any;
         return controller;
       };
     }
