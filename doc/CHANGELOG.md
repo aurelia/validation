@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.6.0](https://github.com/aurelia/validation/compare/1.5.0...1.6.0) (2019-12-18)
+
+
+### Bug Fixes
+
+* **all:** update binding library and fix TS errors ([33c91a1](https://github.com/aurelia/validation/commit/33c91a1120c0cc41a3a1bb093aca7fd682d56e34))
+* **ExpressionVisitor:** not redeclare imports ([15109b3](https://github.com/aurelia/validation/commit/15109b3a82f0d0ecebaf19c7b1490c4373731c13)), closes [#537](https://github.com/aurelia/validation/issues/537)
+
+
+### Features
+
+* **config:** make config constructor param optional and place default trigger in static property ([a52f4c4](https://github.com/aurelia/validation/commit/a52f4c403bb68ed895fd0b7a3ea217c67ce22e2d))
+* **config:** make the setters chainable ([bd118a6](https://github.com/aurelia/validation/commit/bd118a61c9cb283cbb9db36712660a0362f5994c))
+* **config:** rename global config class ([c4e5fe2](https://github.com/aurelia/validation/commit/c4e5fe29e2a9bcd11cfdaba0f70050ef9c894be6))
+* **config:** support global config option for default validation trigger ([39a4e67](https://github.com/aurelia/validation/commit/39a4e679513e3fa716b46cedce24931b3b57028f))
+
+
+
 ## [1.5.0](https://github.com/aurelia/validation/compare/1.4.0...1.5.0) (2019-08-09)
 
 * Update type definitions for compatibility with latest dependency-injection release.
