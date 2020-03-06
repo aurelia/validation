@@ -17,6 +17,7 @@ import {
     <number-input id="number2"               value.bind="number2 & validate"></number-input>
     <input        id="password"        type="text" value.bind="password & validate">
     <input        id="confirmPassword" type="text" value.bind="confirmPassword & validate">
+    <custom-input id="ce" value.two-way="ceValue & validate"></custom-input>
   </form>
 </template>`)
 @inject(ValidationControllerFactory)
@@ -28,6 +29,7 @@ export class RegistrationForm {
   public number2 = 0;
   public password = '';
   public confirmPassword = '';
+  public ceValue = '';
   public controller: ValidationController;
   public showForm = true;
 
@@ -51,11 +53,12 @@ ValidationRules.customRule(
 );
 
 ValidationRules
-  .ensure((f: RegistrationForm) => f.firstName).required()
+  .ensure((f: RegistrationForm) => f.firstName).required().matches(/foo/)
   .ensure(f => f.lastName).required()
   .ensure('email').required().email()
   .ensure(f => f.number1).satisfies(value => value > 0)
   .ensure(f => f.number2).satisfies(value => value > 0).withMessage('${displayName} gots to be greater than zero.')
   .ensure(f => f.password).required()
   .ensure(f => f.confirmPassword).required().satisfiesRule('matchesProperty', 'password')
+  .ensure(f => f.ceValue).required().matches(/foo/)
   .on(RegistrationForm);

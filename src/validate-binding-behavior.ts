@@ -72,3 +72,21 @@ export class ValidateOnChangeOrBlurBindingBehavior extends ValidateBindingBehavi
     return validateTrigger.changeOrBlur;
   }
 }
+
+@bindingBehavior('validateOnFocusout')
+export class ValidateOnFocusoutBindingBehavior extends ValidateBindingBehaviorBase {
+  public static inject = [TaskQueue];
+
+  public getValidateTrigger() {
+    return validateTrigger.focusout;
+  }
+}
+
+@bindingBehavior('validateOnChangeOrFocusout')
+export class ValidateOnChangeOrFocusoutBindingBehavior extends ValidateBindingBehaviorBase {
+  public static inject = [TaskQueue];
+
+  public getValidateTrigger() {
+    return validateTrigger.changeOrFocusout;
+  }
+}
