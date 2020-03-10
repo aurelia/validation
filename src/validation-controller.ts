@@ -393,6 +393,17 @@ export class ValidationController {
   }
 
   /**
+   * Validates the properties of all bindings associated with the given target.
+   */
+  public validateBindingsByTarget(bindingTarget: any) {
+    for (const [binding, { target }] of Array.from(this.bindings)) {
+      if (target === bindingTarget) {
+        this.validateBinding(binding);
+      }
+    }
+  }
+
+  /**
    * Resets the results for a property associated with a binding.
    */
   public resetBinding(binding: Binding) {
@@ -409,6 +420,18 @@ export class ValidationController {
     }
     const { object, propertyName } = propertyInfo;
     this.reset({ object, propertyName });
+  }
+
+  /**
+   * Resets the results for all properties of bindings associated with the given
+   * target.
+   */
+  public resetBindingsByTarget(bindingTarget: any) {
+    for (const [binding, { target }] of Array.from(this.bindings)) {
+      if (target === bindingTarget) {
+        this.resetBinding(binding);
+      }
+    }
   }
 
   /**
