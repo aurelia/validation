@@ -40,6 +40,10 @@ export abstract class ValidateBindingBehaviorBase {
           : null;
     const hasChangeTrigger = (trigger & validateTrigger.change) === validateTrigger.change;
     binding.isDirty = !hasChangeTrigger;
+    // validatedOnce is used to control whether controller should validate upon user input
+    //
+    // always true when validation trigger doesn't include "blur" event (blur/focusout)
+    // else it will be set to true after (a) the first user input & loss of focus or (b) validation
     binding.validatedOnce = hasChangeTrigger && event === null;
     if (hasChangeTrigger) {
       binding.vbbUpdateSource = binding.updateSource;
