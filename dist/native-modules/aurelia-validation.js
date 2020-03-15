@@ -460,16 +460,6 @@ var validateTrigger;
      * when it updates the model due to a change in the view.
      */
     validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
-    /**
-     * Validate the binding when the binding's target element fires a DOM "focusout" event.
-     * Unlike "blur", this event bubbles.
-     */
-    validateTrigger[validateTrigger["focusout"] = 4] = "focusout";
-    /**
-     * Validate the binding when the binding's target element fires a DOM "focusout" event or
-     * when it updates the model due to a change in the view.
-     */
-    validateTrigger[validateTrigger["changeOrFocusout"] = 6] = "changeOrFocusout";
 })(validateTrigger || (validateTrigger = {}));
 
 /**
@@ -1057,7 +1047,6 @@ var ValidationController = /** @class */ (function () {
     return ValidationController;
 }());
 
-// tslint:disable:no-bitwise
 /**
  * Binding behavior. Indicates the bound property should be validated.
  */
@@ -1084,44 +1073,23 @@ var ValidateBindingBehaviorBase = /** @class */ (function () {
         controller.registerBinding(binding, target, rules);
         binding.validationController = controller;
         var trigger = this.getValidateTrigger(controller);
-        var event = (trigger & validateTrigger.blur) === validateTrigger.blur ? 'blur'
-            : (trigger & validateTrigger.focusout) === validateTrigger.focusout ? 'focusout'
-                : null;
-        var hasChangeTrigger = (trigger & validateTrigger.change) === validateTrigger.change;
-        binding.isDirty = !hasChangeTrigger;
-        binding.validatedOnce = hasChangeTrigger && event === null;
-        if (hasChangeTrigger) {
+        // tslint:disable-next-line:no-bitwise
+        if (trigger & validateTrigger.change) {
             binding.vbbUpdateSource = binding.updateSource;
             // tslint:disable-next-line:only-arrow-functions
             // tslint:disable-next-line:space-before-function-paren
             binding.updateSource = function (value) {
                 this.vbbUpdateSource(value);
-                this.isDirty = true;
-                if (this.validatedOnce) {
-                    this.validationController.validateBinding(this);
-                }
+                this.validationController.validateBinding(this);
             };
         }
-        if (event !== null) {
-            binding.blurOrFocusoutValidationHandler = function () {
-                _this.taskQueue.queueMicroTask(function () {
-                    if (binding.isDirty) {
-                        controller.validateBinding(binding);
-                        binding.validatedOnce = true;
-                    }
-                });
+        // tslint:disable-next-line:no-bitwise
+        if (trigger & validateTrigger.blur) {
+            binding.validateBlurHandler = function () {
+                _this.taskQueue.queueMicroTask(function () { return controller.validateBinding(binding); });
             };
-            binding.validationTriggerEvent = event;
             binding.validateTarget = target;
-            target.addEventListener(event, binding.blurOrFocusoutValidationHandler);
-            if (hasChangeTrigger) {
-                var propertyName_1 = getPropertyInfo(binding.sourceExpression, binding.source).propertyName;
-                binding.validationSubscription = controller.subscribe(function (event) {
-                    if (!binding.validatedOnce && event.type === 'validate') {
-                        binding.validatedOnce = event.errors.findIndex(function (e) { return e.propertyName === propertyName_1; }) > -1;
-                    }
-                });
-            }
+            target.addEventListener('blur', binding.validateBlurHandler);
         }
         if (trigger !== validateTrigger.manual) {
             binding.standardUpdateTarget = binding.updateTarget;
@@ -1143,19 +1111,13 @@ var ValidateBindingBehaviorBase = /** @class */ (function () {
             binding.updateTarget = binding.standardUpdateTarget;
             binding.standardUpdateTarget = null;
         }
-        if (binding.blurOrFocusoutValidationHandler) {
-            binding.validateTarget.removeEventListener(binding.validationTriggerEvent, binding.blurOrFocusoutValidationHandler);
-            binding.blurOrFocusoutValidationHandler = null;
+        if (binding.validateBlurHandler) {
+            binding.validateTarget.removeEventListener('blur', binding.validateBlurHandler);
+            binding.validateBlurHandler = null;
             binding.validateTarget = null;
-        }
-        if (binding.validationSubscription) {
-            binding.validationSubscription.dispose();
-            binding.validationSubscription = null;
         }
         binding.validationController.unregisterBinding(binding);
         binding.validationController = null;
-        binding.isDirty = null;
-        binding.validatedOnce = null;
     };
     return ValidateBindingBehaviorBase;
 }());
@@ -1253,34 +1215,6 @@ var ValidateOnChangeOrBlurBindingBehavior = /** @class */ (function (_super) {
         bindingBehavior('validateOnChangeOrBlur')
     ], ValidateOnChangeOrBlurBindingBehavior);
     return ValidateOnChangeOrBlurBindingBehavior;
-}(ValidateBindingBehaviorBase));
-var ValidateOnFocusoutBindingBehavior = /** @class */ (function (_super) {
-    __extends(ValidateOnFocusoutBindingBehavior, _super);
-    function ValidateOnFocusoutBindingBehavior() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    ValidateOnFocusoutBindingBehavior.prototype.getValidateTrigger = function () {
-        return validateTrigger.focusout;
-    };
-    ValidateOnFocusoutBindingBehavior.inject = [TaskQueue];
-    ValidateOnFocusoutBindingBehavior = __decorate([
-        bindingBehavior('validateOnFocusout')
-    ], ValidateOnFocusoutBindingBehavior);
-    return ValidateOnFocusoutBindingBehavior;
-}(ValidateBindingBehaviorBase));
-var ValidateOnChangeOrFocusoutBindingBehavior = /** @class */ (function (_super) {
-    __extends(ValidateOnChangeOrFocusoutBindingBehavior, _super);
-    function ValidateOnChangeOrFocusoutBindingBehavior() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    ValidateOnChangeOrFocusoutBindingBehavior.prototype.getValidateTrigger = function () {
-        return validateTrigger.changeOrFocusout;
-    };
-    ValidateOnChangeOrFocusoutBindingBehavior.inject = [TaskQueue];
-    ValidateOnChangeOrFocusoutBindingBehavior = __decorate([
-        bindingBehavior('validateOnChangeOrFocusout')
-    ], ValidateOnChangeOrFocusoutBindingBehavior);
-    return ValidateOnChangeOrFocusoutBindingBehavior;
 }(ValidateBindingBehaviorBase));
 
 /**
@@ -1937,8 +1871,8 @@ frameworkConfig, callback) {
     config.apply(frameworkConfig.container);
     // globalize the behaviors.
     if (frameworkConfig.globalResources) {
-        frameworkConfig.globalResources(ValidateBindingBehavior, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnFocusoutBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidateOnChangeOrFocusoutBindingBehavior, ValidationErrorsCustomAttribute, ValidationRendererCustomAttribute);
+        frameworkConfig.globalResources(ValidateBindingBehavior, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidationErrorsCustomAttribute, ValidationRendererCustomAttribute);
     }
 }
 
-export { configure, GlobalValidationConfiguration, getTargetDOMElement, getPropertyInfo, PropertyAccessorParser, getAccessorExpression, ValidateBindingBehavior, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidateOnFocusoutBindingBehavior, ValidateOnChangeOrFocusoutBindingBehavior, ValidateEvent, ValidateResult, validateTrigger, ValidationController, ValidationControllerFactory, ValidationErrorsCustomAttribute, ValidationRendererCustomAttribute, Validator, Rules, StandardValidator, validationMessages, ValidationMessageProvider, ValidationMessageParser, MessageExpressionValidator, FluentRuleCustomizer, FluentRules, FluentEnsure, ValidationRules };
+export { configure, GlobalValidationConfiguration, getTargetDOMElement, getPropertyInfo, PropertyAccessorParser, getAccessorExpression, ValidateBindingBehavior, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidateEvent, ValidateResult, validateTrigger, ValidationController, ValidationControllerFactory, ValidationErrorsCustomAttribute, ValidationRendererCustomAttribute, Validator, Rules, StandardValidator, validationMessages, ValidationMessageProvider, ValidationMessageParser, MessageExpressionValidator, FluentRuleCustomizer, FluentRules, FluentEnsure, ValidationRules };
