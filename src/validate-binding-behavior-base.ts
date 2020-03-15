@@ -55,7 +55,7 @@ export abstract class ValidateBindingBehaviorBase {
     }
 
     if (event !== null) {
-      binding.blurOrFocusoutValidationHandler = () => {
+      binding.focusLossHandler = () => {
         this.taskQueue.queueMicroTask(() => {
           if (binding.isDirty) {
             controller.validateBinding(binding);
@@ -65,7 +65,7 @@ export abstract class ValidateBindingBehaviorBase {
       };
       binding.validationTriggerEvent = event;
       binding.validateTarget = target;
-      target.addEventListener(event, binding.blurOrFocusoutValidationHandler);
+      target.addEventListener(event, binding.focusLossHandler);
       if (hasChangeTrigger) {
         const { propertyName } = getPropertyInfo(binding.sourceExpression as Expression, binding.source)!;
         binding.validationSubscription = controller.subscribe((event) => {
@@ -97,11 +97,9 @@ export abstract class ValidateBindingBehaviorBase {
       binding.updateTarget = binding.standardUpdateTarget;
       binding.standardUpdateTarget = null;
     }
-    if (binding.blurOrFocusoutValidationHandler) {
-      binding.validateTarget.removeEventListener(
-        binding.validationTriggerEvent,
-        binding.blurOrFocusoutValidationHandler);
-      binding.blurOrFocusoutValidationHandler = null;
+    if (binding.focusLossHandler) {
+      binding.validateTarget.removeEventListener(binding.validationTriggerEvent, binding.focusLossHandler);
+      binding.focusLossHandler = null;
       binding.validateTarget = null;
     }
     if (binding.validationSubscription) {
