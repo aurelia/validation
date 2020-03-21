@@ -14,6 +14,11 @@ export function blur(element: Element): Promise<void> {
   return new Promise<void>(resolve => setTimeout(resolve));
 }
 
+export function focusout(element: Element): Promise<void> {
+  element.dispatchEvent(DOM.createCustomEvent('focusout', { bubbles: true }));
+  return new Promise<void>(resolve => setTimeout(resolve));
+}
+
 export function change(element: HTMLInputElement, value: string): Promise<void> {
   element.value = value;
   element.dispatchEvent(DOM.createCustomEvent('change', { bubbles: true }));

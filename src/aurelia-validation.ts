@@ -36,7 +36,9 @@ import {
   ValidateManuallyBindingBehavior,
   ValidateOnBlurBindingBehavior,
   ValidateOnChangeBindingBehavior,
-  ValidateOnChangeOrBlurBindingBehavior
+  ValidateOnChangeOrBlurBindingBehavior,
+  ValidateOnFocusoutBindingBehavior,
+  ValidateOnChangeOrFocusoutBindingBehavior
 } from './validate-binding-behavior';
 import { ValidationErrorsCustomAttribute } from './validation-errors-custom-attribute';
 import { ValidationRendererCustomAttribute } from './validation-renderer-custom-attribute';
@@ -68,8 +70,10 @@ export function configure(
       ValidateBindingBehavior,
       ValidateManuallyBindingBehavior,
       ValidateOnBlurBindingBehavior,
+      ValidateOnFocusoutBindingBehavior,
       ValidateOnChangeBindingBehavior,
       ValidateOnChangeOrBlurBindingBehavior,
+      ValidateOnChangeOrFocusoutBindingBehavior,
       ValidationErrorsCustomAttribute,
       ValidationRendererCustomAttribute);
   }
