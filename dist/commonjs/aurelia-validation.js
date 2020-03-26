@@ -463,6 +463,16 @@ var StandardValidator = /** @class */ (function (_super) {
      * when it updates the model due to a change in the view.
      */
     validateTrigger[validateTrigger["changeOrBlur"] = 3] = "changeOrBlur";
+    /**
+     * Validate the binding when the binding's target element fires a DOM "focusout" event.
+     * Unlike "blur", this event bubbles.
+     */
+    validateTrigger[validateTrigger["focusout"] = 4] = "focusout";
+    /**
+     * Validate the binding when the binding's target element fires a DOM "focusout" event or
+     * when it updates the model due to a change in the view.
+     */
+    validateTrigger[validateTrigger["changeOrFocusout"] = 6] = "changeOrFocusout";
 })(exports.validateTrigger || (exports.validateTrigger = {}));
 
 /**
@@ -1050,6 +1060,7 @@ var ValidationController = /** @class */ (function () {
     return ValidationController;
 }());
 
+// tslint:disable:no-bitwise
 /**
  * Binding behavior. Indicates the bound property should be validated.
  */
@@ -1076,23 +1087,48 @@ var ValidateBindingBehaviorBase = /** @class */ (function () {
         controller.registerBinding(binding, target, rules);
         binding.validationController = controller;
         var trigger = this.getValidateTrigger(controller);
-        // tslint:disable-next-line:no-bitwise
-        if (trigger & exports.validateTrigger.change) {
+        var event = (trigger & exports.validateTrigger.blur) === exports.validateTrigger.blur ? 'blur'
+            : (trigger & exports.validateTrigger.focusout) === exports.validateTrigger.focusout ? 'focusout'
+                : null;
+        var hasChangeTrigger = (trigger & exports.validateTrigger.change) === exports.validateTrigger.change;
+        binding.isDirty = !hasChangeTrigger;
+        // validatedOnce is used to control whether controller should validate upon user input
+        //
+        // always true when validation trigger doesn't include "blur" event (blur/focusout)
+        // else it will be set to true after (a) the first user input & loss of focus or (b) validation
+        binding.validatedOnce = hasChangeTrigger && event === null;
+        if (hasChangeTrigger) {
             binding.vbbUpdateSource = binding.updateSource;
             // tslint:disable-next-line:only-arrow-functions
             // tslint:disable-next-line:space-before-function-paren
             binding.updateSource = function (value) {
                 this.vbbUpdateSource(value);
-                this.validationController.validateBinding(this);
+                this.isDirty = true;
+                if (this.validatedOnce) {
+                    this.validationController.validateBinding(this);
+                }
             };
         }
-        // tslint:disable-next-line:no-bitwise
-        if (trigger & exports.validateTrigger.blur) {
-            binding.validateBlurHandler = function () {
-                _this.taskQueue.queueMicroTask(function () { return controller.validateBinding(binding); });
+        if (event !== null) {
+            binding.focusLossHandler = function () {
+                _this.taskQueue.queueMicroTask(function () {
+                    if (binding.isDirty) {
+                        controller.validateBinding(binding);
+                        binding.validatedOnce = true;
+                    }
+                });
             };
+            binding.validationTriggerEvent = event;
             binding.validateTarget = target;
-            target.addEventListener('blur', binding.validateBlurHandler);
+            target.addEventListener(event, binding.focusLossHandler);
+            if (hasChangeTrigger) {
+                var propertyName_1 = getPropertyInfo(binding.sourceExpression, binding.source).propertyName;
+                binding.validationSubscription = controller.subscribe(function (event) {
+                    if (!binding.validatedOnce && event.type === 'validate') {
+                        binding.validatedOnce = event.errors.findIndex(function (e) { return e.propertyName === propertyName_1; }) > -1;
+                    }
+                });
+            }
         }
         if (trigger !== exports.validateTrigger.manual) {
             binding.standardUpdateTarget = binding.updateTarget;
@@ -1114,13 +1150,19 @@ var ValidateBindingBehaviorBase = /** @class */ (function () {
             binding.updateTarget = binding.standardUpdateTarget;
             binding.standardUpdateTarget = null;
         }
-        if (binding.validateBlurHandler) {
-            binding.validateTarget.removeEventListener('blur', binding.validateBlurHandler);
-            binding.validateBlurHandler = null;
+        if (binding.focusLossHandler) {
+            binding.validateTarget.removeEventListener(binding.validationTriggerEvent, binding.focusLossHandler);
+            binding.focusLossHandler = null;
             binding.validateTarget = null;
+        }
+        if (binding.validationSubscription) {
+            binding.validationSubscription.dispose();
+            binding.validationSubscription = null;
         }
         binding.validationController.unregisterBinding(binding);
         binding.validationController = null;
+        binding.isDirty = null;
+        binding.validatedOnce = null;
     };
     return ValidateBindingBehaviorBase;
 }());
@@ -1218,6 +1260,34 @@ var ValidateOnChangeOrBlurBindingBehavior = /** @class */ (function (_super) {
         aureliaBinding.bindingBehavior('validateOnChangeOrBlur')
     ], ValidateOnChangeOrBlurBindingBehavior);
     return ValidateOnChangeOrBlurBindingBehavior;
+}(ValidateBindingBehaviorBase));
+var ValidateOnFocusoutBindingBehavior = /** @class */ (function (_super) {
+    __extends(ValidateOnFocusoutBindingBehavior, _super);
+    function ValidateOnFocusoutBindingBehavior() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ValidateOnFocusoutBindingBehavior.prototype.getValidateTrigger = function () {
+        return exports.validateTrigger.focusout;
+    };
+    ValidateOnFocusoutBindingBehavior.inject = [aureliaTaskQueue.TaskQueue];
+    ValidateOnFocusoutBindingBehavior = __decorate([
+        aureliaBinding.bindingBehavior('validateOnFocusout')
+    ], ValidateOnFocusoutBindingBehavior);
+    return ValidateOnFocusoutBindingBehavior;
+}(ValidateBindingBehaviorBase));
+var ValidateOnChangeOrFocusoutBindingBehavior = /** @class */ (function (_super) {
+    __extends(ValidateOnChangeOrFocusoutBindingBehavior, _super);
+    function ValidateOnChangeOrFocusoutBindingBehavior() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ValidateOnChangeOrFocusoutBindingBehavior.prototype.getValidateTrigger = function () {
+        return exports.validateTrigger.changeOrFocusout;
+    };
+    ValidateOnChangeOrFocusoutBindingBehavior.inject = [aureliaTaskQueue.TaskQueue];
+    ValidateOnChangeOrFocusoutBindingBehavior = __decorate([
+        aureliaBinding.bindingBehavior('validateOnChangeOrFocusout')
+    ], ValidateOnChangeOrFocusoutBindingBehavior);
+    return ValidateOnChangeOrFocusoutBindingBehavior;
 }(ValidateBindingBehaviorBase));
 
 /**
@@ -1874,7 +1944,7 @@ frameworkConfig, callback) {
     config.apply(frameworkConfig.container);
     // globalize the behaviors.
     if (frameworkConfig.globalResources) {
-        frameworkConfig.globalResources(ValidateBindingBehavior, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidationErrorsCustomAttribute, ValidationRendererCustomAttribute);
+        frameworkConfig.globalResources(ValidateBindingBehavior, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnFocusoutBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidateOnChangeOrFocusoutBindingBehavior, ValidationErrorsCustomAttribute, ValidationRendererCustomAttribute);
     }
 }
 
@@ -1889,6 +1959,8 @@ exports.ValidateManuallyBindingBehavior = ValidateManuallyBindingBehavior;
 exports.ValidateOnBlurBindingBehavior = ValidateOnBlurBindingBehavior;
 exports.ValidateOnChangeBindingBehavior = ValidateOnChangeBindingBehavior;
 exports.ValidateOnChangeOrBlurBindingBehavior = ValidateOnChangeOrBlurBindingBehavior;
+exports.ValidateOnFocusoutBindingBehavior = ValidateOnFocusoutBindingBehavior;
+exports.ValidateOnChangeOrFocusoutBindingBehavior = ValidateOnChangeOrFocusoutBindingBehavior;
 exports.ValidateEvent = ValidateEvent;
 exports.ValidateResult = ValidateResult;
 exports.ValidationController = ValidationController;

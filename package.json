@@ -1,6 +1,6 @@
 {
   "name": "aurelia-validation",
-  "version": "1.6.0",
+  "version": "2.0.0-rc1",
   "description": "Validation for Aurelia applications",
   "keywords": [
     "aurelia",
@@ -43,6 +43,7 @@
     "doc": "cross-env typedoc --json doc/api.json --excludeExternals --includeDeclarations --mode modules --target ES6 --name aurelia-validation-docs dist/doc-temp/",
     "postdoc": "cross-env node doc/shape-doc && rimraf dist/doc-temp",
     "precut-release": "cross-env npm run test",
+    "changelog": "conventional-changelog -p angular -i doc/CHANGELOG.md -s",
     "cut-release": "standard-version -t \"\" -i doc/CHANGELOG.md && npm run build && npm run doc"
   },
   "jspm": {

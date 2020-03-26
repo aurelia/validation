@@ -1,6 +1,23 @@
-# Change Log
+# [2.0.0-rc1](https://github.com/aurelia/validation/compare/1.6.0...2.0.0-rc1) (2020-03-26)
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### Features
+
+* focusout trigger + changeOrX behavior change ([62f0579](https://github.com/aurelia/validation/commit/62f05791327716399644bceb410372f53d2da6dc)), closes [#509](https://github.com/aurelia/validation/issues/509) [#543](https://github.com/aurelia/validation/issues/543)
+
+
+### BREAKING CHANGES
+
+* This commit changes the default behavior for the
+changeOrBlur trigger.
+- The change trigger is ineffective till the
+  associated property is validated once, either by manual validation or
+  by blur-triggered validation. This prevents showing validation failure
+  immediately in case of an incomplete input. Note the distinction made
+  between *incomplete* and *invalid* input.
+- The blur trigger is ineffective until the property is dirty; i.e. any
+  changes were made to the property. This prevents showing a failure
+  message when there is a blur event w/o changing the property.
 
 # [1.6.0](https://github.com/aurelia/validation/compare/1.5.0...1.6.0) (2019-12-18)
 

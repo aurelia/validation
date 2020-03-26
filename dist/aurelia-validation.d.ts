@@ -74,7 +74,17 @@ export declare enum validateTrigger {
 	 * Validate the binding when the binding's target element fires a DOM "blur" event and
 	 * when it updates the model due to a change in the view.
 	 */
-	changeOrBlur = 3
+	changeOrBlur = 3,
+	/**
+	 * Validate the binding when the binding's target element fires a DOM "focusout" event.
+	 * Unlike "blur", this event bubbles.
+	 */
+	focusout = 4,
+	/**
+	 * Validate the binding when the binding's target element fires a DOM "focusout" event or
+	 * when it updates the model due to a change in the view.
+	 */
+	changeOrFocusout = 6
 }
 export declare type ValidatorCtor = new (...args: any[]) => Validator;
 /**
@@ -423,6 +433,14 @@ export declare class ValidateOnChangeBindingBehavior extends ValidateBindingBeha
  * a change to the model.
  */
 export declare class ValidateOnChangeOrBlurBindingBehavior extends ValidateBindingBehaviorBase {
+	static inject: (typeof TaskQueue)[];
+	getValidateTrigger(): validateTrigger;
+}
+export declare class ValidateOnFocusoutBindingBehavior extends ValidateBindingBehaviorBase {
+	static inject: (typeof TaskQueue)[];
+	getValidateTrigger(): validateTrigger;
+}
+export declare class ValidateOnChangeOrFocusoutBindingBehavior extends ValidateBindingBehaviorBase {
 	static inject: (typeof TaskQueue)[];
 	getValidateTrigger(): validateTrigger;
 }
