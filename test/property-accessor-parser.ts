@@ -49,5 +49,8 @@ describe('PropertyAccessorParser', () => {
     // tslint:disable-next-line:max-line-length
     expect(parse('function(a){"use strict";_gen$field.f[\'10\']++;_aGen$field.g[\'10\']++;return a.b;}'))
       .toEqual('b');
+        // tslint:disable-next-line:max-line-length
+    expect(parse('function(a){/* istanbul ignore next */ cov_1wjh4ld5ut.f[9]++;cov_1wjh4ld5ut.s[50]++;return a.b;}'))
+    .toEqual('b');
   });
 });
