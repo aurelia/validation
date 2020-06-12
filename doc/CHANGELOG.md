@@ -1,3 +1,9 @@
+# [2.0.0-rc2](https://github.com/aurelia/validation/compare/2.0.0-rc1...2.0.0-rc2) (2020-06-12)
+
+## Bug Fixes
+
+* Istanbul bug
+
 # [2.0.0-rc1](https://github.com/aurelia/validation/compare/1.6.0...2.0.0-rc1) (2020-03-26)
 
 
