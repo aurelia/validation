@@ -38,7 +38,6 @@
     "build": "rollup -c --environment NODE_ENV:production",
     "postbuild": "npm run build:dts",
     "build:dts": "dts-bundle-generator -o dist/aurelia-validation.d.ts src/aurelia-validation.ts",
-    "predoc": "cross-env rimraf doc/api.json && rimraf dist/doc-temp && tsc --project tsconfig.build.json --outFile dist/doc-temp/aurelia-validation.js && node doc/shape-defs && copyfiles tsconfig.json dist/doc-temp",
     "doc": "typedoc --json doc/api.json --excludeExternals --name aurelia-validation-docs src/aurelia-validation.ts",
     "postdoc": "node doc/cleanup.js",
     "precut-release": "npm run test && npm run lint && npm run build",
