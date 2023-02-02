@@ -42,7 +42,7 @@
     "doc": "typedoc --json doc/api.json --excludeExternals --name aurelia-validation-docs src/aurelia-validation.ts",
     "postdoc": "node doc/cleanup.js",
     "precut-release": "npm run test && npm run lint && npm run build",
-    "changelog": "standard-version -t \"\" -i doc/CHANGELOG.md",
+    "changelog": "standard-version -t \"\" -i doc/CHANGELOG.md -s --skip.commit --skip.tag",
     "cut-release": "npm run changelog",
     "postcut-release": "npm run doc"
   },
