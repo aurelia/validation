@@ -37,7 +37,7 @@ export class ValidationController {
   /**
    *  Whether the controller is currently validating.
    */
-  public validating: boolean = false;
+  public validating = false;
 
   // Elements related to validation results that have been rendered.
   private elements = new Map<ValidateResult, Element[]>();
@@ -114,7 +114,7 @@ export class ValidationController {
   ): ValidateResult {
     let resolvedPropertyName: string | number | null;
     if (propertyName === null) {
-      resolvedPropertyName = propertyName;
+      resolvedPropertyName = propertyName as any;
     } else {
       resolvedPropertyName = this.propertyParser.parse(propertyName);
     }
@@ -457,7 +457,7 @@ export class ValidationController {
 /**
  * Information related to an "& validate" decorated binding.
  */
-interface BindingInfo {
+export interface BindingInfo {
   /**
    * The DOM element associated with the binding.
    */

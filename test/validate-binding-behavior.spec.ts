@@ -1,3 +1,4 @@
+import './setup';
 import { StageComponent, ComponentTester } from 'aurelia-testing';
 import { bootstrap } from 'aurelia-bootstrapper';
 import { TriggerForm } from './resources/trigger-form';
@@ -15,7 +16,7 @@ describe('ValidateBindingBehavior', () => {
 
     const renderer = { render: jasmine.createSpy() };
 
-    component.create(bootstrap as any)
+    component.create(bootstrap)
       // grab some references.
       .then(() => {
         viewModel = component.viewModel;
@@ -121,6 +122,6 @@ describe('ValidateBindingBehavior', () => {
 
       // cleanup and finish.
       .then(() => component.dispose())
-      .then(done);
+      .then(() => done());
   });
 });

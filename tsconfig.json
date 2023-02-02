@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "amd",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "target": "es5",
     "lib": [
@@ -9,7 +9,7 @@
     ],
     "outDir": "dist/test",
     "noImplicitAny": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
