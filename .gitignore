@@ -3,6 +3,9 @@ jspm_packages
 bower_components
 .idea
 .DS_STORE
+.coverage
+coverage
+.npmrc
 *.swp
 npm-debug.log*
 .test

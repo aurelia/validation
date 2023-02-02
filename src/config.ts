@@ -3,7 +3,7 @@ import { Validator } from './validator';
 import { StandardValidator } from './implementation/standard-validator';
 import { validateTrigger } from './validate-trigger';
 
-type ValidatorCtor = new (...args: any[]) => Validator;
+export type ValidatorCtor = new (...args: any[]) => Validator;
 
 /**
  * Aurelia Validation Configuration API

@@ -1,12 +1,16 @@
 import { Aurelia, FrameworkConfiguration } from 'aurelia-framework';
-import { DOM } from 'aurelia-pal';
+import { DOM, PLATFORM } from 'aurelia-pal';
+import { configure as configureValidation } from '../src/aurelia-validation';
+// import { configure as configureTestResources } from './resources/index';
 
 export function configure(aurelia: Aurelia): FrameworkConfiguration {
   return aurelia.use
-    .standardConfiguration()
-    // .developmentLogging()
-    .plugin('dist/test/src/aurelia-validation')
-    .feature('./dist/test/test/resources');
+    .defaultBindingLanguage()
+    .defaultResources()
+    .plugin(configureValidation)
+    // lazy loading this to avoid errors with rules being defined too early,
+    // before validation parser has a chance to initialize
+    .plugin(PLATFORM.moduleName('test/resources/index', 'resources'))
 }
 
 export function blur(element: Element): Promise<void> {

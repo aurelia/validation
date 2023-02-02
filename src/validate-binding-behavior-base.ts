@@ -71,6 +71,7 @@ export abstract class ValidateBindingBehaviorBase {
       binding.validateTarget = target;
       target.addEventListener(event, binding.focusLossHandler);
       if (hasChangeTrigger) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const { propertyName } = getPropertyInfo(binding.sourceExpression as Expression, binding.source)!;
         binding.validationSubscription = controller.subscribe((event) => {
           if (!binding.validatedOnce && event.type === 'validate') {

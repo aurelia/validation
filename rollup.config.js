@@ -44,10 +44,10 @@ export default [{
   : [
     {
       input: `src/${entryName}.ts`,
-      output: {
+      output: [{
         file: `dist/es2017/${entryName}.js`,
         format: 'es',
-      },
+      }],
       plugins: [
         typescript({
           tsconfigOverride: {
@@ -101,4 +101,24 @@ export default [{
       ]
     }
   ]
-);
+).map(config => {
+  config.external = [
+    'aurelia-binding',
+    'aurelia-dependency-injection',
+    'aurelia-pal',
+    'aurelia-templating',
+    'aurelia-templating-resources',
+    'aurelia-task-queue',
+    'aurelia-logging',
+    'aurelia-path',
+    'aurelia-loader',
+    'aurelia-metadata'
+  ];
+  config.output.forEach(output => output.sourcemap = true);
+  config.onwarn = /** @param {import('rollup').RollupWarning} warning */ (warning, warn) => {
+    if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+    warn(warning);
+  };
+
+  return config;
+});;

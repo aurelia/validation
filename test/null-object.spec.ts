@@ -44,6 +44,6 @@ describe('ValidationController', () => {
 
       // cleanup and finish.
       .then(() => component.dispose())
-      .then(done);
+      .then(() => done());
   });
 });
