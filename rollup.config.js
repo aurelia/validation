@@ -54,7 +54,8 @@ export default [{
             compilerOptions: {
               module: 'es2015',
               target: 'es2017',
-              declaration: false
+              declaration: false,
+              sourceMap: true
             },
             include: ['src'],
             exclude: undefined
@@ -91,7 +92,8 @@ export default [{
             compilerOptions: {
               module: 'es2015',
               target: 'es5',
-              declaration: false
+              declaration: false,
+              sourceMap: true,
             },
             include: ['src'],
             exclude: undefined

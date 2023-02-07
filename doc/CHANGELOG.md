@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/aurelia/validation/compare/2.0.0-rc2...2.0.0) (2023-02-07)
+
+
+### Bug Fixes
+
+* property accessor ignore instrumenter ([#578](https://github.com/aurelia/validation/issues/578)) ([b9ee21c](https://github.com/aurelia/validation/commit/b9ee21c7941a4628cf247573202c1750ec309548)), closes [#571](https://github.com/aurelia/validation/issues/571)
+
 ## [2.0.0](https://github.com/aurelia/validation/compare/2.0.0-rc2...2.0.0) (2023-02-02)
 
 # [2.0.0-rc2](https://github.com/aurelia/validation/compare/2.0.0-rc1...2.0.0-rc2) (2020-06-12)

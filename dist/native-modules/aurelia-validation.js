@@ -1,9 +1,9 @@
-import { LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingBehavior, bindingMode } from 'aurelia-binding';
-import { BindingLanguage, ViewResources, customAttribute, bindable } from 'aurelia-templating';
-import { getLogger } from 'aurelia-logging';
+import { BindingLanguage, ViewResources, bindable, customAttribute } from 'aurelia-templating';
+import { LiteralString, Binary, Conditional, CallMember, LiteralPrimitive, BindingBehavior, ValueConverter, AccessScope, getContextFor, AccessMember, AccessKeyed, Parser, bindingBehavior, bindingMode } from 'aurelia-binding';
+import * as LogManager from 'aurelia-logging';
 import { DOM } from 'aurelia-pal';
-import { Optional, Lazy } from 'aurelia-dependency-injection';
 import { TaskQueue } from 'aurelia-task-queue';
+import { Optional, Lazy } from 'aurelia-dependency-injection';
 
 /**
  * Validates objects and properties.
@@ -14,30 +14,32 @@ var Validator = /** @class */ (function () {
     return Validator;
 }());
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
     return extendStatics(d, b);
 };
 
 function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
     extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -50,12 +52,14 @@ function __decorate(decorators, target, key, desc) {
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
 
-function __spreadArrays() {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 }
 
 /**
@@ -243,9 +247,9 @@ var MessageExpressionValidator = /** @class */ (function (_super) {
             throw new Error('$parent is not permitted in validation message expressions.');
         }
         if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
-            getLogger('aurelia-validation')
+            LogManager.getLogger('aurelia-validation')
                 // tslint:disable-next-line:max-line-length
-                .warn("Did you mean to use \"$" + access.name + "\" instead of \"" + access.name + "\" in this validation message template: \"" + this.originalMessage + "\"?");
+                .warn("Did you mean to use \"$".concat(access.name, "\" instead of \"").concat(access.name, "\" in this validation message template: \"").concat(this.originalMessage, "\"?"));
         }
     };
     return MessageExpressionValidator;
@@ -527,10 +531,10 @@ function getTargetDOMElement(binding, view) {
             if (element) {
                 return element;
             }
-            throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
+            throw new Error("Unable to locate target element for \"".concat(binding.sourceExpression, "\"."));
         }
     }
-    throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
+    throw new Error("Unable to locate target element for \"".concat(binding.sourceExpression, "\"."));
 }
 
 function getObject(expression, objectExpression, source) {
@@ -539,7 +543,7 @@ function getObject(expression, objectExpression, source) {
         return value;
     }
     // tslint:disable-next-line:max-line-length
-    throw new Error("The '" + objectExpression + "' part of '" + expression + "' evaluates to " + value + " instead of an object, null or undefined.");
+    throw new Error("The '".concat(objectExpression, "' part of '").concat(expression, "' evaluates to ").concat(value, " instead of an object, null or undefined."));
 }
 /**
  * Retrieves the object and property name for the specified expression.
@@ -566,7 +570,7 @@ function getPropertyInfo(expression, source) {
         propertyName = expression.key.evaluate(source);
     }
     else {
-        throw new Error("Expression '" + originalExpression + "' is not compatible with the validate binding-behavior.");
+        throw new Error("Expression '".concat(originalExpression, "' is not compatible with the validate binding-behavior."));
     }
     if (object === null || object === undefined) {
         return null;
@@ -595,19 +599,19 @@ var PropertyAccessorParser = /** @class */ (function () {
             || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
             return accessor.name;
         }
-        throw new Error("Invalid property expression: \"" + accessor + "\"");
+        throw new Error("Invalid property expression: \"".concat(accessor, "\""));
     };
     PropertyAccessorParser.inject = [Parser];
     return PropertyAccessorParser;
 }());
 function getAccessorExpression(fn) {
     /* tslint:disable:max-line-length */
-    var classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?(?:[$_\s\w\d\/\*.['"\]+;]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+    var classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?(?:[$_\s\w\d\/\*.['"\]+;\(\)]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
     /* tslint:enable:max-line-length */
     var arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
     var match = classic.exec(fn) || arrow.exec(fn);
     if (match === null) {
-        throw new Error("Unable to parse accessor function:\n" + fn);
+        throw new Error("Unable to parse accessor function:\n".concat(fn));
     }
     return match[1];
 }
@@ -1119,6 +1123,7 @@ var ValidateBindingBehaviorBase = /** @class */ (function () {
             binding.validateTarget = target;
             target.addEventListener(event, binding.focusLossHandler);
             if (hasChangeTrigger) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 var propertyName_1 = getPropertyInfo(binding.sourceExpression, binding.source).propertyName;
                 binding.validationSubscription = controller.subscribe(function (event) {
                     if (!binding.validatedOnce && event.type === 'validate') {
@@ -1499,7 +1504,7 @@ var FluentRuleCustomizer = /** @class */ (function () {
         get: function () {
             return this.fluentEnsure.rules;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /**
@@ -1530,7 +1535,7 @@ var FluentRuleCustomizer = /** @class */ (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
-        return (_a = this.fluentRules).satisfiesRule.apply(_a, __spreadArrays([name], args));
+        return (_a = this.fluentRules).satisfiesRule.apply(_a, __spreadArray([name], args, false));
     };
     /**
      * Applies the "required" rule to the property.
@@ -1670,14 +1675,14 @@ var FluentRules = /** @class */ (function () {
             // standard rule?
             rule = this[name];
             if (rule instanceof Function) {
-                return rule.call.apply(rule, __spreadArrays([this], args));
+                return rule.call.apply(rule, __spreadArray([this], args, false));
             }
-            throw new Error("Rule with name \"" + name + "\" does not exist.");
+            throw new Error("Rule with name \"".concat(name, "\" does not exist."));
         }
         var config = rule.argsToConfig ? rule.argsToConfig.apply(rule, args) : undefined;
         return this.satisfies(function (value, obj) {
             var _a;
-            return (_a = rule.condition).call.apply(_a, __spreadArrays([_this, value, obj], args));
+            return (_a = rule.condition).call.apply(_a, __spreadArray([_this, value, obj], args, false));
         }, config)
             .withMessageKey(name);
     };
@@ -1945,4 +1950,5 @@ frameworkConfig, callback) {
     }
 }
 
-export { configure, GlobalValidationConfiguration, getTargetDOMElement, getPropertyInfo, PropertyAccessorParser, getAccessorExpression, ValidateBindingBehavior, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidateOnFocusoutBindingBehavior, ValidateOnChangeOrFocusoutBindingBehavior, ValidateEvent, ValidateResult, validateTrigger, ValidationController, ValidationControllerFactory, ValidationErrorsCustomAttribute, ValidationRendererCustomAttribute, Validator, Rules, StandardValidator, validationMessages, ValidationMessageProvider, ValidationMessageParser, MessageExpressionValidator, FluentRuleCustomizer, FluentRules, FluentEnsure, ValidationRules };
+export { FluentEnsure, FluentRuleCustomizer, FluentRules, GlobalValidationConfiguration, MessageExpressionValidator, PropertyAccessorParser, Rules, StandardValidator, ValidateBindingBehavior, ValidateEvent, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidateOnChangeOrFocusoutBindingBehavior, ValidateOnFocusoutBindingBehavior, ValidateResult, ValidationController, ValidationControllerFactory, ValidationErrorsCustomAttribute, ValidationMessageParser, ValidationMessageProvider, ValidationRendererCustomAttribute, ValidationRules, Validator, configure, getAccessorExpression, getPropertyInfo, getTargetDOMElement, validateTrigger, validationMessages };
+//# sourceMappingURL=aurelia-validation.js.map

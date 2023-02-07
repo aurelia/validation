@@ -1,9 +1,9 @@
-import { LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingBehavior, bindingMode } from 'aurelia-binding';
-import { BindingLanguage, ViewResources, customAttribute, bindable } from 'aurelia-templating';
-import { getLogger } from 'aurelia-logging';
+import { BindingLanguage, ViewResources, bindable, customAttribute } from 'aurelia-templating';
+import { LiteralString, LiteralPrimitive, Binary, Conditional, CallMember, BindingBehavior, ValueConverter, AccessScope, getContextFor, AccessMember, AccessKeyed, Parser, bindingBehavior, bindingMode } from 'aurelia-binding';
+import * as LogManager from 'aurelia-logging';
 import { DOM } from 'aurelia-pal';
-import { Optional, Lazy } from 'aurelia-dependency-injection';
 import { TaskQueue } from 'aurelia-task-queue';
+import { Optional, Lazy } from 'aurelia-dependency-injection';
 
 /**
  * Validates objects and properties.
@@ -172,20 +172,20 @@ class ValidationMessageParser {
 }
 ValidationMessageParser.inject = [BindingLanguage];
 class MessageExpressionValidator extends ExpressionVisitor {
-    constructor(originalMessage) {
-        super();
-        this.originalMessage = originalMessage;
-    }
     static validate(expression, originalMessage) {
         const visitor = new MessageExpressionValidator(originalMessage);
         expression.accept(visitor);
+    }
+    constructor(originalMessage) {
+        super();
+        this.originalMessage = originalMessage;
     }
     visitAccessScope(access) {
         if (access.ancestor !== 0) {
             throw new Error('$parent is not permitted in validation message expressions.');
         }
         if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
-            getLogger('aurelia-validation')
+            LogManager.getLogger('aurelia-validation')
                 // tslint:disable-next-line:max-line-length
                 .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
         }
@@ -533,7 +533,7 @@ class PropertyAccessorParser {
 PropertyAccessorParser.inject = [Parser];
 function getAccessorExpression(fn) {
     /* tslint:disable:max-line-length */
-    const classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?(?:[$_\s\w\d\/\*.['"\]+;]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+    const classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?(?:[$_\s\w\d\/\*.['"\]+;\(\)]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
     /* tslint:enable:max-line-length */
     const arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
     const match = classic.exec(fn) || arrow.exec(fn);
@@ -543,19 +543,19 @@ function getAccessorExpression(fn) {
     return match[1];
 }
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 function __decorate(decorators, target, key, desc) {
@@ -1050,6 +1050,7 @@ class ValidateBindingBehaviorBase {
             binding.validateTarget = target;
             target.addEventListener(event, binding.focusLossHandler);
             if (hasChangeTrigger) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const { propertyName } = getPropertyInfo(binding.sourceExpression, binding.source);
                 binding.validationSubscription = controller.subscribe((event) => {
                     if (!binding.validatedOnce && event.type === 'validate') {
@@ -1186,11 +1187,11 @@ ValidateOnChangeOrFocusoutBindingBehavior = __decorate([
  * Creates ValidationController instances.
  */
 class ValidationControllerFactory {
-    constructor(container) {
-        this.container = container;
-    }
     static get(container) {
         return new ValidationControllerFactory(container);
+    }
+    constructor(container) {
+        this.container = container;
     }
     /**
      * Creates a new controller instance.
@@ -1216,15 +1217,15 @@ class ValidationControllerFactory {
 ValidationControllerFactory['protocol:aurelia:resolver'] = true;
 
 let ValidationErrorsCustomAttribute = class ValidationErrorsCustomAttribute {
+    static inject() {
+        return [DOM.Element, Lazy.of(ValidationController)];
+    }
     constructor(boundaryElement, controllerAccessor) {
         this.boundaryElement = boundaryElement;
         this.controllerAccessor = controllerAccessor;
         this.controller = null;
         this.errors = [];
         this.errorsInternal = [];
-    }
-    static inject() {
-        return [DOM.Element, Lazy.of(ValidationController)];
     }
     sort() {
         this.errorsInternal.sort((a, b) => {
@@ -1802,4 +1803,5 @@ frameworkConfig, callback) {
     }
 }
 
-export { configure, GlobalValidationConfiguration, getTargetDOMElement, getPropertyInfo, PropertyAccessorParser, getAccessorExpression, ValidateBindingBehavior, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidateOnFocusoutBindingBehavior, ValidateOnChangeOrFocusoutBindingBehavior, ValidateEvent, ValidateResult, validateTrigger, ValidationController, ValidationControllerFactory, ValidationErrorsCustomAttribute, ValidationRendererCustomAttribute, Validator, Rules, StandardValidator, validationMessages, ValidationMessageProvider, ValidationMessageParser, MessageExpressionValidator, FluentRuleCustomizer, FluentRules, FluentEnsure, ValidationRules };
+export { FluentEnsure, FluentRuleCustomizer, FluentRules, GlobalValidationConfiguration, MessageExpressionValidator, PropertyAccessorParser, Rules, StandardValidator, ValidateBindingBehavior, ValidateEvent, ValidateManuallyBindingBehavior, ValidateOnBlurBindingBehavior, ValidateOnChangeBindingBehavior, ValidateOnChangeOrBlurBindingBehavior, ValidateOnChangeOrFocusoutBindingBehavior, ValidateOnFocusoutBindingBehavior, ValidateResult, ValidationController, ValidationControllerFactory, ValidationErrorsCustomAttribute, ValidationMessageParser, ValidationMessageProvider, ValidationRendererCustomAttribute, ValidationRules, Validator, configure, getAccessorExpression, getPropertyInfo, getTargetDOMElement, validateTrigger, validationMessages };
+//# sourceMappingURL=aurelia-validation.js.map

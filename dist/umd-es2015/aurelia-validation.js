@@ -1,8 +1,28 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('aurelia-binding'), require('aurelia-templating'), require('aurelia-logging'), require('aurelia-pal'), require('aurelia-dependency-injection'), require('aurelia-task-queue')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'aurelia-pal', 'aurelia-dependency-injection', 'aurelia-task-queue'], factory) :
-  (factory((global.au = global.au || {}, global.au.validation = {}),global.au,global.au,global.au.LogManager,global.au,global.au,global.au));
-}(this, (function (exports,aureliaBinding,aureliaTemplating,LogManager,aureliaPal,aureliaDependencyInjection,aureliaTaskQueue) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('aurelia-templating'), require('aurelia-binding'), require('aurelia-logging'), require('aurelia-pal'), require('aurelia-task-queue'), require('aurelia-dependency-injection')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'aurelia-templating', 'aurelia-binding', 'aurelia-logging', 'aurelia-pal', 'aurelia-task-queue', 'aurelia-dependency-injection'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.au = global.au || {}, global.au.validation = {}), global.au, global.au, global.au.LogManager, global.au, global.au, global.au));
+})(this, (function (exports, aureliaTemplating, aureliaBinding, LogManager, aureliaPal, aureliaTaskQueue, aureliaDependencyInjection) { 'use strict';
+
+  function _interopNamespace(e) {
+    if (e && e.__esModule) return e;
+    var n = Object.create(null);
+    if (e) {
+      Object.keys(e).forEach(function (k) {
+        if (k !== 'default') {
+          var d = Object.getOwnPropertyDescriptor(e, k);
+          Object.defineProperty(n, k, d.get ? d : {
+            enumerable: true,
+            get: function () { return e[k]; }
+          });
+        }
+      });
+    }
+    n["default"] = e;
+    return Object.freeze(n);
+  }
+
+  var LogManager__namespace = /*#__PURE__*/_interopNamespace(LogManager);
 
   /**
    * Validates objects and properties.
@@ -171,20 +191,20 @@
   }
   ValidationMessageParser.inject = [aureliaTemplating.BindingLanguage];
   class MessageExpressionValidator extends ExpressionVisitor {
-      constructor(originalMessage) {
-          super();
-          this.originalMessage = originalMessage;
-      }
       static validate(expression, originalMessage) {
           const visitor = new MessageExpressionValidator(originalMessage);
           expression.accept(visitor);
+      }
+      constructor(originalMessage) {
+          super();
+          this.originalMessage = originalMessage;
       }
       visitAccessScope(access) {
           if (access.ancestor !== 0) {
               throw new Error('$parent is not permitted in validation message expressions.');
           }
           if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
-              LogManager.getLogger('aurelia-validation')
+              LogManager__namespace.getLogger('aurelia-validation')
                   // tslint:disable-next-line:max-line-length
                   .warn(`Did you mean to use "$${access.name}" instead of "${access.name}" in this validation message template: "${this.originalMessage}"?`);
           }
@@ -372,6 +392,7 @@
   /**
    * Validation triggers.
    */
+  exports.validateTrigger = void 0;
   (function (validateTrigger) {
       /**
        * Manual validation.  Use the controller's `validate()` and  `reset()` methods
@@ -531,7 +552,7 @@
   PropertyAccessorParser.inject = [aureliaBinding.Parser];
   function getAccessorExpression(fn) {
       /* tslint:disable:max-line-length */
-      const classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?(?:[$_\s\w\d\/\*.['"\]+;]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+      const classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?(?:[$_\s\w\d\/\*.['"\]+;\(\)]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
       /* tslint:enable:max-line-length */
       const arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
       const match = classic.exec(fn) || arrow.exec(fn);
@@ -541,19 +562,19 @@
       return match[1];
   }
 
-  /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation. All rights reserved.
-  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-  this file except in compliance with the License. You may obtain a copy of the
-  License at http://www.apache.org/licenses/LICENSE-2.0
+  /******************************************************************************
+  Copyright (c) Microsoft Corporation.
 
-  THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-  MERCHANTABLITY OR NON-INFRINGEMENT.
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
 
-  See the Apache Version 2.0 License for specific language governing permissions
-  and limitations under the License.
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
 
   function __decorate(decorators, target, key, desc) {
@@ -1048,6 +1069,7 @@
               binding.validateTarget = target;
               target.addEventListener(event, binding.focusLossHandler);
               if (hasChangeTrigger) {
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                   const { propertyName } = getPropertyInfo(binding.sourceExpression, binding.source);
                   binding.validationSubscription = controller.subscribe((event) => {
                       if (!binding.validatedOnce && event.type === 'validate') {
@@ -1184,11 +1206,11 @@
    * Creates ValidationController instances.
    */
   class ValidationControllerFactory {
-      constructor(container) {
-          this.container = container;
-      }
       static get(container) {
           return new ValidationControllerFactory(container);
+      }
+      constructor(container) {
+          this.container = container;
       }
       /**
        * Creates a new controller instance.
@@ -1214,15 +1236,15 @@
   ValidationControllerFactory['protocol:aurelia:resolver'] = true;
 
   exports.ValidationErrorsCustomAttribute = class ValidationErrorsCustomAttribute {
+      static inject() {
+          return [aureliaPal.DOM.Element, aureliaDependencyInjection.Lazy.of(ValidationController)];
+      }
       constructor(boundaryElement, controllerAccessor) {
           this.boundaryElement = boundaryElement;
           this.controllerAccessor = controllerAccessor;
           this.controller = null;
           this.errors = [];
           this.errorsInternal = [];
-      }
-      static inject() {
-          return [aureliaPal.DOM.Element, aureliaDependencyInjection.Lazy.of(ValidationController)];
       }
       sort() {
           this.errorsInternal.sort((a, b) => {
@@ -1800,28 +1822,29 @@
       }
   }
 
-  exports.configure = configure;
+  exports.FluentEnsure = FluentEnsure;
+  exports.FluentRuleCustomizer = FluentRuleCustomizer;
+  exports.FluentRules = FluentRules;
   exports.GlobalValidationConfiguration = GlobalValidationConfiguration;
-  exports.getTargetDOMElement = getTargetDOMElement;
-  exports.getPropertyInfo = getPropertyInfo;
+  exports.MessageExpressionValidator = MessageExpressionValidator;
   exports.PropertyAccessorParser = PropertyAccessorParser;
-  exports.getAccessorExpression = getAccessorExpression;
+  exports.Rules = Rules;
+  exports.StandardValidator = StandardValidator;
   exports.ValidateEvent = ValidateEvent;
   exports.ValidateResult = ValidateResult;
   exports.ValidationController = ValidationController;
   exports.ValidationControllerFactory = ValidationControllerFactory;
-  exports.Validator = Validator;
-  exports.Rules = Rules;
-  exports.StandardValidator = StandardValidator;
-  exports.validationMessages = validationMessages;
-  exports.ValidationMessageProvider = ValidationMessageProvider;
   exports.ValidationMessageParser = ValidationMessageParser;
-  exports.MessageExpressionValidator = MessageExpressionValidator;
-  exports.FluentRuleCustomizer = FluentRuleCustomizer;
-  exports.FluentRules = FluentRules;
-  exports.FluentEnsure = FluentEnsure;
+  exports.ValidationMessageProvider = ValidationMessageProvider;
   exports.ValidationRules = ValidationRules;
+  exports.Validator = Validator;
+  exports.configure = configure;
+  exports.getAccessorExpression = getAccessorExpression;
+  exports.getPropertyInfo = getPropertyInfo;
+  exports.getTargetDOMElement = getTargetDOMElement;
+  exports.validationMessages = validationMessages;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
+//# sourceMappingURL=aurelia-validation.js.map

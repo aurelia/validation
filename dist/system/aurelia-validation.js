@@ -1,45 +1,44 @@
-System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'aurelia-pal', 'aurelia-dependency-injection', 'aurelia-task-queue'], function (exports, module) {
+System.register(['aurelia-templating', 'aurelia-binding', 'aurelia-logging', 'aurelia-pal', 'aurelia-task-queue', 'aurelia-dependency-injection'], (function (exports) {
   'use strict';
-  var LiteralString, Binary, Conditional, LiteralPrimitive, CallMember, AccessMember, AccessScope, AccessKeyed, BindingBehavior, ValueConverter, getContextFor, Parser, bindingBehavior, bindingMode, BindingLanguage, ViewResources, customAttribute, bindable, getLogger, DOM, Optional, Lazy, TaskQueue;
+  var BindingLanguage, ViewResources, bindable, customAttribute, LiteralString, Binary, Conditional, CallMember, LiteralPrimitive, BindingBehavior, ValueConverter, AccessScope, getContextFor, AccessMember, AccessKeyed, Parser, bindingBehavior, bindingMode, LogManager, DOM, TaskQueue, Optional, Lazy;
   return {
     setters: [function (module) {
+      BindingLanguage = module.BindingLanguage;
+      ViewResources = module.ViewResources;
+      bindable = module.bindable;
+      customAttribute = module.customAttribute;
+    }, function (module) {
       LiteralString = module.LiteralString;
       Binary = module.Binary;
       Conditional = module.Conditional;
-      LiteralPrimitive = module.LiteralPrimitive;
       CallMember = module.CallMember;
-      AccessMember = module.AccessMember;
-      AccessScope = module.AccessScope;
-      AccessKeyed = module.AccessKeyed;
+      LiteralPrimitive = module.LiteralPrimitive;
       BindingBehavior = module.BindingBehavior;
       ValueConverter = module.ValueConverter;
+      AccessScope = module.AccessScope;
       getContextFor = module.getContextFor;
+      AccessMember = module.AccessMember;
+      AccessKeyed = module.AccessKeyed;
       Parser = module.Parser;
       bindingBehavior = module.bindingBehavior;
       bindingMode = module.bindingMode;
     }, function (module) {
-      BindingLanguage = module.BindingLanguage;
-      ViewResources = module.ViewResources;
-      customAttribute = module.customAttribute;
-      bindable = module.bindable;
-    }, function (module) {
-      getLogger = module.getLogger;
+      LogManager = module;
     }, function (module) {
       DOM = module.DOM;
     }, function (module) {
+      TaskQueue = module.TaskQueue;
+    }, function (module) {
       Optional = module.Optional;
       Lazy = module.Lazy;
-    }, function (module) {
-      TaskQueue = module.TaskQueue;
     }],
-    execute: function () {
+    execute: (function () {
 
       exports({
         configure: configure,
-        getTargetDOMElement: getTargetDOMElement,
-        getPropertyInfo: getPropertyInfo,
         getAccessorExpression: getAccessorExpression,
-        validateTrigger: void 0
+        getPropertyInfo: getPropertyInfo,
+        getTargetDOMElement: getTargetDOMElement
       });
 
       /**
@@ -51,30 +50,32 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
           return Validator;
       }()));
 
-      /*! *****************************************************************************
-      Copyright (c) Microsoft Corporation. All rights reserved.
-      Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-      this file except in compliance with the License. You may obtain a copy of the
-      License at http://www.apache.org/licenses/LICENSE-2.0
+      /******************************************************************************
+      Copyright (c) Microsoft Corporation.
 
-      THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-      KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-      WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-      MERCHANTABLITY OR NON-INFRINGEMENT.
+      Permission to use, copy, modify, and/or distribute this software for any
+      purpose with or without fee is hereby granted.
 
-      See the Apache Version 2.0 License for specific language governing permissions
-      and limitations under the License.
+      THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+      REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+      AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+      INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+      LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+      OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+      PERFORMANCE OF THIS SOFTWARE.
       ***************************************************************************** */
       /* global Reflect, Promise */
 
       var extendStatics = function(d, b) {
           extendStatics = Object.setPrototypeOf ||
               ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-              function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+              function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
           return extendStatics(d, b);
       };
 
       function __extends(d, b) {
+          if (typeof b !== "function" && b !== null)
+              throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
           extendStatics(d, b);
           function __() { this.constructor = d; }
           d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -87,12 +88,14 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
           return c > 3 && r && Object.defineProperty(target, key, r), r;
       }
 
-      function __spreadArrays() {
-          for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-          for (var r = Array(s), k = 0, i = 0; i < il; i++)
-              for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                  r[k] = a[j];
-          return r;
+      function __spreadArray(to, from, pack) {
+          if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+              if (ar || !(i in from)) {
+                  if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+                  ar[i] = from[i];
+              }
+          }
+          return to.concat(ar || Array.prototype.slice.call(from));
       }
 
       /**
@@ -280,9 +283,9 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
                   throw new Error('$parent is not permitted in validation message expressions.');
               }
               if (['displayName', 'propertyName', 'value', 'object', 'config', 'getDisplayName'].indexOf(access.name) !== -1) {
-                  getLogger('aurelia-validation')
+                  LogManager.getLogger('aurelia-validation')
                       // tslint:disable-next-line:max-line-length
-                      .warn("Did you mean to use \"$" + access.name + "\" instead of \"" + access.name + "\" in this validation message template: \"" + this.originalMessage + "\"?");
+                      .warn("Did you mean to use \"$".concat(access.name, "\" instead of \"").concat(access.name, "\" in this validation message template: \"").concat(this.originalMessage, "\"?"));
               }
           };
           return MessageExpressionValidator;
@@ -477,7 +480,7 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
       /**
        * Validation triggers.
        */
-      var validateTrigger;
+      var validateTrigger; exports('validateTrigger', validateTrigger);
       (function (validateTrigger) {
           /**
            * Manual validation.  Use the controller's `validate()` and  `reset()` methods
@@ -507,7 +510,7 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
            * when it updates the model due to a change in the view.
            */
           validateTrigger[validateTrigger["changeOrFocusout"] = 6] = "changeOrFocusout";
-      })(validateTrigger || (validateTrigger = exports('validateTrigger', {})));
+      })(validateTrigger || (exports('validateTrigger', validateTrigger = {})));
 
       /**
        * Aurelia Validation Configuration API
@@ -564,10 +567,10 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
                   if (element) {
                       return element;
                   }
-                  throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
+                  throw new Error("Unable to locate target element for \"".concat(binding.sourceExpression, "\"."));
               }
           }
-          throw new Error("Unable to locate target element for \"" + binding.sourceExpression + "\".");
+          throw new Error("Unable to locate target element for \"".concat(binding.sourceExpression, "\"."));
       }
 
       function getObject(expression, objectExpression, source) {
@@ -576,7 +579,7 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
               return value;
           }
           // tslint:disable-next-line:max-line-length
-          throw new Error("The '" + objectExpression + "' part of '" + expression + "' evaluates to " + value + " instead of an object, null or undefined.");
+          throw new Error("The '".concat(objectExpression, "' part of '").concat(expression, "' evaluates to ").concat(value, " instead of an object, null or undefined."));
       }
       /**
        * Retrieves the object and property name for the specified expression.
@@ -603,7 +606,7 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
               propertyName = expression.key.evaluate(source);
           }
           else {
-              throw new Error("Expression '" + originalExpression + "' is not compatible with the validate binding-behavior.");
+              throw new Error("Expression '".concat(originalExpression, "' is not compatible with the validate binding-behavior."));
           }
           if (object === null || object === undefined) {
               return null;
@@ -632,19 +635,19 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
                   || accessor instanceof AccessMember && accessor.object instanceof AccessScope) {
                   return accessor.name;
               }
-              throw new Error("Invalid property expression: \"" + accessor + "\"");
+              throw new Error("Invalid property expression: \"".concat(accessor, "\""));
           };
           PropertyAccessorParser.inject = [Parser];
           return PropertyAccessorParser;
       }()));
       function getAccessorExpression(fn) {
           /* tslint:disable:max-line-length */
-          var classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?(?:[$_\s\w\d\/\*.['"\]+;]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
+          var classic = /^function\s*\([$_\w\d]+\)\s*\{(?:\s*"use strict";)?(?:[$_\s\w\d\/\*.['"\]+;\(\)]+)?\s*return\s+[$_\w\d]+\.([$_\w\d]+)\s*;?\s*\}$/;
           /* tslint:enable:max-line-length */
           var arrow = /^\(?[$_\w\d]+\)?\s*=>\s*[$_\w\d]+\.([$_\w\d]+)$/;
           var match = classic.exec(fn) || arrow.exec(fn);
           if (match === null) {
-              throw new Error("Unable to parse accessor function:\n" + fn);
+              throw new Error("Unable to parse accessor function:\n".concat(fn));
           }
           return match[1];
       }
@@ -1156,6 +1159,7 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
                   binding.validateTarget = target;
                   target.addEventListener(event, binding.focusLossHandler);
                   if (hasChangeTrigger) {
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                       var propertyName_1 = getPropertyInfo(binding.sourceExpression, binding.source).propertyName;
                       binding.validationSubscription = controller.subscribe(function (event) {
                           if (!binding.validatedOnce && event.type === 'validate') {
@@ -1536,7 +1540,7 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
               get: function () {
                   return this.fluentEnsure.rules;
               },
-              enumerable: true,
+              enumerable: false,
               configurable: true
           });
           /**
@@ -1567,7 +1571,7 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
               for (var _i = 1; _i < arguments.length; _i++) {
                   args[_i - 1] = arguments[_i];
               }
-              return (_a = this.fluentRules).satisfiesRule.apply(_a, __spreadArrays([name], args));
+              return (_a = this.fluentRules).satisfiesRule.apply(_a, __spreadArray([name], args, false));
           };
           /**
            * Applies the "required" rule to the property.
@@ -1707,14 +1711,14 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
                   // standard rule?
                   rule = this[name];
                   if (rule instanceof Function) {
-                      return rule.call.apply(rule, __spreadArrays([this], args));
+                      return rule.call.apply(rule, __spreadArray([this], args, false));
                   }
-                  throw new Error("Rule with name \"" + name + "\" does not exist.");
+                  throw new Error("Rule with name \"".concat(name, "\" does not exist."));
               }
               var config = rule.argsToConfig ? rule.argsToConfig.apply(rule, args) : undefined;
               return this.satisfies(function (value, obj) {
                   var _a;
-                  return (_a = rule.condition).call.apply(_a, __spreadArrays([_this, value, obj], args));
+                  return (_a = rule.condition).call.apply(_a, __spreadArray([_this, value, obj], args, false));
               }, config)
                   .withMessageKey(name);
           };
@@ -1982,6 +1986,7 @@ System.register(['aurelia-binding', 'aurelia-templating', 'aurelia-logging', 'au
           }
       }
 
-    }
+    })
   };
-});
+}));
+//# sourceMappingURL=aurelia-validation.js.map
